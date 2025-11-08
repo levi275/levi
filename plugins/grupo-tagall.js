@@ -2,13 +2,29 @@ const handler = async (m, { isOwner, isAdmin, conn, text, participants, args, co
   if (usedPrefix == 'a' || usedPrefix == 'A') return;
 
   const botname = global.botname || 'Ruby';
-  
+
   m.react('✅');
 
   if (!(isAdmin || isOwner)) {
     global.dfail('admin', m, conn);
     throw false;
   }
+
+  let fkontak = null;
+  try {
+    const res = await fetch('https://i.postimg.cc/nhdkndD6/pngtree-yellow-bell-ringing-with-sound-waves-png-image-20687908.png');
+    const thumb2 = Buffer.from(await res.arrayBuffer());
+    fkontak = {
+      key: { participant: '0@s.whatsapp.net', remoteJid: 'status@broadcast', fromMe: false, id: 'Halo' },
+      message: {
+        locationMessage: {
+          name: `¡𝙈𝙀𝙉𝘾𝙄𝙊𝙉 𝙋𝘼𝙍𝘼 𝙏𝙊𝘿𝙊 𝙀𝙇 𝙂𝙍𝙐𝙋𝙊!`,
+          jpegThumbnail: thumb2
+        }
+      },
+      participant: '0@s.whatsapp.net'
+    };
+  } catch {}
 
   const mensaje = args.join` ` || 'Atención a todos';
 
@@ -25,7 +41,7 @@ const handler = async (m, { isOwner, isAdmin, conn, text, participants, args, co
 
   texto += `╰─「 ${botname} 」`;
 
-  conn.sendMessage(m.chat, { text: texto, mentions: participants.map((a) => a.id) });
+  conn.sendMessage(m.chat, { text: texto, mentions: participants.map((a) => a.id) }, { quoted: fkontak });
 };
 
 handler.help = ['tagall *<mensaje opcional>*'];
