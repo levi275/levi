@@ -1,17 +1,17 @@
-import fetch from "node-fetch"
+import { ytmp3, ytmp4 } from "../lib/youtubedl.js"
 import yts from "yt-search"
 
 const youtubeRegexID = /(?:youtu\.be\/|youtube\.com\/(?:watch\?v=|embed\/))([a-zA-Z0-9_-]{11})/
 
 const handler = async (m, { conn, text, command }) => {
   try {
-    if (!text.trim()) {
+    if (!text || !text.trim()) {
       return conn.reply(m.chat, `✧ 𝙃𝙚𝙮! Debes escribir *el nombre o link* del video/audio para descargar.`, m)
     }
 
     await conn.sendMessage(m.chat, { react: { text: "⏳", key: m.key }})
 
-    let videoIdToFind = text.match(youtubeRegexID) || null
+    let videoIdToFind = text.match(youtubeRegexID)
     let ytplay2 = await yts(videoIdToFind ? "https://youtu.be/" + videoIdToFind[1] : text)
 
     if (videoIdToFind) {
@@ -19,7 +19,7 @@ const handler = async (m, { conn, text, command }) => {
       ytplay2 = ytplay2.all.find(item => item.videoId === videoId) || ytplay2.videos.find(item => item.videoId === videoId)
     }
 
-    ytplay2 = ytplay2.all?.[0] || ytplay2.videos?.[0] || ytplay2
+    ytplay2 = ytplay2?.all?.[0] || ytplay2?.videos?.[0] || ytplay2
     if (!ytplay2) {
       await conn.sendMessage(m.chat, { react: { text: "❌", key: m.key }})
       return m.reply("⚠︎ No encontré resultados, intenta con otro nombre o link.")
@@ -32,14 +32,13 @@ const handler = async (m, { conn, text, command }) => {
     const infoMessage = `
 ㅤ۫ ㅤ  🦭 ୧   ˚ \`𝒅𝒆𝒔𝒄𝒂𝒓𝒈𝒂 𝒆𝒏 𝒄𝒂𝒎𝒊𝒏𝒐\` !  ୨ 𖹭  ִֶָ  
 
-᮫ؙܹ  ᳘︵᮫ּܹ࡛〫ࣥܳ⌒ؙ۫ ᮫ּ۪֯⏝ֺ࣯࠭۟ ᮫ּ〪࣭︶᮫ܹ᳟〫࠭߳፝֟᷼⏜᮫᮫ּ〪࣭࠭〬︵᮫ּ᳝̼࣪ 🍚⃘ᩚּ̟߲ ּ〪࣪︵᮫࣭࣪࠭ᰯּ〪࣪࠭⏜ְ࣮〫߳ ᮫ּׅ࣪۟︶᮫ܹׅ࠭〬 ᮫ּּ࣭᷼⏝ᩥ᮫〪ܹ۟࠭۟۟ ᮫ּؙ⌒᮫ܹ۫︵ᩝּּ۟࠭ ࣭۪۟
-> 🧊✿⃘࣪◌ ֪ \`𝗧𝗶́𝘁𝘂𝗹𝗼\` » *${title}*  
-> 🧊✿⃘࣪◌ ֪ \`𝗖𝗮𝗻𝗮𝗹\` » *${canal}*  
-> 🧊✿⃘࣪◌ ֪ \`𝗗𝘂𝗿𝗮𝗰𝗶𝗼́𝗻\` » *${timestamp}*  
-> 🧊✿⃘࣪◌ ֪ \`𝗩𝗶𝘀𝘁𝗮𝘀\` » *${vistas}*  
-> 🧊✿⃘࣪◌ ֪ \`𝗣𝘂𝗯𝗹𝗶𝗰𝗮𝗱𝗼\` » *${ago}*  
-> 🧊✿⃘࣪◌ ֪ \`𝗟𝗶𝗻𝗸\` » ${url} 
-ᓭ݄︢݃ୄᰰ𐨎 𝐢︩۪𝆬͡ꗜ፝֟͜͡ꗜ︪۪𝆬͡ 𝐢   ᅟᨳᩘ🧁ଓ   ᅟ 𝐢︩۪𝆬͡ꗜ፝֟͜͡ꗜ︪۪𝆬͡ 𝐢ୄᰰ𐨎ᓯ︢
+᮫ؙܹ  ᳘︵᮫ּܹ࡛〫ࣥܳ⌒ؙ۫ ᮫ּ۪֯⏝ֺ࣯࠭۟ ᮫ּ〪࣭︶᮫ܹ᳟〫࠭߳፝֟᷼⏜᮫᮫ּ〪࣭࠭〬︵᮫ּ᳝̼࣪ 🍚⃘ᩚּ̟߲ ּ〪࣪︵᮫࣭࣪࠭ᰯּ〪࣪࠭⏜ְ࣮〫߳ ᮫ּׅ࣪۟︶᮫ܹׅ࠭〬 ᮫ּּ࣭᷼⏝ᩥ᮫〪ܹ۟࠭۟۟ ᮫ּؙ⌒᮫ܹ۫︵ᩝּּ۟࠭ ࣭۪۟
+> 🧊✿⃘࣪◌ ֪ \`𝗧𝗶́𝘁𝘂𝗹𝗼\` » *${title}*
+> 🧊✿⃘࣪◌ ֪ \`𝗖𝗮𝗻𝗮𝗹\` » *${canal}*
+> 🧊✿⃘࣪◌ ֪ \`𝗗𝘂𝗿𝗮𝗰𝗶𝗼́𝗻\` » *${timestamp}*
+> 🧊✿⃘࣪◌ ֪ \`𝗩𝗶𝘀𝘁𝗮𝘀\` » *${vistas}*
+> 🧊✿⃘࣪◌ ֪ \`𝗣𝘂𝗯𝗹𝗶𝗰𝗮𝗱𝗼\` » *${ago}*
+> 🧊✿⃘࣪◌ ֪ \`𝗟𝗶𝗻𝗸\` » ${url}
 
 > 𐙚 🪵 ｡ Preparando tu descarga... ˙𐙚
     `.trim()
@@ -62,11 +61,13 @@ const handler = async (m, { conn, text, command }) => {
     if (["play", "yta", "ytmp3", "playaudio"].includes(command)) {
       let audioData = null
       try {
-        const r = await (await fetch(`https://ruby-core.vercel.app/api/download/youtube/mp3?url=${encodeURIComponent(url)}`)).json()
+        const r = await ytmp3(url)
         if (r?.status && r?.download?.url) {
           audioData = { link: r.download.url, title: r.metadata?.title }
         }
-      } catch {}
+      } catch (e) {
+        console.error(e)
+      }
 
       if (!audioData) {
         await conn.sendMessage(m.chat, { react: { text: "❌", key: m.key }})
@@ -86,11 +87,13 @@ const handler = async (m, { conn, text, command }) => {
     else if (["play2", "ytv", "ytmp4", "mp4"].includes(command)) {
       let videoData = null
       try {
-        const r = await (await fetch(`https://ruby-core.vercel.app/api/download/youtube/mp4?url=${encodeURIComponent(url)}`)).json()
+        const r = await ytmp4(url)
         if (r?.status && r?.download?.url) {
           videoData = { link: r.download.url, title: r.metadata?.title }
         }
-      } catch {}
+      } catch (e) {
+        console.error(e)
+      }
 
       if (!videoData) {
         await conn.sendMessage(m.chat, { react: { text: "❌", key: m.key }})
@@ -107,17 +110,15 @@ const handler = async (m, { conn, text, command }) => {
       await conn.sendMessage(m.chat, { react: { text: "✅", key: m.key }})
     }
 
-    else {
-      return conn.reply(m.chat, "✧︎ Comando no válido, revisa el menú.", m)
-    }
-
   } catch (error) {
     await conn.sendMessage(m.chat, { react: { text: "❌", key: m.key }})
-    return m.reply(`⚠︎ Error inesperado:\n\n${error}`)
+    console.error(error)
+    return m.reply(`⚠︎ Error inesperado. Por favor, reporta este problema.`)
   }
 }
 
-handler.command = handler.help = ["play", "yta", "ytmp3", "play2", "ytv", "ytmp4", "playaudio", "mp4"]
+handler.command = ["play", "yta", "ytmp3", "play2", "ytv", "ytmp4", "playaudio", "mp4"]
+handler.help = ["play", "yta", "ytmp3", "play2", "ytv", "ytmp4", "playaudio", "mp4"]
 handler.tags = ["descargas"]
 
 export default handler
