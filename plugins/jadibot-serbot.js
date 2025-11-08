@@ -31,23 +31,6 @@ let crm4 = "IF9hdXRvcmVzcG9uZGVyLmpzIGluZm8tYm90Lmpz"
 let drm1 = ""
 let drm2 = ""
 let rtx = "*\n\n✐ Cσɳҽxισɳ SυႦ-Bσƚ Mσԃҽ QR\n\n✰ Con otro celular o en la PC escanea este QR para convertirte en un *Sub-Bot* Temporal.\n\n\`1\` » Haga clic en los tres puntos en la esquina superior derecha\n\n\`2\` » Toque dispositivos vinculados\n\n\`3\` » Escanee este codigo QR para iniciar sesion con el bot\n\n✧ ¡Este código QR expira en 45 segundos!."
-let rtx2 = `╭━╴╶╴╶╴╶╴𖣘╶╴╶╴╶╴╶━╮
-│🩵 S E R B O T - S U B B O T 🩵
-├╶╴╶╴╶╴╶╴╶╴╶╴╶╴╶╴╶╴╶╴
-│ (*ᴗ͈ˬᴗ͈)ꕤ  𝐔𝐬𝐚 𝐞𝐬𝐭𝐞 𝐂𝐨𝐝𝐢𝐠𝐨 𝐏𝐚𝐫𝐚 𝐒𝐞𝐫 𝐒𝐮𝐛 𝐁𝐨𝐭
-├╶╴╶╴╶╴╶╴╶╴╶╴╶╴╶╴╶╴
-│💎 𝐏𝐚𝐬𝐨𝐬:
-├╶╴╶╴╶╴╶╴╶╴╶╴╶╴╶╴╶╴
-│🏟️⃟̶̸̷┆ \`1\` : 𝐇𝐚𝐠𝐚 𝐜𝐥𝐢𝐜𝐤 𝐞𝐧 𝐥𝐨𝐬 3 𝐩𝐮𝐧𝐭𝐨𝐬 𝐝𝐞 𝐥𝐚 𝐞𝐬𝐪𝐮𝐢𝐧𝐚 𝐝𝐞𝐫𝐞𝐜𝐡𝐚
-├╶╴╶╴╶╴╶╴╶╴╶╴
-│🏟️⃟̶̸̷┆ \`2\` : 𝐓𝐞 𝐝𝐢𝐬𝐩𝐨𝐬𝐢𝐭𝐢𝐯𝐨𝐬 𝐕𝐢𝐧𝐜𝐮𝐥𝐚𝐝𝐨𝐬
-├╶╴╶╴╶╴╶╴╶╴╶╴
-│🏟️⃟̶̸̷┆ \`3\` : 𝐒𝐞𝐥𝐞𝐜𝐜𝐢𝐨𝐧𝐚 𝐕𝐢𝐧𝐜𝐮𝐥𝐚𝐫 𝐜𝐨𝐧 𝐄𝐥 𝐧𝐮𝐦𝐞𝐫𝐨 𝐃𝐞 𝐭𝐞𝐥𝐞𝐟𝐨𝐧𝐨
-├╶╴╶╴╶╴╶╴╶╴╶╴
-│🏟️⃟̶̸̷┆ \`4\` : 𝐏𝐞𝐠𝐚 𝐞𝐥 𝐜𝐨𝐝𝐢𝐠𝐨 𝐞𝐧𝐯𝐢𝐚𝐝𝐨
-├╶╴╶╴╶╴╶╴╶╴╶╴
-> *𝑵𝒐𝒕𝒂:* 𝑬𝒔𝒕𝒆 𝑪𝒐𝒅𝒊𝒈𝒐 𝒔𝒐𝒍𝒐 𝒇𝒖𝒏𝒄𝒊𝒐𝒏𝒂 𝒆𝒏 𝒆𝒍 𝒏𝒖𝒎𝒆𝒓𝒐 𝒒𝒖𝒆 𝒍𝒐 𝒔𝒐𝒍𝒊𝒄𝒊𝒕𝒐.
-*╰━╴╶╴╶╴╶╴𖣘╶╴╶╴╶╴╶━╯*`
 
 const __filename = fileURLToPath(import.meta.url)
 const __dirname = path.dirname(__filename)
@@ -150,7 +133,7 @@ setTimeout(() => { conn.sendMessage(m.sender, { delete: txtQR.key })}, 45000)
 return
 } 
 if (qr && mcode) {
-    const rawCode = await sock.requestPairingCode(m.sender.split`@`[0]);
+    const rawCode = await sock.requestPairingCode(m.sender.split`@`[0], "RUBYCHAN");
 
     const interactiveButtons = [{
         name: "cta_copy",
@@ -217,7 +200,7 @@ if (options.fromCommand) m?.chat ? await conn.sendMessage(`${path.basename(pathR
 console.error(chalk.bold.yellow(`Error 440 no se pudo enviar mensaje a: +${path.basename(pathRubyJadiBot)}`))
 }}
 if (reason == 405 || reason == 401) {
-console.log(chalk.bold.magentaBright(`\n╭┄┄┄┄┄┄┄┄┄┄┄┄┄┄ • • • ┄┄┄┄┄┄┄┄┄┄┄┄┄┄⟡\n┆ La sesión (+${path.basename(pathRubyJadiBot)}) fue cerrada. Credenciales no válidas o dispositivo desconectado manualmente.\n╰┄┄┄┄┄┄┄┄┄┄┄┄┄┄ • • • ┄┄┄┄┄┄┄┄┄┄┄┄┄┄⟡`))
+console.log(chalk.bold.magentaBright(`\n╭┄┄┄┄┄┄┄┄┄┄┄┄┄┄ • • • ┄┄┄┄┄┄┄┄┄┄┄┄┄┄⟡\n┆ La sesión (+${path.basename(pathRubyJadiBot)}) fue cerrada. Credenciales no válidas o dispositivo desconectado manualmente.\n╰┄┄┄┄┄┄┄┄┄┄┄┄┄┄ • • • ┄┄┄┄┄┄┄Doç┄┄┄┄┄┄⟡`))
 try {
 if (options.fromCommand) m?.chat ? await conn.sendMessage(`${path.basename(pathRubyJadiBot)}@s.whatsapp.net`, {text : '*SESIÓN PENDIENTE*\n\n> *INTENTÉ NUEVAMENTE VOLVER A SER SUB-BOT*' }, { quoted: m || null }) : ""
 } catch (error) {
