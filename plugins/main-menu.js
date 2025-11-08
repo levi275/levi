@@ -35,7 +35,7 @@ let handler = async (m, { conn, args }) => {
   const randomGif = gifVideos[Math.floor(Math.random() * gifVideos.length)];
 
   let txt = `
-¡Hola, ${name}! Mi nombre es *Ruby Hoshino* (≧◡≦) 💖
+¡Hola, ${name}! Mi nombre es *Ruby Hoshino*,  Te deseo una Feliz Navidad (≧◡≦) 💖
 
 ╔═══════⩽✦✰✦⩾═══════╗
        「 𝙄𝙉𝙁𝙊 𝘿𝙀 𝙇𝘼 𝘽𝙊𝙏 」
