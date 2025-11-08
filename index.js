@@ -98,10 +98,10 @@ cfonts.say('Developed By: Dioneibi-rip', {
   colors: ['blueBright']
 })
 
-console.log(chalk.magentaBright('═════════════════════════════════════════════════════════════════════'))
-console.log(chalk.whiteBright('            🚀 Bienvenido al núcleo de la Bot Ruby Hoshino 🚀'))
-console.log(chalk.whiteBright('     Prepara tu sesión... Ruby no puede esperar para servirte querido usuario ✨'))
-console.log(chalk.magentaBright('═════════════════════════════════════════════════════════════════════\n'))
+console.log(chalk.magentaBright('~`⊹₊ ︵︵︵﹒🌟﹒︵︵︵ ₊˚⊹`~'))
+console.log(chalk.whiteBright('        🚀 𝕭𝖎𝖊𝖓𝖛𝖊𝖓𝖎𝖉𝖔 𝖆𝖑 𝖓𝖚́𝖈𝖑𝖊𝖔 𝖉𝖊 𝕽𝖚𝖇𝖞 𝕳𝖔𝖘𝖍𝖎𝖓𝖔 𝕭𝖔𝖙 🚀'))
+console.log(chalk.whiteBright('      ✨ ¡𝕻𝖗𝖊𝖕𝖆𝖗𝖆𝖓𝖉𝖔 𝖙𝖚 𝖘𝖊𝖘𝖎𝖔́𝖓! 𝕽𝖚𝖇𝖞 𝖙𝖊 𝖊𝖘𝖕𝖊𝖗𝖆... ✨'))
+console.log(chalk.magentaBright('~`⊹₊ ︵︵︵﹒🌟﹒︵︵︵ ₊˚⊹`~\n'))
 
 protoType()
 serialize()
@@ -167,16 +167,31 @@ const opcionTexto = chalk.bold.cyan
 const rl = readline.createInterface({ input: process.stdin, output: process.stdout })
 const question = (texto) => new Promise((resolver) => rl.question(texto, resolver))
 
+// --- DECORACIÓN PARA PREGUNTAS ---
+const marcoSuperior = chalk.bold.magentaBright('▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰');
+const marcoInferior = chalk.bold.magentaBright('▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰');
+const lineaVacia = chalk.bold.magentaBright('║');
+// --- FIN DE DECORACIÓN ---
+
 let opcion
 if (methodCodeQR) {
 opcion = '1'
 }
 if (!methodCodeQR && !methodCode && !fs.existsSync(`./${Rubysessions}/creds.json`)) {
 do {
-opcion = await question(colores('⌨ Seleccione una opción:\n') + opcionQR('1. Con código QR\n') + opcionTexto('2. Con código de texto de 8 dígitos\n--> '))
+opcion = await question(
+  marcoSuperior + '\n' +
+  lineaVacia + chalk.bold.white('      🔮 ¿𝘾𝙤𝙢𝙤 𝙙𝙚𝙨𝙚𝙖𝙨 𝙘𝙤𝙣𝙚𝙘𝙩𝙖𝙧𝙩𝙚? 🔮     ') + lineaVacia + '\n' +
+  lineaVacia + '                                       ' + lineaVacia + '\n' +
+  lineaVacia + '   ' + opcionQR('1. 𝘾𝙤𝙣 𝙘𝙤𝙙𝙞𝙜𝙤 𝙌𝙍') + '                   ' + lineaVacia + '\n' +
+  lineaVacia + '   ' + opcionTexto('2. 𝘾𝙤𝙣 𝙘𝙤́𝙙𝙞𝙜𝙤 𝙙𝙚 8 𝘿𝙞𝙜𝙞𝙩𝙤𝙨') + '     ' + lineaVacia + '\n' +
+  lineaVacia + '                                       ' + lineaVacia + '\n' +
+  marcoInferior + '\n' +
+  chalk.bold.whiteBright('⇢ 𝖤𝗅𝗂𝗀𝖾 𝗎𝗇𝖺 𝗈𝗉𝖼𝗂𝗈́𝗇 (1/2): ')
+);
 
 if (!/^[1-2]$/.test(opcion)) {
-console.log(chalk.bold.redBright(`✦ No se permiten numeros que no sean 1 o 2, tampoco letras o símbolos especiales.`))
+console.log(chalk.bold.redBright(`\n         ® ╥﹏╥ solo se permiten los números 1 o 2 ®\n`))
 }} while (opcion !== '1' && opcion !== '2' || fs.existsSync(`./${Rubysessions}/creds.json`))
 } 
 
@@ -216,7 +231,14 @@ if (!!phoneNumber) {
 addNumber = phoneNumber.replace(/[^0-9]/g, '')
 } else {
 do {
-phoneNumber = await question(chalk.bgBlack(chalk.bold.greenBright(`✦ Por favor, Ingrese el número de WhatsApp.\n${chalk.bold.yellowBright(`✏  Ejemplo: 57321×××××××`)}\n${chalk.bold.magentaBright('---> ')}`)))
+phoneNumber = await question(
+  marcoSuperior + '\n' +
+  lineaVacia + chalk.bold.greenBright('    📱 іᥒgrᥱsᥲ 𝗍ᥙ ᥒᥙ́mᥱr᥆ 📱 ') + lineaVacia + '\n' +
+  lineaVacia + '                                       ' + lineaVacia + '\n' +
+  lineaVacia + chalk.bold.yellowBright('   ✏  ᥱȷᥱm⍴ᥣ᥆: +57321xxxxxxx') + '             ' + lineaVacia + '\n' +
+  marcoInferior + '\n' +
+  chalk.bold.whiteBright('⇢ ᥒᥙmᥱr᥆: ')
+);
 phoneNumber = phoneNumber.replace(/\D/g,'')
 if (!phoneNumber.startsWith('+')) {
 phoneNumber = `+${phoneNumber}`
@@ -226,8 +248,12 @@ rl.close()
 addNumber = phoneNumber.replace(/\D/g, '')
 setTimeout(async () => {
 let codeBot = await conn.requestPairingCode(addNumber)
-codeBot = codeBot?.match(/.{1,4}/g)?.join("-") || codeBot
-console.log(chalk.bold.white(chalk.bgMagenta(`✧ CÓDIGO DE VINCULACIÓN ✧`)), chalk.bold.white(chalk.white(codeBot)))
+codeBot = codeBot?.match(/.{1,4}/g)?.join(" — ") || codeBot
+console.log(chalk.bold.magentaBright('\n~`⊹₊ ︵︵︵﹒🔗﹒︵︵︵ ₊˚⊹`~'));
+console.log(chalk.bold.white(chalk.bgMagenta(` ✧ código de vinculación ✧ `)));
+console.log(chalk.bold.white(`\n¡No compartas este código con nadie!`));
+console.log(chalk.bold.whiteBright.bgBlack(`   ${codeBot}   `));
+console.log(chalk.bold.magentaBright('~`⊹₊ ︵︵︵﹒🔗﹒︵︵︵ ₊˚⊹`~\n'));
 }, 3000)
 }}}
 }
@@ -257,34 +283,34 @@ global.timestamp.connect = new Date;
 if (global.db.data == null) loadDatabase();
 if (update.qr != 0 && update.qr != undefined || methodCodeQR) {
 if (opcion == '1' || methodCodeQR) {
-console.log(chalk.bold.yellow(`\n❐ ESCANEA EL CÓDIGO QR EXPIRA EN 45 SEGUNDOS`))}
+console.log(chalk.bold.yellow(`\n⇢  escanea el código qr, expira en 45 segundos...`))}
 }
 if (connection == 'open') {
-console.log(chalk.bold.green('\n❀ Ruby-Bot Conectada con éxito ❀'))
+console.log(chalk.bold.green('\n❀✨ 𝕽𝖚𝖇𝖞-𝕭𝖔𝖙 𝕮𝖔𝖓𝖊𝖈𝖙𝖆𝖉𝖆 𝖈𝖔𝖓 𝖊́𝖝𝖎𝖙𝖔 ✨❀\n'))
 }
 let reason = new Boom(lastDisconnect?.error)?.output?.statusCode
 if (connection === 'close') {
 if (reason === DisconnectReason.badSession) {
-console.log(chalk.bold.cyanBright(`\n⚠︎ SIN CONEXIÓN, BORRE LA CARPETA ${global.Rubysessions} Y ESCANEA EL CÓDIGO QR ⚠︎`))
+console.log(chalk.bold.cyanBright(`\n[ ⚠︎ ] 𝕾𝕴𝕹 𝕮𝕺𝕹𝕰𝖃𝕴𝕺́𝕹, 𝖇𝖔𝖗𝖗𝖊 𝖑𝖆 𝖈𝖆𝖗𝖕𝖊𝖙𝖆 ${global.Rubysessions} 𝖞 𝖊𝖘𝖈𝖆𝖓𝖊𝖆 𝖊𝖑 𝖈𝖔́𝖉𝖎𝖌𝖔 𝕼𝕽.\n`))
 } else if (reason === DisconnectReason.connectionClosed) {
-console.log(chalk.bold.magentaBright(`\n╭┄┄┄┄┄┄┄┄┄┄┄┄┄┄ • • • ┄┄┄┄┄┄┄┄┄┄┄┄┄┄ ☹\n┆ ⚠︎ CONEXION CERRADA, RECONECTANDO....\n╰┄┄┄┄┄┄┄┄┄┄┄┄┄┄ • • • ┄┄┄┄┄┄┄┄┄┄┄┄┄┄ ☹`))
+console.log(chalk.bold.magentaBright(`\n╭┄┄┄ ☹ ┄┄┄ • • • ┄┄┄ ☹ ┄┄┄╮\n┆ ⚠︎ 𝕮𝕺𝕹𝕰𝖃𝕴𝕺́𝕹 𝕮𝕰𝕽𝕽𝕬𝕯𝕬, 𝕽𝕰𝕮𝕺𝕹𝕰𝕮𝕿𝕬𝕹𝕯𝕺....\n╰┄┄┄ ☹ ┄┄┄ • • • ┄┄┄ ☹ ┄┄┄╯\n`))
 await global.reloadHandler(true).catch(console.error)
 } else if (reason === DisconnectReason.connectionLost) {
-console.log(chalk.bold.blueBright(`\n╭┄┄┄┄┄┄┄┄┄┄┄┄┄┄ • • • ┄┄┄┄┄┄┄┄┄┄┄┄┄┄ ☂\n┆ ⚠︎ CONEXIÓN PERDIDA CON EL SERVIDOR, RECONECTANDO....\n╰┄┄┄┄┄┄┄┄┄┄┄┄┄┄ • • • ┄┄┄┄┄┄┄┄┄┄┄┄┄┄ ☂`))
+console.log(chalk.bold.blueBright(`\n╭┄┄┄ ☂ ┄┄┄ • • • ┄┄┄ ☂ ┄┄┄╮\n┆ ⚠︎ 𝕮𝕺𝕹𝕰𝖃𝕴𝕺́𝕹 𝕻𝕰𝕽𝕯𝕴𝕯𝕬, 𝕽𝕰𝕮𝕺𝕹𝕰𝕮𝕿𝕬𝕹𝕯𝕺....\n╰┄┄┄ ☂ ┄┄┄ • • • ┄┄┄ ☂ ┄┄┄╯\n`))
 await global.reloadHandler(true).catch(console.error)
 } else if (reason === DisconnectReason.connectionReplaced) {
-console.log(chalk.bold.yellowBright(`\n╭┄┄┄┄┄┄┄┄┄┄┄┄┄┄ • • • ┄┄┄┄┄┄┄┄┄┄┄┄┄┄ ✗\n┆ ⚠︎ CONEXIÓN REEMPLAZADA, SE HA ABIERTO OTRA NUEVA SESION, POR FAVOR, CIERRA LA SESIÓN ACTUAL PRIMERO.\n╰┄┄┄┄┄┄┄┄┄┄┄┄┄┄ • • • ┄┄┄┄┄┄┄┄┄┄┄┄┄┄ ✗`))
+console.log(chalk.bold.yellowBright(`\n╭┄┄┄ ✗ ┄┄┄ • • • ┄┄┄ ✗ ┄┄┄╮\n┆ ⚠︎ 𝕮𝕺𝕹𝕰𝖃𝕴𝕺́𝕹 𝕽𝕰𝕰𝕸𝕻𝕷𝕬𝖅𝕬𝕯𝕬, 𝖈𝖎𝖊𝖗𝖗𝖊 𝖑𝖆 𝖘𝖊𝖘𝖎𝖔́𝖓 𝖆𝖈𝖙𝖚𝖆𝖑.\n╰┄┄┄ ✗ ┄┄┄ • • • ┄┄┄ ✗ ┄┄┄╯\n`))
 } else if (reason === DisconnectReason.loggedOut) {
-console.log(chalk.bold.redBright(`\n⚠︎ SIN CONEXIÓN, BORRE LA CARPETA ${global.Rubysessions} Y ESCANEA EL CÓDIGO QR ⚠︎`))
+console.log(chalk.bold.redBright(`\n[ ⚠︎ ] 𝕾𝕴𝕹 𝕮𝕺𝕹𝕰𝖃𝕴𝕺́𝕹, 𝖇𝖔𝖗𝖗𝖊 𝖑𝖆 𝖈𝖆𝖕𝖊𝖙𝖆 ${global.Rubysessions} 𝖞 𝖊𝖘𝖈𝖆𝖓𝖊𝖆 𝖊𝖑 𝖈𝖔́𝖉𝖎𝖌𝖔 𝕼𝕽.\n`))
 await global.reloadHandler(true).catch(console.error)
 } else if (reason === DisconnectReason.restartRequired) {
-console.log(chalk.bold.cyanBright(`\n╭┄┄┄┄┄┄┄┄┄┄┄┄┄┄ • • • ┄┄┄┄┄┄┄┄┄┄┄┄┄┄ ✓\n┆ ✧ CONECTANDO AL SERVIDOR...\n╰┄┄┄┄┄┄┄┄┄┄┄┄┄┄ • • • ┄┄┄┄┄┄┄┄┄┄┄┄┄┄ ✓`))
+console.log(chalk.bold.cyanBright(`\n╭┄┄┄ ✓ ┄┄┄ • • • ┄┄┄ ✓ ┄┄┄╮\n┆ ✧ 𝕮𝕺𝕹𝕰𝕮𝕿𝕬𝕹𝕯𝕺 𝕬𝕷 𝕾𝕰𝕽𝖁𝕴𝕯𝕺𝕽...\n╰┄┄┄ ✓ ┄┄┄ • • • ┄┄┄ ✓ ┄┄┄╯\n`))
 await global.reloadHandler(true).catch(console.error)
 } else if (reason === DisconnectReason.timedOut) {
-console.log(chalk.bold.yellowBright(`\n╭┄┄┄┄┄┄┄┄┄┄┄┄┄┄ • • • ┄┄┄┄┄┄┄┄┄┄┄┄┄┄ ▸\n┆ ⧖ TIEMPO DE CONEXIÓN AGOTADO, RECONECTANDO....\n╰┄┄┄┄┄┄┄┄┄┄┄┄┄┄ • • • ┄┄┄┄┄┄┄┄┄┄┄┄┄┄ ▸`))
+console.log(chalk.bold.yellowBright(`\n╭┄┄┄ ⧖ ┄┄┄ • • • ┄┄┄ ⧖ ┄┄┄╮\n┆ ⧖ 𝕿𝕴𝕰𝕸𝕻𝕺 𝕬𝕲𝕺𝕿𝕬𝕯𝕺, 𝕽𝕰𝕮𝕺𝕹𝕰𝕮𝕿𝕬𝕹𝕯𝕺....\n╰┄┄┄ ⧖ ┄┄┄ • • • ┄┄┄ ⧖ ┄┄┄╯\n`))
 await global.reloadHandler(true).catch(console.error) //process.send('reset')
 } else {
-console.log(chalk.bold.redBright(`\n⚠︎！ RAZON DE DESCONEXIÓN DESCONOCIDA: ${reason || 'No encontrado'} >> ${connection || 'No encontrado'}`))
+console.log(chalk.bold.redBright(`\n[ ⚠︎！] 𝕽𝕬𝖅𝕺𝕹 𝕯𝕰𝕾𝕮𝕺𝕹𝕺𝕮𝕴𝕯𝕬: ${reason || 'No encontrado'} >> ${connection || 'No encontrado'}\n`))
 }}
 }
 process.on('uncaughtException', console.error)
@@ -461,11 +487,11 @@ unlinkSync(`./${jadi}/${directorio}/${fileInDir}`)
 }})
 }})
 if (SBprekey.length === 0) {
-console.log(chalk.bold.green(`\n╭» ❍ ${jadi} ❍\n│→ NADA POR ELIMINAR \n╰― ― ― ― ― ― ― ― ― ― ― ― ― ― ― ― ― ― ― ⌫ ♻︎`))
+console.log(chalk.bold.green(`\n╭» ❍ ${jadi} ❍\n│→ 𝕹𝖆𝖉𝖆 𝖕𝖔𝖗 𝖊𝖑𝖎𝖒𝖎𝖓𝖆𝖗.\n╰― ― ― ― ― ― ― ― ― ― ― ― ― ― ― ― ― ― ― ⌫ ♻︎`))
 } else {
-console.log(chalk.bold.cyanBright(`\n╭» ❍ ${jadi} ❍\n│→ ARCHIVOS NO ESENCIALES ELIMINADOS\n╰― ― ― ― ― ― ― ― ― ― ― ― ― ― ― ― ― ― ― ⌫ ♻︎︎`))
+console.log(chalk.bold.cyanBright(`\n╭» ❍ ${jadi} ❍\n│→ 𝕬𝖗𝖈𝖍𝖎𝖛𝖔𝖘 𝖓𝖔 𝖊𝖘𝖊𝖓𝖈𝖎𝖆𝖑𝖊𝖘 𝖊𝖑𝖎𝖒𝖎𝖓𝖆𝖉𝖔𝖘.\n╰― ― ― ― ― ― ― ― ― ― ― ― ― ― ― ― ― ― ― ⌫ ♻︎︎`))
 }} catch (err) {
-console.log(chalk.bold.red(`\n╭» ❍ ${jadi} ❍\n│→ OCURRIÓ UN ERROR\n╰― ― ― ― ― ― ― ― ― ― ― ― ― ― ― ― ― ― ― ⌫ ♻\n` + err))
+console.log(chalk.bold.red(`\n╭» ❍ ${jadi} ❍\n│→ 𝕺𝖈𝖚𝖗𝖗𝖎𝖔́ 𝖚𝖓 𝖊𝖗𝖗𝖔𝖗.\n╰― ― ― ― ― ― ― ― ― ― ― ― ― ― ― ― ― ― ― ⌫ ♻\n` + err))
 }}
 
 function purgeOldFiles() {
@@ -478,9 +504,9 @@ if (file !== 'creds.json') {
 const filePath = path.join(dir, file);
 unlinkSync(filePath, err => {
 if (err) {
-console.log(chalk.bold.red(`\n╭» ❍ ARCHIVO ❍\n│→ ${file} NO SE LOGRÓ BORRAR\n╰― ― ― ― ― ― ― ― ― ― ― ― ― ― ― ― ― ― ― ⌫ ✘\n` + err))
+console.log(chalk.bold.red(`\n╭» ❍ ARCHIVO ❍\n│→ ${file} 𝖓𝖔 𝖘𝖊 𝖑𝖔𝖌𝖗𝖔́ 𝖇𝖔𝖗𝖗𝖆𝖗.\n╰― ― ― ― ― ― ― ― ― ― ― ― ― ― ― ― ― ― ― ⌫ ✘\n` + err))
 } else {
-console.log(chalk.bold.green(`\n╭» ❍ ARCHIVO ❍\n│→ ${file} BORRADO CON ÉXITO\n╰― ― ― ― ― ― ― ― ― ― ― ― ― ― ― ― ― ― ― ⌫ ♻`))
+console.log(chalk.bold.green(`\n╭» ❍ ARCHIVO ❍\n│→ ${file} 𝖇𝖔𝖗𝖗𝖆𝖉𝖔 𝖈𝖔𝖓 𝖊́𝖝𝖎𝖙𝖔.\n╰― ― ― ― ― ― ― ― ― ― ― ― ― ― ― ― ― ― ― ⌫ ♻`))
 } }) }
 }) }) }) }
 
@@ -497,12 +523,12 @@ originalConsoleMethod.apply(console, arguments)
 setInterval(async () => {
 if (stopped === 'close' || !conn || !conn.user) return
 await clearTmp()
-console.log(chalk.bold.cyanBright(`\n╭» ❍ MULTIMEDIA ❍\n│→ ARCHIVOS DE LA CARPETA TMP ELIMINADAS\n╰― ― ― ― ― ― ― ― ― ― ― ― ― ― ― ― ― ― ― ⌫ ♻`))}, 1000 * 60 * 4) // 4 min 
+console.log(chalk.bold.cyanBright(`\n╭» ❍ MULTIMEDIA ❍\n│→ 𝕬𝖗𝖈𝖍𝖎𝖛𝖔𝖘 𝖉𝖊 𝖑𝖆 𝖈𝖆𝖗𝖕𝖊𝖙𝖆 𝕿𝕸𝕻 𝖊𝖑𝖎𝖒𝖎𝖓𝖆𝖉𝖔𝖘.\n╰― ― ― ― ― ― ― ― ― ― ― ― ― ― ― ― ― ― ― ⌫ ♻`))}, 1000 * 60 * 4) // 4 min 
 
 setInterval(async () => {
 if (stopped === 'close' || !conn || !conn.user) return
 await purgeRubySession()
-console.log(chalk.bold.cyanBright(`\n╭» ❍ ${global.Rubysessions} ❍\n│→ SESIONES NO ESENCIALES ELIMINADAS\n╰― ― ― ― ― ― ― ― ― ― ― ― ― ― ― ― ― ― ― ⌫ ♻`))}, 1000 * 60 * 10) // 10 min
+console.log(chalk.bold.cyanBright(`\n╭» ❍ ${global.Rubysessions} ❍\n│→ 𝕾𝖊𝖘𝖎𝖔𝖓𝖊𝖘 𝖓𝖔 𝖊𝖘𝖊𝖓𝖈𝖎𝖆𝖑𝖊𝖘 𝖊𝖑𝖎𝖒𝖎𝖓𝖆𝖉𝖆𝖘.\n╰― ― ― ― ― ― ― ― ― ― ― ― ― ― ― ― ― ― ― ⌫ ♻`))}, 1000 * 60 * 10) // 10 min
 
 setInterval(async () => {
 if (stopped === 'close' || !conn || !conn.user) return
@@ -511,7 +537,7 @@ await purgeRubySessionSB()}, 1000 * 60 * 10)
 setInterval(async () => {
 if (stopped === 'close' || !conn || !conn.user) return
 console.log(await purgeOldFiles());
-console.log(chalk.bold.cyanBright(`\n╭» ❍ ARCHIVOS ❍\n│→ ARCHIVOS RESIDUALES ELIMINADAS\n╰― ― ― ― ― ― ― ― ― ― ― ― ― ― ― ― ― ― ― ⌫ ♻`))}, 1000 * 60 * 10)
+console.log(chalk.bold.cyanBright(`\n╭» ❍ ARCHIVOS ❍\n│→ 𝕬𝖗𝖈𝖍𝖎𝖛𝖔𝖘 𝖗𝖊𝖘𝖎𝖉𝖚𝖆𝖑𝖊𝖘 𝖊𝖑𝖎𝖒𝖎𝖓𝖆𝖉𝖔𝖘.\n╰― ― ― ― ― ― ― ― ― ― ― ― ― ― ― ― ― ― ― ⌫ ♻`))}, 1000 * 60 * 10)
 
 _quickTest().then(() => conn.logger.info(chalk.bold(`✦  H E C H O\n`.trim()))).catch(console.error)
 
@@ -527,4 +553,5 @@ const parsedNumber = phoneUtil.parseAndKeepRawInput(number)
 return phoneUtil.isValidNumber(parsedNumber)
 } catch (error) {
 return false
-}}
+}
+}
