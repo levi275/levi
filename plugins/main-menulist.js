@@ -46,7 +46,7 @@ let handler = async (m, { conn, usedPrefix: _p, __dirname }) => {
     );
 
     let sections = [{
-      title: "🌟 𝗖𝗔𝗧𝗘𝗚𝗢𝗥𝗜́𝗔𝗦 𝗗𝗜𝗦𝗣𝗢𝗡𝗜𝗕𝗟𝗘𝗦 🌟",
+      title: "𝐒𝐄𝐋𝐄𝐂𝐂𝐈𝐎𝐍𝐄 𝐀𝐐𝐔𝐈",
       rows: [
         {
           title: "🌟 𝗠𝗘𝗡𝗨́ 𝗖𝗢𝗠𝗣𝗟𝗘𝗧𝗢 🌟",
