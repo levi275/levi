@@ -6,8 +6,8 @@ import { prepareWAMessageMedia, generateWAMessageFromContent } from '@whiskeysoc
 import moment from 'moment-timezone';
 
 const defaultMenu = {
-  before: `Hola %name ${ucapan()}
-mi nombre es Ruby, y te deseo unas felices fiestas! 🧴  𖹥
+  before: `𝙃𝙤𝙡𝙖 %name ${ucapan()}
+𝙢𝙞 𝙣𝙤𝙢𝙗𝙧𝙚 𝙚𝙨 𝙍𝙪𝙗𝙮, 𝙮 𝙩𝙚 𝙙𝙚𝙨𝙚𝙤 𝙪𝙣𝙖𝙨 𝙛𝙚𝙡𝙞𝙘𝙚𝙨 𝙛𝙞𝙚𝙨𝙩𝙖𝙨! 🧴  𖹥
 
 ╭─ ☄︎  *INFO DEL BOT* ☄︎
 │ ◦ 👑 *Creador:* Dioneibi
@@ -50,7 +50,7 @@ let handler = async (m, { conn, usedPrefix: _p, __dirname }) => {
             product: {
               productImage: { jpegThumbnail: thumb2 },
               title: '𝖬𝖤𝖭𝖴 𝖫𝖨𝖲𝖳 • 𝖱𝖴𝖡𝖸',
-              description: 'AI • ESTADO',
+              description: '╰┈➤ 𝖨𝖭𝖳𝖤𝖱𝖠𝖢𝖳𝖨𝖵𝖤 𝖬𝖤𝖭𝖴',
               retailerId: 'AI • ESTADO',
               productImageCount: 1
             },
