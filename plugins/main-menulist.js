@@ -41,7 +41,7 @@ let handler = async (m, { conn, usedPrefix: _p, __dirname }) => {
 
     let fkontak = null;
     try {
-      const res = await fetch('https://i.postimg.cc/nhdkndD6/pngtree-yellow-bell-ringing-with-sound-waves-png-image-20687908.png');
+      const res = await fetch('https://i.postimg.cc/2ypnK87s/d797c7bf7b2bc52d2fe4c90d4bdae653-2025-11-15T174105-377.jpg');
       const thumb2 = Buffer.from(await res.arrayBuffer());
       fkontak = {
         key: { participant: '0@s.whatsapp.net', remoteJid: 'status@broadcast', fromMe: false, id: 'Halo' },
