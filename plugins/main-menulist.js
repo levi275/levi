@@ -189,7 +189,7 @@ let handler = async (m, { conn, usedPrefix: _p, __dirname }) => {
     let msgi = generateWAMessageFromContent(
       m.chat, 
       { viewOnceMessage: { message: { interactiveMessage } } }, 
-      { userJid: conn.user.jid, quoted: fkontak || m } // <-- Aquí se usa el fkontak
+      { userJid: conn.user.jid, quoted: fkontak || m }
     );
 
     await conn.relayMessage(m.chat, msgi.message, { messageId: msgi.key.id });
