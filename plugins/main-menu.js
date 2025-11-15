@@ -693,7 +693,7 @@ let handler = async (m, { conn, args }) => {
             forwardingScore: 999,
             forwardedNewsletterMessageInfo: {
                 newsletterJid: '120363335626706839@newsletter',
-                newsletterName: '⏤͟͟͞͞◯⃞📣 𝐍𖹭𝐭𝐢𝐟𝐢𝐜𝐚𝐜𝐢𖹭𝐧𝐞𝐬 𝐑υ𝐛ყ 𝐇𖹭𝐬𝐡𝐢𝐧𖹭 ིྀ',
+                newsletterName: '..⃗. 💌 ⌇ ¡Noticias y más de tu idol favorita! ⊹ ִ ּ',
                 serverMessageId: -1,
             },
             externalAdReply: {
