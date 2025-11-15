@@ -7,7 +7,7 @@ import moment from 'moment-timezone';
 
 const defaultMenu = {
   before: `Hola %name ${ucapan()}
-Soy ୨🎤୧ 𝐑υ𝐛ყ 𝐇𖹭𝐬𝐡𝐢𝐧𖹭 𝐁𖹭𝐭 𝐌𝐃 ୨🎤୧
+mi nombre es Ruby, y te deseo unas felices fiestas! 🧴  𖹥
 
 ╭─ ☄︎  *INFO DEL BOT* ☄︎
 │ ◦ 👑 *Creador:* Dioneibi
