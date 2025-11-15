@@ -712,7 +712,7 @@ let handler = async (m, { conn, args }) => {
 handler.help = ['menu'];
 handler.register = true;
 handler.tags = ['main'];
-handler.command = ['menu', 'menú', 'help'];
+handler.command = ['menuall', 'allmenu', 'allmenù'];
 
 export default handler;
 
@@ -721,4 +721,5 @@ function clockString(ms) {
     let minutes = Math.floor((ms / (1000 * 60)) % 60);
     let hours = Math.floor((ms / (1000 * 60 * 60)) % 24);
     return `${hours}h ${minutes}m ${seconds}s`;
+
 }
