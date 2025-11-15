@@ -39,6 +39,30 @@ let handler = async (m, { conn, usedPrefix: _p, __dirname }) => {
     let uptime = clockString(_uptime);
     let totalreg = Object.keys(global.db.data.users).length;
 
+    let fkontak = null;
+    try {
+      const res = await fetch('https://i.postimg.cc/nhdkndD6/pngtree-yellow-bell-ringing-with-sound-waves-png-image-20687908.png');
+      const thumb2 = Buffer.from(await res.arrayBuffer());
+      fkontak = {
+        key: { participant: '0@s.whatsapp.net', remoteJid: 'status@broadcast', fromMe: false, id: 'Halo' },
+        message: {
+          productMessage: {
+            product: {
+              productImage: { jpegThumbnail: thumb2 },
+              title: '𝖬𝖤𝖭𝖴 𝖫𝖨𝖲𝖳 • 𝖱𝖴𝖡𝖸',
+              description: 'AI • ESTADO',
+              currencyCode: 'BRL',
+              priceAmount1000: '999999999',
+              retailerId: 'AI • ESTADO',
+              productImageCount: 1
+            },
+            businessOwnerJid: '0@s.whatsapp.net'
+          }
+        },
+        participant: '0@s.whatsapp.net'
+      };
+    } catch {}
+
     const imageUrl = 'https://files.catbox.moe/yenx0h.png';
     let media = await prepareWAMessageMedia(
       { image: { url: imageUrl } },
@@ -146,7 +170,7 @@ let handler = async (m, { conn, usedPrefix: _p, __dirname }) => {
           {
             name: "single_select",
             buttonParamsJson: JSON.stringify({
-              title: " ❀⃘⃛͜ ۪۪۪݃𓉘᳟ี ⃞̸͢𑁃 ̚𓉝᳟ี𝐌𝐄𝐍𝐔 𝐁𝐎𝐓❀⃘⃛͜",
+              title: " ❀⃘⃛͜ ۪۪۪݃𓉘᳟ี ⃞̸͢𑁃 ̚𓉝᳟ี𝐌𝐄𝐍𝐔 𝐁𝐎𝐓❀⃘⃛͜",
               sections: sections
             })
           },
@@ -165,12 +189,12 @@ let handler = async (m, { conn, usedPrefix: _p, __dirname }) => {
     let msgi = generateWAMessageFromContent(
       m.chat, 
       { viewOnceMessage: { message: { interactiveMessage } } }, 
-      { userJid: conn.user.jid, quoted: m }
+      { userJid: conn.user.jid, quoted: fkontak || m } // <-- Aquí se usa el fkontak
     );
 
     await conn.relayMessage(m.chat, msgi.message, { messageId: msgi.key.id });
     m.react('💞');
-    
+
   } catch (e) {
     conn.reply(m.chat, `꒰ 💔 Oops... ꒱ 𝗻𝗼 𝘀𝗲 𝗽𝘂𝗱𝗼 𝗰𝗮𝗿𝗴𝗮𝗿 𝗲𝗹 𝗺𝗲𝗻𝘂́.\n\n*Razón:* ${e}`, m);
     throw e;
