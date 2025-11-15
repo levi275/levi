@@ -51,8 +51,6 @@ let handler = async (m, { conn, usedPrefix: _p, __dirname }) => {
               productImage: { jpegThumbnail: thumb2 },
               title: '𝖬𝖤𝖭𝖴 𝖫𝖨𝖲𝖳 • 𝖱𝖴𝖡𝖸',
               description: 'AI • ESTADO',
-              currencyCode: 'BRL',
-              priceAmount1000: '999999999',
               retailerId: 'AI • ESTADO',
               productImageCount: 1
             },
