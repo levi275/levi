@@ -167,7 +167,7 @@ id: `${_p}menubusquedas`
 handler.help = ['menu'];
 handler.tags = ['main'];
 handler.register = true;
-handler.command = ['menulist', 'listmenu'];
+handler.command = ['menu', 'menú', 'listmenu'];
 
 function pickRandom(list) {
   return list[Math.floor(Math.random() * list.length)];
