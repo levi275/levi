@@ -72,7 +72,7 @@ let handler = async (m, { conn, usedPrefix: _p, __dirname }) => {
       rows: [
         {
           title: "🌟 𝗠𝗘𝗡𝗨́ 𝗖𝗢𝗠𝗣𝗟𝗘𝗧𝗢 🌟",
-          description: "💖 𝗠𝘂𝗲𝘀𝘁𝗿𝗮 𝘁𝗼𝗱𝗼𝘀 𝗹𝗼𝘀 𝗰𝗼𝗺𝗮𝗻𝗱𝗼𝘀 𝗱𝗶𝘀𝗽𝗼𝗻𝗶𝗯𝗹𝗲𝘀 𝗱𝗲 𝗥𝘂𝗯𝘆.",
+          description: "୨♡୧ ꒰ ᴍᴜᴇsᴛʀᴀ ᴛᴏᴅᴏs ʟᴏs ᴄᴏᴍᴀɴᴅᴏs ᴅɪsᴘᴏɴɪʙʟᴇs ° 𐙚  .",
           id: `${_p}menuall`
         },
         {
