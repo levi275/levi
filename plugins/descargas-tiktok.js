@@ -1,49 +1,69 @@
 import fetch from 'node-fetch';
 
-var handler = async (m, { conn, args, usedPrefix, command }) => {
-  if (!args[0]) {
+const handler = async (m, { conn, args, usedPrefix, command }) => {
+  const emoji = "🌸";
+
+  const tiktokRegex = /^(https?:\/\/)?(www\.)?(vm\.tiktok\.com|tiktok\.com)\/.+/i;
+
+  if (!args[0] || !tiktokRegex.test(args[0])) {
     return conn.reply(
       m.chat,
-      `${emoji} 𝙿𝚘𝚛 𝚏𝚊𝚟𝚘𝚛, 𝚒𝚗𝚐𝚛𝚎𝚜𝚊 𝚞𝚗 𝚎𝚗𝚕𝚊𝚌𝚎 𝚍𝚎 𝚃𝚒𝚔𝚃𝚘𝚔.\n\n📌 *Ejemplo:* ${usedPrefix + command} https://vm.tiktok.com/...`,
+      `
+${emoji} 𝑶𝒘𝒈~ 𝒏𝒐𝒏 𝒏𝒐𝒏... 𝒅𝒆𝒃𝒆𝒔 𝒖𝒔𝒂𝒓 𝒆𝒍 𝒄𝒐𝒎𝒂𝒏𝒅𝒐 𝒋𝒖𝒏𝒕𝒐 𝒂 𝒖𝒏 𝒆𝒏𝒍𝒂𝒄𝒆 𝒗𝒂𝒍𝒊𝒅𝒐 𝒅𝒆 𝑻𝒊𝒌𝑻𝒐𝒌 ✨
+
+📌 *Ejemplo correcto:*  
+» ${usedPrefix + command} https://vm.tiktok.com/XXXXXXXX/
+
+(˘⌣˘ ) 𝑽𝒖𝒆𝒍𝒗𝒆 𝒂 𝒊𝒏𝒕𝒆𝒏𝒕𝒂𝒓 𝒄𝒐𝒏 𝒖𝒏 𝒍𝒊𝒏𝒌 𝒗𝒂𝒍𝒊𝒅𝒐
+      `.trim(),
       m
     );
   }
 
   try {
-    await conn.reply(m.chat, `${emoji} 𝙴𝚜𝚙𝚎𝚛𝚎 𝚞𝚗 𝚖𝚘𝚖𝚎𝚗𝚝𝚘, 𝚘𝚋𝚝𝚎𝚗𝚒𝚎𝚗𝚍𝚘 𝚎𝚕 𝚟𝚒𝚍𝚎𝚘...`, m);
+    await conn.reply(
+      m.chat,
+      `${emoji} 𝑬𝒔𝒑𝒆𝒓𝒂 𝒍𝒊𝒏𝒅𝒐~ 𝒆𝒔𝒕𝒐𝒚 𝒃𝒂𝒋𝒂𝒏𝒅𝒐 𝒕𝒖 𝒗𝒊𝒅𝒆𝒊𝒕𝒐... 📥✨`,
+      m
+    );
 
     const tiktokData = await tiktokdl(args[0]);
     const result = tiktokData?.data;
 
     if (!result?.play) {
-      return conn.reply(m.chat, "❌ 𝙴𝚛𝚛𝚘𝚛: 𝙽𝚘 𝚜𝚎 𝚙𝚞𝚍𝚘 𝚘𝚋𝚝𝚎𝚗𝚎𝚛 𝚎𝚕 𝚟𝚒𝚍𝚎𝚘.", m);
+      return conn.reply(
+        m.chat,
+        `${emoji} ❌ 𝑼𝒑𝒔… 𝒏𝒐 𝒑𝒖𝒅𝒆 𝒐𝒃𝒕𝒆𝒏𝒆𝒓 𝒆𝒍 𝒗𝒊𝒅𝒆𝒐.`,
+        m
+      );
     }
 
     const caption = `
-  *T I K T O K  -  D O W N L O A D*
+✦・﹤ 𝑻 𝑰 𝑲 𝑻 𝑶 𝑲  —  𝑫 𝑶 𝑾 𝑵 𝑳 𝑶 𝑨 𝑫 ﹥・✦
 
-\`${result.title || 'Sin título'}\`
+「${result.title || '✧ 𝑺𝒊𝒏 𝒕𝒊𝒕𝒖𝒍𝒐 ✧'}」
 
-01:43 ━━━━●───── 04:40
-⇆ㅤ ◁ㅤ ❚❚ ㅤ▷ ㅤ ↻
-               ılıılıılıılıılıılı
-𝚅𝙾𝙻𝚄𝙼𝙴 : ▮▮▮▮▮▮▮▮▮▮
+❀ 𝑨𝒖𝒕𝒐𝒓: ${result.author?.nickname || 'Desconocido'}
+❀ 𝑫𝒖𝒓𝒂𝒄𝒊𝒐𝒏: ${result.duration || 0}s
+❀ 𝑽𝒊𝒔𝒕𝒂𝒔: ${result.play_count || 0}
+❀ 𝑳𝒊𝒌𝒆𝒔: ${result.digg_count || 0}
+❀ 𝑪𝒐𝒎𝒆𝒏𝒕𝒂𝒓𝒊𝒐𝒔: ${result.comment_count || 0}
+❀ 𝑪𝒐𝒎𝒑𝒂𝒓𝒕𝒊𝒅𝒐𝒔: ${result.share_count || 0}
+❀ 𝑭𝒆𝒄𝒉𝒂: ${formatDate(result.create_time)}
 
-❐  *Autor* : ${result.author?.nickname || 'Desconocido'}
-❐  *Duración* : ${result.duration || 0} segundos
-❐  *Vistas* : ${result.play_count || 0}
-❐  *Likes* : ${result.digg_count || 0}
-❐  *Comentarios* : ${result.comment_count || 0}
-❐  *Compartidos* : ${result.share_count || 0}
-❐  *Publicado* : ${formatDate(result.create_time)}
-❐  *Descargas* : ${result.download_count || 0}
-`.trim();
+╰★━━━━━━━━━━━━━━━━━━★╯
+    `.trim();
 
     await conn.sendFile(m.chat, result.play, 'tiktok.mp4', caption, m);
-    await m.react('✅');
-  } catch (error) {
-    console.error(error);
-    return conn.reply(m.chat, `❌ 𝙴𝚛𝚛𝚘𝚛 𝚊𝚕 𝚍𝚎𝚜𝚌𝚊𝚛𝚐𝚊𝚛: ${error.message}`, m);
+
+    await m.react("🌸");
+  } catch (e) {
+    console.error(e);
+    return conn.reply(
+      m.chat,
+      `❌ 𝑬𝒓𝒓𝒐𝒓 𝒂𝒍 𝒅𝒆𝒔𝒄𝒂𝒓𝒈𝒂𝒓:\n${e.message}`,
+      m
+    );
   }
 };
 
@@ -52,19 +72,18 @@ handler.tags = ['descargas'];
 handler.command = ['tiktok', 'tt', 'tiktokdl', 'ttdl'];
 handler.group = true;
 handler.register = true;
-handler.coin = 2;
-handler.limit = true;
 
 export default handler;
 
 async function tiktokdl(url) {
   const api = `https://www.tikwm.com/api/?url=${url}&hd=1`;
   const res = await fetch(api);
-  const json = await res.json();
-  return json;
+  return await res.json();
 }
 
 function formatDate(timestamp) {
   const date = new Date(timestamp * 1000);
-  return date.toLocaleString('es-ES', { timeZone: 'America/Mexico_City' });
+  return date.toLocaleString('es-ES', {
+    timeZone: 'America/Mexico_City'
+  });
 }
