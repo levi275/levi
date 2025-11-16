@@ -1,6 +1,6 @@
 import fetch from 'node-fetch'
 let handler = async (m, { conn, usedPrefix, command }) => {
-try{
+try {
 let name = m.pushName||'Aventurero'
 let lkr=`⋱⏜ֹ๋۪۪۪۪۪۪᷼︵̈⋱ֻ࡛࡛፟＼𑂳⚚／ֻ࡛𑂳࡛⋰̈︵ֹ๋۪۪۪۪۪۪᷼⏜⋰
 ᰍิ۪۪۪֟፝ᰍิ͚  ִּ֮   🌟 𝙈𝙀𝙉𝙐 𝙈𝘼𝙉𝙐𝘼𝙇 🌟   ִּ֮ 
@@ -29,13 +29,22 @@ let lkr=`⋱⏜ֹ๋۪۪۪۪۪۪᷼︵̈⋱ֻ࡛࡛፟＼𑂳⚚／ֻ࡛𑂳࡛�
 > │  ◦  ⚙️ _${usedPrefix}menujuegos_
 > 🎲 ꒰ 𝗣𝗿𝘂𝗲𝗯𝗮 𝘁𝘂 𝘀𝘂𝗲𝗿𝘁𝗲 𝘆 𝗿𝗲𝘁𝗮 𝗮 𝘁𝘂𝘀 𝗮𝗺𝗶𝗴𝗼𝘀 𝗲𝗻 𝗺𝗶𝗻𝗶-𝗷𝘂𝗲𝗴𝗼𝘀 ꒱
 > │  ◦  ⚙️ _${usedPrefix}menunsfw_
-> 🔞 ꒰ 𝗔𝗰𝗰𝗲𝘀𝗼 𝗮 𝗰𝗼𝗺𝗮𝗻𝗱𝗼𝘀 𝗡𝗦𝗙𝗪, 𝘀𝗼𝗹𝗼 𝗽𝗮𝗿𝗮 𝗮𝗱𝘂𝗹𝘁𝗼𝘀 (+18) ꒱
+> 🔞 ꒰ 𝗔𝗰𝗰𝗲𝗿𝗶𝘀𝗼 𝗮 𝗰𝗼𝗺𝗮𝗻𝗱𝗼𝘀 𝗡𝗦𝗙𝗪, 𝘀𝗼𝗹𝗼 𝗽𝗮𝗿𝗮 𝗮𝗱𝗹𝘁𝗼𝘀 (+18) ꒱
 > │  ◦  ⚙️ _${usedPrefix}menubusquedas_
 > 🌍 ꒰ 𝗕𝘂𝘀𝗰𝗮 𝗶𝗻𝗳𝗼, 𝗹𝗲𝘁𝗿𝗮𝘀, 𝘃𝗶𝗱𝗲𝗼𝘀 𝘆 𝗺𝘂𝗰𝗵𝗼 𝗺𝗮́𝘀 𝗲𝗻 𝗹𝗶́𝗻𝗲𝗮 ꒱
 > ╰┉ͦ━ᷫ━ⷭ┈ ⃘⵿݂۪۪۪࣭࣭፝۬۬۬͞💙ꫂ❀ᰰ᷒|²⁰|²|²³ ♡┈⊷ꫂ፝۬۬۬͞ᜓ⃘݂۪۪۪࣭࣭.─❤️⃟ᬽ፝֟━❥ᰰຼ᭢╯*`
-let res=await fetch('https://raw.githubusercontent.com/levi275/img/main/Merry-christmas4.jpeg')
-let buffer=Buffer.from(await res.arrayBuffer())
-await conn.sendMessage(m.chat,{image:{buffer},caption:lkr,contextInfo:{mentionedJid:[m.sender],isForwarded:true,forwardedNewsletterMessageInfo:{newsletterJid:global.channelRD,newsletterName:global.canalNombreM,serverMessageId:-1}}})
+let res = await fetch('https://raw.githubusercontent.com/levi275/img/main/Merry-christmas4.jpeg')
+let buffer = Buffer.from(await res.arrayBuffer())
+await conn.sendFile(m.chat, buffer, 'Merry-christmas4.jpeg', lkr, m, false, {
+contextInfo:{
+mentionedJid:[m.sender],
+isForwarded:true,
+forwardedNewsletterMessageInfo:{
+newsletterJid:global.channelRD,
+newsletterName:global.canalNombreM,
+serverMessageId:-1
+}
+}})
 await m.react('🌟')}
 catch(e){await conn.reply(m.chat,`❌ Ocurrió un error en el comando *${command}*:\n\n${e}`,m);console.error(e)}
 }
