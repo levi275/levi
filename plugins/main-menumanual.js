@@ -4,20 +4,16 @@ const channelRD = '120363335626706839@newsletter'
 const canalNombreM = '𖥔ᰔᩚ⋆｡˚ ꒰🍒 ʀᴜʙʏ-ʜᴏꜱʜɪɴᴏ | ᴄʜᴀɴɴᴇʟ-ʙᴏᴛ 💫꒱࣭'
 
 var handler = async (m, { conn, usedPrefix, command }) => {
-
 try {
-
 const img = await axios.get("https://github.com/levi275/img/blob/main/Merry-christmas4.jpeg?raw=1", { responseType: "arraybuffer" })
-
+const thumb = Buffer.from(img.data)
 let name = m.pushName || 'Aventurero'
 
 const texto = `⋱⏜ֹ๋۪۪۪۪۪۪᷼︵̈⋱ֻ࡛࡛፟＼𑂳⚚／ֻ࡛𑂳࡛⋰̈︵ֹ๋۪۪۪۪۪۪᷼⏜⋰
-    
-     ᰍิ۪۪۪֟፝ᰍิ͚  ִּ֮   🌟 𝙈𝙀𝙉𝙐 𝙈𝘼𝙉𝙐𝘼𝙇 🌟   ִּ֮ 
+ᰍִ۪۪۪֟፝ᰍִ͚  ִּ֮   🌟 𝙈𝙀𝙉𝙐 𝙈𝘼𝙉𝙐𝘼𝙇 🌟   ִּ֮ 
     
 (｡•ᴗ•)ﾉﾞ¡𝐇𝐨𝐥𝐚, ${name}! 💫
 𝐄𝐬𝐭𝐨𝐬 𝐬𝐨𝐧 𝐥𝐚𝐬 𝐨𝐩𝐜𝐢𝐨𝐧𝐞𝐬 𝐝𝐞 𝐦𝐞𝐧𝐮́ 𝐪𝐮𝐞 𝐭𝐢𝐞𝐧𝐞 𝐥𝐚 𝐛𝐨𝐭
-
 
 > ├┈・──・──・﹕₊˚ ✦・୨୧・
 > │  ◦  ⚙️ _${usedPrefix}menumanual_
@@ -29,7 +25,7 @@ const texto = `⋱⏜ֹ๋۪۪۪۪۪۪᷼︵̈⋱ֻ࡛࡛፟＼𑂳⚚／ֻ࡛�
 > │  ◦  ⚙️ _${usedPrefix}menugacha_
 > 🎭 ꒰ ¡𝗚𝗶𝗿𝗮 𝗲𝗹 𝗱𝗲𝘀𝘁𝗶𝗻𝗼 𝘆 𝗰𝗼𝗹𝗲𝗰𝗰𝗶𝗼𝗻𝗮 𝗵𝗲́𝗿𝗼𝗲𝘀 𝗲́𝗽𝗶𝗰𝗼𝘀! ꒱
 > │  ◦  ⚙️ _${usedPrefix}menusticker_
-> ✨ ꒰ 𝗖𝗿𝗲𝗮 𝘀𝘁𝗶𝗰𝗸𝗲rs 𝗮𝗻𝗶𝗺𝗮𝗱𝗼𝘀, 𝗽𝗲𝗿𝘀𝗼𝗻𝗮𝗹𝗶𝘇𝗮𝗱𝗼𝘀 𝘆 𝘂́𝗻𝗶𝗰𝗼𝘀 ꒱
+> ✨ ꒰ 𝗖𝗿𝗲𝗮 𝘀𝘁𝗶𝗰𝗸𝗲𝗿𝘀 𝗮𝗻𝗶𝗺𝗮𝗱𝗼𝘀, 𝗽𝗲𝗿𝘀𝗼𝗻𝗮𝗹𝗶𝘇𝗮𝗱𝗼𝘀 𝘆 𝘂́𝗻𝗶𝗰𝗼𝘀 ꒱
 > │  ◦  ⚙️ _${usedPrefix}menuherramientas_
 > ⛓️‍💥 ꒰ 𝗖𝗼𝗺𝗮𝗻𝗱𝗼𝘀 𝘂́𝘁𝗶𝗹𝗲𝘀 𝘆 𝗱𝗶𝘃𝗲𝗿𝘀𝗼𝘀 𝗽𝗮𝗿𝗮 𝗰𝗮𝗱𝗮 𝘀𝗶𝘁𝘂𝗮𝗰𝗶𝗼́𝗻 ꒱
 > │  ◦  ⚙️ _${usedPrefix}menuperfil_
@@ -64,12 +60,11 @@ newsletterName: canalNombreM,
 serverMessageId: -1
 },
 externalAdReply: {
-title: "Ruby Hoshino Bot",
-body: botname,
-thumbnailUrl: "https://github.com/levi275/img/blob/main/Merry-christmas4.jpeg?raw=1",
-sourceUrl: "https://youtube.com",
+title: packname,
+body: "💗 𓈒꒰ 𝘔𝘦𝘯𝘶 𝘦𝘯𝘷𝘪𝘢𝘥𝘰 ꒱",
 mediaType: 1,
-renderLargerThumbnail: true
+thumbnail: thumb,
+renderLargerThumbnail: false
 }
 }
 },
@@ -79,7 +74,6 @@ renderLargerThumbnail: true
 } catch (e) {
 await conn.reply(m.chat, "❌ Error:\n" + e.toString(), m)
 }
-
 }
 
 handler.help = ["menumanual"]
