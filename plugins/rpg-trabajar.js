@@ -20,7 +20,7 @@ const handler = async (m, { conn }) => {
         const amount = Math.floor((Math.random() * 4000 + 1000) * premiumBenefit);
         user.coin += amount;
         const work = pickRandom(trabajosBuenos);
-        await conn.reply(m.chat, `${work} y te llevaste *${m.moneda}${amount.toLocaleString()}*.\n\n*💰 Cartera:* ${m.moneda}${user.coin.toLocaleString()} | *🏦 Banco:* ${m.moneda}${user.bank.toLocaleString()}`, m);
+        await conn.reply(m.chat, `${work} y te llevaste *${m.moneda} ${amount.toLocaleString()}*.\n\n*💰 Cartera:* ${m.moneda} ${user.coin.toLocaleString()} | *🏦 Banco:* ${m.moneda} ${user.bank.toLocaleString()}`, m);
     } else {
         const amount = Math.floor(Math.random() * 3000 + 500);
         let total = user.coin + user.bank;
@@ -35,7 +35,7 @@ const handler = async (m, { conn }) => {
         }
 
         const work = pickRandom(trabajosMalos);
-        await conn.reply(m.chat, `${work} y en el proceso perdiste *${m.moneda}${loss.toLocaleString()}*.\n\n*💰 Cartera:* *${m.moneda}${user.coin.toLocaleString()}* | *🏦 Banco:* *${m.moneda}${user.bank.toLocaleString()}*`, m);
+        await conn.reply(m.chat, `${work} y en el proceso perdiste *${m.moneda} ${loss.toLocaleString()}*.\n\n*💰 Cartera:* *${m.moneda} ${user.coin.toLocaleString()}* | *🏦 Banco:* *${m.moneda} ${user.bank.toLocaleString()}*`, m);
     }
 
     cooldowns[m.sender] = Date.now();
