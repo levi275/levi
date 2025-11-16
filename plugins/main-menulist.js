@@ -5,10 +5,9 @@ import { xpRange } from '../lib/levelling.js';
 import { prepareWAMessageMedia, generateWAMessageFromContent } from '@whiskeysockets/baileys';
 import moment from 'moment-timezone';
 
-// (Todo tu 'defaultMenu' y la parte de arriba quedan igual)
 const defaultMenu = {
   before: `𝙃𝙤𝙡𝙖 *%name* ${ucapan()}
-mi nombre es 𝙍𝙪𝙗𝙮, 𝙮 𝙩𝙚 𝙙𝙚𝙨𝙚𝙤 𝙪𝙣𝙖𝙨 𝙛𝙚𝙡𝙞𝙘𝙚𝙨 𝙛𝙞𝙚𝙨𝙩𝙖𝙨! 🧴  𖹥
+𝙢𝙞 𝙣𝙤𝙢𝙗𝙧𝙚 𝙚𝙨 𝙍𝙪𝙗𝙮, 𝙮 𝙩𝙚 𝙙𝙚𝙨𝙚𝙤 𝙪𝙣𝙖𝙨 𝙛𝙚𝙡𝙞𝙘𝙚𝙨 𝙛𝙞𝙚𝙨𝙩𝙖𝙨! 🧴  𖹥
 
 ♡  ∩_∩
   （„• ֊ •„)♡
@@ -72,7 +71,6 @@ let handler = async (m, { conn, usedPrefix: _p, __dirname }) => {
       { upload: conn.waUploadToServer }
     );
 
-    // Definimos las secciones (sin el menú manual aquí)
     let sections = [{
       title: "𝐒𝐄𝐋𝐄𝐂𝐂𝐈𝐎𝐍𝐄 𝐀𝐐𝐔𝐈",
       rows: [
@@ -108,9 +106,6 @@ let handler = async (m, { conn, usedPrefix: _p, __dirname }) => {
     let beforeText = defaultMenu.before.replace(/%name/g, name).replace(/%muptime/g, muptime).replace(/%uptime/g, uptime).replace(/%totalreg/g, totalreg).replace(/%exp/g, exp).replace(/%level/g, level).replace(/%role/g, role);
 
 
-    // --- INICIO DE LA MODIFICACIÓN ---
-    
-    // MENSAJE 1: El Menú Interactivo (NUEVO)
     const interactiveMessage = {
       header: {
         title: "",
@@ -130,7 +125,6 @@ let handler = async (m, { conn, usedPrefix: _p, __dirname }) => {
               sections: sections
             })
           }
-          // Eliminamos el 'quick_reply' de aquí
         ],
         messageParamsJson: ""
       }
@@ -142,26 +136,22 @@ let handler = async (m, { conn, usedPrefix: _p, __dirname }) => {
       { userJid: conn.user.jid, quoted: fkontak || m }
     );
 
-    // Enviamos el MENSAJE 1
     await conn.relayMessage(m.chat, msgi.message, { messageId: msgi.key.id });
 
     
-    // MENSAJE 2: El Botón Manual (OBSOLETO PERO FUNCIONAL)
     const buttons = [
       { buttonId: `${_p}menumanual`, buttonText: { displayText: '꒰꒰ 🍒 𝐌𝖾𝗇𝗎 𝐌𝖺𝗇𝗎𝖺l Ი꯭ᰍ' }, type: 1 }
     ];
     
     const buttonMessage = {
-        text: `*¿Prefieres la vista de texto?* 📄\nUsa este botón para el menú manual.`,
+        text: `*¿Prefieres hacerlo manual?* 📄\escribe ${usedPrefix}menumanual o Usa este botón para el menú manual.`,
         footer: 'Pulse el botón de abajo',
         buttons: buttons,
         headerType: 1
     };
 
-    // Enviamos el MENSAJE 2
     await conn.sendMessage(m.chat, buttonMessage, { quoted: m });
     
-    // --- FIN DE LA MODIFICACIÓN ---
 
     m.react('💞');
 
@@ -178,7 +168,6 @@ handler.command = ['menu', 'menú', 'listmenu'];
 
 export default handler;
 
-// (Todas tus funciones 'pickRandom', 'clockString' y 'ucapan' quedan igual)
 function pickRandom(list) {
   return list[Math.floor(Math.random() * list.length)];
 }
