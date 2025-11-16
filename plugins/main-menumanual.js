@@ -1,12 +1,11 @@
 import fetch from 'node-fetch'
 let handler = async (m, { conn, usedPrefix, command }) => {
 try{
-let name = m.pushName || 'Aventurero'
-let lkr = `⋱⏜ֹ๋۪۪۪۪۪۪᷼︵̈⋱ֻ࡛࡛፟＼𑂳⚚／ֻ࡛𑂳࡛⋰̈︵ֹ๋۪۪۪۪۪۪᷼⏜⋰
+let name = m.pushName||'Aventurero'
+let lkr=`⋱⏜ֹ๋۪۪۪۪۪۪᷼︵̈⋱ֻ࡛࡛፟＼𑂳⚚／ֻ࡛𑂳࡛⋰̈︵ֹ๋۪۪۪۪۪۪᷼⏜⋰
 ᰍิ۪۪۪֟፝ᰍิ͚  ִּ֮   🌟 𝙈𝙀𝙉𝙐 𝙈𝘼𝙉𝙐𝘼𝙇 🌟   ִּ֮ 
 (｡•ᴗ•)ﾉﾞ¡𝐇𝐨𝐥𝐚, ${name}! 💫
 𝐄𝐬𝐭𝐨𝐬 𝐬𝐨𝐧 𝐥𝐚𝐬 𝐨𝐩𝐜𝐢𝐨𝐧𝐞𝐬 𝐝𝐞 𝐦𝐞𝐧𝐮́ 𝐪𝐮𝐞 𝐭𝐢𝐞𝐧𝐞 𝐥𝐚 𝐛𝐨𝐭
-
 > ├┈・──・──・﹕₊˚ ✦・୨୧・
 > │  ◦  ⚙️ _${usedPrefix}menumanual_
 > 🍧 ꒰ 𝗺𝘂𝗲𝘀𝘁𝗿𝗮 𝘁𝗼𝗱𝗼𝘀 𝗹𝗼𝘀 𝗰𝗼𝗺𝗮𝗻𝗱𝗼𝘀 𝗱𝗶𝘀𝗽𝗼𝗻𝗶𝗯𝗹𝗲𝘀 𝗲𝗻 𝗥𝘂𝗯𝘆 ꒱
@@ -33,9 +32,9 @@ let lkr = `⋱⏜ֹ๋۪۪۪۪۪۪᷼︵̈⋱ֻ࡛࡛፟＼𑂳⚚／ֻ࡛𑂳�
 > │  ◦  ⚙️ _${usedPrefix}menubusquedas_
 > 🌍 ꒰ 𝗕𝘂𝘀𝗰𝗮 𝗶𝗻𝗳𝗼, 𝗹𝗲𝘁𝗿𝗮𝘀, 𝘃𝗶𝗱𝗲𝗼𝘀 𝘆 𝗺𝘂𝗰𝗵𝗼 𝗺𝗮́𝘀 𝗲𝗻 𝗹𝗶́𝗻𝗲𝗮 ꒱
 > ╰┉ͦ━ᷫ━ⷭ┈ ⃘⵿݂۪۪۪࣭࣭፝۬۬۬͞💙ꫂ❀ᰰ᷒|²⁰|²|²³ ♡┈⊷ꫂ፝۬۬۬͞ᜓ⃘݂۪۪۪࣭࣭.─❤️⃟ᬽ፝֟━❥ᰰຼ᭢╯*`
-let res = await fetch('https://raw.githubusercontent.com/levi275/img/main/Merry-christmas4.jpeg')
-let buffer = await res.arrayBuffer()
-await conn.sendMessage(m.chat,{image:Buffer.from(buffer),caption:lkr,contextInfo:{mentionedJid:[m.sender],isForwarded:true,forwardedNewsletterMessageInfo:{newsletterJid:global.channelRD,newsletterName:global.canalNombreM,serverMessageId:-1}}})
+let res=await fetch('https://raw.githubusercontent.com/levi275/img/main/Merry-christmas4.jpeg')
+let buffer=Buffer.from(await res.arrayBuffer())
+await conn.sendMessage(m.chat,{image:{buffer},caption:lkr,contextInfo:{mentionedJid:[m.sender],isForwarded:true,forwardedNewsletterMessageInfo:{newsletterJid:global.channelRD,newsletterName:global.canalNombreM,serverMessageId:-1}}})
 await m.react('🌟')}
 catch(e){await conn.reply(m.chat,`❌ Ocurrió un error en el comando *${command}*:\n\n${e}`,m);console.error(e)}
 }
