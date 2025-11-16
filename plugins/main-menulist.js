@@ -11,13 +11,14 @@ const defaultMenu = {
 
 ♡  ∩_∩
   （„• ֊ •„)♡
- ┏━━∪∪━⏤͟͟͞͞★꙲⃝͟🌷❈┉━━━┓
-   *INFO DEL BOT* 
-│ ◦ 👑 *Creador:* Dioneibi
-│ ◦ 🌎 *Modo:* Pública
-│ ◦ 💻 *Baileys:* Multi Device
-│ ◦ ⏰ *Tiempo Activa:* %uptime
-│ ◦ 👥 *Usuarios:* %totalreg
+┏━━∪∪━⏤͟͟͞͞★꙲⃝͟🌷❈┉━━━┓
+┃ ◦ *INFO DEL BOT* 
+┃┈──❊:::::::¨¨*:::::::❊──┈
+┃ ◦ 👑 *Creador:* Dioneibi
+┃ ◦ 🌎 *Modo:* Pública
+┃ ◦ 💻 *Baileys:* Multi Device
+┃ ◦ ⏰ *Tiempo Activa:* %uptime
+┃ ◦ 👥 *Usuarios:* %totalreg
 ┗━━━━⏤͟͟͞͞★꙲⃝͟🌷❈┉━━━━━━┛`.trim(),
 };
 
