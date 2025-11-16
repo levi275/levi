@@ -1,15 +1,12 @@
 let handler = async (m, { conn, usedPrefix, command }) => {
-
-    let name = m.pushName || 'Aventurero'
+    let name = m.pushName || 'Aventurero';
     
-
     let lkr = `⋱⏜ֹ๋۪۪۪۪۪۪᷼︵̈⋱ֻ࡛࡛፟＼𑂳⚚／ֻ࡛𑂳࡛⋰̈︵ֹ๋۪۪۪۪۪۪᷼⏜⋰
-    
-     ᰍิ۪۪۪֟፝ᰍิ͚  ִּ֮   🌟 𝙈𝙀𝙉𝙐 𝙈𝘼𝙉𝙐𝘼𝙇 🌟   ִּ֮ 
-    
+
+  ᰍิ۪۪۪֟፝ᰍิ͚  ִּ֮   🌟 𝙈𝙀𝙉𝙐 𝙈𝘼𝙉𝙐𝘼𝙇 🌟   ִּ֮ 
+
 (｡•ᴗ•)ﾉﾞ¡𝐇𝐨𝐥𝐚, ${name}! 💫
 𝐄𝐬𝐭𝐨𝐬 𝐬𝐨𝐧 𝐥𝐚𝐬 𝐨𝐩𝐜𝐢𝐨𝐧𝐞𝐬 𝐝𝐞 𝐦𝐞𝐧𝐮́ 𝐪𝐮𝐞 𝐭𝐢𝐞𝐧𝐞 𝐥𝐚 𝐛𝐨𝐭
-
 
 > ├┈・──・──・﹕₊˚ ✦・୨୧・
 > │  ◦  ⚙️ _${usedPrefix}menumanual_
@@ -21,7 +18,7 @@ let handler = async (m, { conn, usedPrefix, command }) => {
 > │  ◦  ⚙️ _${usedPrefix}menugacha_
 > 🎭 ꒰ ¡𝗚𝗶𝗿𝗮 𝗲𝗹 𝗱𝗲𝘀𝘁𝗶𝗻𝗼 𝘆 𝗰𝗼𝗹𝗲𝗰𝗰𝗶𝗼𝗻𝗮 𝗵𝗲́𝗿𝗼𝗲𝘀 𝗲́𝗽𝗶𝗰𝗼𝘀! ꒱
 > │  ◦  ⚙️ _${usedPrefix}menusticker_
-> ✨ ꒰ 𝗖𝗿𝗲𝗮 𝘀𝘁𝗶𝗰𝗸𝗲rs 𝗮𝗻𝗶𝗺𝗮𝗱𝗼𝘀, 𝗽𝗲𝗿𝘀𝗼𝗻𝗮𝗹𝗶𝘇𝗮𝗱𝗼𝘀 𝘆 𝘂́𝗻𝗶𝗰𝗼𝘀 ꒱
+> ✨ ꒰ 𝗖𝗿𝗲𝗮 𝘀𝘁𝗶𝗰𝗸𝗲𝗿𝘀 𝗮𝗻𝗶𝗺𝗮𝗱𝗼𝘀, 𝗽𝗲𝗿𝘀𝗼𝗻𝗮𝗹𝗶𝘇𝗮𝗱𝗼𝘀 𝘆 𝘂́𝗻𝗶𝗰𝗼𝘀 ꒱
 > │  ◦  ⚙️ _${usedPrefix}menuherramientas_
 > ⛓️‍💥 ꒰ 𝗖𝗼𝗺𝗮𝗻𝗱𝗼𝘀 𝘂́𝘁𝗶𝗹𝗲𝘀 𝘆 𝗱𝗶𝘃𝗲𝗿𝘀𝗼𝘀 𝗽𝗮𝗿𝗮 𝗰𝗮𝗱𝗮 𝘀𝗶𝘁𝘂𝗮𝗰𝗶𝗼́𝗻 ꒱
 > │  ◦  ⚙️ _${usedPrefix}menuperfil_
@@ -29,7 +26,7 @@ let handler = async (m, { conn, usedPrefix, command }) => {
 > │  ◦  ⚙️ _${usedPrefix}menugrupo_
 > 🌐 ꒰ 𝗛𝗲𝗿𝗿𝗮𝗺𝗶𝗲𝗻𝘁𝗮𝘀 𝗽𝗮𝗿𝗮 𝗹𝗮 𝗮𝗱𝗺𝗶𝗻𝗶𝘀𝘁𝗿𝗮𝗰𝗶𝗼́𝗻 𝗱𝗲 𝘁𝘂 𝗴𝗿𝘂𝗽𝗼 ꒱
 > │  ◦  ⚙️ _${usedPrefix}menuanime_
-> 💢 ꒰ 𝗘𝘅𝗽𝗿𝗲́𝘀𝗮𝘁𝗲 𝗰𝗼𝗻 𝗿𝗲𝗮𝗰𝗰𝗶𝗼𝗻𝗲𝘀 𝗱𝗲 𝗮𝗻𝗶𝗺𝗲 𝗶𝗰𝗼́𝗻𝗶𝗰𝗮𝘀 ꒱
+> 💢 ꒰ 𝗘𝘅𝗽𝗿𝗲́𝘀𝗮𝘁𝗲 𝗰𝗼𝗻 𝗿𝗲𝗮𝗰𝗰𝗶𝗼𝗻𝗲𝘀 𝗱𝗲 𝗮𝗻𝗶𝗺𝗲 𝗶𝗰𝗼́𝗻𝗶𝗰𝗮 ꒱
 > │  ◦  ⚙️ _${usedPrefix}menujuegos_
 > 🎲 ꒰ 𝗣𝗿𝘂𝗲𝗯𝗮 𝘁𝘂 𝘀𝘂𝗲𝗿𝘁𝗲 𝘆 𝗿𝗲𝘁𝗮 𝗮 𝘁𝘂𝘀 𝗮𝗺𝗶𝗴𝗼𝘀 𝗲𝗻 𝗺𝗶𝗻𝗶-𝗷𝘂𝗲𝗴𝗼𝘀 ꒱
 > │  ◦  ⚙️ _${usedPrefix}menunsfw_
@@ -41,27 +38,25 @@ let handler = async (m, { conn, usedPrefix, command }) => {
   ִ ⋱  ִֺ＼ ֺ ִ ̲｜ ֺ ִ ̲／ ֺ ִ⋰ִ  ֺ
  ֻׄ ⚚ ֕ ̷̸᮫᮫ּּּׁ᳟࣭݂۪֟፝ׄ݊͜͞  𝐓𝐞 𝐞𝐬𝐩𝐞𝐫𝐚𝐦𝐨𝐬̶̤࣭᪲۫‿ּ۪۪۪۪۪ٜ࣪⢎ּ۪࣪🪽`;
 
-    
-    await conn.sendMessage(m.chat, { 
-      image: { url: 'https://telegra.ph/file/861d4dde6b2fd5f808183.jpg' },
-      caption: lkr,
-      contextInfo: {
-        mentionedJid: [m.sender],
-        isForwarded: true,
-        forwardedNewsletterMessageInfo: {
-          newsletterJid: channelRD,
-          newsletterName: canalNombreM,
-          serverMessageId: -1
+    await conn.sendMessage(m.chat, {
+        image: { url: 'https://telegra.ph/file/861d4dde6b2fd5f808183.jpg' },
+        caption: lkr,
+        contextInfo: {
+            mentionedJid: [m.sender],
+            isForwarded: true,
+            forwardedNewsletterMessageInfo: {
+                newsletterJid: global.channelRD,
+                newsletterName: global.canalNombreM,
+                serverMessageId: -1
+            }
         }
-      }
     });
-    
-    await m.react('🌟'); 
 
+    await m.react('🌟'); 
 }
 
-handler.help = ['uni']
-handler.tags = ['main']
-handler.command = ['menumanual']
+handler.help = ['uni'];
+handler.tags = ['main'];
+handler.command = 'menumanual';
 
-export default handler
+export default handler;
