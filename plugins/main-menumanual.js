@@ -3,7 +3,7 @@ import axios from "axios"
 const channelRD = '120363335626706839@newsletter'
 const canalNombreM = '𖥔ᰔᩚ⋆｡˚ ꒰🍒 ʀᴜʙʏ-ʜᴏꜱʜɪɴᴏ | ᴄʜᴀɴɴᴇʟ-ʙᴏᴛ 💫꒱࣭'
 
-var handler = async (m, { conn }) => {
+var handler = async (m, { conn, usedPrefix, command }) => {
 
 try {
 
