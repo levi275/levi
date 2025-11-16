@@ -12,7 +12,7 @@ const defaultMenu = {
 ♡  ∩_∩
   （„• ֊ •„)♡
 ┏━━∪∪━⏤͟͟͞͞★꙲⃝͟🌷❈┉━━━┓
-┃ ◦ *INFO DEL BOT* 
+┃  *𝖨𝖭𝖥𝖮 𝖣𝖤 𝖫𝖠 𝖡𝖮𝖳* 
 ┃┈──❊:::::::¨¨*:::::::❊──┈
 ┃ ◦ 👑 *Creador:* Dioneibi
 ┃ ◦ 🌎 *Modo:* Pública
@@ -137,12 +137,16 @@ let handler = async (m, { conn, usedPrefix: _p, __dirname }) => {
       ]
     }];
 
-    let bodyText = `╭─ 🌟  *INFO DEL USUARIO* 🌟
-│ ◦ 👤 *𝐍𝐨𝐦𝐛𝐫𝐞:* %name
-│ ◦ ✨ *𝐄𝐱𝐩:* %exp
-│ ◦ 📈 *𝐍𝐢𝐯𝐞𝐥:* %level
-│ ◦ 🏆 *𝐑𝐚𝐧𝐠𝐨:* %role
-╰───────────`;
+    let bodyText = `╭━━━━━━━ 𝖨 𝖭 𝖥 𝖮  𝖴 𝖲 𝖤 𝖱 ━━━━━━━╮
+┃🍁❥̷᜔ %name❁⃟ࣾ❥̷.⁞. ┃
+─━━━━┉❈⏤͟͟͞͞★꙲⃝͟🍁❈┉━━━━─
+┃ ◦ ✨ *𝐄𝐱𝐩:* %exp
+─━━━━┉❈⏤͟͟͞͞★꙲⃝͟🍁❈┉━━━━─
+┃ ◦ 📈 *𝐍𝐢𝐯𝐞𝐥:* %level
+─━━━━┉❈⏤͟͟͞͞★꙲⃝͟🍁❈┉━━━━─
+┃ ◦ 🏆 *𝐑𝐚𝐧𝐠𝐨:* %role
+─━━━━┉❈⏤͟͟͞͞★꙲⃝͟🍁❈┉━━━━─
+╰━━━┳━━━━━━━━━━━╯`;
 
     bodyText = bodyText.replace(/%name/g, name)
                        .replace(/%exp/g, exp)
