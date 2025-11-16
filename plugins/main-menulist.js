@@ -144,7 +144,7 @@ let handler = async (m, { conn, usedPrefix: _p, __dirname }) => {
     ];
     
     const buttonMessage = {
-        text: `*¿Prefieres hacerlo manual?* 📄\escribe ${usedPrefix}menumanual o Usa este botón para el menú manual.`,
+        text: `*¿Prefieres hacerlo manual?* 📄\escribe ${_p}menumanual o Usa este botón para el menú manual.`,
         footer: 'Pulse el botón de abajo',
         buttons: buttons,
         headerType: 1
