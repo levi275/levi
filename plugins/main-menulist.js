@@ -2,14 +2,9 @@ import { promises } from 'fs';
 import { join } from 'path';
 import fetch from 'node-fetch';
 import { xpRange } from '../lib/levelling.js';
-// ¡¡ASEGÚRATE DE IMPORTAR 'proto'!!
-// Si no lo tienes, usa: import * as proto from '@whiskeysockets/baileys';
-// Pero la mayoría de bots ya lo tienen definido en 'conn' o 'global'.
-// Si da error, busca cómo se define 'proto' en tu bot.
 import { prepareWAMessageMedia, generateWAMessageFromContent } from '@whiskeysockets/baileys';
 import moment from 'moment-timezone';
 
-// (Tu 'defaultMenu' y todo lo de arriba queda igual)
 const defaultMenu = {
   before: `𝙃𝙤𝙡𝙖 *%name* ${ucapan()}
 𝙢𝙞 𝙣𝙤𝙢𝙗𝙧𝙚 𝙚𝙨 𝙍𝙪𝙗𝙮, 𝙮 𝙩𝙚 𝙙𝙚𝙨𝙚𝙤 𝙪𝙣𝙖𝙨 𝙛𝙚𝙡𝙞𝙘𝙚𝙨 𝙛𝙞𝙚𝙨𝙩𝙖𝙨! 🧴  𖹥
@@ -17,7 +12,7 @@ const defaultMenu = {
 ♡  ∩_∩
   （„• ֊ •„)♡
 ┏━━∪∪━⏤͟͟͞͞★꙲⃝͟🌷❈┉━━━┓
-┃  *𝖨𝖭𝖥𝖮 𝖣𝖤 𝖫𝖠 𝖡𝖮𝖳* ┃┈──❊:::::::¨¨*:::::::❊──┈
+┃  *𝖨𝖭𝖥𝖮 𝖣𝖤 𝖫𝖠 𝖡𝖤𝖳* ┃┈──❊:::::::¨¨*:::::::❊──┈
 ┃ ◦ 👑 *Creador:* Dioneibi
 ┃ ◦ 🌎 *Modo:* Pública
 ┃ ◦ 💻 *Baileys:* Multi Device
@@ -28,7 +23,6 @@ const defaultMenu = {
 
 let handler = async (m, { conn, usedPrefix: _p, __dirname }) => {
   try {
-    // (Toda la configuración de 'package', 'level', 'name', 'uptime', 'fkontak' es la misma)
     let _package = JSON.parse(await promises.readFile(join(__dirname, '../package.json')).catch(_ => ({}))) || {};
     let { exp, level, role } = global.db.data.users[m.sender];
     let { min, xp, max } = xpRange(level, global.multiplier);
@@ -58,7 +52,7 @@ let handler = async (m, { conn, usedPrefix: _p, __dirname }) => {
           productMessage: {
             product: {
               productImage: { jpegThumbnail: thumb2 },
-              title: '𝖬𝖤𝖭𝖴 𝖫𝖨𝖲𝖳 • 𝖱𝖴𝖸',
+              title: '𝖬𝖤𝖭𝖴 𝖫𝖨𝖲𝖳 • 𝖱𝖴𝖡𝖸',
               description: '╰┈➤ 𝖨𝖭𝖳𝖤𝖱𝖠𝖢𝖳𝖨𝖵𝖤 𝖬𝖤𝖭𝖴',
               retailerId: 'AI • ESTADO',
               productImageCount: 1
@@ -76,26 +70,72 @@ let handler = async (m, { conn, usedPrefix: _p, __dirname }) => {
       { upload: conn.waUploadToServer }
     );
 
-    // (Tu variable 'sections' está perfecta, la dejamos igual)
     let sections = [{
       title: "𝐒𝐄𝐋𝐄𝐂𝐂𝐈𝐎𝐍𝐄 𝐀𝐐𝐔𝐈",
       rows: [
-        { title: "🌟 𝗠𝗘𝗡𝗨́ 𝗖𝗢𝗠𝗣𝗟𝗘𝗧𝗢 🌟", description: "🍧 ꒰ 𝗺𝘂𝗲𝘀𝘁𝗿𝗮 𝘁𝗼𝗱𝗼𝘀 𝗹𝗼𝘀 𝗰𝗼𝗺𝗮𝗻𝗱𝗼𝘀 𝗱𝗶𝘀𝗽𝗼𝗻𝗶𝗯𝗹𝗲𝘀 𝗲𝗻 𝗥𝘂𝗯𝘆 ꒱", id: `${_p}menuall`},
-        { title: "📥 𝗠𝗘𝗡𝗨́ 𝗗𝗘 𝗗𝗘𝗦𝗖𝗔𝗥𝗚𝗔𝗦 📥", description: "🎧 ꒰ 𝗗𝗲𝘀𝗰𝗮𝗿𝗴𝗮 𝗮𝘂𝗱𝗶𝗼𝘀, 𝘃𝗶𝗱𝗲𝗼𝘀, 𝗜𝗴, 𝗙𝗕, 𝗧𝗶𝗸𝗧𝗼𝗸 𝘆 𝗺𝗮́𝘀 ꒱", id: `${_p}menudescargas`},
-        { title: "⚔️ 𝗠𝗘𝗡𝗨́ 𝗘𝗖𝗢𝗡𝗢𝗠𝗜́𝗔 & 𝗥𝗣𝗚 ⚔️", description: "🎮 ꒰ ¡𝗖𝗿𝗲𝗮 𝘁𝘂 𝗮𝘃𝗲𝗻𝘁𝘂𝗿𝗮! 𝗠𝗶𝗻𝗮, 𝗰𝗮𝘇𝗮, 𝗴𝗮𝗻𝗮 𝗼𝗿𝗼 𝘆 𝗱𝗼𝗺𝗶𝗻𝗮 𝗲𝗹 𝗥𝗣𝗚. ꒱", id: `${_p}menueconomia`},
-        { title: "🎲 𝗠𝗘𝗡𝗨́ 𝗚𝗔𝗖𝗛𝗔 🎲", description: "🎭 ꒰ ¡𝗚𝗶𝗿𝗮 𝗲𝗹 𝗱𝗲𝘀𝘁𝗶𝗻𝗼 𝘆 𝗰𝗼𝗹𝗲𝗰𝗰𝗶𝗼𝗻𝗮 𝗵𝗲́𝗿𝗼𝗲𝘀 𝗲́𝗽𝗶𝗰𝗼𝘀! ꒱", id: `${_p}menugacha`},
-        { title: "🎨 𝗠𝗘𝗡𝗨́ 𝗗𝗘 𝗦𝗧𝗜𝗖𝗞𝗘𝗥𝗦 🎨", description: "✨ ꒰ 𝗖𝗿𝗲𝗮 𝘀𝘁𝗶𝗰𝗸ers 𝗮𝗻𝗶𝗺𝗮𝗱𝗼𝘀, 𝗽𝗲𝗿𝘀𝗼𝗻𝗮𝗹𝗶𝘇𝗮𝗱𝗼𝘀 𝘆 𝘂́𝗻𝗶𝗰𝗼𝘀 ꒱", id: `${_p}menusticker`},
-        { title: "🛠️ 𝗠𝗘𝗡𝗨́ 𝗛𝗘𝗥𝗥𝗔𝗠𝗜𝗘𝗡𝗧𝗔𝗦 🛠️", description: "⚙️ ꒰ 𝗖𝗼𝗺𝗮𝗻𝗱𝗼𝘀 𝘂́𝘁𝗶𝗹𝗲𝘀 𝘆 𝗱𝗶𝘃𝗲𝗿𝘀𝗼𝘀 𝗽𝗮𝗿𝗮 𝗰𝗮𝗱𝗮 𝘀𝗶𝘁𝘂𝗮𝗰𝗶́𝗼𝗻 ꒱", id: `${_p}menuherramientas`},
-        { title: "👤 𝗠𝗘𝗡𝗨́ 𝗗𝗘 𝗣𝗘𝗥𝗙𝗜𝗟 👤", description: "🧩 ꒰ 𝗔𝗱𝗮𝗽𝘁𝗮 𝘁𝘂 𝘂𝘀𝘂𝗮𝗿𝗶𝗼, 𝗿𝗲𝗴𝗶́𝘀𝘁𝗿𝗮𝘁𝗲 𝘆 𝗿𝗲𝘃𝗶𝘀𝗮 𝘁𝘂 𝗲𝘀𝘁𝗮𝗱𝗼 ꒱", id: `${_p}menuperfil`},
-        { title: "📢 𝗠𝗘𝗡𝗨́ 𝗗𝗘 𝗚𝗥𝗨𝗣𝗢𝗦 📢", description: "🌐 ꒰ 𝗛𝗲𝗿𝗿𝗮𝗺𝗶𝗲𝗻𝘁𝗮𝘀 𝗽𝗮𝗿𝗮 𝗹𝗮 𝗮𝗱𝗺𝗶𝗻𝗶𝘀𝘁𝗿𝗮𝗰𝗶́𝗼𝗻 𝗱𝗲 𝘁𝘂 𝗴𝗿𝘂𝗽𝗼 ꒱", id: `${_p}menugrupo`},
-        { title: "🎌 𝗠𝗘𝗡𝗨́ 𝗗𝗘 𝗔𝗡𝗜𝗠𝗘 🎌", description: "💢 ꒰ 𝗘𝘅𝗽𝗿𝗲́𝘀𝗮𝘁𝗲 𝗰𝗼𝗻 𝗿𝗲𝗮𝗰𝗰𝗶𝗼𝗻𝗲𝘀 𝗱𝗲 𝗮𝗻𝗶𝗺𝗲 𝗶𝗰𝗼́𝗻𝗶𝗰𝗮𝘀 ꒱", id: `${_p}menuanime`},
-        { title: "🎮 𝗠𝗘𝗡𝗨́ 𝗗𝗘 𝗝𝗨𝗘𝗚𝗢𝗦 🎮", description: "🎲 ꒰ 𝗣𝗿𝘂𝗲𝗯𝗮 𝘁𝘂 𝘀𝘂𝗲𝗿𝘁𝗲 𝘆 𝗿𝗲𝘁𝗮 𝗮 𝘁𝘂𝘀 𝗮𝗺𝗶𝗴𝗼𝘀 𝗲𝗻 𝗺𝗶𝗻𝗶-𝗷𝘂𝗲𝗴𝗼𝘀 ꒱", id: `${_p}menujuegos`},
-        { title: "🔥 𝗠𝗘𝗡𝗨́ 𝗣𝗜𝗖𝗔𝗡𝗧𝗘 (NSFW) 🔥", description: "🔞 ꒰ 𝗔𝗰𝗰𝗲𝘀𝗼 𝗮 𝗰𝗼𝗺𝗮𝗻𝗱𝗼𝘀 𝗡𝗦𝗙𝗪, 𝘀𝗼𝗹𝗼 𝗽𝗮𝗿𝗮 𝗮𝗱𝘂𝗹𝘁𝗼𝘀 (+18) ꒱", id: `${_p}menunsfw`},
-        { title: "🔍 𝗠𝗘𝗡𝗨́ 𝗗𝗘 𝗕𝗨́𝗦𝗤𝗨𝗘𝗗𝗔𝗦 🔍", description: "🌍 ꒰ 𝗕𝘂𝘀𝗰𝗮 𝗶𝗻𝗳𝗼, 𝗹𝗲𝘁𝗿𝗮𝘀, 𝘃𝗶𝗱𝗲𝗼𝘀 𝘆 𝗺𝘂𝗰𝗵𝗼 𝗺𝗮́𝘀 𝗲𝗻 𝗹𝗶́𝗻𝗲𝗮 ꒱", id: `${_p}menubusquedas`}
+        {
+          title: "🌟 𝗠𝗘𝗡𝗨́ 𝗖𝗢𝗠𝗣𝗟𝗘𝗧𝗢 🌟",
+          description: "🍧 ꒰ 𝗺𝘂𝗲𝘀𝘁𝗿𝗮 𝘁𝗼𝗱𝗼𝘀 𝗹𝗼𝘀 𝗰𝗼𝗺𝗮𝗻𝗱𝗼𝘀 𝗱𝗶𝘀𝗽𝗼𝗻𝗶𝗯𝗹𝗲𝘀 𝗲𝗻 𝗥𝘂𝗯𝘆 ꒱",
+          id: `${_p}menuall`
+        },
+        {
+          title: "📥 𝗠𝗘𝗡𝗨́ 𝗗𝗘 𝗗𝗘𝗦𝗖𝗔𝗥𝗚𝗔𝗦 📥",
+          description: "🎧 ꒰ 𝗗𝗲𝘀𝗰𝗮𝗿𝗴𝗮 𝗮𝘂𝗱𝗶𝗼𝘀, 𝘃𝗶𝗱𝗲𝗼𝘀, 𝗜𝗴, 𝗙𝗕, 𝗧𝗶𝗸𝗧𝗼𝗸 𝘆 𝗺𝗮́𝘀 ꒱",
+          id: `${_p}menudescargas`
+        },
+        {
+          title: "⚔️ 𝗠𝗘𝗡𝗨́ 𝗘𝗖𝗢𝗡𝗢𝗠𝗜́𝗔 & 𝗥𝗣𝗚 ⚔️",
+          description: "🎮 ꒰ ¡𝗖𝗿𝗲𝗮 𝘁𝘂 𝗮𝘃𝗲𝗻𝘁𝘂𝗿𝗮! 𝗠𝗶𝗻𝗮, 𝗰𝗮𝘇𝗮, 𝗴𝗮𝗻𝗮 𝗼𝗿𝗼 𝘆 𝗱𝗼𝗺𝗶𝗻𝗮 𝗲𝗹 𝗥𝗣𝗚. ꒱",
+          id: `${_p}menueconomia`
+        },
+        {
+          title: "🎲 𝗠𝗘𝗡𝗨́ 𝗚𝗔𝗖𝗛𝗔 🎲",
+          description: "🎭 ꒰ ¡𝗚𝗶𝗿𝗮 𝗲𝗹 𝗱𝗲𝘀𝘁𝗶𝗻𝗼 𝘆 𝗰𝗼𝗹𝗲𝗰𝗰𝗶𝗼𝗻𝗮 𝗵𝗲́𝗿𝗼𝗲𝘀 𝗲́𝗽𝗶𝗰𝗼𝘀! ꒱",
+          id: `${_p}menugacha`
+        },
+        {
+          title: "🎨 𝗠𝗘𝗡𝗨́ 𝗗𝗘 𝗦𝗧𝗜𝗖𝗞𝗘𝗥𝗦 🎨",
+          description: "✨ ꒰ 𝗖𝗿𝗲𝗮 𝘀𝘁𝗶𝗰𝗸𝗲rs 𝗮𝗻𝗶𝗺𝗮𝗱𝗼𝘀, 𝗽𝗲𝗿𝘀𝗼𝗻𝗮𝗹𝗶𝘇𝗮𝗱𝗼𝘀 𝘆 𝘂́𝗻𝗶𝗰𝗼𝘀 ꒱",
+          id: `${_p}menusticker`
+        },
+        {
+          title: "🛠️ 𝗠𝗘𝗡𝗨́ 𝗛𝗘𝗥𝗥𝗔𝗠𝗜𝗘𝗡𝗧𝗔𝗦 🛠️",
+          description: "⚙️ ꒰ 𝗖𝗼𝗺𝗮𝗻𝗱𝗼𝘀 𝘂́𝘁𝗶𝗹𝗲𝘀 𝘆 𝗱𝗶𝘃𝗲𝗿𝘀𝗼𝘀 𝗽𝗮𝗿𝗮 𝗰𝗮𝗱𝗮 𝘀𝗶𝘁𝘂𝗮𝗰𝗶𝗼́𝗻 ꒱",
+          id: `${_p}menuherramientas`
+        },
+        {
+          title: "👤 𝗠𝗘𝗡𝗨́ 𝗗𝗘 𝗣𝗘𝗥𝗙𝗜𝗟 👤",
+          description: "🧩 ꒰ 𝗔𝗱𝗮𝗽𝘁𝗮 𝘁𝘂 𝘂𝘀𝘂𝗮𝗿𝗶𝗼, 𝗿𝗲𝗴𝗶́𝘀𝘁𝗿𝗮𝘁𝗲 𝘆 𝗿𝗲𝘃𝗶𝘀𝗮 𝘁𝘂 𝗲𝘀𝘁𝗮𝗱𝗼 ꒱",
+          id: `${_p}menuperfil`
+        },
+        {
+          title: "📢 𝗠𝗘𝗡𝗨́ 𝗗𝗘 𝗚𝗥𝗨𝗣𝗢𝗦 📢",
+          description: "🌐 ꒰ 𝗛𝗲𝗿𝗿𝗮𝗺𝗶𝗲𝗻𝘁𝗮𝘀 𝗽𝗮𝗿𝗮 𝗹𝗮 𝗮𝗱𝗺𝗶𝗻𝗶𝘀𝘁𝗿𝗮𝗰𝗶𝗼́𝗻 𝗱𝗲 𝘁𝘂 𝗴𝗿𝘂𝗽𝗼 ꒱",
+          id: `${_p}menugrupo`
+        },
+        {
+          title: "🎌 𝗠𝗘𝗡𝗨́ 𝗗𝗘 𝗔𝗡𝗜𝗠𝗘 🎌",
+          description: "💢 ꒰ 𝗘𝘅𝗽𝗿𝗲́𝘀𝗮𝘁𝗲 𝗰𝗼𝗻 𝗿𝗲𝗮𝗰𝗰𝗶𝗼𝗻𝗲𝘀 𝗱𝗲 𝗮𝗻𝗶𝗺𝗲 𝗶𝗰𝗼́𝗻𝗶𝗰𝗮𝘀 ꒱",
+          id: `${_p}menuanime`
+        },
+        {
+          title: "🎮 𝗠𝗘𝗡𝗨́ 𝗗𝗘 𝗝𝗨𝗘𝗚𝗢𝗦 🎮",
+          description: "🎲 ꒰ 𝗣𝗿𝘂𝗲𝗯𝗮 𝘁𝘂 𝘀𝘂𝗲𝗿𝘁𝗲 𝘆 𝗿𝗲𝘁𝗮 𝗮 𝘁𝘂𝘀 𝗮𝗺𝗶𝗴𝗼𝘀 𝗲𝗻 𝗺𝗶𝗻𝗶-𝗷𝘂𝗲𝗴𝗼𝘀 ꒱",
+          id: `${_p}menujuegos`
+        },
+        {
+          title: "🔥 𝗠𝗘𝗡𝗨́ 𝗣𝗜𝗖𝗔𝗡𝗧𝗘 (NSFW) 🔥",
+          description: "🔞 ꒰ 𝗔𝗰𝗰𝗲𝘀𝗼 𝗮 𝗰𝗼𝗺𝗮𝗻𝗱𝗼𝘀 𝗡𝗦𝗙𝗪, 𝘀𝗼𝗹𝗼 𝗽𝗮𝗿𝗮 𝗮𝗱𝘂𝗹𝘁𝗼𝘀 (+18) ꒱",
+          id: `${_p}menunsfw`
+        },
+        {
+          title: "🔍 𝗠𝗘𝗡𝗨́ 𝗗𝗘 𝗕𝗨́𝗦𝗤𝗨𝗘𝗗𝗔𝗦 🔍",
+          description: "🌍 ꒰ 𝗕𝘂𝘀𝗰𝗮 𝗶𝗻𝗳𝗼, 𝗹𝗲𝘁𝗿𝗮𝘀, 𝘃𝗶𝗱𝗲𝗼𝘀 𝘆 𝗺𝘂𝗰𝗵𝗼 𝗺𝗮́𝘀 𝗲𝗻 𝗹𝗶́𝗻𝗲𝗮 ꒱",
+          id: `${_p}menubusquedas`
+        }
       ]
     }];
 
-    // (Tu 'bodyText' y 'beforeText' quedan igual)
     let bodyText = `
   🪷ᩚ⃟꙰⟡˖ ࣪𝗜𝖭𝖥𝖮 𝖣𝖤𝖫 𝖴𝖲𝖴𝖠𝖱𝖨𝖮 🪷⃟✿˚
 ─━━━━┉❈⏤͟͟͞͞★꙲⃝͟🍁❈┉━━━━─
@@ -107,48 +147,67 @@ let handler = async (m, { conn, usedPrefix: _p, __dirname }) => {
 ─━━━━┉❈⏤͟͟͞͞★꙲⃝͟🍁❈┉━━━━─
  ი ̯ 🎋̸̶ *𝖱𝖠𝖭𝖦𝖮:* %role
 ─━━━━┉❈⏤͟͟͞͞★꙲⃝͟🍁❈┉━━━━─`;
-    bodyText = bodyText.replace(/%name/g, name).replace(/%exp/g, exp).replace(/%level/g, level).replace(/%role/g, role);
-    let beforeText = defaultMenu.before.replace(/%name/g, name).replace(/%muptime/g, muptime).replace(/%uptime/g, uptime).replace(/%totalreg/g, totalreg).replace(/%exp/g, exp).replace(/%level/g, level).replace(/%role/g, role);
 
+    bodyText = bodyText.replace(/%name/g, name)
+                       .replace(/%exp/g, exp)
+                       .replace(/%level/g, level)
+                       .replace(/%role/g, role);
 
-    // --- INICIO DE LA CORRECCIÓN ---
-    // Ya no usamos 'nativeFlowMessage'
+    let beforeText = defaultMenu.before.replace(/%name/g, name)
+                                       .replace(/%muptime/g, muptime)
+                                       .replace(/%uptime/g, uptime)
+                                       .replace(/%totalreg/g, totalreg)
+                                       .replace(/%exp/g, exp)
+                                       .replace(/%level/g, level)
+                                       .replace(/%role/g, role);
+
+    // --- CÓDIGO AJUSTADO PARA USAR LISTMESSAGE + BOTONES DE RESPUESTA RÁPIDA ---
     
-    const interactiveMessage = {
-      header: {
-        title: "",
-        hasMediaAttachment: true,
-        imageMessage: media.imageMessage
-      },
-      body: { 
-        text: `${beforeText}\n\n${bodyText}`
-      },
-      footer: { text: "⏤͟͞ू⃪  ̸̷͢𝐑𝐮𝐛y͟ 𝐇𝐨𝐬𝐡𝐢n͟𖹭 𝐁𖹭t͟𑁯ᰍ" },
-      
-      // 1. AÑADIMOS LAS SECCIONES (LA LISTA) AQUÍ
-      // WhatsApp lo mostrará como un botón "List - Menu"
-      sections: sections,
-      
-      // 2. AÑADIMOS LOS BOTONES DE RESPUESTA RÁPIDA AQUÍ
-      // Estos son los botones de abajo (como 'Owner' y 'Bots' en la foto)
-      buttons: [
+    // 1. Define los botones de respuesta rápida externos
+    const quickReplyButtons = [
         {
-          buttonId: `${_p}menumanual`, // El ID que se enviará como comando
-          buttonText: { displayText: '꒰꒰ 🍒 𝐌𝖾𝗇𝗎 𝐌𝖺𝗇𝗎𝖺l Ი꯭ᰍ' },
-          type: 1 // Tipo QUICK_REPLY
+            buttonId: `${_p}menumanual`, 
+            buttonText: { displayText: '꒰꒰ 🍒 𝐌𝖾𝗇𝗎 𝐌𝖺𝗇𝗎𝖺l Ი꯭ᰍ' },
+            type: 1 // Quick Reply: enviará el ID como un mensaje de texto.
+        },
+        {
+            buttonId: `${_p}owner`, 
+            buttonText: { displayText: '← Owner' },
+            type: 1
         }
-        // Si quisieras añadir más, como los de la foto:
-        // { buttonId: '.owner', buttonText: { displayText: ' Owner' }, type: 1 },
-        // { buttonId: '.bots', buttonText: { displayText: ' Bots' }, type: 1 }
-      ]
-    };
-    // --- FIN DE LA CORRECCIÓN ---
+    ];
 
+    // 2. Define el contenido del List Message + Botones + Contexto
+    const listMessageContent = {
+        // La estructura de ListMessage (el botón que abre el desplegable)
+        listMessage: {
+            title: 'List - Menu', // Título para la vista de lista
+            description: `${beforeText}\n\n${bodyText}`, // Contenido del mensaje principal
+            buttonText: 'List - Menu', // Texto visible en el botón de Lista
+            footer: "⏤͟͞ू⃪  ̸̷͢𝐑𝐮𝐛y͟ 𝐇𝐨𝐬𝐡𝐢n͟𖹭 𝐁𖹭t͟𑁯ᰍ",
+            sections: sections, // Tu array de secciones se mantiene
+            listType: 1 
+        },
+        // Los botones de respuesta rápida se adjuntan aquí, fuera del objeto listMessage
+        buttons: quickReplyButtons, 
+        
+        // El contexto es donde va la imagen (media) y la cita (fkontak)
+        contextInfo: {
+            externalAdReply: {
+                title: 'Powered By Ruby AI', 
+                mediaType: 1, // Image
+                renderLargerThumbnail: true,
+                thumbnail: thumb2, // El buffer del thumbnail
+                sourceUrl: ''
+            },
+            quoted: fkontak || m // La cita
+        }
+    };
 
     let msgi = generateWAMessageFromContent(
-      m.chat, 
-      { viewOnceMessage: { message: { interactiveMessage } } }, 
-      { userJid: conn.user.jid, quoted: fkontak || m }
+        m.chat, 
+        { viewOnceMessage: { message: listMessageContent } }, 
+        { userJid: conn.user.jid }
     );
 
     await conn.relayMessage(m.chat, msgi.message, { messageId: msgi.key.id });
@@ -167,7 +226,6 @@ handler.command = ['menu', 'menú', 'listmenu'];
 
 export default handler;
 
-// (Tus funciones 'pickRandom', 'clockString' y 'ucapan' quedan igual)
 function pickRandom(list) {
   return list[Math.floor(Math.random() * list.length)];
 }
@@ -184,6 +242,6 @@ function ucapan() {
   let res = "Buenas Noches 🌙";
   if (time >= 5 && time < 12) res = "𝘽𝙪𝙚𝙣𝙤𝙨 𝘿𝙞́𝙖𝙨 ☀️";
   else if (time >= 12 && time < 18) res = "𝘽𝙪𝙚𝙣𝙖𝙨 𝙏𝙖𝙧𝙙𝙚𝙨 🌤️";
-  else if (time >= 18) res = "𝘽𝙪𝙚𝙣𝙖𝙨 𝙉𝙤𝙘𝙝e𝙨 🌙";
+  else if (time >= 18) res = "𝘽𝙪𝙚𝙣𝙖𝙨 𝙉𝙤𝙘𝙝𝙚𝙨 🌙";
   return res;
 }
