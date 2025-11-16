@@ -1,13 +1,9 @@
-let handler = async (m, { conn, usedPrefix, command }) => {
-    try {
-        let name = m.pushName || 'Aventurero';
-
-        let lkr = `⋱⏜ֹ๋۪۪۪۪۪۪᷼︵̈⋱ֻ࡛࡛፟＼𑂳⚚／ֻ࡛𑂳࡛⋰̈︵ֹ๋۪۪۪۪۪۪᷼⏜⋰
-
-  ᰍิ۪۪۪֟፝ᰍิ͚  ִּ֮   🌟 𝙈𝙀𝙉𝙐 𝙈𝘼𝙉𝙐𝘼𝙇 🌟   ִּ֮ 
-
+import fetch from 'node-fetch'
+let handler=async(m,{conn,usedPrefix,command})=>{try{let name=m.pushName||'Aventurero';let lkr=`⋱⏜ֹ๋۪۪۪۪۪۪᷼︵̈⋱ֻ࡛࡛፟＼𑂳⚚／ֻ࡛𑂳࡛⋰̈︵ֹ๋۪۪۪۪۪۪᷼⏜⋰
+ᰍิ۪۪۪֟፝ᰍิ͚  ִּ֮   🌟 𝙈𝙀𝙉𝙐 𝙈𝘼𝙉𝙐𝘼𝙇 🌟   ִּ֮ 
 (｡•ᴗ•)ﾉﾞ¡𝐇𝐨𝐥𝐚, ${name}! 💫
 𝐄𝐬𝐭𝐨𝐬 𝐬𝐨𝐧 𝐥𝐚𝐬 𝐨𝐩𝐜𝐢𝐨𝐧𝐞𝘀 𝐝𝐞 𝐦𝐞𝐧𝐮́ 𝐪𝐮𝐞 𝐭𝐢𝐞𝐧𝐞 𝐥𝐚 𝐛𝐨𝐭
+
 
 > ├┈・──・──・﹕₊˚ ✦・୨୧・
 > │  ◦  ⚙️ _${usedPrefix}menumanual_
@@ -34,37 +30,13 @@ let handler = async (m, { conn, usedPrefix, command }) => {
 > 🔞 ꒰ 𝗔𝗰𝗰𝗲𝘀𝗼 𝗮 𝗰𝗼𝗺𝗮𝗻𝗱𝗼𝘀 𝗡𝗦𝗙𝗪, 𝘀𝗼𝗹𝗼 𝗽𝗮𝗿𝗮 𝗮𝗱𝘂𝗹𝘁𝗼𝘀 (+18) ꒱
 > │  ◦  ⚙️ _${usedPrefix}menubusquedas_
 > 🌍 ꒰ 𝗕𝘂𝘀𝗰𝗮 𝗶𝗻𝗳𝗼, 𝗹𝗲𝘁𝗿𝗮𝘀, 𝘃𝗶𝗱𝗲𝗼𝘀 𝘆 𝗺𝘂𝗰𝗵𝗼 𝗺𝗮́𝘀 𝗲𝗻 𝗹𝗶́𝗻𝗲𝗮 ꒱
-> ╰┉ͦ━ᷫ━ⷭ┈ ⃘⵿݂۪۪۪࣭࣭፝۬۬۬͞💙ꫂ❀ᰰ᷒|²⁰|²|²³ ♡┈⊷ꫂ፝۬۬۬͞ᜓ⃘݂۪۪۪࣭࣭.─❤️⃟ᬽ፝֟━❥ᰰຼ᭢╯*`;
+> ╰┉ͦ━ᷫ━ⷭ┈ ⃘⵿݂۪۪۪࣭࣭፝۬۬۬͞💙ꫂ❀ᰰ᷒|²⁰|²|²³ ♡┈⊷ꫂ፝۬۬۬͞ᜓ⃘݂۪۪۪࣭࣭.─❤️⃟ᬽ፝֟━❥ᰰຼ᭢╯*`;  
 
-        await conn.sendFile(
-            m.chat, 
-            'https://telegra.ph/file/861d4dde6b2fd5f808183.jpg', 
-            'menu.jpg', 
-            lkr, 
-            m, 
-            false, 
-            { 
-                contextInfo: {
-                    mentionedJid: [m.sender],
-                    isForwarded: true,
-                    forwardedNewsletterMessageInfo: {
-                        newsletterJid: global.channelRD,
-                        newsletterName: global.canalNombreM,
-                        serverMessageId: -1
-                    }
-                }
-            }
-        );
+        let buffer=await(await fetch('https://telegra.ph/file/861d4dde6b2fd5f808183.jpg')).buffer();  
+        await conn.sendMessage(m.chat,{image:buffer,caption:lkr,contextInfo:{mentionedJid:[m.sender],isForwarded:true,forwardedNewsletterMessageInfo:{newsletterJid:global.channelRD,newsletterName:global.canalNombreM,serverMessageId:-1}}});  
+        await m.react('🌟')}catch(error){await conn.reply(m.chat,`❌ Ocurrió un error en el comando *${command}*:\n\n${error}`,m);console.error(error)}}  
 
-        await m.react('🌟');
-
-    } catch (error) {
-        await conn.reply(m.chat, `❌ Ocurrió un error en el comando *${command}*:\n\n${error}`, m);
-        console.error(`Error en comando ${command}:`, error);
-    }
-}
-
-handler.help = ['uni'];
-handler.tags = ['main'];
-handler.command = 'menumanual';
-export default handler;
+handler.help=['uni'];  
+handler.tags=['main'];  
+handler.command='menumanual';  
+export default handler
