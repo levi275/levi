@@ -1,78 +1,95 @@
-import fetch from 'node-fetch'
+import { fbdl } from 'ruhend-scraper'
 
-const handler = async (m, { text, conn, args, usedPrefix, command }) => {
-  const emoji = '🌸'
-  const emoji2 = '❌'
-  const msm = '⚠️'
-  const done = '✅'
-  const rwait = '⏳'
+var handler = async (m, { conn, args, command, usedPrefix, text }) => {
 
-  if (!args[0]) {
-    return conn.reply(
-      m.chat,
-      `${emoji} 𝐏𝐨𝐫 𝐟𝐚𝐯𝐨𝐫, 𝐢𝐧𝐠𝐫𝐞𝐬𝐚 𝐮𝐧 𝐞𝐧𝐥𝐚𝐜𝐞 𝐝𝐞 𝐅𝐚𝐜𝐞𝐛𝐨𝐨𝐤 🌐\n\n✨ Ejemplo:\n> *${usedPrefix + command} https://www.facebook.com/...*`,
-      m
-    )
-  }
+let vid 
+const isCommand7 = /^(facebook|fb|facebookdl|fbdl)$/i.test(command)
 
-  try {
-    await m.react(rwait)
-
-    const apiUrl = `https://ruby-core.vercel.app/api/download/facebook?url=${encodeURIComponent(args[0])}`
-    const res = await fetch(apiUrl)
-    const json = await res.json()
-
-    if (!json.status || !json.download) {
-      await m.react('⚠️')
-      return conn.reply(m.chat, `${emoji2} No se pudo obtener el video, verifica el enlace por favor >w<`, m)
-    }
-
-    const { title, description, siteName } = json.metadata
-    const videoUrl = json.download
-
-    const caption = `
-ㅤֺㅤ۪ㅤ   ׄ  ＼ㅤ｜ㅤ／  ׄ  ㅤִㅤ۫ 
-> ꜒📺ᮀ࠘࿑  *\`𝐓𝐈𝐓𝐔𝐋𝐎\`*: ${title || 'Sin título'}
-> ꜒📝ᮀ࠘࿑  *\`𝐃𝐄𝐒𝐂𝐑𝐈𝐏𝐂𝐈𝐎́𝐍\`*: ${description || 'Sin descripción'}
-> ꜒🌐ᮀ࠘࿑  *\`𝐎𝐑𝐈𝐆𝐄𝐍\`*: ${siteName || 'Facebook'}
-> ꜒👩🏻‍💻ᮀ࠘࿑  *\`𝐀𝐏𝐈\`*: Ruby Core by Dioneibi
-╰┈➤ *Hai~! 💕 Aquí tienes tu video listo, Onee-san~!* 🍰
-`.trim()
-
-    await conn.sendMessage(
-      m.chat,
-      {
-        video: { url: videoUrl },
-        caption,
-        fileName: 'facebook_video.mp4',
-        mimetype: 'video/mp4',
-        contextInfo: {
-          externalAdReply: {
-            title: '🌸 Ruby Hoshino Downloader 🌸',
-            body: 'Descarga directa desde Facebook 💕',
-            thumbnailUrl: 'https://telegra.ph/file/95c0cc90d069fea2cdf0d.png',
-            sourceUrl: 'https://ruby-core.vercel.app/',
-            mediaType: 1,
-            renderLargerThumbnail: true
-          }
-        }
-      },
-      { quoted: m }
-    )
-
-    await m.react(done)
-  } catch (e) {
-    console.error(e)
-    await m.react('⚠️')
-    return conn.reply(m.chat, `${msm} Hubo un error al procesar el video >_<`, m)
-  }
+async function reportError(e) {
+    await conn.reply(m.chat, `⁖🧡꙰ 𝙾𝙲𝚄𝚁𝚁𝙸𝙾 𝚄𝙽 𝙴𝚁𝚁𝙾𝚁`, m, rcanal, )
+    console.log(`⁖💚꙰ 𝙴𝚁𝚁𝙾𝚁 𝙴𝙽: ${usedPrefix + command} ⚠️\n`)
+    console.log(e)
 }
 
-handler.help = ['facebook', 'fb']
+switch (true) {   
+case isCommand7:
+    if (!text) return conn.reply(m.chat, `🚩 *Ingrese un enlace de facebook*\n\nEjemplo, !fb https://fb.watch/kAOXy3wf2L/?mibextid=Nif5oz`, m, rcanal, )
+    if (!args[0].match(/www.facebook.com|fb.watch|web.facebook.com|business.facebook.com|video.fb.com/g)) return conn.reply(m.chat, '🚩 *ᥒ᥆ ᥱs ᥙᥒ ᥱᥒᥣᥲᥴᥱ ᥎ᥲ́ᥣіძ᥆*', m, rcanal, )
+    
+    conn.reply(m.chat, '🚀 𝗗𝗲𝘀𝗰𝗮𝗿𝗴𝗮𝗻𝗱𝗼 𝗘𝗹 𝗩𝗶𝗱𝗲𝗼 𝗗𝗲 𝗙𝗮𝗰𝗲𝗯𝗼𝗼𝗸, 𝗘𝘀𝗽𝗲𝗿𝗲 𝗨𝗻 𝗠𝗼𝗺𝗲𝗻𝘁𝗼....', m, {
+    contextInfo: { externalAdReply :{ mediaUrl: null, mediaType: 1, showAdAttribution: true,
+    title: packname,
+    body: wm,
+    previewType: 0, thumbnail: icons,
+    sourceUrl: channel }}})
+    m.react(rwait)
+    
+    let messageType = checkMessageType(args[0])
+    let message = ''
+    switch (messageType) {
+    case 'groups':
+    message = `𝗩𝗶𝗱𝗲𝗼 𝗱𝗲 𝗴𝗿𝘂𝗽𝗼 𝗱𝗲 𝗙𝗮𝗰𝗲𝗯𝗼𝗼𝗸 ⁖❤️꙰\n${global.wm}`
+    break
+    case 'reel':
+    message = `𝗩𝗶𝗱𝗲𝗼 𝗱𝗲 𝗿𝗲𝗲𝗹𝘀 𝗱𝗲 𝗙𝗮𝗰𝗲𝗯𝗼𝗼𝗸 ⁖❤️꙰\n${global.wm}`
+    break
+    case 'stories':
+    message = `𝗩𝗶𝗱𝗲𝗼 𝗱𝗲 𝗵𝗶𝘀𝘁𝗼𝗿𝗶𝗮𝘀 𝗱𝗲 𝗙𝗮𝗰𝗲𝗯𝗼𝗼𝗸 ⁖❤️꙰\n${global.wm}`
+    break
+    case 'posts':
+    message = `𝗩𝗶𝗱𝗲𝗼 𝗱𝗲 𝗽𝗹𝘂𝗯𝗹𝗶𝗰𝗮𝗰𝗶𝗼𝗻𝗲𝘀 𝗱𝗲 𝗙𝗮𝗰𝗲𝗯𝗼𝗼𝗸 ⁖❤️꙰\n${global.wm}`
+    break
+    default:
+    message = `𝗩𝗶𝗱𝗲𝗼 𝗱𝗲 𝗙𝗮𝗰𝗲𝗯𝗼𝗼𝗸 ⁖❤️꙰\n${global.wm}`
+    break
+    }
+
+    
+    try {
+        const res = await fbdl(args[0]);
+        
+        const data = res.data;
+
+        let videoUrl = data.video_hd || data.hd || data.video_sd || data.sd || data.url;
+
+        if (!videoUrl && Array.isArray(data) && data.length > 0) {
+            videoUrl = data[0].url || data[0];
+        }
+
+        if (!videoUrl || typeof videoUrl !== 'string') {
+            console.error("Respuesta del scraper (ruhend-scraper) no fue un enlace válido:", data);
+            throw new Error('No se pudo extraer un enlace de video válido de la respuesta.');
+        }
+
+        await conn.sendFile(m.chat, videoUrl, 'video.mp4', `${message}`, m, null, rcanal);
+    
+    } catch (e) {
+        reportError(e);
+    }
+
+    break;
+}
+}
+
+handler.help = ['fb']
 handler.tags = ['descargas']
-handler.command = ['facebook', 'fb']
-handler.group = true
+handler.command = /^(facebook|fb|facebookdl|fbdl)$/i
+
 handler.register = true
-handler.coin = 2
+handler.estrellas = 1
 
 export default handler
+
+function checkMessageType(url) {
+if (url.includes('www.facebook.com')) {
+if (url.includes('/groups/')) {
+return 'groups'
+} else if (url.includes('/reel/')) {
+return 'reel'
+} else if (url.includes('/stories/')) {
+return 'stories'
+} else if (url.includes('/posts/')) {
+return 'posts'
+}}
+return 'default'
+}
