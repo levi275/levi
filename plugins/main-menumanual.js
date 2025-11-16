@@ -63,7 +63,7 @@ externalAdReply: {
 title: packname,
 body: "💗 𓈒꒰ 𝘔𝘦𝘯𝘶 𝘦𝘯𝘷𝘪𝘢𝘥𝘰 ꒱",
 mediaType: 1,
-thumbnail: thumb,
+thumbnail: icons,
 renderLargerThumbnail: false
 }
 }
