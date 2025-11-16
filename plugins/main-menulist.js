@@ -6,7 +6,7 @@ import { prepareWAMessageMedia, generateWAMessageFromContent } from '@whiskeysoc
 import moment from 'moment-timezone';
 
 const defaultMenu = {
-  before: `𝙃𝙤𝙡𝙖 %name ${ucapan()}
+  before: `𝙃𝙤𝙡𝙖 *%name* ${ucapan()}
 𝙢𝙞 𝙣𝙤𝙢𝙗𝙧𝙚 𝙚𝙨 𝙍𝙪𝙗𝙮, 𝙮 𝙩𝙚 𝙙𝙚𝙨𝙚𝙤 𝙪𝙣𝙖𝙨 𝙛𝙚𝙡𝙞𝙘𝙚𝙨 𝙛𝙞𝙚𝙨𝙩𝙖𝙨! 🧴  𖹥
 
 ╭─ ☄︎  *INFO DEL BOT* ☄︎
@@ -220,8 +220,8 @@ function clockString(ms) {
 function ucapan() {
   const time = moment.tz('America/Lima').format('HH');
   let res = "Buenas Noches 🌙";
-  if (time >= 5 && time < 12) res = "Buenos Días ☀️";
-  else if (time >= 12 && time < 18) res = "Buenas Tardes 🌤️";
-  else if (time >= 18) res = "Buenas Noches 🌙";
+  if (time >= 5 && time < 12) res = "𝘽𝙪𝙚𝙣𝙤𝙨 𝘿𝙞́𝙖𝙨 ☀️";
+  else if (time >= 12 && time < 18) res = "𝘽𝙪𝙚𝙣𝙖𝙨 𝙏𝙖𝙧𝙙𝙚𝙨 🌤️";
+  else if (time >= 18) res = "𝘽𝙪𝙚𝙣𝙖𝙨 𝙉𝙤𝙘𝙝𝙚𝙨 🌙";
   return res;
 }
