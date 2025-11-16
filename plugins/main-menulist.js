@@ -197,7 +197,7 @@ let handler = async (m, { conn, usedPrefix: _p, __dirname }) => {
                 title: 'Powered By Ruby AI', 
                 mediaType: 1, // Image
                 renderLargerThumbnail: true,
-                thumbnail: thumb2, // El buffer del thumbnail
+                thumbnail: icons, // El buffer del thumbnail
                 sourceUrl: ''
             },
             quoted: fkontak || m // La cita
