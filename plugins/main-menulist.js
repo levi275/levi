@@ -184,7 +184,7 @@ let handler = async (m, { conn, usedPrefix: _p, __dirname }) => {
           {
             name: "quick_reply",
             buttonParamsJson: JSON.stringify({
-              display_text: "Menú Manual",
+              display_text: "꒰꒰ 🍒 𝐌𝖾𝗇𝗎 𝐌𝖺𝗇𝗎𝖺𝗅 Ი꯭ᰍ",
               id: `${_p}menumanual`
             })
           }
