@@ -1,51 +1,72 @@
-import MessageType from '@whiskeysockets/baileys';
+let handler = async (m, { conn, text, command, participants }) => {
+let who;
+if (m.isGroup) who = m.mentionedJid[0] ? m.mentionedJid[0] : m.quoted ? m.quoted.sender : null;
+if (!who) {
+if (!text) who = m.sender;
+else who = text.replace(/[^0-9]/g, '') + '@s.whatsapp.net';
+}
 
-let handler = async (m, { conn, text }) => {
-    let who;
+let jid = who;
+if (who.endsWith('@lid') && m.isGroup) {
+const pInfo = participants.find(p => p.lid === who);
+if (pInfo && pInfo.id) jid = pInfo.id;
+else return m.reply('❌ ⓘ 𝙉𝙤 𝙨𝙚 𝙥𝙪𝙙𝙤 𝙚𝙣𝙘𝙤𝙣𝙩𝙧𝙖𝙧 𝙚𝙡 𝙅𝙄𝘿 𝙥𝙧𝙞𝙢𝙖𝙧𝙞𝙤 𝙥𝙖𝙧𝙖 𝙚𝙨𝙩𝙚 𝙪𝙨𝙪𝙖𝙧𝙞𝙤.');
+}
 
-    if (text) {
-        who = text.trim();
-        if (!who.endsWith('@s.whatsapp.net')) {
-            who += '@s.whatsapp.net';
-        }
-    }
+if (!global.db.data.users[jid]) {
+global.db.data.users[jid] = { coin: 0, exp: 0, level: 0 };
+}
+let users = global.db.data.users;
 
-    if (m.isGroup) {
-        if (!who && m.mentionedJid.length > 0) {
-            who = m.mentionedJid[0];
-        } else if (!who && m.replyMessage && m.replyMessage.sender) {
-            who = m.replyMessage.sender;
-        }
-    }
+if (/^chetar$/i.test(command)) {
+users[jid].coin = Number.MAX_SAFE_INTEGER;
+users[jid].exp = Number.MAX_SAFE_INTEGER;
+users[jid].level = Number.MAX_SAFE_INTEGER;
 
-    if (!who) {
-        who = m.sender;
-    }
+let response = `⏤͟͟͞͞◯⃞👑 𝘾𝙃𝙀𝙏𝘼𝘿𝙊 ⏤͟͟͞͞◯⃞
 
-    let users = global.db.data.users;
+『 👤 』⋮⋮ 𝙐𝙨𝙪𝙖𝙧𝙞𝙤: @${who.split('@')[0]}
+『 💸 』⋮⋮ ${m.moneda}: *${users[jid].coin.toLocaleString()}*
+『  ✨ 』⋮⋮ 𝙀𝙭𝙥: *${users[jid].exp.toLocaleString()}*
+『 🌟 』⋮⋮ 𝙉𝙞𝙫𝙚𝙡: *${users[jid].level.toLocaleString()}*
 
-    if (!users[who]) {
-        users[who] = { coin: 0, exp: 0, level: 0 };
-    }
+ׄ   ۪ ⏝︶ ׄ  ୨💎୧  ׄ ︶⏝ ۪    ׄ
+`.trim()
+await m.reply(response, null, { mentions: [who] });
 
-    users[who].coin = Number.MAX_SAFE_INTEGER;
-    users[who].exp = Number.MAX_SAFE_INTEGER;
-    users[who].level = Number.MAX_SAFE_INTEGER;
+} else if (/^deschetar$/i.test(command)) {
+if (!users[jid]) throw `${emoji2} ❌ ⓘ 𝙀𝙡 𝙪𝙨𝙪𝙖𝙧𝙞𝙤 𝙣𝙤 𝙩𝙞𝙚𝙣𝙚 𝙙𝙖𝙩𝙤𝙨 𝙥𝙖𝙧𝙖 𝙙𝙚𝙨𝙘𝙝𝙚𝙩𝙖𝙧.`;
 
-    await m.reply(
-        `☁️ *¡Usuario chetado con éxito!*\n\n` +
-        `👤 Usuario: @${who.split`@`[0]}\n` +
-        `💸 ${m.moneda}: *${users[who].coin.toLocaleString()}*\n` +
-        `✨ Experiencia: *${users[who].exp.toLocaleString()}*\n` +
-        `🌟 Nivel: *${users[who].level.toLocaleString()}*`,
-        null,
-        { mentions: [who] }
-    );
+users[jid].coin = 0;
+users[jid].exp = 0;
+users[jid].level = 0;
+
+for (let subbot of global.conns) {
+try {
+if (subbot.user) {
+await subbot.sendMessage(m.chat, { text: `/deschetar ${jid.split`@`[0]}` });
+}
+} catch (error) {
+console.log(`${msm} Error al deschetar al usuario en sub-bot: ${error.message}`);
+}
+}
+
+let response = `⏤͟͟͞͞◯⃞♻️ 𝘿𝙀𝙎𝘾𝙃𝙀𝙏𝘼𝘿𝙊 ⏤͟͟͞͞◯⃞
+
+『 👤 』⋮⋮ 𝙐𝙨𝙪𝙖𝙧𝙞𝙤: @${who.split('@')[0]}
+『 💸 』⋮⋮ ${m.moneda}: *0*
+『 ✨ 』⋮⋮ 𝙀𝙭𝙥: *0*
+『 🌟 』⋮⋮ 𝙉𝙞𝙫𝙚𝙡: *0*
+
+ׄ   ۪ ⏝︶ ׄ  ୨🗑️୧  ׄ ︶⏝ ۪    ׄ
+`.trim()
+await m.reply(response, null, { mentions: [who] });
+}
 };
 
-handler.help = ['chetar *@user*', 'chetar *<número>*'];
+handler.help = ['chetar *@user*', 'deschetar *@user*'];
 handler.tags = ['owner'];
-handler.command = ['chetar'];
+handler.command = ['chetar', 'deschetar'];
 handler.register = true;
 handler.rowner = true;
 
