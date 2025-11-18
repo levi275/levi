@@ -32,27 +32,8 @@ thumbnail: icons
 
 m.react(rwait);
 
-let messageType = checkMessageType(args[0]);
-let message = '';
-switch (messageType) {
-case 'groups':
-message = `𝗩𝗶𝗱𝗲𝗼 𝗱𝗲 𝗴𝗿𝘂𝗽𝗼 𝗱𝗲 𝗙𝗮𝗰𝗲𝗯𝗼𝗼𝗸 ⁖❤️꙰\n${global.wm}`;
-break;
-case 'reel':
-message = `𝗩𝗶𝗱𝗲𝗼 𝗱𝗲 𝗿𝗲𝗲𝗹𝘀 𝗱𝗲 𝗙𝗮𝗰𝗲𝗯𝗼𝗼𝗸 ⁖❤️꙰\n${global.wm}`;
-break;
-case 'stories':
-message = `𝗩𝗶𝗱𝗲𝗼 𝗱𝗲 𝗵𝗶𝘀𝘁𝗼𝗿𝗶𝗮𝘀 𝗱𝗲 𝗙𝗮𝗰𝗲𝗯𝗼𝗼𝗸 ⁖❤️꙰\n${global.wm}`;
-break;
-case 'posts':
-message = `𝗩𝗶𝗱𝗲𝗼 𝗱𝗲 𝗽𝗹𝘂𝗯𝗹𝗶𝗰𝗮𝗰𝗶𝗼𝗻𝗲𝘀 𝗱𝗲 𝗙𝗮𝗰𝗲𝗯𝗼𝗼𝗸 ⁖❤️꙰\n${global.wm}`;
-break;
-default:
-message = `𝗩𝗶𝗱𝗲𝗼 𝗱𝗲 𝗙𝗮𝗰𝗲𝗯𝗼𝗼𝗸 ⁖❤️꙰\n${global.wm}`;
-break;
-}
-
 try {
+
 const res = await fbdl(args[0]);
 const data = res.data;
 
@@ -63,22 +44,20 @@ videoUrl = data[0].url || data[0];
 }
 
 if (!videoUrl || typeof videoUrl !== 'string') {
-console.error("Respuesta del scraper (ruhend-scraper) no fue un enlace válido:", data);
-throw new Error('No se pudo extraer un enlace de video válido de la respuesta.');
+throw new Error('No se pudo extraer un enlace de video válido.');
 }
 
-await conn.sendFile(m.chat, videoUrl, 'video.mp4', `${message}`, m, {
-contextInfo: {
-mentionedJid: [m.sender, userId],
-isForwarded: true,
-forwardingScore: 999,
-forwardedNewsletterMessageInfo: {
-newsletterJid: '120363335626706839@newsletter',
-newsletterName: '..⃗. 💌 ⌇ ¡Noticias y más de tu idol favorita! ⊹ ִ ּ',
-serverMessageId: -1
-}
-}
-}, rcanal);
+let caption = `📹 *VIDEO DESCARGADO DE FACEBOOK*\n
+✨ *Título:* ${data.title || 'No disponible'}
+🧑‍💻 *Autor:* ${data.author || 'No disponible'}
+⏱️ *Duración:* ${data.duration || 'No disponible'}
+🎞️ *Calidad:* ${data.quality || 'Automática'}
+🔗 *Enlace original:* ${args[0]}
+
+${global.wm}
+`;
+
+await conn.sendFile(m.chat, videoUrl, 'facebook.mp4', caption, m);
 
 } catch (e) {
 reportError(e);
@@ -93,13 +72,3 @@ handler.register = true;
 handler.estrellas = 1;
 
 export default handler;
-
-function checkMessageType(url) {
-if (url.includes('www.facebook.com')) {
-if (url.includes('/groups/')) return 'groups';
-if (url.includes('/reel/')) return 'reel';
-if (url.includes('/stories/')) return 'stories';
-if (url.includes('/posts/')) return 'posts';
-}
-return 'default';
-}
