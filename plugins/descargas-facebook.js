@@ -61,13 +61,13 @@ const videoUrl = video.url
 
 const meta = await scrapeMetadata(args[0])
 
-let caption = `📹 *VIDEO DESCARGADO DE FACEBOOK*\n
-✨ *Título:* ${meta.title || 'No disponible'}
-📝 *Descripción:* ${meta.description || 'No disponible'}
-🌐 *Sitio:* Facebook
-🔗 *Enlace original:* ${args[0]}
-
-${global.wm}
+let caption = `꒰꒰͡  *𝗩𝗶𝗱𝗲𝗼 𝗱𝗲 𝗙𝗮𝗰𝗲𝗯𝗼𝗼𝗸 ⁖❤️꙰* !! ര\n
+┉ ᩿💭 ᩠〪ᷭׄ : *𝙏𝙄𝙏𝙐𝙇𝙊:* ${meta.title || 'No disponible'}
+┉ ᩿💭 ᩠〪ᷭׄ : *𝘿𝙀𝙎𝘾𝙍𝙄𝙋𝘾𝙄𝙊́𝙉:* ${meta.description || 'No disponible'}
+┉ ᩿💭 ᩠〪ᷭׄ : *𝙎𝙄𝙏𝙄𝙊:* Facebook
+┉ ᩿💭 ᩠〪ᷭׄ : *𝙀𝙉𝙇𝘼𝘾𝙀 𝙊𝙍𝙄𝙂𝙄𝙉𝘼𝙇:* ${args[0]}
+────────────────
+> ${global.wm}
 `
 
 await conn.sendFile(m.chat, videoUrl, 'facebook.mp4', caption, m)
