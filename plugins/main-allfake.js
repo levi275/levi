@@ -141,7 +141,7 @@ global.rcanal = {
       serverMessageId: -1
     },
     externalAdReply: {
-      title: wm,
+      title: packname,
       body: dev,
       thumbnail: icons,
       sourceUrl: redes,
