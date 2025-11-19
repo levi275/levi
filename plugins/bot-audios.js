@@ -2,26 +2,16 @@ let handler = m => m
 handler.all = async function (m) {
     let chat = global.db.data.chats[m.chat]
     
-    // Si el chat está baneado, no hacemos nada
     if (chat.isBanned) return
 
-    // Función auxiliar para enviar notas de voz convertidas
-    // Esta función se encarga de:
-    // 1. Marcar "grabando audio..."
-    // 2. Usar sendFile para CONVERTIR el mp3 a formato OPUS (nota de voz real)
     const sendBn = async (url) => {
         await this.sendPresenceUpdate('recording', m.chat)
-        // El 'true' en el 6to argumento fuerza la conversión a PTT (Nota de voz)
         await this.sendFile(m.chat, url, 'voice.mp3', null, m, true, { type: 'audioMessage', ptt: true })
     }
 
-    // Recompensas (se ejecutan si entra en algún audio o comando válido más abajo)
-    // Nota: Si prefieres que sume XP solo cuando responde, deberías mover esto dentro de los IFs, 
-    // pero lo dejo aquí como estaba en tu base.
     global.db.data.users[m.sender].money += 50
     global.db.data.users[m.sender].exp += 50  
 
-    // --- LISTA DE AUDIOS ---
 
     if (/^A Bueno master|Bueno master|Bueno Máster|🫂$/i.test(m.text) && chat.audios) {  
         if (!db.data.chats[m.chat].audios && m.isGroup) throw 0    
@@ -33,8 +23,6 @@ handler.all = async function (m) {
     } 
 
     if (chat.audios && m.text.match(/(bienvenido|🥳|🤗)/gi)) {
-        // Este caso es especial porque usa externalAdReply, usamos sendMessage para mantener el estilo visual
-        // pero corregimos el mimetype a audio/mpeg
         let vn = 'https://qu.ax/cUYg.mp3'
         this.sendPresenceUpdate('recording', m.chat)   
         await this.sendMessage(m.chat, { 
