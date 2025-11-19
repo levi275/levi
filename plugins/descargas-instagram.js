@@ -1,81 +1,63 @@
 import { igdl } from 'ruhend-scraper'
-import axios from 'axios'
-import * as cheerio from 'cheerio'
-
-async function getInstagramMetadata(url) {
-    try {
-        const res = await axios.get(url, {
-            headers: { 'User-Agent': 'Mozilla/5.0', 'Accept-Language': 'en-US,en;q=0.9' }
-        });
-
-        const $ = cheerio.load(res.data);
-        const script = $('script[type="application/ld+json"]').html();
-        if (!script) return null;
-
-        const json = JSON.parse(script);
-
-        return {
-            author: json.author ? json.author.alternateName : null,
-            authorName: json.author ? json.author.name : null,
-            caption: json.caption || null,
-            uploadDate: json.uploadDate || null,
-            thumbnail: json.thumbnailUrl || null
-        };
-
-    } catch {
-        return null;
-    }
-}
 
 var handler = async (m, { conn, args, command, usedPrefix, text }) => {
 
-if (!text) return conn.reply(m.chat, `🚩 *Ingrese un enlace de Instagram*`, m, rcanal);
+const isCmd = /^(ig|instagram|instadl|igdl)$/i.test(command);
 
-conn.reply(m.chat, '🚀 𝗗𝗲𝘀𝗰𝗮𝗿𝗴𝗮𝗻𝗱𝗼 𝗘𝗹 𝗖𝗼𝗻𝘁𝗲𝗻𝗶𝗱𝗼 𝗗𝗲 𝗜𝗻𝘀𝘁𝗮𝗴𝗿𝗮𝗺....', m, {
+async function reportError(e){
+await conn.reply(m.chat, `⁖🧡꙰ 𝙾𝙲𝚄𝚁𝚁𝙸𝙾 𝚄𝙽 𝙴𝚁𝚁𝙾𝚁`, m, rcanal);
+console.log(e);
+}
+
+if (!isCmd) return;
+if (!text && !args[0]) return conn.reply(m.chat, `🚩 *Ingrese un enlace de Instagram*\n\nEjemplo: !ig https://www.instagram.com/reel/xxxx`, m, rcanal);
+const url = args[0] || text;
+
+if (!url.match(/instagram.com|instagr.am|ig.me/)) return conn.reply(m.chat, '🚩 *Enlace no válido*', m, rcanal);
+
+await conn.reply(m.chat, '⁖❤️꙰  *Descargando su video de Instagram*', m, {
 contextInfo: { 
 forwardingScore: 2022, 
 isForwarded: true, 
 externalAdReply: {
-title: packname,
+title: packname || 'Ruby-Hoshino',
 body: '𝙄𝙉𝙎𝙏𝘼𝙂𝙍𝘼𝙈 - 𝘿𝙊𝙒𝙉𝙇𝙊𝘼𝘿',
-sourceUrl: redes,
-thumbnail: icons
+sourceUrl: redes || '',
+thumbnail: icons || null
 }
 }
 });
 
-m.react(rwait);
+m.react && m.react(rwait).catch(()=>{});
 
 try {
+const res = await igdl(url);
+const data = res.data || res;
 
-const meta = await getInstagramMetadata(args[0]);
+if (!data || (Array.isArray(data) && data.length === 0)) throw new Error('No se encontró contenido');
 
-const res = await igdl(args[0]);
-const data = res.data;
+for (let i = 0; i < data.length; i++) {
+const media = data[i];
+const mediaUrl = media.url || media;
+const isVideo = /(\.mp4|video)/i.test(mediaUrl);
+const ext = isVideo ? 'mp4' : 'jpg';
+const title = isVideo ? '✨ 𝙎𝙪 𝙫𝙞𝙙𝙚𝙤 𝙙𝙚 𝙄𝙣𝙨𝙩𝙖𝙜𝙧𝙖𝙢 𝙡𝙞𝙨𝙩𝙤 ✨' : '✨ 𝙎𝙪 𝙞𝙢𝙖𝙜𝙚𝙣 𝙙𝙚 𝙄𝙣𝙨𝙩𝙖𝙜𝙧𝙖𝙢 𝙡𝙞𝙨𝙩𝙖 ✨';
+const prettyCaption = `${title}\n\n▶️ Aquí tienes tu ${isVideo ? 'video' : 'imagen'} listo para ver y compartir.\n\n🔗 Enlace original: ${url}\n\n{botname}`;
 
-for (let media of data) {
-
-let caption = `📸 *CONTENIDO DE INSTAGRAM*\n
-👤 *Autor:* ${meta?.authorName || meta?.author || 'No disponible'}
-📝 *Descripción:* ${meta?.caption || 'Sin descripción'}
-📅 *Fecha:* ${meta?.uploadDate || 'No disponible'}
-📂 *Tipo:* ${media.url.includes('.mp4') ? 'Video' : 'Imagen'}
-🔗 *Enlace original:* ${args[0]}
-
-${global.wm}
-`;
-
-await conn.sendFile(m.chat, media.url, 'instagram.mp4', caption, m);
-await new Promise(r => setTimeout(r, 1000));
-
+await conn.sendFile(m.chat, mediaUrl, `instagram.${ext}`, prettyCaption, m);
+await new Promise(r => setTimeout(r, 800));
 }
 
 } catch (e) {
-console.log(e)
-await conn.reply(m.chat, `⁖🧡꙰ 𝙾𝙲𝚄𝚁𝚁𝙸𝙾 𝚄𝙽 𝙴𝚁𝚁𝙾𝚁`, m, rcanal);
+reportError(e);
 }
 
 };
 
-handler.command = ['ig','instagram'];
+handler.help = ['ig'];
+handler.tags = ['descargas'];
+handler.command = ['ig','instagram','igdl','instadl'];
+handler.register = true;
+handler.estrellas = 1;
+
 export default handler;
