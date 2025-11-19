@@ -90,5 +90,5 @@ let handler = async (m, { conn }) => {
   }, { quoted: m });
 };
 
-handler.command = ['menugrupos', 'gruposmenu', 'groups'];
+handler.command = ['menugrupo', 'gruposmenu'];
 export default handler;
