@@ -41,8 +41,7 @@ const media = data[i];
 const mediaUrl = media.url || media;
 const isVideo = /(\.mp4|video)/i.test(mediaUrl);
 const ext = isVideo ? 'mp4' : 'jpg';
-const title = isVideo ? '✨ 𝙎𝙪 𝙫𝙞𝙙𝙚𝙤 𝙙𝙚 𝙄𝙣𝙨𝙩𝙖𝙜𝙧𝙖𝙢 𝙡𝙞𝙨𝙩𝙤 ✨' : '✨ 𝙎𝙪 𝙞𝙢𝙖𝙜𝙚𝙣 𝙙𝙚 𝙄𝙣𝙨𝙩𝙖𝙜𝙧𝙖𝙢 𝙡𝙞𝙨𝙩𝙖 ✨';
-const prettyCaption = `${title}\n\n▶️ Aquí tienes tu ${isVideo ? 'video' : 'imagen'} listo para ver y compartir.\n\n🔗 Enlace original: ${url}\n\n{botname}`;
+const prettyCaption = `🌹̫ᩙ᮫〫𝆬  𝙘𝙤𝙣𝙩𝙚𝙣𝙞𝙙𝙤 𝙙𝙚 𝙞𝙣𝙨𝙩𝙖𝙜𝙧𝙖𝙢 𝙡𝙞𝙨𝙩𝙤`;
 
 await conn.sendFile(m.chat, mediaUrl, `instagram.${ext}`, prettyCaption, m);
 await new Promise(r => setTimeout(r, 800));
