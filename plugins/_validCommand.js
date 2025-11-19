@@ -1,6 +1,6 @@
 import fetch from 'node-fetch';
 
-export async function before(m, { conn }) { // AÑADIDO { conn }
+export async function before(m, { conn }) {
   if (!m.text || !global.prefix.test(m.text)) return;
 
   const usedPrefix = global.prefix.exec(m.text)[0];
@@ -64,12 +64,9 @@ export async function before(m, { conn }) { // AÑADIDO { conn }
 ⍴ᥲrᥲ ᥴ᥆ᥒsᥙᥣ𝗍ᥲr ᥣᥲ ᥣіs𝗍ᥲ ᥴ᥆m⍴ᥣᥱ𝗍ᥲ ძᥱ 𝖿ᥙᥒᥴі᥆ᥒᥲᥣіძᥲძᥱs ᥙsᥲ:
 » *${usedPrefix}help*`;
 
-    // USAMOS conn.sendMessage CON LA OPCIÓN quoted: fkontak
     if (fkontak) {
-      // Si fkontak existe, lo usamos como cita
       await conn.sendMessage(m.chat, { text: msjDecorado }, { quoted: fkontak });
     } else {
-      // Si fkontak falla, enviamos el mensaje normalmente citando el mensaje original (m)
       await m.reply(msjDecorado);
     }
   }
