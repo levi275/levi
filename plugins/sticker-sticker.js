@@ -31,8 +31,7 @@ return conn.reply(m.chat, '❌ 𝙍𝙚𝙨𝙥𝙤𝙣𝙙𝙚 𝙖 𝙪𝙣 �
 await conn.reply(m.chat, '⚠︎ Ocurrió un Error: ' + e.message, m)
 await m.react('✖️')
 } finally {
-if (stiker) {
-conn.sendFile(m.chat, stiker, 'sticker.webp', '', m)
+if (stiker) conn.sendFile(m.chat, stiker, 'sticker.webp', '',m, true, { contextInfo: { 'forwardingScore': 200, 'isForwarded': false, externalAdReply:{ showAdAttribution: false, title: packname, body: `Ruby Bot - MD 🚩`, mediaType: 2, sourceUrl: redes, thumbnail: icons}}}, { quoted: m })
 await m.react('🧃')
 }}}
 
