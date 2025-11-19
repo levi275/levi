@@ -82,6 +82,5 @@ handler.help = ['fb']
 handler.tags = ['descargas']
 handler.command = ['fb', 'facebook']
 handler.register = true
-handler.estrellas = 1
 
 export default handler
