@@ -7,37 +7,29 @@ import { unwatchFile, watchFile } from 'fs'
 import chalk from 'chalk'
 import fetch from 'node-fetch'
 import failureHandler from './lib/respuesta.js';
-
 const { proto } = (await import('@whiskeysockets/baileys')).default
 const isNumber = x => typeof x === 'number' && !isNaN(x)
 const delay = ms => isNumber(ms) && new Promise(resolve => setTimeout(function () {
 clearTimeout(this)
 resolve()
 }, ms))
-
 export async function handler(chatUpdate) {
 this.msgqueque = this.msgqueque || []
 this.uptime = this.uptime || Date.now()
-if (!chatUpdate)
-return
+if (!chatUpdate) return
 this.pushMessage(chatUpdate.messages).catch(console.error)
 let m = chatUpdate.messages[chatUpdate.messages.length - 1]
-if (!m)
-return;
-if (global.db.data == null)
-await global.loadDatabase()
+if (!m) return;
+if (global.db.data == null) await global.loadDatabase()
 let sender;
 try {
 m = smsg(this, m) || m
-if (!m)
-return
-
+if (!m) return
 if (m.isGroup) {
 const chat = global.db.data.chats[m.chat];
 if (chat?.primaryBot) {
 const universalWords = ['resetbot', 'resetprimario', 'botreset'];
 const firstWord = m.text ? m.text.trim().split(' ')[0].toLowerCase().replace(/^[./#]/, '') : '';
-
 if (!universalWords.includes(firstWord)) {
 if (this?.user?.jid !== chat.primaryBot) {
 return;
@@ -46,16 +38,15 @@ return;
 }
 }
 sender = m.isGroup ? (m.key.participant ? m.key.participant : m.sender) : m.key.remoteJid;
-
-const groupMetadata_lid = m.isGroup ? { ...(this.chats[m.chat]?.metadata || await this.groupMetadata(m.chat).catch(_ => null) || {}), ...(((this.chats[m.chat]?.metadata || await this.groupMetadata(m.chat).catch(_ => null) || {}).participants) && { participants: ((this.chats[m.chat]?.metadata || await this.groupMetadata(m.chat).catch(_ => null) || {}).participants || []).map(p => ({ ...p, id: p.jid, jid: p.jid, lid: p.lid })) }) } : {}
-const participants_lid = ((m.isGroup ? groupMetadata_lid.participants : []) || []).map(participant => ({ id: participant.jid, jid: participant.jid, lid: participant.lid, admin: participant.admin }))
+const groupMetadata = m.isGroup ? { ...(this.chats[m.chat]?.metadata || await this.groupMetadata(m.chat).catch(_ => null) || {}), ...(((this.chats[m.chat]?.metadata || await this.groupMetadata(m.chat).catch(_ => null) || {}).participants) && { participants: ((this.chats[m.chat]?.metadata || await this.groupMetadata(m.chat).catch(_ => null) || {}).participants || []).map(p => ({ ...p, id: p.jid, jid: p.jid, lid: p.lid })) }) } : {}
+const participants = ((m.isGroup ? groupMetadata.participants : []) || []).map(participant => ({ id: participant.jid, jid: participant.jid, lid: participant.lid, admin: participant.admin }))
 if (m.isGroup && sender.endsWith('@lid')) {
-const participantInfo = participants_lid.find(p => p.lid === sender);
+const participantInfo = participants.find(p => p.lid === sender);
 if (participantInfo && participantInfo.jid) {
-sender = participantInfo.jid; 
+sender = participantInfo.jid;
+m.sender = participantInfo.jid; 
 }
 }
-
 m.exp = 0
 m.coin = false
 try {
@@ -155,22 +146,17 @@ self: false, restrict: true, jadibotmd: true, antiPrivate: false, moneda: 'Coins
 } catch (e) {
 console.error(e)
 }
-
 if (opts['nyimak']) return
 if (!m.fromMe && opts['self']) return
 if (opts['swonly' && m.chat !== 'status@broadcast']) return
 if (typeof m.text !== 'string')
 m.text = ''
-
 const _user = global.db.data.users[sender]
-const groupMetadata = m.isGroup ? { ...(this.chats[m.chat]?.metadata || await this.groupMetadata(m.chat).catch(_ => null) || {}), ...(((this.chats[m.chat]?.metadata || await this.groupMetadata(m.chat).catch(_ => null) || {}).participants) && { participants: ((this.chats[m.chat]?.metadata || await this.groupMetadata(m.chat).catch(_ => null) || {}).participants || []).map(p => ({ ...p, id: p.jid, jid: p.jid, lid: p.lid })) }) } : {}
-const participants = ((m.isGroup ? groupMetadata.participants : []) || []).map(participant => ({ id: participant.jid, jid: participant.jid, lid: participant.lid, admin: participant.admin }))
 const userGroup = (m.isGroup ? participants.find((u) => this.decodeJid(u.jid) === sender) : {}) || {}
 const botGroup = (m.isGroup ? participants.find((u) => this.decodeJid(u.jid) == this.user.jid) : {}) || {}
 const isRAdmin = userGroup?.admin == "superadmin" || false
 const isAdmin = isRAdmin || userGroup?.admin == "admin" || false
 const isBotAdmin = botGroup?.admin || false
-
 const senderNum = sender.split('@')[0];
 const isROwner = [...global.owner.map(([number]) => number), this.user.jid.split('@')[0]].includes(senderNum);
 const isOwner = isROwner || m.fromMe
@@ -225,7 +211,6 @@ continue
 }
 if (typeof plugin !== 'function') continue
 if ((usedPrefix = (match[0] || '')[0])) {
-
 let noPrefix = m.text.replace(usedPrefix, '')
 let [command, ...args] = noPrefix.trim().split` `.filter(v => v)
 args = args || []
@@ -241,15 +226,12 @@ global.comando = command
 if ((m.id.startsWith('NJX-') || (m.id.startsWith('BAE5') && m.id.length === 16) || (m.id.startsWith('B24E') && m.id.length === 20))) return
 if (!isAccept) { continue }
 m.plugin = name
-
 let chat = global.db.data.chats[m.chat] || {};
 const isBotBannedInThisChat = chat.bannedBots && chat.bannedBots.includes(this.user.jid);
 const unbanCommandFiles = ['grupo-unbanchat.js'];
-
 if (isBotBannedInThisChat && !unbanCommandFiles.includes(name)) {
 return;
 }
-
 if (m.chat in global.db.data.chats || sender in global.db.data.users) {
 let chat = global.db.data.chats[m.chat]
 let user = global.db.data.users[sender]
@@ -275,7 +257,6 @@ let adminMode = global.db.data.chats[m.chat].modoadmin
 if (adminMode && m.isGroup && !isAdmin && !isOwner && !isROwner) {
 return
 }
-
 if (plugin.rowner && plugin.owner && !(isROwner || isOwner)) {
 fail('owner', m, this)
 continue
@@ -391,8 +372,6 @@ try {
 if (!opts['noprint']) await (await import(`./lib/print.js`)).default(m, this)
 } catch (e) { console.log(m, m.quoted, e) }
 let settingsREAD = global.db.data.settings[this.user.jid] || {}
-// if (settingsREAD.autoread) await this.readMessages([m.key]) 
-
 }
 }
 global.dfail = (type, m, conn) => { failureHandler(type, conn, m); };
