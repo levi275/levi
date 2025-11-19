@@ -40,7 +40,7 @@ export async function before(m, { conn }) { // AÑADIDO { conn }
   } else {
     let fkontak = null;
     try {
-      const res = await fetch('https://i.postimg.cc/nhdkndD6/pngtree-yellow-bell-ringing-with-sound-waves-png-image-20687908.png');
+      const res = await fetch('https://i.postimg.cc/d0DPFp3R/5a8d323a071395fcdab8465e510c749c-2025-11-17T213332-475.jpg');
       if (res.ok) {
         const thumb2 = Buffer.from(await res.arrayBuffer());
         fkontak = {
