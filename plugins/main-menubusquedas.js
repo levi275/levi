@@ -45,7 +45,7 @@ let handler = async (m, { conn }) => {
       externalAdReply: {
         title: '🔍 Comandos de Búsqueda Global',
         body: 'Encuentra videos, imágenes e información',
-        thumbnailUrl: icons,
+        thumbnail: icons,
         mediaType: 1,
         renderLargerThumbnail: false,
         showAdAttribution: true,
@@ -58,5 +58,5 @@ let handler = async (m, { conn }) => {
   }, { quoted: m });
 };
 
-handler.command = ['menubusquedas', 'busquedamenu', 'search'];
+handler.command = ['menubusquedas', 'busquedamenu'];
 export default handler;
