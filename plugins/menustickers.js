@@ -44,5 +44,5 @@ let handler = async (m, { conn }) => {
   }, { quoted: m });
 };
 
-handler.command = ['menusticker', 'stickersmenu', 'sticker'];
+handler.command = ['menusticker', 'stickersmenu'];
 export default handler;
