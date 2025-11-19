@@ -38,14 +38,14 @@ let handler = async (m, { conn }) => {
   `.trim();
 
   await conn.sendMessage(m.chat, {
-    image: { url: 'https://files.catbox.moe/61219t.png' },
+    image: { url: 'https://files.catbox.moe/jau272.jpeg' },
     caption: texto,
     contextInfo: {
       mentionedJid: [m.sender],
       externalAdReply: {
         title: '🔍 Comandos de Búsqueda Global',
         body: 'Encuentra videos, imágenes e información',
-        thumbnailUrl: 'https://files.catbox.moe/hdr7oh.jpg',
+        thumbnailUrl: icons,
         mediaType: 1,
         renderLargerThumbnail: false,
         showAdAttribution: true,
