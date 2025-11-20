@@ -1,26 +1,26 @@
 let handler = async (m, { conn }) => {
   const texto = `
-⊹🌈 𝑪𝒐𝒎𝒂𝒏𝒅𝒐𝒔 𝒑𝒂𝒓𝒂 𝒍𝒂 𝒄𝒓𝒆𝒂𝒄𝒊𝒐𝒏 𝒚 𝒑𝒆𝒓𝒔𝒐𝒏𝒂𝒍𝒊𝒛𝒂𝒄𝒊𝒐𝒏 𝒅𝒆 𝒔𝒕𝒊𝒄𝒌𝒆𝒓𝒔 🌈⊹
+🖼️✨⊹ 𝐂𝐨𝐦𝐚𝐧𝐝𝐨𝐬 𝐩𝐚𝐫𝐚 𝐜𝐫𝐞𝐚𝐜𝐢𝐨𝐧𝐞𝐬 𝐝𝐞 𝐬𝐭𝐢𝐜𝐤𝐞𝐫𝐬, 𝐞𝐭𝐜. 🎨🔖
 
-ㅤۚ𑁯ׂᰍ  🪴 ᳴   ׅ  ׄʚ   ̶ *#brat*
-> ✦ Convierte un texto a sticker.
-
-ㅤۚ𑁯ׂᰍ  🪴 ᳴   ׅ  ׄʚ   ̶ *#emojimix*
-> ✦ Crea un solo emoji con dos.
-
-ㅤۚ𑁯ׂᰍ 🪴 ᳴ ׅ ׄʚ ̶ *#setmeta*
-> ✦ Personaliza los nombres de los stickers que hagas en la bot. 
-
-ㅤۚ𑁯ׂᰍ 🪴 ᳴ ׅ ׄʚ ̶ *#s • #sticker*
-> ✦ Convierte una imagen a sticker.
-
-ㅤۚ𑁯ׂᰍ 🪴 ᳴ ׅ ׄʚ ̶ *#toimg*
-> ✦ Convierte un stickers a imagen.
-
-ㅤۚ𑁯ׂᰍ 🪴 ᳴ ׅ ׄʚ ̶ *#wm*
-> ✦  Personaliza los nombres de los stickers que respondas.
-
-╰──── ੈ₊˚༅༴╰────︶.︶ ⸙ ͛ ͎ ͛ ︶.︶ ੈ₊˚༅
+🏮 ⃞ּㅤ ᰩ 𑂳  ▢꯭֟፝▢   ׅ ੭ *#sticker • #s*
+> ✦ Crea stickers de (imagen/video).
+🏮 ⃞ּㅤ ᰩ 𑂳  ▢꯭֟፝▢   ׅ ੭ *#setmeta*
+> ✦ Establece un pack y autor para los stickers.
+🏮 ⃞ּㅤ ᰩ 𑂳  ▢꯭֟፝▢   ׅ ੭ *#delmeta*
+> ✦ Elimina tu pack de stickers.
+🏮 ⃞ּㅤ ᰩ 𑂳  ▢꯭֟፝▢   ׅ ੭ *#pfp • #getpic*
+> ✦ Obtén la foto de perfil de un usuario.
+🏮 ⃞ּㅤ ᰩ 𑂳  ▢꯭֟፝▢   ׅ ੭ *#qc*
+> ✦ Crea stickers con texto o de un usuario.
+🏮 ⃞ּㅤ ᰩ 𑂳  ▢꯭֟፝▢   ׅ ੭ *#toimg • #img*
+> ✦ Convierte stickers en imagen.
+🏮 ⃞ּㅤ ᰩ 𑂳  ▢꯭֟፝▢   ׅ ੭ *#brat • #ttp • #attp*︎
+> ✦ Crea stickers con texto.
+🏮 ⃞ּㅤ ᰩ 𑂳  ▢꯭֟፝▢   ׅ ੭ *#emojimix*
+> ✦ Funciona 2 emojis para crear un sticker.
+🏮 ⃞ּㅤ ᰩ 𑂳  ▢꯭֟፝▢   ׅ ੭ *#wm*
+> ✦ Cambia el nombre de los stickers.
+╰────︶.︶ ⸙ ͛ ͎ ͛  ︶.︶ ੈ₊˚༅,
   `.trim();
 
   await conn.sendMessage(m.chat, {
