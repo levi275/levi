@@ -41,8 +41,8 @@ contextInfo: {
 forwardingScore: 2022,
 isForwarded: true,
 externalAdReply: {
-title: packname,
-body: '¡aquí tienes tu sticker! (˵•̀ᴗ - ˵ )',
+title: 'ϟϟ(๑⚈ ․̫ ⚈๑)ᵖⁱᵏᵃ ᵖⁱᵏᵃ',
+body: '¡aquí tienes tu sticker!',
 sourceUrl: redes,
 thumbnail: icons,
 mediaType: 2
