@@ -19,7 +19,7 @@ handler.before = async function (m, { conn, participants, groupMetadata }) {
     
     let fkontak = null;
     try {
-        const res = await fetch('https://i.postimg.cc/nhdkndD6/pngtree-yellow-bell-ringing-with-sound-waves-png-image-20687908.png');
+        const res = await fetch('https://i.postimg.cc/6562JdR7/Hoshino-Ruby-(2).jpg');
         const thumb2 = await res.buffer();
         fkontak = {
             key: { participant: '0@s.whatsapp.net', remoteJid: 'status@broadcast', fromMe: false, id: 'Halo' },
