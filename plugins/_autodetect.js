@@ -1,13 +1,6 @@
-/**
- * MODIFICADO Y DECORADO - DETECTOR DE EVENTOS
- * Estilo: Aesthetic / Premium
- * Funciones: ExternalAdReply para mejor visualización
- */
-
 import { WAMessageStubType } from '@whiskeysockets/baileys'
 import fetch from 'node-fetch'
 
-// Función para estilizar texto (Bold Italic Sans)
 const styleText = (text) => {
     const map = {
         'a': '𝘢', 'b': '𝘣', 'c': '𝘤', 'd': '𝘥', 'e': '𝘦', 'f': '𝘧', 'g': '𝘨', 'h': '𝘩', 'i': '𝘪', 'j': '𝘫', 'k': '𝘬', 'l': '𝘭', 'm': '𝘮', 'n': '𝘯', 'o': '𝘰', 'p': '𝘱', 'q': '𝘲', 'r': '𝘳', 's': '𝘴', 't': '𝘵', 'u': '𝘶', 'v': '𝘷', 'w': '𝘸', 'x': '𝘹', 'y': '𝘺', 'z': '𝘻',
@@ -21,151 +14,179 @@ let handler = m => m
 
 handler.before = async function (m, { conn, participants, groupMetadata }) {
     if (!m.messageStubType || !m.isGroup) return
-
     let chat = global.db.data.chats[m.chat]
     let usuario = m.sender.split('@')[0]
-    let pp = await conn.profilePictureUrl(m.chat, 'image').catch(_ => 'https://i.imgur.com/iP6Jg9I.jpeg') // Imagen por defecto si falla
-    
-    // Configuración del mensaje "Fake" (Fkontak mejorado con adReply)
-    // Esto crea una tarjeta visual bonita arriba del mensaje
+    let pp = await conn.profilePictureUrl(m.chat, 'image').catch(_ => 'https://i.imgur.com/iP6Jg9I.jpeg')
+    let img = await (await fetch(pp)).buffer()
+
+    const decorations = {
+        line: '‿︵‿︵‿︵୨˚̣̣̣͙୧ - - ୨˚̣̣̣͙୧‿︵‿︵‿︵',
+        header: ' . ⁺ ︵֔⏜۠͡︵ 🧸 ︵۠͡⏜֔︵ ⁺ .',
+        star: '✦',
+        heart: '𖹭',
+        bear: '🐻‍❄️',
+        flower: '❀'
+    }
+
     const fakeChannel = {
         contextInfo: {
             mentionedJid: [m.sender],
+            isForwarded: true,
+            forwardingScore: 999,
             externalAdReply: {
-                title: styleText("NOTIFICACION DEL GRUPO"),
-                body: styleText(groupMetadata.subject),
+                title: styleText(groupMetadata.subject),
+                body: "꯭✎ ꯭𝘚꯭𝘦꯭𝘦 ꯭𝘪𝘯꯭𝘧𝘰 ꯭𝘰𝘧 ꯭𝘵𝘩꯭𝘪𝘴 ꯭𝘨𝘳꯭𝘰𝘶꯭𝘱 ꯭𝘩𝘦꯭𝘳𝘦 ꯭🔭",
                 mediaType: 1,
-                renderLargerThumbnail: false,
+                renderLargerThumbnail: true,
                 previewType: "PHOTO",
-                thumbnailUrl: pp,
-                sourceUrl: "https://whatsapp.com/channel/0029Va4QjTC7TkjD6Z92K62s" // Puedes poner tu canal aquí
+                thumbnail: img,
+                sourceUrl: "https://whatsapp.com/channel/0029Va4QjTC7TkjD6Z92K62s"
             }
         }
     }
 
-    // Textos y lógica
     let text = ''
     let mentions = [m.sender]
-    let actionType = ''
+    let titleAd = ''
 
-    // 1. Cambio de Nombre del Grupo (Type 21)
     if (chat.detect && m.messageStubType == 21) {
-        actionType = '📝 𝐂𝐀𝐌𝐁𝐈𝐎 𝐃𝐄 𝐍𝐎𝐌𝐁𝐑𝐄'
+        titleAd = '𝐍𝐄𝐖 𝐍𝐀𝐌𝐄'
         text = `
-╭╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌
-┆ ${styleText("El nombre del grupo ha sido actualizado.")}
-┆
-┆ 👤 *Autor:* @${usuario}
-┆ 🏷️ *Nuevo Nombre:*
-┆ ${styleText(m.messageStubParameters[0])}
-╰╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌`
-    
-    // 2. Cambio de Foto del Grupo (Type 22)
+${decorations.header}
+      ${decorations.bear}̸̼̲֗  ׅ𝙏͟𝘩͟𝙚֗͟ ׅ 𝙉𝘢𝘮𝘦 𝘊𝘩𝘢𝘯𝘨𝘦 ֪ ֗𝙂𝙖𝙡𝘭̶𝙚𝘳𝙮 ׂׅ ❤̷̸֪֗
+           ⪩ ּ︶͜⏝ᐤ ɛɜ ᐤ︶͜⏝ּ ⪨
+           𓆪𓂃 
+      . 
+                           .    𝄢
+       𖥔    　     *@${usuario}* ࣪      ˖ؚ
+ㅤだ ㅤׄㅤ *#* ㅤִㅤ✿ㅤׄ﹕ 𝐂𝐡𝐚𝐧𝐠𝐞𝐝 𝐓𝐡𝐞 𝐍𝐚𝐦𝐞.   𖤝      
+꒰꒰ 🐻‍❄️ 𝐍𝐞𝐰 𝐍𝐚𝐦𝐞 Ი꯭ᰍ
+> 🏷️ ${styleText(m.messageStubParameters[0])}
+${decorations.line}`
+
     } else if (chat.detect && m.messageStubType == 22) {
-        actionType = '🖼️ 𝐍𝐔𝐄𝐕𝐀 𝐈𝐌𝐀𝐆𝐄𝐍'
+        titleAd = '𝐍𝐄𝐖 𝐈𝐂𝐎𝐍'
         text = `
-╭╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌
-┆ ${styleText("La identidad visual del grupo ha cambiado.")}
-┆
-┆ 👤 *Autor:* @${usuario}
-┆ 📸 *Estado:* ${styleText("Icono Actualizado")}
-╰╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌`
+${decorations.header}
+      ${decorations.bear}̸̼̲֗  ׅ𝙏͟𝘩͟𝙚֗͟ ׅ 𝙉𝘦𝘸 𝘐𝘤𝘰𝘯 ֪ ֗𝙂𝙖𝙡𝘭̶𝙚𝘳𝙮 ׂׅ ❤̷̸֪֗
+           ⪩ ּ︶͜⏝ᐤ ɛɜ ᐤ︶͜⏝ּ ⪨
+           𓆪𓂃 
+      . 
+                           .    𝄢
+       𖥔    　     *@${usuario}* ࣪      ˖ؚ
+ㅤだ ㅤׄㅤ *#* ㅤִㅤ✿ㅤׄ﹕ 𝐔𝐩𝐝𝐚𝐭𝐞𝐝 𝐭𝐡𝐞 𝐈𝐜𝐨𝐧.   𖤝      
+꒰꒰ 🖼️ 𝐒𝐭𝐚𝐭𝐮𝐬 Ი꯭ᰍ
+> 🫧 ${styleText("Aesthetic Mode On")}
+${decorations.line}`
 
-    // 3. Restablecer Enlace (Type 23) (Detecta cuando se revoca el link)
     } else if (chat.detect && m.messageStubType == 23) {
-        actionType = '🔗 𝐄𝐍𝐋𝐀𝐂𝐄 𝐑𝐄𝐕𝐎𝐂𝐀𝐃𝐎'
+        titleAd = '𝐋𝐈𝐍𝐊 𝐑𝐄𝐒𝐄𝐓'
         text = `
-╭╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌
-┆ ${styleText("El enlace de invitación anterior ya no sirve.")}
-┆
-┆ 👤 *Autor:* @${usuario}
-┆ 🛡️ *Acción:* ${styleText("Link Restablecido")}
-╰╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌`
+${decorations.header}
+      ${decorations.bear}̸̼̲֗  ׅ𝙏͟𝘩͟𝙚֗͟ ׅ 𝙇𝘪𝘯𝘬 𝘙𝘦𝘴𝘦𝘵 ֪ ֗𝙂𝙖𝙡𝘭̶𝙚𝘳𝙮 ׂׅ ❤̷̸֪֗
+           ⪩ ּ︶͜⏝ᐤ ɛɜ ᐤ︶͜⏝ּ ⪨
+           𓆪𓂃 
+      . 
+                           .    𝄢
+       𖥔    　     *@${usuario}* ࣪      ˖ؚ
+ㅤだ ㅤׄㅤ *#* ㅤִㅤ✿ㅤׄ﹕ 𝐑𝐞𝐯𝐨𝐤𝐞𝐝 𝐭𝐡𝐞 𝐋𝐢𝐧𝐤.   𖤝      
+꒰꒰ 🔗 𝐒𝐭𝐚𝐭𝐮𝐬 Ი꯭ᰍ
+> 🚫 ${styleText("Old link is dead")}
+${decorations.line}`
 
-    // 4. Configuración de Grupo (Type 25 - Editar info)
     } else if (chat.detect && m.messageStubType == 25) {
-        actionType = '⚙️ 𝐀𝐉𝐔𝐒𝐓𝐄𝐒 𝐃𝐄 𝐄𝐃𝐈𝐂𝐈𝐎𝐍'
-        let allow = m.messageStubParameters[0] == 'on' ? 'Solo Admins' : 'Todos los participantes'
+        titleAd = '𝐒𝐄𝐓𝐓𝐈𝐍𝐆𝐒'
+        let type = m.messageStubParameters[0] == 'on' ? '𝐀𝐝𝐦𝐢𝐧𝐬 𝐎𝐧𝐥𝐲' : '𝐀𝐥𝐥 𝐔𝐬𝐞𝐫𝐬'
         text = `
-╭╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌
-┆ ${styleText("Se han modificado los permisos de edición.")}
-┆
-┆ 👤 *Autor:* @${usuario}
-┆ 🔓 *Permitido a:* ${styleText(allow)}
-╰╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌`
+${decorations.header}
+      ${decorations.bear}̸̼̲֗  ׅ𝙏͟𝘩͟𝙚֗͟ ׅ 𝘚𝘦𝘵𝘵𝘪𝘯𝘨𝘴 ֪ ֗𝙂𝙖𝙡𝘭̶𝙚𝘳𝙮 ׂׅ ❤̷̸֪֗
+           ⪩ ּ︶͜⏝ᐤ ɛɜ ᐤ︶͜⏝ּ ⪨
+           𓆪𓂃 
+      . 
+                           .    𝄢
+       𖥔    　     *@${usuario}* ࣪      ˖ؚ
+ㅤだ ㅤׄㅤ *#* ㅤִㅤ✿ㅤׄ﹕ 𝐄𝐝𝐢𝐭 𝐈𝐧𝐟𝐨 𝐆𝐫𝐨𝐮𝐩.   𖤝      
+꒰꒰ ⚙️ 𝐍𝐨𝐰 Ი꯭ᰍ
+> 🔓 ${styleText(type)}
+${decorations.line}`
 
-    // 5. Grupo Cerrado/Abierto (Type 26)
     } else if (chat.detect && m.messageStubType == 26) {
-        actionType = m.messageStubParameters[0] == 'on' ? '🔒 𝐆𝐑𝐔𝐏𝐎 𝐂𝐄𝐑𝐑𝐀𝐃𝐎' : '🔓 𝐆𝐑𝐔𝐏𝐎 𝐀𝐁𝐈𝐄𝐑𝐓𝐎'
-        let status = m.messageStubParameters[0] == 'on' ? 'Solo Admins' : 'Todos'
+        titleAd = '𝐆𝐑𝐎𝐔𝐏 𝐒𝐓𝐀𝐓𝐔𝐒'
+        let type = m.messageStubParameters[0] == 'on' ? '🔒 𝐂𝐥𝐨𝐬𝐞𝐝' : '🔓 𝐎𝐩𝐞𝐧'
         text = `
-╭╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌
-┆ ${styleText("Se han actualizado los permisos de mensajería.")}
-┆
-┆ 👤 *Autor:* @${usuario}
-┆ 💬 *Pueden enviar:* ${styleText(status)}
-╰╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌`
+${decorations.header}
+      ${decorations.bear}̸̼̲֗  ׅ𝙏͟𝘩͟𝙚֗͟ ׅ 𝘊𝘩𝘢𝘵 𝘚𝘵𝘢𝘵𝘶𝘴 ֪ ֗𝙂𝙖𝙡𝘭̶𝙚𝘳𝙮 ׂׅ ❤̷̸֪֗
+           ⪩ ּ︶͜⏝ᐤ ɛɜ ᐤ︶͜⏝ּ ⪨
+           𓆪𓂃 
+      . 
+                           .    𝄢
+       𖥔    　     *@${usuario}* ࣪      ˖ؚ
+ㅤだ ㅤׄㅤ *#* ㅤִㅤ✿ㅤׄ﹕ 𝐔𝐩𝐝𝐚𝐭𝐞𝐝 𝐂𝐡𝐚𝐭.   𖤝      
+꒰꒰ 💬 𝐌𝐨𝐝𝐞 Ი꯭ᰍ
+> ${styleText(type)}
+${decorations.line}`
 
-    // 6. Nuevo Participante / Autoaceptado (Type 27)
     } else if (chat.detect2 && m.messageStubType == 27) {
-        actionType = '👋 𝐍𝐔𝐄𝐕𝐎 𝐌𝐈𝐄𝐌𝐁𝐑𝐎'
-        let nuevoUser = m.messageStubParameters[0].split('@')[0]
-        mentions.push(m.messageStubParameters[0])
+        titleAd = '𝐖𝐄𝐋𝐂𝐎𝐌𝐄'
+        let nuevo = m.messageStubParameters[0]
+        mentions.push(nuevo)
         text = `
-╭╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌
-┆ ${styleText("¡Demos la bienvenida a un nuevo integrante!")}
-┆
-┆ 👤 *Nuevo:* @${nuevoUser}
-┆ 👮‍♂️ *Aceptado por:* @${usuario}
-╰╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌`
+${decorations.header}
+      ${decorations.bear}̸̼̲֗  ׅ𝙏͟𝘩͟𝙚֗͟ ׅ 𝙒𝘦𝘭𝘤𝘰𝘮𝘦 ֪ ֗𝙂𝙖𝙡𝘭̶𝙚𝘳𝙮 ׂׅ ❤̷̸֪֗
+           ⪩ ּ︶͜⏝ᐤ ɛɜ ᐤ︶͜⏝ּ ⪨
+           𓆪𓂃 
+      . 
+                           .    𝄢
+       𖥔    　     *@${usuario}* ࣪      ˖ؚ
+ㅤだ ㅤׄㅤ *#* ㅤִㅤ✿ㅤׄ﹕ 𝐀𝐜𝐜𝐞𝐩𝐭𝐞𝐝 𝐍𝐞𝐰 𝐌𝐞𝐦𝐛𝐞𝐫.   𖤝      
+꒰꒰ 🧸 𝐍𝐞𝐰 𝐁𝐚𝐛𝐲 Ი꯭ᰍ
+> 👋 @${nuevo.split('@')[0]}
+${decorations.line}`
 
-    // 7. Nuevo Admin (Type 29)
     } else if (chat.detect && m.messageStubType == 29) {
-        actionType = '🛡️ 𝐍𝐔𝐄𝐕𝐎 𝐀𝐃𝐌𝐈𝐍'
-        let nuevoAdmin = m.messageStubParameters[0].split('@')[0]
-        mentions.push(m.messageStubParameters[0])
+        titleAd = '𝐍𝐄𝐖 𝐀𝐃𝐌𝐈𝐍'
+        let nuevoAdmin = m.messageStubParameters[0]
+        mentions.push(nuevoAdmin)
         text = `
-╭╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌
-┆ ${styleText("El grupo tiene un nuevo administrador.")}
-┆
-┆ 🏅 *Ascendido:* @${nuevoAdmin}
-┆ 👤 *Por:* @${usuario}
-╰╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌`
+${decorations.header}
+      ${decorations.bear}̸̼̲֗  ׅ𝙏͟𝘩͟𝙚֗͟ ׅ 𝘼𝘥𝘮𝘪𝘯 ֪ ֗𝙂𝙖𝙡𝘭̶𝙚𝘳𝙮 ׂׅ ❤̷̸֪֗
+           ⪩ ּ︶͜⏝ᐤ ɛɜ ᐤ︶͜⏝ּ ⪨
+           𓆪𓂃 
+      . 
+                           .    𝄢
+       𖥔    　     *@${usuario}* ࣪      ˖ؚ
+ㅤだ ㅤׄㅤ *#* ㅤִㅤ✿ㅤׄ﹕ 𝐏𝐫𝐨𝐦𝐨𝐭𝐞𝐝 𝐔𝐬𝐞𝐫.   𖤝      
+꒰꒰ 👑 𝐍𝐞𝐰 𝐁𝐨𝐬𝐬 Ი꯭ᰍ
+> 🫡 @${nuevoAdmin.split('@')[0]}
+${decorations.line}`
 
-    // 8. Admin Eliminado (Type 30)
     } else if (chat.detect && m.messageStubType == 30) {
-        actionType = '📉 𝐃𝐄𝐆𝐑𝐀𝐃𝐀𝐃𝐎'
-        let exAdmin = m.messageStubParameters[0].split('@')[0]
-        mentions.push(m.messageStubParameters[0])
+        titleAd = '𝐃𝐄𝐌𝐎𝐓𝐄𝐃'
+        let exAdmin = m.messageStubParameters[0]
+        mentions.push(exAdmin)
         text = `
-╭╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌
-┆ ${styleText("Un participante ha perdido sus privilegios.")}
-┆
-┆ 🔻 *Usuario:* @${exAdmin}
-┆ 👤 *Por:* @${usuario}
-╰╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌`
+${decorations.header}
+      ${decorations.bear}̸̼̲֗  ׅ𝙏͟𝘩͟𝙚֗͟ ׅ 𝘋𝘦𝘮𝘰𝘵𝘦 ֪ ֗𝙂𝙖𝙡𝘭̶𝙚𝘳𝙮 ׂׅ ❤̷̸֪֗
+           ⪩ ּ︶͜⏝ᐤ ɛɜ ᐤ︶͜⏝ּ ⪨
+           𓆪𓂃 
+      . 
+                           .    𝄢
+       𖥔    　     *@${usuario}* ࣪      ˖ؚ
+ㅤだ ㅤׄㅤ *#* ㅤִㅤ✿ㅤׄ﹕ 𝐃𝐞𝐦𝐨𝐭𝐞𝐝 𝐔𝐬𝐞𝐫.   𖤝      
+꒰꒰ 📉 𝐔𝐬𝐞𝐫 Ი꯭ᰍ
+> 😔 @${exAdmin.split('@')[0]}
+${decorations.line}`
     }
 
-    // ENVIAR MENSAJE SI HAY TEXTO DEFINIDO
     if (text) {
-        // Actualizamos el título del fakeChannel dependiendo de la acción
-        fakeChannel.contextInfo.externalAdReply.title = actionType
-        
+        fakeChannel.contextInfo.externalAdReply.title = titleAd
         await conn.sendMessage(m.chat, { 
             text: text, 
             contextInfo: {
                 ...fakeChannel.contextInfo, 
                 mentionedJid: mentions 
             }
-        }, { quoted: null }) // Quoted null para que se vea más limpio o puedes poner 'm'
-    } else {
-        // Log para debug si es un tipo desconocido
-        if (m.messageStubType != 2) {
-            console.log({
-                type: m.messageStubType,
-                params: m.messageStubParameters
-            })
-        }
+        }, { quoted: null })
     }
 }
 
