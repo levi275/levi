@@ -34,14 +34,14 @@ let handler = async (m, { conn }) => {
   `.trim();
 
   await conn.sendMessage(m.chat, {
-    image: { url: 'https://files.catbox.moe/61219t.png' },
+    image: { url: 'https://files.catbox.moe/wel1hf.jpeg' },
     caption: texto,
     contextInfo: {
       mentionedJid: [m.sender],
       externalAdReply: {
         title: '🛠️ Herramientas Útiles',
         body: 'Funciones variadas para el día a día',
-        thumbnailUrl: 'https://files.catbox.moe/hdr7oh.jpg',
+        thumbnail: icons,
         mediaType: 1,
         renderLargerThumbnail: false,
         showAdAttribution: true,
