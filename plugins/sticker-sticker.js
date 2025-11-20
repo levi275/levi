@@ -13,13 +13,10 @@ try {
 let q = m.quoted ? m.quoted : m
 let mime = (q.msg || q).mimetype || q.mediaType || ''
 let txt = args.join(' ')
-
 if (/webp|image|video/g.test(mime) && q.download) {
-if (/video/.test(mime) && (q.msg || q).seconds > 16)
-return conn.reply(m.chat, '❌ El video no puede durar más de *15 segundos*', m)
+if (/video/.test(mime) && (q.msg || q).seconds > 16) return conn.reply(m.chat, '❌ El video no puede durar más de *15 segundos*', m)
 let buffer = await q.download()
 await m.react('🧃')
-
 let marca = txt ? txt.split(/[\u2022|]/).map(part => part.trim()) : [texto1, texto2]
 stiker = await sticker(buffer, false, marca[0], marca[1])
 } else if (args[0] && isUrl(args[0])) {
@@ -32,7 +29,16 @@ await conn.reply(m.chat, '⚠︎ Ocurrió un Error: ' + e.message, m)
 await m.react('✖️')
 } finally {
 if (stiker) {
-conn.sendFile(m.chat, stiker, 'sticker.webp', '', m)
+await conn.sendFile(m.chat, stiker, 'sticker.webp', 'el sticker', m, { 
+contextInfo: { 
+forwardingScore: 2022, 
+isForwarded: true, 
+externalAdReply: {
+title: packname,
+body: '¡aquí tienes tu sticker! (˵•̀ᴗ - ˵ )',
+sourceUrl: redes,
+thumbnail: icons
+}}})
 await m.react('🧃')
 }}}
 
