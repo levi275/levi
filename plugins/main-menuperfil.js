@@ -36,14 +36,14 @@ let handler = async (m, { conn }) => {
   `.trim();
 
   await conn.sendMessage(m.chat, {
-    image: { url: 'https://files.catbox.moe/61219t.png' },
+    image: { url: 'https://files.catbox.moe/a2cyzt.jpeg' },
     caption: texto,
     contextInfo: {
       mentionedJid: [m.sender],
       externalAdReply: {
         title: '🆔 Perfil y Ajustes de Usuario',
         body: 'Configura tu identidad en el bot',
-        thumbnailUrl: 'https://files.catbox.moe/hdr7oh.jpg',
+        thumbnail: icons,
         mediaType: 1,
         renderLargerThumbnail: false,
         showAdAttribution: true,
