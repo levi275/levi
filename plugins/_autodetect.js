@@ -38,19 +38,11 @@ handler.before = async function (m, { conn, participants, groupMetadata }) {
     let text = ''
     let mentions = [m.sender]
 
-    // HEADER CONSTANTS
-    const head = `.             ⁺ ︵֔⏜۠͡︵ ♡ᩙ ︵۠͡⏜֔︵ ⁺
-         🐻‍❄️̸̼̲֗  ׅ𝙏͟𝘩͟𝙚֗͟ ׅ 𝙂𝙧𝙤𝙪𝙥 ֪ ֗𝙐𝙥𝙙𝙖𝙩𝙚𝙨 ׂׅ ❤̷̸֪֗
-             ⪩ ּ︶͜⏝ᐤ ɛɜ ᐤ︶͜⏝ּ ⪨
-           𓆪𓂃           
-      . 
-                           .    𝄢`
 
     const footer = `‿︵‿︵‿︵୨˚̣̣̣͙୧ - - ୨˚̣̣̣͙୧‿︵‿︵‿︵`
 
     if (chat.detect && m.messageStubType == 21) {
         text = `
-${head}
 
        𖥔    　     *@${usuario}* ࣪      ˖ؚ
 ㅤだ ㅤׄㅤ *#* ㅤִㅤ✿ㅤׄ﹕ 𝐂𝐡𝐚𝐧𝐠𝐞𝐝 𝐍𝐚𝐦𝐞.   𖤝        
@@ -61,7 +53,6 @@ ${footer}`
 
     } else if (chat.detect && m.messageStubType == 22) {
         text = `
-${head}
 
        𖥔    　     *@${usuario}* ࣪      ˖ؚ
 ㅤだ ㅤׄㅤ *#* ㅤִㅤ✿ㅤׄ﹕ 𝐂𝐡𝐚𝐧𝐠𝐞𝐝 𝐈𝐜𝐨𝐧.   𖤝        
@@ -72,7 +63,6 @@ ${footer}`
 
     } else if (chat.detect && m.messageStubType == 23) {
         text = `
-${head}
 
        𖥔    　     *@${usuario}* ࣪      ˖ؚ
 ㅤだ ㅤׄㅤ *#* ㅤִㅤ✿ㅤׄ﹕ 𝐑𝐞𝐯𝐨𝐤𝐞𝐝 𝐋𝐢𝐧𝐤.   𖤝        
@@ -84,7 +74,6 @@ ${footer}`
     } else if (chat.detect && m.messageStubType == 25) {
         let type = m.messageStubParameters[0] == 'on' ? '𝐀𝐝𝐦𝐢𝐧𝐬 𝐎𝐧𝐥𝐲' : '𝐀𝐥𝐥 𝐔𝐬𝐞𝐫𝐬'
         text = `
-${head}
 
        𖥔    　     *@${usuario}* ࣪      ˖ؚ
 ㅤだ ㅤׄㅤ *#* ㅤִㅤ✿ㅤׄ﹕ 𝐄𝐝𝐢𝐭 𝐒𝐞𝐭𝐭𝐢𝐧𝐠𝐬.   𖤝        
@@ -96,7 +85,6 @@ ${footer}`
     } else if (chat.detect && m.messageStubType == 26) {
         let type = m.messageStubParameters[0] == 'on' ? '🔒 𝐂𝐥𝐨𝐬𝐞𝐝' : '🔓 𝐎𝐩𝐞𝐧'
         text = `
-${head}
 
        𖥔    　     *@${usuario}* ࣪      ˖ؚ
 ㅤだ ㅤׄㅤ *#* ㅤִㅤ✿ㅤׄ﹕ 𝐂𝐡𝐚𝐭 𝐒𝐭𝐚𝐭𝐮𝐬.   𖤝        
@@ -109,7 +97,6 @@ ${footer}`
         let nuevo = m.messageStubParameters[0]
         mentions.push(nuevo)
         text = `
-${head}
 
        𖥔    　     *@${usuario}* ࣪      ˖ؚ
 ㅤだ ㅤׄㅤ *#* ㅤִㅤ✿ㅤׄ﹕ 𝐍𝐞𝐰 𝐌𝐞𝐦𝐛𝐞𝐫.   𖤝        
@@ -122,7 +109,6 @@ ${footer}`
         let nuevoAdmin = m.messageStubParameters[0]
         mentions.push(nuevoAdmin)
         text = `
-${head}
 
        𖥔    　     *@${usuario}* ࣪      ˖ؚ
 ㅤだ ㅤׄㅤ *#* ㅤִㅤ✿ㅤׄ﹕ 𝐍𝐞𝐰 𝐀𝐝𝐦𝐢𝐧.   𖤝        
@@ -135,7 +121,6 @@ ${footer}`
         let exAdmin = m.messageStubParameters[0]
         mentions.push(exAdmin)
         text = `
-${head}
 
        𖥔    　     *@${usuario}* ࣪      ˖ؚ
 ㅤだ ㅤׄㅤ *#* ㅤִㅤ✿ㅤׄ﹕ 𝐃𝐞𝐦𝐨𝐭𝐞𝐝 𝐔𝐬𝐞𝐫.   𖤝        
