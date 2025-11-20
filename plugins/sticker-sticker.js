@@ -29,16 +29,25 @@ await conn.reply(m.chat, '⚠︎ Ocurrió un Error: ' + e.message, m)
 await m.react('✖️')
 } finally {
 if (stiker) {
-await conn.sendFile(m.chat, stiker, 'sticker.webp', 'el sticker', m, { 
+await conn.sendFile(
+m.chat, 
+stiker, 
+'sticker.webp', 
+'el sticker',
+m, 
+true,
+{ 
 contextInfo: { 
-forwardingScore: 2022, 
-isForwarded: true, 
+forwardingScore: 2022,
+isForwarded: true,
 externalAdReply: {
 title: packname,
 body: '¡aquí tienes tu sticker! (˵•̀ᴗ - ˵ )',
 sourceUrl: redes,
-thumbnail: icons
-}}})
+thumbnail: icons,
+mediaType: 2
+}}}, 
+{ quoted: m })
 await m.react('🧃')
 }}}
 
