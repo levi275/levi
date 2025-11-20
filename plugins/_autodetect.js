@@ -35,7 +35,7 @@ handler.before = async function (m, { conn, participants, groupMetadata }) {
                 title: styleText("NOTIFICACION DEL GRUPO"),
                 body: styleText(groupMetadata.subject),
                 mediaType: 1,
-                renderLargerThumbnail: true,
+                renderLargerThumbnail: false,
                 previewType: "PHOTO",
                 thumbnailUrl: pp,
                 sourceUrl: "https://whatsapp.com/channel/0029Va4QjTC7TkjD6Z92K62s" // Puedes poner tu canal aquí
