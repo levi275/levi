@@ -74,14 +74,14 @@ let handler = async (m, { conn }) => {
   `.trim();
 
   await conn.sendMessage(m.chat, {
-    image: { url: 'https://files.catbox.moe/61219t.png' },
+    image: { url: 'https://files.catbox.moe/ubxkf4.jpeg' },
     caption: texto,
     contextInfo: {
       mentionedJid: [m.sender],
       externalAdReply: {
         title: '🎌 Reacciones de Anime',
         body: 'Expresa tus emociones con estilo',
-        thumbnailUrl: 'https://files.catbox.moe/hdr7oh.jpg',
+        thumbnail: icons,
         mediaType: 1,
         renderLargerThumbnail: false,
         showAdAttribution: true,
