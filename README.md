@@ -1,244 +1,149 @@
 <div align="center">
-  <img src="https://files.catbox.moe/91q106.jpg" alt="Banner Ruby Hoshino Bot" width="full">
+  <img src="https://files.catbox.moe/81l14y.jpg" alt="Luffy Gear 5 Banner" width="300" style="border-radius: 15px; box-shadow: 0px 0px 20px rgba(255, 0, 0, 0.8);">
 </div>
+
+<h1 align="center">👒 Monkey D. Luffy Bot - MD ⚡</h1>
 
 <div align="center">
-  <br>
-  <img src="https://readme-typing-svg.demolab.com?font=Fira+Code&pause=1000&color=E91E63&lines=BIENVENIDO+AL+REPOSITORIO;RUBY+HOSHINO+BOT;GRACIAS+POR+VISITAR+EL+REPOSITORIO;CREADO+CON+%E2%9D%A4%EF%B8%8F+POR+DIONEIBI;%C2%A1LA+BOT+MAS+LINDA;%F0%9F%92%96" alt="Typing SVG">
-  <br><br>
-  
-  <p align="center">
-    <a href="https://github.com/Dioneibi-rip/Ruby-Hoshino-Bot"><img src="https://img.shields.io/github/stars/Dioneibi-rip/Ruby-Hoshino-Bot?style=for-the-badge&logo=github&color=FF69B4" alt="GitHub stars"></a>
-    <a href="https://github.com/Dioneibi-rip/Ruby-Hoshino-Bot/network/members"><img src="https://img.shields.io/github/forks/Dioneibi-rip/Ruby-Hoshino-Bot?style=for-the-badge&logo=github&color=DA70D6" alt="GitHub forks"></a>
-    <img src="https://img.shields.io/github/license/Dioneibi-rip/Ruby-Hoshino-Bot?style=for-the-badge&color=87CEEB" alt="License">
-    <a href="https://api.whatsapp.com/send/?phone=18294868853&text=Hola,+vengo+de+GitHub+y+necesito+soporte+con+Ruby+Bot&type=phone_number&app_absent=0"><img src="https://img.shields.io/badge/WhatsApp-Soporte-25D366?style=for-the-badge&logo=whatsapp&logoColor=white" alt="Support WhatsApp"></a>
-  </p>
+  <a href="https://git.io/typing-svg">
+    <img src="https://readme-typing-svg.demolab.com?font=Fira+Code&weight=600&size=25&pause=1000&color=F70000&center=true&vCenter=true&width=435&lines=YO+SERE+EL+REY+DE+LOS+PIRATAS;MONKEY+D.+LUFFY+BOT+MD;BIENVENIDO+A+GRAND+LINE;GEAR+5+ACTIVADO+%E2%9A%A1;CREADO+POR+NENE504273" alt="Typing SVG" />
+  </a>
+</div>
 
-  <img src="https://files.catbox.moe/atnv7f.gif" alt="Ruby Hoshino Bot Preview" width="350"/>
+<p align="center">
+  <em>"¡No voy a perder contra nadie, porque voy a ser el Rey de los Piratas!" 🏴‍☠️</em>
+</p>
+
+<div align="center">
+  
+  <a href="https://github.com/nene504273/Monkey-D-luffy-Bot-MD">
+    <img src="https://img.shields.io/badge/Versión-1.0.0-FF0000?style=for-the-badge&logo=github&logoColor=white" alt="Version">
+  </a>
+  <a href="https://github.com/nene504273/Monkey-D-luffy-Bot-MD/network/members">
+     <img src="https://img.shields.io/github/forks/nene504273/Monkey-D-luffy-Bot-MD?style=for-the-badge&color=FFD700" alt="Forks">
+  </a>
+  <a href="https://github.com/nene504273/Monkey-D-luffy-Bot-MD/stargazers">
+    <img src="https://img.shields.io/github/stars/nene504273/Monkey-D-luffy-Bot-MD?style=for-the-badge&color=blue" alt="Stars">
+  </a>
+
+  <br><br>
+
+  <a href="[CAMBIAR_POR_LINK_DE_TU_GRUPO_WHATSAPP]">
+    <img src="https://img.shields.io/badge/Unirse%20al%20Grupo-25D366?style=for-the-badge&logo=whatsapp&logoColor=white" alt="Grupo WhatsApp">
+  </a>
+  <a href="https://wa.me/[CAMBIAR_POR_TU_NUMERO]?text=Hola+quiero+info+del+bot">
+    <img src="https://img.shields.io/badge/Soporte%20Creador-25D366?style=for-the-badge&logo=whatsapp&logoColor=white" alt="Soporte">
+  </a>
 </div>
 
 ---
 
+## 🍖 **`DESCRIPCIÓN`**
 
-> [!WARNING]
-> **AVISO IMPORTANTE**  
-> Este bot no está hecho por `WhatsApp Inc.` Así que el mal uso del bot podría resultar en la `prohibición` de tu cuenta de `WhatsApp`. (Aunque tu cuenta de WhatsApp solo puede ser desbloqueada una vez).
-> No soy responsable de la prohibición de tu cuenta.
-> Úsalo bajo tu propio riesgo teniendo en cuenta esta advertencia.
-
-
-> **`Ruby Hoshino - Bot`** Es una versión **personalizada del trabajo original de [Yuki Wa Bot](https://github.com/The-King-Destroy/YukiBot-MD)**, Modificado por **[Dioneibi-rip](https://github.com/Dioneibi-rip)**.  
- ¡Úsalo con responsabilidad y diviértete! 💖
-
------
-
-### <img src="https://i.pinimg.com/originals/19/80/6e/19806e91932e6054965fc83b85241270.gif" alt="Prueba La Bot Aqui" width="42" height="42"> ¡Prueba el Bot en Acción!
-
-> ¿Quieres ver la magia de Ruby antes de instalar? ¡Únete a la comunidad y pruébalo! 💖
-
-[**Únete al Grupo Oficial**](https://chat.whatsapp.com/K2CPrOTksiA36SW6k41yuR)
-
------
-
-## 🩵 **`INSTALACIÓN`**
-
-
-### 📥 NECESITAS INSTALAR UNAS DE ESTAS HERRAMIENTAS
-
-
-<p align="center">
-  <a href="https://www.mediafire.com/file/llugt4zgj7g3n3u/com.termux_1020.apk/file"><img src="https://img.shields.io/badge/Descargar-Termux-26C6DA?style=for-the-badge&logo=android" alt="Download Termux"></a>
-  <a href="https://www.mediafire.com/file/bp2l6cci2p30hjv/Cloud+Shell_1.apk/file"><img src="https://img.shields.io/badge/Descargar-Cloud%20Shell-FF7043?style=for-the-badge&logo=google-cloud" alt="Download Cloud Shell"></a>
-</p>
+> **Monkey D. Luffy Bot** es un bot multifuncional para WhatsApp inspirado en la libertad y poder del futuro Rey de los Piratas. Diseñado para administrar grupos, descargar multimedia y entretener a tus nakamas con estilo RPG y anime.
 
 ---
 
-> 🚩 ESCRIBE LOS SIGUIENTES COMANDOS UNO POR UNO: 
+## 🌊 **`CARACTERÍSTICAS DEL PIRATA`**
 
-## <img src="https://i.giphy.com/media/nWGRHBnAl5Kmc/giphy.gif" alt="Instalacion" width="40" height="40"> Instalación en [termux](https://f-droid.org/repo/com.termux_118.apk)
+| 🏷️ Función | 📝 Descripción | Estado |
+| :--- | :--- | :---: |
+| 🛡️ **Seguridad** | Antilink, Antifake, Bienvenidas y Despedidas personalizables. | ✅ |
+| 🎵 **Descargas** | Baja música de YT, Videos de TikTok e Instagram sin marca. | ✅ |
+| 🎨 **Stickers** | Crea stickers de imágenes, videos y GIFs al instante. | ✅ |
+| 🎮 **Juegos** | Sistema RPG, Matemáticas, Adivinanzas y PvP. | ✅ |
+| 🤖 **IA** | Chatbot inteligente integrado para responder dudas. | ✅ |
+| ⚡ **Velocidad** | Respuestas rápidas optimizadas (Gear 2 style). | ✅ |
 
-> ⚠️ **Nota Importante:** La bot no es 100% compatible con Termux y puede presentar fallos o no funcionar correctamente en algunos dispositivos. Se recomienda el uso de Cloud Shell o despliegue en la nube para una mejor experiencia.
+---
+
+## 🏴‍☠️ **`INSTALACIÓN EN TERMUX`**
+
+> Sigue estos pasos cuidadosamente para zarpar sin problemas.
 
 <details>
-<summary><b>🪼 PASOS DE INSTALACION</b></summary>
+  <summary><b>⚡ CLIC PARA VER COMANDOS DE INSTALACIÓN</b></summary>
+  <br>
 
+**1. Actualizar paquetes y preparar el barco:**
 ```bash
 termux-setup-storage
+apt update && apt upgrade -y
+pkg install -y git nodejs ffmpeg imagemagick yarn
 ````
 
-```bash
-pkg update && pkg upgrade && pkg install -y git nodejs ffmpeg imagemagick yarn
-```
+**2. Clonar el repositorio (Subir a bordo):**
 
 ```bash
-git clone https://github.com/Dioneibi-rip/Ruby-Hoshino-Bot && cd Ruby-Hoshino-Bot
+git clone [https://github.com/nene504273/Monkey-D-luffy-Bot-MD](https://github.com/nene504273/Monkey-D-luffy-Bot-MD)
+cd Monkey-D-luffy-Bot-MD
 ```
 
-```bash
-yarn install
-```
-
-```bash
-npm start
-```
-
-> Cuando el sistema te pregunte: `(Y/I/N/O/D/Z) [default=N]`, escribe **"y"** y presiona **ENTER**.
-
-</details>
-
----
-
-## <img src="https://files.catbox.moe/rs536w.gif" alt="Instalacion" width="40" height="40"> Instalación en [Cloud Shell](https://www.mediafire.com/file/bp2l6cci2p30hjv/Cloud+Shell_1.apk/file)
-
-<details>
-  <summary><b>🚀 VER PASOS PARA CLOUD SHELL</b></summary>
-
-```bash
-git clone https://github.com/Dioneibi-rip/Ruby-Hoshino-Bot && cd Ruby-Hoshino-Bot
-```
+**3. Instalar dependencias (Provisiones):**
 
 ```bash
 yarn install && npm install
 ```
 
-```bash
-npm start
-```
-
-> ✔️ Asegúrate de que tu Cloud Shell tenga Node.js instalado.
-</details>
-
----
-
-### 💖 **`ACTIVAR SI SE DETUVO (TERMUX)`**
-
-<details>
-<summary><b>✨ VER COMANDOS</b></summary>
-
-```bash
-cd && cd Ruby-Hoshino-Bot && npm start
-```
-
-</details>
-
----
-
-### 🔑 **`OBTENER UN NUEVO CÓDIGO`**
-
-<details>
-<summary><b>🔄 VER COMANDOS</b></summary>
-
-```bash
-cd Ruby-Hoshino-Bot
-```
-
-```bash
-rm -rf RubySessions
-```
+**4. Iniciar el Bot (¡A zarpar\!):**
 
 ```bash
 npm start
 ```
 
-</details>
+\</details\>
 
----
+\<details\>
+\<summary\>\<b\>♻️ OBTENER NUEVO CÓDIGO QR (RE-LOGIN)\</b\>\</summary\>
+<br>
 
-🪻 **`Ruby 24/7 (TERMUX)`**
-
-<details>
-<summary><b>🐝 VER COMANDOS</b></summary>
-
-```bash
-termux-wake-lock && npm i -g pm2 && pm2 start index.js && pm2 save && pm2 logs 
-```
-
-</details>
-
-
-🩷 **`ACTUALIZACION A LA BOT (TERMUX) `**
-> Comandos para actualizar a Ruby-Bot de forma automática
-
-<details>
-<summary><b>🫛 VER COMANDOS</b></summary>
+> Si necesitas volver a vincular el bot, usa esto:
 
 ```bash
-grep -q 'bash\|wget' <(dpkg -l) || apt install -y bash wget && wget -O - https://raw.githubusercontent.com/Dioneibi-rip/Ruby-Hoshino-Bot/master/update.sh | bash
+cd Monkey-D-luffy-Bot-MD
+rm -rf session
+npm start
 ```
 
-</details>
+\</details\>
 
----
+-----
 
-### **`USA A RUBY COMPLETAMENTE 24/7 EN AKIRAX HOST 🍉︎`**
+## ☁️ **`DESPLIEGUE EN LA NUBE`**
 
-<a
-href="https://home.akirax.net"><img src="https://raw.githubusercontent.com/The-King-Destroy/Adiciones/main/Contenido/1748713078525.jpeg" height="125px"></a>
+Si prefieres no usar Termux, puedes hostear el bot aquí:
 
-<details>
- <summary><b> 🍡 VER AKIRAX</b></summary>
+| Plataforma | Link de Deploy |
+| :--- | :--- |
+| **Replit** | [](https://www.google.com/search?q=https://repl.it/github/nene504273/Monkey-D-luffy-Bot-MD) |
+| **Heroku** | [](https://www.google.com/search?q=https://heroku.com/deploy%3Ftemplate%3Dhttps://github.com/nene504273/Monkey-D-luffy-Bot-MD) |
+| **Render** | [](https://www.google.com/search?q=https://dashboard.render.com/blueprint/new%3Frepo%3Dhttps://github.com/nene504273/Monkey-D-luffy-Bot-MD) |
 
-* Dashboard : [`Dash`](https://home.akirax.net)
-* Panel : [`Panel`](https://console.akirax.net)
-* Canal de WhatsApp : [`Aqui`](https://whatsapp.com/channel/0029VbBCchVDJ6H6prNYfz2z)
-* Grupo Oficial : [`Aquí`](https://chat.whatsapp.com/JxSZTFJN9J20TnsH7KsKTA)
+-----
 
-</details>
+## ⚠️ **`NOTA IMPORTANTE`**
 
----
+> [\!WARNING]
+> **USO BAJO TU PROPIO RIESGO**
+> Este bot no está afiliado con WhatsApp Inc. El uso de bots puede conllevar riesgos de suspensión de número si se usa para SPAM masivo. ¡Úsalo con responsabilidad, nakama\!
 
-## ☁️ **`MÉTODOS DE DESPLIEGUE EN LA NUBE`**
+-----
 
-#### 💜 **ACTIVAR EN HEROKU**
+## 👑 **`CREADOR & CRÉDITOS`**
 
-[![Deploy on Heroku](https://img.shields.io/badge/DEPLOY%20EN%20HEROKU-6762A6?style=for-the-badge\&logo=heroku\&logoColor=white)](https://heroku.com/deploy?template=https://github.com/Dioneibi-rip/Ruby-Hoshino-Bot)
+\<div align="center"\>
+\<a href="https://www.google.com/search?q=https://github.com/nene504273"\>
+\<img src="https://www.google.com/search?q=https://github.com/nene504273.png" width="120" height="120" alt="Creador" style="border-radius: 50%;"\>
+\</a\>
+<br>
+\<h3\>🌟 nene504273 🌟\</h3\>
+\<p\>
+Desarrollador Principal & Capitán
+\</p\>
+\</div\>
 
-#### 💙 **ACTIVAR EN REPLIT**
-
-[![Run on Replit](https://img.shields.io/badge/ACTIVAR%20EN%20REPLIT-0D101E?style=for-the-badge\&logo=replit\&logoColor=white)](https://repl.it/github/Dioneibi-rip/Ruby-Hoshino-Bot)
-
-#### 💚 **ACTIVAR EN RENDER**
-
-[![Deploy on Render](https://img.shields.io/badge/ACTIVAR%20EN%20RENDER-0468FF?style=for-the-badge\&logo=render\&logoColor=white)](https://dashboard.render.com/blueprint/new?repo=https%3A%2F%2Fgithub.com%2FDioneibi-rip%2FRuby-Hoshino-Bot)
-
----
-
-## <img src="https://i.pinimg.com/originals/73/69/6e/73696e022df7cd5cb3d999c6875361dd.gif" alt="Características" width="42" height="42"> Características Brillantes
-
-| Característica                 | Descripción                                                | Estado |
-| :----------------------------- | :--------------------------------------------------------- | :----: |
-| 🎵 **Descargas Multimedia**    | Descarga música y videos de múltiples plataformas.         |    ✅   |
-| 🎨 **Fábrica de Stickers**     | Crea stickers de imágenes, videos o GIFs, con o sin fondo. |    ✅   |
-| 🛡️ **Guardián de Grupos**     | Anti-enlaces, anti-spam, bienvenidas y más.                |    ✅   |
-| 🎮 **Zona de Juegos**          | Diviértete con P-P-T, Tic-Tac-Toe y un sistema RPG.        |    ✅   |
-| 🤖 **Inteligencia Artificial** | Interactúa con chatbots como Simsimi y un contestador IA.  |    ✅   |
-| 🔍 **Búsquedas al Instante**   | Busca en Google, Wikipedia y más sin salir de WhatsApp.    |    ✅   |
-
----
-
-## 💬 **`COMUNIDAD Y CANALES OFICIALES`**
-
-¿Tienes dudas o quieres estar al día con las novedades? ¡Únete a nuestros canales oficiales! 💫
-
-<p align="center">
-  <a href="https://whatsapp.com/channel/0029VakLbM76mYPPFL0IFI3P">
-    <img src="https://img.shields.io/badge/Canal%20Oficial-25D366?style=for-the-badge&logo=whatsapp&logoColor=white" alt="Canal Oficial">
-  </a>
-  <a href="https://api.whatsapp.com/send/?phone=18294868853&text=Hola,+vengo+de+GitHub+y+necesito+soporte+con+Ruby+Bot&type=phone_number&app_absent=0">
-    <img src="https://img.shields.io/badge/Contacto%20de%20Soporte-FF5722?style=for-the-badge&logo=whatsapp&logoColor=white" alt="Support Contact">
-  </a>
-</p>
-
----
-
-### `🍋‍🟩 𝘿𝙀𝙎𝘼𝙍𝙍𝙊𝙇𝙇𝘼𝘿𝙊𝙍𝙀𝙎`
-<a href="https://github.com/Dioneibi-rip/Ruby-Hoshino-Bot/graphs/contributors">
-<img src="https://contrib.rocks/image?repo=Dioneibi-rip/Ruby-Hoshino-Bot" /> 
-</a>
-
-### `🪷 𝘾𝙍𝙀𝘼𝘿𝙊𝙍 𝙊𝙁𝙄𝘾𝙄𝘼𝙇`
-<a
-href="https://github.com/Dioneibi-rip"><img src="https://github.com/Dioneibi-rip.png" width="130" height="130" alt="David"/></a>
-
-
-**`¡GRACIAS POR PREFERIRNOS!` 🫧**
+\<div align="center"\>
+\<img src="https://www.google.com/search?q=https://media1.tenor.com/m/K24L1kZ10nEAAAAC/luffy-gear-5-one-piece.gif" alt="Luffy Gear 5 Gif" width="100%"\>
+<br>
+\<b\>¡GRACIAS POR PREFERIR MONKEY D. LUFFY BOT\!\</b\>
+\</div\>
