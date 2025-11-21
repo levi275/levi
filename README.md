@@ -1,5 +1,5 @@
 <div align="center">
-  <img src="https://files.catbox.moe/81l14y.jpg" alt="Luffy Gear 5 Banner" width="300" style="border-radius: 15px; box-shadow: 0px 0px 20px rgba(255, 0, 0, 0.8);">
+  <img src="https://files.catbox.moe/81l14y.jpg" alt="Luffy Gear 5 Banner" width="100%" style="border-radius: 15px; box-shadow: 0px 0px 20px rgba(255, 0, 0, 0.8);">
 </div>
 
 <h1 align="center">👒 Monkey D. Luffy Bot - MD ⚡</h1>
@@ -17,7 +17,7 @@
 <div align="center">
   
   <a href="https://github.com/nene504273/Monkey-D-luffy-Bot-MD">
-    <img src="https://img.shields.io/badge/Versión-1.0.0-FF0000?style=for-the-badge&logo=github&logoColor=white" alt="Version">
+    <img src="https://img.shields.io/badge/Versión-3.0.0-FF0000?style=for-the-badge&logo=github&logoColor=white" alt="Version">
   </a>
   <a href="https://github.com/nene504273/Monkey-D-luffy-Bot-MD/network/members">
      <img src="https://img.shields.io/github/forks/nene504273/Monkey-D-luffy-Bot-MD?style=for-the-badge&color=FFD700" alt="Forks">
@@ -46,6 +46,10 @@
 
 ## 🌊 **`CARACTERÍSTICAS DEL PIRATA`**
 
+<div align="center">
+<img src="https://i.pinimg.com/originals/73/69/6e/73696e022df7cd5cb3d999c6875361dd.gif" alt="Features" width="50">
+</div>
+
 | 🏷️ Función | 📝 Descripción | Estado |
 | :--- | :--- | :---: |
 | 🛡️ **Seguridad** | Antilink, Antifake, Bienvenidas y Despedidas personalizables. | ✅ |
@@ -59,7 +63,7 @@
 
 ## 🏴‍☠️ **`INSTALACIÓN EN TERMUX`**
 
-> Sigue estos pasos cuidadosamente para zarpar sin problemas.
+> Sigue estos pasos cuidadosamente para zarpar sin problemas en Android.
 
 <details>
   <summary><b>⚡ CLIC PARA VER COMANDOS DE INSTALACIÓN</b></summary>
@@ -93,11 +97,38 @@ npm start
 
 \</details\>
 
+-----
+
+### 🍟 **`COMANDOS ÚTILES PARA TERMUX`**
+
 \<details\>
-\<summary\>\<b\>♻️ OBTENER NUEVO CÓDIGO QR (RE-LOGIN)\</b\>\</summary\>
+\<summary\>\<b\>💊 ACTIVAR SI SE DETIENE (REVIVIR)\</b\>\</summary\>
 <br>
 
-> Si necesitas volver a vincular el bot, usa esto:
+> Si el bot se cierra, usa estos comandos uno por uno:
+
+```bash
+cd
+cd Monkey-D-luffy-Bot-MD
+npm start
+```
+
+\</details\>
+
+\<details\>
+\<summary\>\<b\>♾️ ACTIVAR 24/7 (ANTI-CIERRE)\</b\>\</summary\>
+<br>
+
+> Usa esto para que Luffy nunca duerma:
+
+```bash
+termux-wake-lock && npm i -g pm2 && pm2 start index.js && pm2 save && pm2 logs
+```
+
+\</details\>
+
+\<details\>
+\<summary\>\<b\>♻️ OBTENER NUEVO QR (BORRAR SESIÓN)\</b\>\</summary\>
 
 ```bash
 cd Monkey-D-luffy-Bot-MD
@@ -107,17 +138,73 @@ npm start
 
 \</details\>
 
+\<details\>
+\<summary\>\<b\>🆙 ACTUALIZAR LUFFY BOT\</b\>\</summary\>
+
+> Actualiza a la última versión del repositorio:
+
+```bash
+git pull
+npm install
+```
+
+\</details\>
+
 -----
 
-## ☁️ **`DESPLIEGUE EN LA NUBE`**
+## ☁️ **`INSTALACIÓN EN CLOUD SHELL`**
 
-Si prefieres no usar Termux, puedes hostear el bot aquí:
+> Si prefieres usar Google Cloud Shell, sigue estos pasos.
+
+\<details\>
+\<summary\>\<b\>🌩️ CLIC PARA VER PASOS DE CLOUD SHELL\</b\>\</summary\>
+<br>
+
+**1. Clonar repositorio:**
+
+```bash
+git clone [https://github.com/nene504273/Monkey-D-luffy-Bot-MD](https://github.com/nene504273/Monkey-D-luffy-Bot-MD)
+cd Monkey-D-luffy-Bot-MD
+```
+
+**2. Instalar dependencias:**
+
+```bash
+yarn install && npm install
+```
+
+**3. Iniciar:**
+
+```bash
+npm start
+```
+
+*(Nota: Asegúrate de tener Node.js instalado en tu instancia)*
+
+\</details\>
+
+-----
+
+## 🟣 **`HOSTS RECOMENDADOS (Paneles)`**
+
+> ¿Buscas un host 24/7 de calidad? Aquí algunas opciones de nakamas.
+
+\<a href="https://www.google.com/search?q=LINK\_DE\_TU\_PANEL\_PREFERIDO\_O\_BORRAR"\>\<img src="https://qu.ax/waCu.jpg" height="100px" alt="Hosting Banner"\>\</a\>
+
+  * **Dashboard:** [`Clic Aquí`](https://www.google.com/search?q=LINK)
+  * **Panel:** [`Clic Aquí`](https://www.google.com/search?q=LINK)
+  * **Canal WhatsApp:** [`Clic Aquí`](https://www.google.com/search?q=LINK)
+
+-----
+
+## 🚀 **`DESPLIEGUE RÁPIDO (DEPLOY)`**
 
 | Plataforma | Link de Deploy |
 | :--- | :--- |
 | **Replit** | [](https://www.google.com/search?q=https://repl.it/github/nene504273/Monkey-D-luffy-Bot-MD) |
 | **Heroku** | [](https://www.google.com/search?q=https://heroku.com/deploy%3Ftemplate%3Dhttps://github.com/nene504273/Monkey-D-luffy-Bot-MD) |
 | **Render** | [](https://www.google.com/search?q=https://dashboard.render.com/blueprint/new%3Frepo%3Dhttps://github.com/nene504273/Monkey-D-luffy-Bot-MD) |
+| **CodeSpaces** | [](https://www.google.com/search?q=https://github.com/codespaces/new%3Fhide_repo_select%3Dtrue%26ref%3Dmain%26repo%3Dnene504273/Monkey-D-luffy-Bot-MD) |
 
 -----
 
@@ -133,7 +220,7 @@ Si prefieres no usar Termux, puedes hostear el bot aquí:
 
 \<div align="center"\>
 \<a href="https://www.google.com/search?q=https://github.com/nene504273"\>
-\<img src="https://www.google.com/search?q=https://github.com/nene504273.png" width="120" height="120" alt="Creador" style="border-radius: 50%;"\>
+\<img src="https://www.google.com/search?q=https://github.com/nene504273.png" width="130" height="130" alt="Creador" style="border-radius: 50%; border: 4px solid \#FF0000;"\>
 \</a\>
 <br>
 \<h3\>🌟 nene504273 🌟\</h3\>
@@ -142,8 +229,10 @@ Desarrollador Principal & Capitán
 \</p\>
 \</div\>
 
+<br>
+
 \<div align="center"\>
 \<img src="https://www.google.com/search?q=https://media1.tenor.com/m/K24L1kZ10nEAAAAC/luffy-gear-5-one-piece.gif" alt="Luffy Gear 5 Gif" width="100%"\>
 <br>
-\<b\>¡GRACIAS POR PREFERIR MONKEY D. LUFFY BOT\!\</b\>
+\<h3\>¡GRACIAS POR PREFERIRNOS\! 🏴‍☠️\</h3\>
 \</div\>
