@@ -241,17 +241,6 @@ npm start
 
 ---
 
-## 🟣 HOSTS RECOMENDADOS  
-*(Cambia los links por los tuyos)*
-
-<a href="#"><img src="https://qu.ax/waCu.jpg" height="100px"></a>
-
-- **Dashboard:** [Clic Aquí](#)  
-- **Panel:** [Clic Aquí](#)  
-- **Canal WhatsApp:** [Clic Aquí](#)
-
----
-
 ## 🚀 DEPLOY RÁPIDO
 
 | Plataforma | Enlace |
