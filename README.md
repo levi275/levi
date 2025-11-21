@@ -6,7 +6,7 @@
 
 <div align="center">
   <a href="https://git.io/typing-svg">
-    <img src="https://readme-typing-svg.demolab.com?font=Fira+Code&weight=600&size=25&pause=1000&color=F70000&center=true&vCenter=true&width=435&lines=YO+SERE+EL+REY+DE+LOS+PIRATAS;MONKEY+D.+LUFFY+BOT+MD;BIENVENIDO+A+GRAND+LINE;GEAR+5+ACTIVADO+⚡;CREADO+POR+NENE504273" alt="Typing SVG" />
+    <img src="https://readme-typing-svg.demolab.com?font=Fira+Code&weight=600&size=25&pause=1000&color=F70000&center=true&vCenter=true&width=435&lines=YO+SERE+EL+REY+DE+LOS+PIRATAS;MONKEY+D.+LUFFY+BOT+MD;BIENVENIDO+A+GRAND+LINE;GEAR+5+ACTIVADO+%E2%9A%A1;CREADO+POR+NENE504273" alt="Typing SVG" />
   </a>
 </div>
 
@@ -15,6 +15,7 @@
 </p>
 
 <div align="center">
+  
   <a href="https://github.com/nene504273/Monkey-D-luffy-Bot-MD">
     <img src="https://img.shields.io/badge/Versión-3.0.0-FF0000?style=for-the-badge&logo=github&logoColor=white" alt="Version">
   </a>
@@ -37,9 +38,9 @@
 
 ---
 
-## 🍖 **DESCRIPCIÓN**
+## 🍖 **`DESCRIPCIÓN`**
 
-> **Monkey D. Luffy Bot** es un bot multifuncional para WhatsApp inspirado en el futuro Rey de los Piratas. Administra grupos, descarga multimedia y entretiene con funciones RPG y anime.
+> **Monkey D. Luffy Bot** es un bot multifuncional para WhatsApp inspirado en la libertad y poder del futuro Rey de los Piratas. Diseñado para administrar grupos, descargar multimedia y entretener a tus nakamas con estilo RPG y anime.
 
 ---
 
