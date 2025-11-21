@@ -31,7 +31,7 @@
   <a href="[https://chat.whatsapp.com/GoCTBX17WRV9PqwHGXm43G?mode=wwt]">
     <img src="https://img.shields.io/badge/Unirse%20al%20Grupo-25D366?style=for-the-badge&logo=whatsapp&logoColor=white" alt="Grupo WhatsApp">
   </a>
-  <a href="https://wa.me/[CAMBIAR_POR_TU_NUMERO]?text=Hola+quiero+info+del+bot">
+  <a href="https://wa.me/[+58 424-4144821]?text=Hola+quiero+info+del+bot">
     <img src="https://img.shields.io/badge/Soporte%20Creador-25D366?style=for-the-badge&logo=whatsapp&logoColor=white" alt="Soporte">
   </a>
 </div>
