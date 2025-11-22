@@ -18,19 +18,18 @@ if(!result?.play){
 return conn.reply(m.chat,`${emoji} ❌ 𝑼𝒑𝒔… 𝒏𝒐 𝒑𝒖𝒅𝒆 𝒐𝒃𝒕𝒆𝒏𝒆𝒓 𝒆𝒍 𝒗𝒊𝒅𝒆𝒐.`,m);
 }
 
-const caption=`✦・﹤ 𝑻 𝑰 𝑲 𝑻 𝑶 𝑲 — 𝑫 𝑶 𝑾 𝑵 𝑳 𝑶 𝑨 𝑫 ﹥・✦
+const caption=`_💌  ᩭ✎Tiktok sin marca de agua descargado con éxito_
 
 「${result.title||'✧ 𝑺𝒊𝒏 𝒕𝒊𝒕𝒖𝒍𝒐 ✧'}」
 
-❀ 𝑨𝒖𝒕𝒐𝒓: ${result.author?.nickname||'Desconocido'}
-❀ 𝑫𝒖𝒓𝒂𝒄𝒊𝒐𝒏: ${result.duration||0}s
-❀ 𝑽𝒊𝒔𝒕𝒂𝒔: ${result.play_count||0}
-❀ 𝑳𝒊𝒌𝒆𝒔: ${result.digg_count||0}
-❀ 𝑪𝒐𝒎𝒆𝒏𝒕𝒂𝒓𝒊𝒐𝒔: ${result.comment_count||0}
-❀ 𝑪𝒐𝒎𝒑𝒂𝒓𝒕𝒊𝒅𝒐𝒔: ${result.share_count||0}
-❀ 𝑭𝒆𝒄𝒉𝒂: ${formatDate(result.create_time)}
-
-╰★━━━━━━━━━━━━━━━━━━★╯`.trim();
+ ᴀᴜᴛᴏʀ: ${result.author?.nickname||'Desconocido'}
+❀ 𝘿𝙐𝙍𝘼𝘾𝙄𝙊𝙉: ${result.duration||0}s
+❀ 𝙑𝙄𝙎𝙏𝘼𝙎: ${result.play_count||0}
+❀ 𝙇𝙄𝙆𝙀𝙎: ${result.digg_count||0}
+❀ 𝘾𝙊𝙈𝙀𝙉𝙏𝘼𝙍𝙄𝙊𝙎: ${result.comment_count||0}
+❀ 𝘾𝙊𝙈𝙋𝘼𝙍𝙏𝙄𝘿𝙊𝙎: ${result.share_count||0}
+❀ 𝙁𝙀𝘾𝙃𝘼: ${formatDate(result.create_time)}
+`.trim();
 
 await conn.sendFile(m.chat,result.play,'tiktok.mp4',caption,m);
 await m.react("🌸");
