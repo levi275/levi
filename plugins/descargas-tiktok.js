@@ -22,7 +22,7 @@ const caption=`_💌  ᩭ✎Tiktok sin marca de agua descargado con éxito_
 
 「${result.title||'✧ 𝑺𝒊𝒏 𝒕𝒊𝒕𝒖𝒍𝒐 ✧'}」
 
- ᴀᴜᴛᴏʀ: ${result.author?.nickname||'Desconocido'}
+❀ 𝘼𝙐𝙏𝙊𝙍: ${result.author?.nickname||'Desconocido'}
 ❀ 𝘿𝙐𝙍𝘼𝘾𝙄𝙊𝙉: ${result.duration||0}s
 ❀ 𝙑𝙄𝙎𝙏𝘼𝙎: ${result.play_count||0}
 ❀ 𝙇𝙄𝙆𝙀𝙎: ${result.digg_count||0}
