@@ -125,10 +125,8 @@ global.taguser = '@' + m.sender.split("@")[0]
 var more = String.fromCharCode(8206)
 global.readMore = more.repeat(850)
 
-global.packsticker = {
-  packname: `${nombre}`,
-  author: `𝚁𝚄𝙱𝚈 𝙱𝙾𝚃 𝙼𝙳 ˃ 𖥦 ˂`
-}
+global.packsticker = `${nombre}`
+global.packsticker2 = `𝚁𝚄𝙱𝚈 𝙱𝙾𝚃 𝙼𝙳 ˃ 𖥦 ˂`
 
 global.rcanal = {
   contextInfo: {
