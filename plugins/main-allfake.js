@@ -125,10 +125,7 @@ global.taguser = '@' + m.sender.split("@")[0]
 var more = String.fromCharCode(8206)
 global.readMore = more.repeat(850)
 
-global.packsticker = `╭━━꯭━⵿─꯭─「 ☾ 」─꯭─⵿━꯭━━╮
-│ ░ 𝗕𖦹𝘁: ${botname}
-│ ░ 𝗨𝘀𝗲𝗿: ${nombre}
-╰━━꯭━⵿─꯭─「 ${fecha} 」─꯭─⵿━꯭━━╯`
+global.packsticker = `${nombre}`
 
 global.rcanal = {
   contextInfo: {
