@@ -210,7 +210,7 @@ throw e;
 handler.help = ['menu'];
 handler.tags = ['main'];
 handler.register = true;
-handler.command = ['menu', 'menú', 'listmenu'];
+handler.command = ['menu', 'menú', 'help', 'listmenu'];
 
 export default handler;
 
