@@ -1,21 +1,17 @@
 import fetch from 'node-fetch';
-
 const handler=async(m,{conn,args,usedPrefix,command})=>{
-if(!args[0])throw`_*< DESCARGAS - TIKTOK />*_\n\n*☁️ Iɴɢʀᴇsᴇ Uɴ Eɴʟᴀᴄᴇ Dᴇ Vɪᴅᴇᴏ Dᴇ TɪᴋTᴏᴋ.*\n\n*💌 Eᴊᴇᴍᴘʟᴏ:* _${usedPrefix+command} https://vm.tiktok.com/ZM6UHJYtE/_`;
-const tiktokRegex=/^(https?:\/\/)?(www\.)?(vm\.tiktok\.com|tiktok\.com)\/.+/i;
-if(!tiktokRegex.test(args[0]))throw`*< DESCARGAS - TIKTOK />*\n\n*☁️ Iɴɢʀᴇsᴇ Uɴ Eɴʟᴀᴄᴇ Vᴀʟɪᴅᴏ.*\n\n*💌 Eᴊᴇᴍᴘʟᴏ:* _${usedPrefix+command} https://vm.tiktok.com/ZM6UHJYtE/_`;
-
-m.react('🕒');
-
-const txt=`_💌 @${m.sender.split\`@\`[0]}  ᩭ✎Enviando Video, espere un momento...._`;
-await conn.sendMessage(m.chat,{text:txt,contextInfo:{externalAdReply:{title:packname,body:wm,thumbnail:icons,sourceUrl:yt},mentionedJid:[m.sender]}},{quoted:m});
-
+if(!args[0])return conn.reply(m.chat,`_*< DESCARGAS - TIKTOK />*_\n\n*☁️ Iɴɢʀᴇsᴇ Uɴ Eɴʟᴀᴄᴇ Dᴇ TɪᴋTᴏᴋ.*\n\n*💌 Ejemplo:* ${usedPrefix+command} https://vm.tiktok.com/ZM6UHJYtE/`,m);
+const link=args[0];
+const regex=/^(https?:\/\/)?(www\.)?(vm\.tiktok\.com|tiktok\.com)\/.+/i;
+if(!regex.test(link))return conn.reply(m.chat,`_*< DESCARGAS - TIKTOK />*_\n\n*☁️ Iɴɢʀᴇsᴇ Uɴ Eɴʟᴀᴄᴇ Vᴀ́ʟɪᴅᴏ ᴅᴇ Tɪᴋᴛᴏᴋ.*\n\n*💌 Ejemplo:* ${usedPrefix+command} https://vm.tiktok.com/ZM6UHJYtE/`,m);
+await m.react('🕒');
+const aviso=`_💌 @${m.sender.split\`@\`[0]} ᩭ✎Eɴᴠɪᴀɴᴅᴏ ᴇʟ ᴠɪᴅᴇᴏ, ᴇsᴘᴇʀᴇ ᴜɴ ᴍᴏᴍᴇɴᴛᴏ..._`;
+await conn.sendMessage(m.chat,{text:aviso,contextInfo:{externalAdReply:{title:packname,body:wm,thumbnail:icons,sourceUrl:yt},mentionedJid:[m.sender]}},{quoted:m});
 try{
-const api=`https://www.tikwm.com/api/?url=${args[0]}&hd=1`;
+const api=`https://www.tikwm.com/api/?url=${link}&hd=1`;
 const res=await fetch(api);
 const json=await res.json();
 const r=json.data;
-
 const caption=`✦・﹤ 𝑻𝑰𝑲𝑻𝑶𝑲 — 𝑫𝑬𝑺𝑪𝑨𝑹𝑮𝑨 ﹥・✦
 
 「${r.title||'✧ 𝑺𝒊𝒏 𝒕𝒊𝒕𝒖𝒍𝒐 ✧'}」
@@ -29,12 +25,10 @@ const caption=`✦・﹤ 𝑻𝑰𝑲𝑻𝑶𝑲 — 𝑫𝑬𝑺𝑪𝑨𝑹�
 ❀ 𝑭𝒆𝒄𝒉𝒂: ${formatDate(r.create_time)}
 
 ╰★━━━━━━━━━━━━━━━━━━★╯`;
-
 await conn.sendFile(m.chat,r.play,'tiktok.mp4',caption,m);
-m.react("🌸");
-
+await m.react("🌸");
 }catch(e){
-throw`_*< DESCARGAS - TIKTOK />*_\n\n*🌟 Ocurrió un error. Inténtalo más tarde.*`;
+return conn.reply(m.chat,`_*< DESCARGAS - TIKTOK />*_\n\n🌟 Ocurrió un error inesperado.`,m);
 }};
 handler.help=['tiktok','tt'];
 handler.tags=['descargas'];
@@ -42,7 +36,6 @@ handler.command=['tiktok','tt','tiktokdl','ttdl'];
 handler.group=true;
 handler.register=true;
 export default handler;
-
 function formatDate(ts){
 const d=new Date(ts*1000);
 return d.toLocaleString('es-ES',{timeZone:'America/Mexico_City'});
