@@ -170,7 +170,7 @@ imageMessage: media.imageMessage
 body: { 
 text: `${beforeText}\n\n${bodyText}`
 },
-footer: { text: "⏤͟͞ू⃪  ̸̷͢𝐑𝐮𝐛y͟ 𝐇𝐨𝐬𝐡𝐢n͟𖹭 𝐁𖹭t͟𑁯ᰍ" },
+footer: { text: "usa ${_p}menumanual si no puedes usar los botones" },
 nativeFlowMessage: {
 buttons: [
 {
