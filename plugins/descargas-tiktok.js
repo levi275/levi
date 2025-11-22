@@ -1,15 +1,21 @@
 import fetch from 'node-fetch';
-const handler=async(m,{conn,text,args,usedPrefix,command})=>{
-if(!text)throw`_*< DESCARGAS - TIKTOK />*_\n\n*☁️ Iɴɢʀᴇsᴇ Uɴ Eɴʟᴀᴄᴇ Dᴇ Vɪᴅᴇᴏ Dᴇ TɪᴋTᴏᴋ.*\n\n*💌 Eᴊᴇᴍᴘʟᴏ:* _${usedPrefix+command} https://vm.tiktok.com/ZM6UHJYtE/_`;
-if(!/(?:https:?\/{2})?(?:w{3}|vm|vt|t)?\.?tiktok.com\/([^\s&]+)/gi.test(text))throw`*< DESCARGAS - TIKTOK />*\n\n*☁️ Iɴɢʀᴇsᴇ Uɴ Eɴʟᴀᴄᴇ Dᴇ Vɪᴅᴇᴏ Dᴇ Tɪᴋᴛᴏᴋ.*\n\n*💌 Eᴊᴇᴍᴘʟᴏ:* _${usedPrefix+command} https://vm.tiktok.com/ZM6UHJYtE/_`;
+
+const handler=async(m,{conn,args,usedPrefix,command})=>{
+if(!args[0])throw`_*< DESCARGAS - TIKTOK />*_\n\n*☁️ Iɴɢʀᴇsᴇ Uɴ Eɴʟᴀᴄᴇ Dᴇ Vɪᴅᴇᴏ Dᴇ TɪᴋTᴏᴋ.*\n\n*💌 Eᴊᴇᴍᴘʟᴏ:* _${usedPrefix+command} https://vm.tiktok.com/ZM6UHJYtE/_`;
+const tiktokRegex=/^(https?:\/\/)?(www\.)?(vm\.tiktok\.com|tiktok\.com)\/.+/i;
+if(!tiktokRegex.test(args[0]))throw`*< DESCARGAS - TIKTOK />*\n\n*☁️ Iɴɢʀᴇsᴇ Uɴ Eɴʟᴀᴄᴇ Vᴀʟɪᴅᴏ.*\n\n*💌 Eᴊᴇᴍᴘʟᴏ:* _${usedPrefix+command} https://vm.tiktok.com/ZM6UHJYtE/_`;
+
 m.react('🕒');
+
 const txt=`_💌 @${m.sender.split\`@\`[0]}  ᩭ✎Enviando Video, espere un momento...._`;
 await conn.sendMessage(m.chat,{text:txt,contextInfo:{externalAdReply:{title:packname,body:wm,thumbnail:icons,sourceUrl:yt},mentionedJid:[m.sender]}},{quoted:m});
+
 try{
-const api=`https://www.tikwm.com/api/?url=${text}&hd=1`;
+const api=`https://www.tikwm.com/api/?url=${args[0]}&hd=1`;
 const res=await fetch(api);
 const json=await res.json();
 const r=json.data;
+
 const caption=`✦・﹤ 𝑻𝑰𝑲𝑻𝑶𝑲 — 𝑫𝑬𝑺𝑪𝑨𝑹𝑮𝑨 ﹥・✦
 
 「${r.title||'✧ 𝑺𝒊𝒏 𝒕𝒊𝒕𝒖𝒍𝒐 ✧'}」
@@ -23,14 +29,17 @@ const caption=`✦・﹤ 𝑻𝑰𝑲𝑻𝑶𝑲 — 𝑫𝑬𝑺𝑪𝑨𝑹�
 ❀ 𝑭𝒆𝒄𝒉𝒂: ${formatDate(r.create_time)}
 
 ╰★━━━━━━━━━━━━━━━━━━★╯`;
+
 await conn.sendFile(m.chat,r.play,'tiktok.mp4',caption,m);
 m.react("🌸");
+
 }catch(e){
 throw`_*< DESCARGAS - TIKTOK />*_\n\n*🌟 Ocurrió un error. Inténtalo más tarde.*`;
 }};
-handler.help=['tiktok'];
+handler.help=['tiktok','tt'];
 handler.tags=['descargas'];
-handler.command=/^(tiktok|tt|tiktokdl|ttdl)$/i;
+handler.command=['tiktok','tt','tiktokdl','ttdl'];
+handler.group=true;
 handler.register=true;
 export default handler;
 
