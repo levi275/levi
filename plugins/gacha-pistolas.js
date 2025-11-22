@@ -1,13 +1,18 @@
 import fs from 'fs/promises';
+
 const userConfigFile = './src/database/userClaimConfig.json';
 
 let handler = async (m, { args }) => {
+
     const userId = m.sender;
-    const texto = args.join(' ').trim();
+    let texto = args.join(' ').trim();
 
     if (!texto) {
         return m.reply(`《✧》Debes especificar un mensaje para reclamar un personaje.\n\n> Ejemplos:\n*#setclaim $user ha reclamado a $character!*\n*#setclaim Ahora $user es dueño de $character.*`);
     }
+
+    texto = texto.replace(/\*?\$user\*?/gi, '*$user*');
+    texto = texto.replace(/\*?\$character\*?/gi, '*$character*');
 
     let config = {};
     try {
@@ -16,8 +21,10 @@ let handler = async (m, { args }) => {
     } catch { config = {}; }
 
     config[userId] = texto;
+
     await fs.writeFile(userConfigFile, JSON.stringify(config, null, 2));
-    m.reply('✧ ¡Tu mensaje personalizado fue guardado correctamente!');
+    
+    m.reply(`✧ ¡Tu mensaje personalizado fue guardado correctamente!\n\n*Vista previa del formato:*\n${texto}`);
 };
 
 handler.help = ['setclaim <mensaje>'];
