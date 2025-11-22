@@ -170,7 +170,7 @@ imageMessage: media.imageMessage
 body: { 
 text: `${beforeText}\n\n${bodyText}`
 },
-footer: { text: "usa ${_p}menumanual si no puedes usar los botones" },
+footer: { text: "usa #menumanual si no puedes usar los botones" },
 nativeFlowMessage: {
 buttons: [
 {
