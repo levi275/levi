@@ -127,11 +127,10 @@ let handler = async (m, { conn, command, usedPrefix, args, text, isOwner }) => {
                             buttons: [
                                 {
                                     // Botón para ser sub-bot
-                                    name: "cta_url",
+                                    name: "quick_reply",
                                     buttonParamsJson: JSON.stringify({
-                                        display_text: toFancy("Sᥱr Sᥙᑲ-B᥆𝗍 (QR)"),
-                                        url: "https://api.whatsapp.com/send/?text=" + usedPrefix + "qr", 
-                                        merchant_url: "https://api.whatsapp.com/send/?text=" + usedPrefix + "qr"
+                                        display_text: toFancy("sᥱr sᥙᑲ-ᑲ᥆𝗍 (QR)"),
+                                        id: `${usedPrefix}qr`
                                     })
                                 },
                                 {
