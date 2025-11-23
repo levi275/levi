@@ -5,12 +5,10 @@ const { proto, generateWAMessageFromContent, prepareWAMessageMedia } = (await im
 
 let handler = async (m, { conn, command, usedPrefix, args, text, isOwner }) => {
 
-    // --- 1. CONFIGURACIÓN Y ESTILOS ---
     const isDeleteSession = /^(deletesesion|deletebot|deletesession|deletesesaion)$/i.test(command)
     const isPauseBot = /^(stop|pausarai|pausarbot)$/i.test(command)
     const isShowBots = /^(bots|sockets|socket)$/i.test(command)
 
-    // Función para convertir texto a fuente aesthetic
     const toFancy = (str) => {
         const map = {
             'a': 'ᥲ', 'b': 'ᑲ', 'c': 'ᥴ', 'd': 'ᑯ', 'e': 'ᥱ', 'f': '𝖿', 'g': 'g', 'h': 'һ',
@@ -24,13 +22,11 @@ let handler = async (m, { conn, command, usedPrefix, args, text, isOwner }) => {
         return str.split('').map(c => map[c] || c).join('')
     }
 
-    // Función de ayuda para errores
     const reportError = async (e) => {
         await m.reply(`⚠️ ${toFancy("Ocurrió un error inesperado, lo siento mucho...")}`)
         console.error(e)
     }
 
-    // Función para formatear tiempo
     const convertirMsAFormato = (ms) => {
         if (!ms || ms < 1000) return toFancy('Recién conectado')
         let segundos = Math.floor(ms / 1000)
@@ -45,10 +41,7 @@ let handler = async (m, { conn, command, usedPrefix, args, text, isOwner }) => {
         if (segundos > 0) parts.push(`${segundos}s`)
         return parts.join(', ') || toFancy('Justo ahora')
     }
-
-    // --- 2. LÓGICA DE COMANDOS ---
     
-    // === CASO 1: ELIMINAR SESIÓN ===
     if (isDeleteSession) {
         const who = m.mentionedJid && m.mentionedJid[0] ? m.mentionedJid[0] : m.fromMe ? conn.user.jid : m.sender
         const uniqid = `${who.split('@')[0]}`
@@ -76,8 +69,6 @@ let handler = async (m, { conn, command, usedPrefix, args, text, isOwner }) => {
             reportError(e)
         }
     }
-
-    // === CASO 2: PAUSAR BOT ===
     else if (isPauseBot) {
         if (global.conn.user.jid == conn.user.jid) {
             return conn.reply(m.chat, `🚫 ${toFancy("No puedes pausar el bot principal.")}`, m)
@@ -86,7 +77,6 @@ let handler = async (m, { conn, command, usedPrefix, args, text, isOwner }) => {
         conn.ws.close()
     }
 
-    // === CASO 3: MOSTRAR BOTS (SOCKETS) ===
     else if (isShowBots) {
         const users = [...new Set([...global.conns.filter(c => c.user && c.ws.socket && c.ws.socket.readyState !== ws.CLOSED)])]
         
@@ -104,7 +94,6 @@ let handler = async (m, { conn, command, usedPrefix, args, text, isOwner }) => {
         const finalMessage = users.length > 0 ? listaSubBots : `💤 ${toFancy("Actualmente no hay Sub-Bots conectados.")}`
         const headerText = `*${toFancy("SUB-BOTS CONECTADOS")}* ✨\n\n${toFancy("Total Activos:")} ${users.length}\n${users.length > 0 ? '───────────────\n' : ''}${finalMessage}`
 
-        // Preparamos la imagen de cabecera
         let mediaMessage = await prepareWAMessageMedia({ 
             image: { url: 'https://files.catbox.moe/65rdkc.jpg' } 
         }, { upload: conn.waUploadToServer })
@@ -126,7 +115,6 @@ let handler = async (m, { conn, command, usedPrefix, args, text, isOwner }) => {
                         nativeFlowMessage: proto.Message.InteractiveMessage.NativeFlowMessage.fromObject({
                             buttons: [
                                 {
-                                    // Botón para ser sub-bot
                                     name: "quick_reply",
                                     buttonParamsJson: JSON.stringify({
                                         display_text: toFancy("sᥱr sᥙᑲ-ᑲ᥆𝗍 (QR)"),
@@ -134,7 +122,6 @@ let handler = async (m, { conn, command, usedPrefix, args, text, isOwner }) => {
                                     })
                                 },
                                 {
-                                    // Botón para pedir código
                                     name: "quick_reply",
                                     buttonParamsJson: JSON.stringify({
                                         display_text: toFancy("Oᑲ𝗍ᥱᥒᥱr Cóძіg᥆"),
