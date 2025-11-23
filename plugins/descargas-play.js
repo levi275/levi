@@ -5,6 +5,23 @@ const youtubeRegexID = /(?:youtu\.be\/|youtube\.com\/(?:watch\?v=|embed\/))([a-z
 
 const handler = async (m, { conn, text, command }) => {
   try {
+
+    let fkontak = null;
+    try {
+      const res = await fetch('https://i.postimg.cc/k5JmXxmT/Nuevo-proyecto-8694C3E.png')
+      const thumb2 = Buffer.from(await res.arrayBuffer())
+      fkontak = {
+        key: { participant: '0@s.whatsapp.net', remoteJid: 'status@broadcast', fromMe: false, id: 'Halo' },
+        message: {
+          locationMessage: {
+            name: `𝙔𝙊𝙐𝙏𝙐𝘽𝙀 - 𝘿𝙊𝙒𝙉𝙇𝙊𝘼𝘿`,
+            jpegThumbnail: thumb2
+          }
+        },
+        participant: '0@s.whatsapp.net'
+      }
+    } catch {}
+
     if (!text || !text.trim()) {
       return conn.reply(m.chat, `✧ 𝙃𝙚𝙮! Debes escribir *el nombre o link* del video/audio para descargar.`, m)
     }
@@ -44,7 +61,9 @@ const handler = async (m, { conn, text, command }) => {
     `.trim()
 
     const thumb = (await conn.getFile(thumbnail))?.data
-    await conn.reply(m.chat, infoMessage, m, {
+
+    await conn.sendMessage(m.chat, {
+      text: infoMessage,
       contextInfo: {
         externalAdReply: {
           title: botname,
@@ -56,7 +75,7 @@ const handler = async (m, { conn, text, command }) => {
           sourceUrl: url
         }
       }
-    })
+    }, { quoted: fkontak })
 
     if (["play", "yta", "ytmp3", "playaudio"].includes(command)) {
       let audioData = null
