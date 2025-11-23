@@ -40,11 +40,28 @@ return;
 sender = m.isGroup ? (m.key.participant ? m.key.participant : m.sender) : m.key.remoteJid;
 const groupMetadata = m.isGroup ? { ...(this.chats[m.chat]?.metadata || await this.groupMetadata(m.chat).catch(_ => null) || {}), ...(((this.chats[m.chat]?.metadata || await this.groupMetadata(m.chat).catch(_ => null) || {}).participants) && { participants: ((this.chats[m.chat]?.metadata || await this.groupMetadata(m.chat).catch(_ => null) || {}).participants || []).map(p => ({ ...p, id: p.jid, jid: p.jid, lid: p.lid })) }) } : {}
 const participants = ((m.isGroup ? groupMetadata.participants : []) || []).map(participant => ({ id: participant.jid, jid: participant.jid, lid: participant.lid, admin: participant.admin }))
-if (m.isGroup && sender.endsWith('@lid')) {
-const participantInfo = participants.find(p => p.lid === sender);
-if (participantInfo && participantInfo.jid) {
-sender = participantInfo.jid;
-m.sender = participantInfo.jid; 
+if (m.isGroup) {
+if (sender.endsWith('@lid')) {
+const pInfo = participants.find(p => p.lid === sender);
+if (pInfo && pInfo.id) {
+sender = pInfo.id;
+m.sender = pInfo.id;
+}
+}
+if (m.quoted && m.quoted.sender && m.quoted.sender.endsWith('@lid')) {
+const pInfo = participants.find(p => p.lid === m.quoted.sender);
+if (pInfo && pInfo.id) {
+m.quoted.sender = pInfo.id;
+}
+}
+if (m.mentionedJid && m.mentionedJid.length > 0) {
+m.mentionedJid = m.mentionedJid.map(jid => {
+if (jid.endsWith('@lid')) {
+const pInfo = participants.find(p => p.lid === jid);
+return (pInfo && pInfo.id) ? pInfo.id : jid;
+}
+return jid;
+});
 }
 }
 m.exp = 0
@@ -369,10 +386,8 @@ stat.lastSuccess = now
 }
 }
 try {
-    if (!opts['noprint']) await (await import(`./lib/print.js`)).default(m, this)
-} catch (e) { 
-    console.log(chalk.red('Error en print.js')) 
-}
+if (!opts['noprint']) await (await import(`./lib/print.js`)).default(m, this)
+} catch (e) { console.log(m, m.quoted, e) }
 let settingsREAD = global.db.data.settings[this.user.jid] || {}
 }
 }
