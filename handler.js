@@ -369,8 +369,10 @@ stat.lastSuccess = now
 }
 }
 try {
-if (!opts['noprint']) await (await import(`./lib/print.js`)).default(m, this)
-} catch (e) { console.log(m, m.quoted, e) }
+    if (!opts['noprint']) await (await import(`./lib/print.js`)).default(m, this)
+} catch (e) { 
+    console.log(chalk.red('Error en print.js')) 
+}
 let settingsREAD = global.db.data.settings[this.user.jid] || {}
 }
 }
