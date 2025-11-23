@@ -23,7 +23,7 @@ const handler = async (m, { conn, text, command }) => {
     } catch {}
 
     if (!text || !text.trim()) {
-      return conn.reply(m.chat, `✧ 𝙃𝙚𝙮! Debes escribir *el nombre o link* del video/audio para descargar.`, m)
+      return conn.reply(m.chat, `✧ 𝙃𝙚𝙮! Debes escribir *el nombre o link* del video/audio para descargar.`, m, rcanal)
     }
 
     await conn.sendMessage(m.chat, { react: { text: "⏳", key: m.key }})
