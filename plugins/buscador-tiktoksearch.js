@@ -81,7 +81,7 @@ let handler = async (message, { conn, text, usedPrefix, command }) => {
                         externalAdReply: {
                             title: toFancy("Tiktok Search Bot"),
                             body: toFancy("Resultados encontrados"),
-                            thumbnailUrl: 'https://i.imgur.com/EfFh7X0.png',
+                            thumbnailUrl: 'https://i.postimg.cc/k5JmXxmT/Nuevo-proyecto-8694C3E.png',
                             sourceUrl: 'https://github.com/WhiskeySockets/Baileys',
                             mediaType: 1,
                             renderLargerThumbnail: true
