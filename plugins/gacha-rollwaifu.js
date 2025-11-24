@@ -5,7 +5,6 @@ const haremFilePath = './src/database/harem.json';
 
 export const cooldowns = {};
 
-// Inicializamos el objeto global para rastrear los rolls activos
 global.activeRolls = global.activeRolls || {};
 
 async function loadCharacters() {
