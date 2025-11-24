@@ -5,6 +5,9 @@ const haremFilePath = './src/database/harem.json';
 
 export const cooldowns = {};
 
+// Inicializamos el objeto global para rastrear los rolls activos
+global.activeRolls = global.activeRolls || {};
+
 async function loadCharacters() {
     try {
         const data = await fs.readFile(charactersFilePath, 'utf-8');
@@ -61,6 +64,13 @@ let handler = async (m, { conn }) => {
             ? `Reclamado por @${randomCharacter.user.split('@')[0]}` 
             : 'Libre';
 
+        if (!randomCharacter.user) {
+            global.activeRolls[randomCharacter.id] = {
+                user: userId,
+                time: Date.now()
+            };
+        }
+
         const message = `╔◡╍┅•.⊹︵ࣾ᷼ ׁ𖥓┅╲۪ ⦙᷼͝🧸᷼͝⦙ ׅ╱ׅ╍𖥓 ︵ࣾ᷼︵ׄׄ᷼⊹┅╍◡╗
 ┋  ⣿̶ֻ〪ׅ⃕݊⃧🐚⃚̶̸͝ᤢ֠◌ִ̲ 𝑪𝑯𝑨𝑹𝑨𝑪𝑻𝑬𝑹 𝑹𝑨𝑵𝑫𝑶𝑴 🐸ꨪ̸⃙ׅᮬֺ๋֢᳟  ┋
 ╚◠┅┅˙•⊹.⁀𖥓 ׅ╍╲۪ ⦙᷼͝🎠᷼͝⦙ ׅ╱ׅ╍𖥓 ◠˙⁀۪ׄ⊹˙╍┅◠╝
@@ -77,7 +87,7 @@ let handler = async (m, { conn }) => {
         const mentions = statusMessage.startsWith('Reclamado por') ? [randomCharacter.user] : [];
         await conn.sendFile(m.chat, randomImage, `${randomCharacter.name}.jpg`, message, m, { mentions });
 
-        cooldowns[userId] = now + 15 * 60 * 1000; // 15 minutos
+        cooldowns[userId] = now + 15 * 60 * 1000;
 
     } catch (error) {
         await conn.reply(m.chat, `✘ Error al cargar el personaje: ${error.message}`, m);
