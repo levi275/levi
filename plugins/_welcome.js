@@ -39,7 +39,9 @@ text=`
 ┆⌣⃕╼̟ᜒ 📅 : ${fecha}
 └͡╼᮫͜ ⌢᜔֔⌣ׄ𝅄⌢ֵ݊⌣֘ ܁ ⌢᜔֔⌣ׄ𝅄⌢ֵ݊⌣֘܁⌢̼ׄ
 
-︶᮫໋۪۪᷼͡⏝᜔໋〫᷑ׄ♡᜔ׅ𝆬۟┅᮫໋ׅׄ᪲︶᮫᜔ׅᷭ͡⏝᮫᜔〪ׅ〫𝆬⢥ֶ𝆬✿۪۪𝆬֟🍒̷̸᩠〪۪۪〫〫〫ᷭ✿ֶ〫𝆬`.trim()}
+︶᮫໋۪۪᷼͡⏝᜔໋〫᷑ׄ♡᜔ׅ𝆬۟┅᮫໋ׅׄ᪲︶᮫᜔ׅᷭ͡⏝᮫᜔〪ׅ〫𝆬⢥ֶ𝆬✿۪۪𝆬֟🍒̷̸᩠〪۪۪〫〫〫ᷭ✿ֶ〫𝆬
+
+> establece un mensaje de bienvenida con #setwelcome`.trim()}
 await conn.sendMessage(m.chat,{image:{url:pp},caption:text,contextInfo:{mentionedJid:[userId],isForwarded:true,forwardingScore:9999999,forwardedNewsletterMessageInfo:{newsletterJid:newsletterJid,newsletterName:newsletterName,serverMessageId:-1},externalAdReply:{title:'  ͟͞ Ｗ Ｅ Ｌ Ｃ Ｏ Ｍ Ｅ ͟͞  ',body:`✧ ˖ ꒰ ${groupName} ꒱ ˖ ✧`,thumbnailUrl:getRandomIcono(),sourceUrl:global.redes||'https://whatsapp.com/channel/0029Vag9VSI2ZjCocqa2lB1y',mediaType:1,renderLargerThumbnail:true}}},{quoted:null})}
 if(m.messageStubType===WAMessageStubType.GROUP_PARTICIPANT_REMOVE||m.messageStubType===WAMessageStubType.GROUP_PARTICIPANT_LEAVE){
 let text
@@ -63,7 +65,9 @@ text=`
                  ⋮ ꯭͡𖹭꯭͡ ⋮     🥥     ⋮ ꯭͡𖹭꯭͡ ⋮          
 -        ${groupSize}     —     ${fecha}
 
-︶᮫໋۪۪᷼͡⏝᜔໋〫᷑ׄ♡᜔ׅ𝆬۟┅᮫໋ׅׄ᪲︶᮫᜔ׅᷭ͡⏝᮫᜔〪ׅ〫𝆬⢥ֶ𝆬✿۪۪𝆬֟🍒̷̸᩠〪۪۪〫〫〫ᷭ✿ֶ〫𝆬`.trim()}
-await conn.sendMessage(m.chat,{image:{url:pp},caption:text,contextInfo:{mentionedJid:[userId],isForwarded:true,forwardingScore:9999999,forwardedNewsletterMessageInfo:{newsletterJid:newsletterJid,newsletterName:newsletterName,serverMessageId:-1},externalAdReply:{title:'  ͟͞ Ａ Ｄ Ｉ Ｏ́ Ｓ ͟͞  ',body:`✧ ˖ ꒰ ${toFancy("Hasta la proxima")} ꒱ ˖ ✧`,thumbnailUrl:getRandomIcono(),sourceUrl:global.redes||'https://whatsapp.com/channel/0029Vag9VSI2ZjCocqa2lB1y',mediaType:1,renderLargerThumbnail:true}}},{quoted:null})}
+︶᮫໋۪۪᷼͡⏝᜔໋〫᷑ׄ♡᜔ׅ𝆬۟┅᮫໋ׅׄ᪲︶᮫᜔ׅᷭ͡⏝᮫᜔〪ׅ〫𝆬⢥ֶ𝆬✿۪۪𝆬֟🍒̷̸᩠〪۪۪〫〫〫ᷭ✿ֶ〫𝆬
+
+> establece un mensaje de despedida con #setbye.trim()}
+await conn.sendMessage(m.chat,{image:{url:pp},caption:text,contextInfo:{mentionedJid:[userId],isForwarded:true,forwardingScore:9999999,forwardedNewsletterMessageInfo:{newsletterJid:newsletterJid,newsletterName:newsletterName,serverMessageId:-1},externalAdReply:{title:'  ͟͞ Ａ Ｄ Ｉ Ｏ́ Ｓ ͟͞  ',body:`✧ ˖ ꒰ ${toFancy("Hasta la proxima")} ꒱ ˖ ✧`,thumbnailUrl:getRandomIcono(),sourceUrl:global.redes||'https://whatsapp.com/channel/0029Vag9VSI2ZjCocqa2lB1y',mediaType:1,renderLargerThumbnail:false}}},{quoted:null})}
 }
 export default {before}
