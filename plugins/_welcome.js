@@ -63,15 +63,8 @@ export async function before(m, { conn, participants, groupMetadata }) {
  🎐 ${toFancy("Esperamos que tu estadía")}
  ${toFancy("sea maravillosa")}.
 
-· · • • • ✿ • • • · ·
-「 ${toFancy("INFO DEL GRUPO")} 」
-👥 ${toFancy("Miembros")}: ${groupSize}
-📅 ${toFancy("Fecha")}: ${fecha}
-📝 ${toFancy("Descripción")}:
-${desc}
-· · • • • ✿ • • • · ·
 
-> ${toFancy("Disfruta tu tiempo aquí")} ✨
+> establece un mensaje de bienvenida con #setwelcome✨
 
 ╰─── *·˚ 🍥 ˚·* ──────────╯`.trim()
         }
@@ -117,13 +110,9 @@ ${desc}
  🍂 ${toFancy("Esperamos que hayas disfrutado")}
  ${toFancy("tu tiempo con nosotros")}.
 
-· · • • • ✿ • • • · ·
-「 ${toFancy("ESTADO ACTUAL")} 」
-📉 ${toFancy("Miembros")}: ${groupSize}
-📅 ${toFancy("Fecha")}: ${fecha}
-· · • • • ✿ • • • · ·
+${toFancy("Te extrañaremos... o no")} 😹
 
-> ${toFancy("Te extrañaremos... o no")} 😹
+> establece un mensaje de despedida con #setbye
 
 ╰─── *·˚ 🥀 ˚·* ──────────╯`.trim()
         }
