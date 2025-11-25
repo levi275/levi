@@ -41,31 +41,19 @@ sender = m.isGroup ? (m.key.participant ? m.key.participant : m.sender) : m.key.
 const groupMetadata = m.isGroup ? { ...(this.chats[m.chat]?.metadata || await this.groupMetadata(m.chat).catch(_ => null) || {}), ...(((this.chats[m.chat]?.metadata || await this.groupMetadata(m.chat).catch(_ => null) || {}).participants) && { participants: ((this.chats[m.chat]?.metadata || await this.groupMetadata(m.chat).catch(_ => null) || {}).participants || []).map(p => ({ ...p, id: p.jid, jid: p.jid, lid: p.lid })) }) } : {}
 const participants = ((m.isGroup ? groupMetadata.participants : []) || []).map(participant => ({ id: participant.jid, jid: participant.jid, lid: participant.lid, admin: participant.admin }))
 if (m.isGroup) {
-if (sender.endsWith('@lid')) {
+if (sender && sender.endsWith('@lid')) {
 const pInfo = participants.find(p => p.lid === sender);
 if (pInfo && pInfo.id) {
 sender = pInfo.id;
-Object.defineProperty(m, 'sender', {
-value: pInfo.id,
-writable: true,
-enumerable: true,
-configurable: true
-});
+if (m.key) m.key.participant = pInfo.id;
+try { m.sender = pInfo.id } catch (e) {}
 }
 }
 if (m.quoted && m.quoted.sender && m.quoted.sender.endsWith('@lid')) {
 const pInfo = participants.find(p => p.lid === m.quoted.sender);
 if (pInfo && pInfo.id) {
-try {
-m.quoted.sender = pInfo.id;
-} catch (e) {
-Object.defineProperty(m.quoted, 'sender', {
-value: pInfo.id,
-writable: true,
-enumerable: true,
-configurable: true
-});
-}
+if (m.quoted.key) m.quoted.key.participant = pInfo.id;
+try { m.quoted.sender = pInfo.id } catch (e) {}
 }
 }
 if (m.mentionedJid && m.mentionedJid.length > 0) {
@@ -76,12 +64,7 @@ return (pInfo && pInfo.id) ? pInfo.id : jid;
 }
 return jid;
 });
-Object.defineProperty(m, 'mentionedJid', {
-value: normalizedMentions,
-writable: true,
-enumerable: true,
-configurable: true
-});
+try { m.mentionedJid = normalizedMentions } catch (e) {}
 }
 }
 m.exp = 0
