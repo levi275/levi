@@ -147,7 +147,7 @@ ${desc}
                     thumbnailUrl: getRandomIcono(), // Usamos un icono aleatorio para la tarjeta
                     sourceUrl: global.redes || 'https://whatsapp.com/channel/0029Vag9VSI2ZjCocqa2lB1y',
                     mediaType: 1,
-                    renderLargerThumbnail: true
+                    renderLargerThumbnail: false, 
                 }
             }
         }, { quoted: null })
