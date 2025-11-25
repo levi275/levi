@@ -42,7 +42,7 @@ text=`
 ︶᮫໋۪۪᷼͡⏝᜔໋〫᷑ׄ♡᜔ׅ𝆬۟┅᮫໋ׅׄ᪲︶᮫᜔ׅᷭ͡⏝᮫᜔〪ׅ〫𝆬⢥ֶ𝆬✿۪۪𝆬֟🍒̷̸᩠〪۪۪〫〫〫ᷭ✿ֶ〫𝆬
 
 > establece un mensaje de bienvenida con #setwelcome`.trim()}
-await conn.sendMessage(m.chat,{image:{url:pp},caption:text,contextInfo:{mentionedJid:[userId],isForwarded:true,forwardingScore:9999999,forwardedNewsletterMessageInfo:{newsletterJid:newsletterJid,newsletterName:newsletterName,serverMessageId:-1},externalAdReply:{title:'  ͟͞ Ｗ Ｅ Ｌ Ｃ Ｏ Ｍ Ｅ ͟͞  ',body:`✧ ˖ ꒰ ${groupName} ꒱ ˖ ✧`,thumbnailUrl:getRandomIcono(),sourceUrl:global.redes||'https://whatsapp.com/channel/0029Vag9VSI2ZjCocqa2lB1y',mediaType:1,renderLargerThumbnail:true}}},{quoted:null})}
+await conn.sendMessage(m.chat,{image:{url:pp},caption:text,contextInfo:{mentionedJid:[userId],isForwarded:true,forwardingScore:9999999,forwardedNewsletterMessageInfo:{newsletterJid:newsletterJid,newsletterName:newsletterName,serverMessageId:-1},externalAdReply:{title:'  ͟͞ Ｗ Ｅ Ｌ Ｃ Ｏ Ｍ Ｅ ͟͞  ',body:`✧ ˖ ꒰ ${groupName} ꒱ ˖ ✧`,thumbnailUrl:getRandomIcono(),sourceUrl:global.redes||'https://whatsapp.com/channel/0029Vag9VSI2ZjCocqa2lB1y',mediaType:1,renderLargerThumbnail:false}}},{quoted:null})}
 if(m.messageStubType===WAMessageStubType.GROUP_PARTICIPANT_REMOVE||m.messageStubType===WAMessageStubType.GROUP_PARTICIPANT_LEAVE){
 let text
 if(chat.byeText){text=chat.byeText.replace(/@user/g,username).replace(/@subject/g,groupName)}else{
