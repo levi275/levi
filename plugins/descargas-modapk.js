@@ -42,7 +42,7 @@ let handler = async (m, { conn, usedPrefix, command, text }) => {
           thumbnailUrl: data5.icon,
           sourceUrl: global.channel || 'https://whatsapp.com/channel/0029Vag9VSI2ZjCocqa2lB1y',
           mediaType: 1,
-          renderLargerThumbnail: true
+          renderLargerThumbnail: false
         }
       }
     }, { quoted: m })
