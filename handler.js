@@ -45,22 +45,42 @@ if (sender.endsWith('@lid')) {
 const pInfo = participants.find(p => p.lid === sender);
 if (pInfo && pInfo.id) {
 sender = pInfo.id;
-m.sender = pInfo.id;
+Object.defineProperty(m, 'sender', {
+value: pInfo.id,
+writable: true,
+enumerable: true,
+configurable: true
+});
 }
 }
 if (m.quoted && m.quoted.sender && m.quoted.sender.endsWith('@lid')) {
 const pInfo = participants.find(p => p.lid === m.quoted.sender);
 if (pInfo && pInfo.id) {
+try {
 m.quoted.sender = pInfo.id;
+} catch (e) {
+Object.defineProperty(m.quoted, 'sender', {
+value: pInfo.id,
+writable: true,
+enumerable: true,
+configurable: true
+});
+}
 }
 }
 if (m.mentionedJid && m.mentionedJid.length > 0) {
-m.mentionedJid = m.mentionedJid.map(jid => {
+const normalizedMentions = m.mentionedJid.map(jid => {
 if (jid.endsWith('@lid')) {
 const pInfo = participants.find(p => p.lid === jid);
 return (pInfo && pInfo.id) ? pInfo.id : jid;
 }
 return jid;
+});
+Object.defineProperty(m, 'mentionedJid', {
+value: normalizedMentions,
+writable: true,
+enumerable: true,
+configurable: true
 });
 }
 }
@@ -356,11 +376,12 @@ const quequeIndex = this.msgqueque.indexOf(m.id || m.key.id)
 if (quequeIndex !== -1) this.msgqueque.splice(quequeIndex, 1)
 }
 let user, stats = global.db.data.stats
-if (m) { let utente = global.db.data.users[sender]
+if (m) {
+let utente = global.db.data.users[sender]
 if (utente && utente.muto == true) {
 let bang = m.key.id
 let cancellazzione = m.key.participant
-await this.sendMessage(m.chat, { delete: { remoteJid: m.chat, fromMe: false, id: bang, participant: cancellazzione }})
+await this.sendMessage(m.chat, { delete: { remoteJid: m.chat, fromMe: false, id: bang, participant: cancellazzione } })
 }
 if (sender && (user = global.db.data.users[sender])) {
 user.exp += m.exp
@@ -387,7 +408,9 @@ stat.lastSuccess = now
 }
 try {
 if (!opts['noprint']) await (await import(`./lib/print.js`)).default(m, this)
-} catch (e) { console.log(m, m.quoted, e) }
+} catch (e) {
+console.log(chalk.red('Error en print.js'))
+}
 let settingsREAD = global.db.data.settings[this.user.jid] || {}
 }
 }
@@ -396,7 +419,7 @@ const file = global.__filename(import.meta.url, true);
 watchFile(file, async () => {
 unwatchFile(file);
 console.log(chalk.green('Actualizando "handler.js"'));
-if (global.conns && global.conns.length > 0 ) {
+if (global.conns && global.conns.length > 0) {
 const users = [...new Set([...global.conns.filter((conn) => conn.user && conn.ws.socket && conn.ws.socket.readyState !== ws.CLOSED).map((conn) => conn)])];
 for (const userr of users) { userr.subreloadHandler(false) }
 }
