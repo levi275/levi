@@ -22,10 +22,10 @@ async function loadClaimMessages() {
     }
 }
 
-async function getCustomClaimMessage(userId, username, characterName) {
+async function getCustomClaimMessage(userId, username, characterName, timeTaken) {
     const messages = await loadClaimMessages();
-    const template = messages[userId] || '✧ *$user* ha reclamado a *$character* ✦';
-    return template.replace(/\$user/g, username).replace(/\$character/g, characterName);
+    const template = messages[userId] || '❀ *$character* ha sido reclamado por *$user* ($time)';
+    return template.replace(/\$user/g, username).replace(/\$character/g, characterName).replace(/\$time/g, timeTaken);
 }
 
 let handler = async (m, { conn }) => {
@@ -36,11 +36,11 @@ let handler = async (m, { conn }) => {
         const remaining = cooldowns[userId] - now;
         const minutes = Math.floor(remaining / 60000);
         const seconds = Math.floor((remaining % 60000) / 1000);
-        return conn.reply(m.chat, `⏳ Debes esperar *${minutes}m ${seconds}s* antes de reclamar otra waifu.`, m);
+        return conn.reply(m.chat, `𝗗𝗲𝗯𝗲𝘀 𝗲𝘀𝗽𝗲𝗿𝗮𝗿 *${minutes}m ${seconds}s* 𝗽𝗮𝗿𝗮 𝘃𝗼𝗹𝘃𝗲𝗿 𝗮 𝗿𝗲𝗰𝗹𝗮𝗺𝗮𝗿.`, m);
     }
 
     if (!m.quoted || !m.quoted.text) {
-        return conn.reply(m.chat, '《✧》Debes *citar un personaje válido* para reclamarlo.', m);
+        return conn.reply(m.chat, '𝗗𝗲𝗯𝗲𝘀 *𝗰𝗶𝘁𝗮𝗿 𝘂𝗻 𝗽𝗲𝗿𝘀𝗼𝗻𝗮𝗷𝗲 𝘃𝗮́𝗹𝗶𝗱𝗼* 𝗽𝗮𝗿𝗮 𝗿𝗲𝗰𝗹𝗮𝗺𝗮𝗿𝗹𝗼.', m);
     }
 
     try {
@@ -54,23 +54,27 @@ let handler = async (m, { conn }) => {
         if (!character) return conn.reply(m.chat, '《✧》Personaje no encontrado.', m);
 
         const rollData = global.activeRolls ? global.activeRolls[id] : null;
-        
+        let timeTakenMsg = '';
+
         if (rollData) {
             const timeElapsed = now - rollData.time;
 
-            if (timeElapsed > 40000) {
+            if (timeElapsed > 120000) {
                 delete global.activeRolls[id];
-                return conn.reply(m.chat, "ese personaje ya expiró y nadie puede reclamarlo", m);
+                return conn.reply(m.chat, "𝗘𝘀𝗲 𝗽𝗲𝗿𝘀𝗼𝗻𝗮𝗷𝗲 𝘆𝗮 𝗲𝘅𝗽𝗶𝗿𝗼́ 𝘆 𝗻𝗮𝗱𝗶𝗲 𝗽𝘂𝗲𝗱𝗲 𝗿𝗲𝗰𝗹𝗮𝗺𝗮𝗿𝗹𝗼.", m);
             }
 
-            if (timeElapsed < 20000 && rollData.user !== userId) {
+            if (timeElapsed < 60000 && rollData.user !== userId) {
                 const protectedBy = await conn.getName(rollData.user);
-                return conn.reply(m.chat, `el personaje ${character.name} está siendo protegido por ${protectedBy} por 20 segundos`, m);
+                const remainingProtection = ((60000 - timeElapsed) / 1000).toFixed(1);
+                return conn.reply(m.chat, `𝗘𝗹 𝗽𝗲𝗿𝘀𝗼𝗻𝗮𝗷𝗲 *${character.name}* 𝗲𝘀𝘁𝗮́ 𝗽𝗿𝗼𝘁𝗲𝗴𝗶𝗱𝗼 𝗽𝗼𝗿 *${protectedBy}* 𝗗𝘂𝗿𝗮𝗻𝘁𝗲 *${remainingProtection}s*`, m);
             }
+            timeTakenMsg = `${(timeElapsed / 1000).toFixed(1)}s`;
         } else {
             if (!character.user) {
-                return conn.reply(m.chat, "ese personaje ya expiró y nadie puede reclamarlo", m);
+                return conn.reply(m.chat, "𝗘𝘀𝗲 𝗽𝗲𝗿𝘀𝗼𝗻𝗮𝗷𝗲 𝘆𝗮 𝗲𝘅𝗽𝗶𝗿𝗼́ 𝘆 𝗻𝗮𝗱𝗶𝗲 𝗽𝘂𝗲𝗱𝗲 𝗿𝗲𝗰𝗹𝗮𝗺𝗮𝗿𝗹𝗼.", m);
             }
+            timeTakenMsg = 'N/A';
         }
 
         const owner = '18294868853@s.whatsapp.net';
@@ -79,7 +83,7 @@ let handler = async (m, { conn }) => {
         }
 
         if (character.user && character.user !== userId) {
-            return conn.reply(m.chat, `✧ El personaje *${character.name}* ya fue reclamado por @${character.user.split('@')[0]}.`, m, { mentions: [character.user] });
+            return conn.reply(m.chat, `𝗘𝗹 𝗽𝗲𝗿𝘀𝗼𝗻𝗮𝗷𝗲 *${character.name}* 𝘆𝗮 𝗳𝘂𝗲 𝗿𝗲𝗰𝗹𝗮𝗺𝗮𝗱𝗼 𝗽𝗼𝗿 @${character.user.split('@')[0]}.`, m, { mentions: [character.user] });
         }
 
         character.user = userId;
@@ -91,7 +95,18 @@ let handler = async (m, { conn }) => {
         }
 
         const username = await conn.getName(userId);
-        const mensajeFinal = await getCustomClaimMessage(userId, username, character.name);
+        let mensajeFinal;
+        
+        const messages = await loadClaimMessages();
+        if (messages[userId]) {
+            mensajeFinal = messages[userId]
+                .replace(/\$user/g, username)
+                .replace(/\$character/g, character.name)
+                .replace(/\$time/g, timeTakenMsg);
+        } else {
+            mensajeFinal = `❀ *${character.name}* ha sido reclamado por *${username}* (${timeTakenMsg})`;
+        }
+
         await conn.reply(m.chat, mensajeFinal, m);
 
         cooldowns[userId] = now + 30 * 60 * 1000;
