@@ -37,6 +37,8 @@ let handler = async (m, { conn }) => {
 > ✦ Votar por un personaje para subir su valor.
 ̟ׄ🐟▒⃝᪶ᩙ᷼͠꜇ָ—— *#waifusboard • #waifustop • #topwaifus*
 > ✦ Ver el top de personajes con mayor valor.
+🐟▒⃝᪶ᩙ᷼͠꜇ָ—— *#delwaifu • #deletewaifu • #delchar*
+> ✦ Eliminar un personaje reclamado.
 ੈ₊˚༅༴╰────︶.︶ ⸙ ͛ ͎ ͛  ︶.︶ ੈੈ₊˚
   `.trim();
 
