@@ -51,7 +51,7 @@ let handler = async (m, { conn }) => {
         const id = match[1].trim();
         const character = characters.find(c => c.id === id);
 
-        if (!character) return conn.reply(m.chat, '《✧》🚫 𝗣𝗲𝗿𝘀𝗼𝗻𝗮𝗷𝗲 𝗻𝗼 𝗲𝗻𝗰𝗼𝗻𝘁𝗿𝗮𝗱𝗼.', m);
+        if (!character) return conn.reply(m.chat, '🚫 𝗣𝗲𝗿𝘀𝗼𝗻𝗮𝗷𝗲 𝗻𝗼 𝗲𝗻𝗰𝗼𝗻𝘁𝗿𝗮𝗱𝗼.', m);
 
         const rollData = global.activeRolls ? global.activeRolls[id] : null;
 
@@ -64,7 +64,7 @@ let handler = async (m, { conn }) => {
 
             if (timeElapsed > expirationTime) {
                 delete global.activeRolls[id];
-                return conn.reply(m.chat, "《✧》🍂 𝗘𝘀𝗲 𝗽𝗲𝗿𝘀𝗼𝗻𝗮𝗷𝗲 𝘆𝗮 𝗲𝘅𝗽𝗶𝗿𝗼́ 𝘆 𝗻𝗮𝗱𝗶𝗲 𝗽𝘂𝗲𝗱𝗲 𝗿𝗲𝗰𝗹𝗮𝗺𝗮𝗿𝗹𝗼.", m);
+                return conn.reply(m.chat, "🍂 𝗘𝘀𝗲 𝗽𝗲𝗿𝘀𝗼𝗻𝗮𝗷𝗲 𝘆𝗮 𝗲𝘅𝗽𝗶𝗿𝗼́ 𝘆 𝗻𝗮𝗱𝗶𝗲 𝗽𝘂𝗲𝗱𝗲 𝗿𝗲𝗰𝗹𝗮𝗺𝗮𝗿𝗹𝗼.", m);
             }
 
             if (timeElapsed < protectionTime && rollData.user !== userId) {
@@ -76,13 +76,13 @@ let handler = async (m, { conn }) => {
             timeElapsedStr = ` (${(timeElapsed / 1000).toFixed(1)}s)`;
         } else {
             if (!character.user) {
-                return conn.reply(m.chat, "《✧》🍂 𝗘𝘀𝗲 𝗽𝗲𝗿𝘀𝗼𝗻𝗮𝗷𝗲 𝘆𝗮 𝗲𝘅𝗽𝗶𝗿𝗼́ 𝘆 𝗻𝗮𝗱𝗶𝗲 𝗽𝘂𝗲𝗱𝗲 𝗿𝗲𝗰𝗹𝗮𝗺𝗮𝗿𝗹𝗼.", m);
+                return conn.reply(m.chat, "🍂 𝗘𝘀𝗲 𝗽𝗲𝗿𝘀𝗼𝗻𝗮𝗷𝗲 𝘆𝗮 𝗲𝘅𝗽𝗶𝗿𝗼́ 𝘆 𝗻𝗮𝗱𝗶𝗲 𝗽𝘂𝗲𝗱𝗲 𝗿𝗲𝗰𝗹𝗮𝗺𝗮𝗿𝗹𝗼.", m);
             }
         }
 
         const owner = '18294868853@s.whatsapp.net';
         if (character.id === "35" && userId !== owner) {
-            return conn.reply(m.chat, '《✧》👑 ¡𝗘𝘀𝗲 𝗽𝗲𝗿𝘀𝗼𝗻𝗮𝗷𝗲 𝘀𝗼𝗹𝗼 𝗽𝘂𝗲𝗱𝗲 𝘀𝗲𝗿 𝗿𝗲𝗰𝗹𝗮𝗺𝗮𝗱𝗼 𝗽𝗼𝗿 𝗗𝗶𝗼𝗻𝗲𝗶𝗯𝗶!', m);
+            return conn.reply(m.chat, '👑 ¡𝗘𝘀𝗲 𝗽𝗲𝗿𝘀𝗼𝗻𝗮𝗷𝗲 𝘀𝗼𝗹𝗼 𝗽𝘂𝗲𝗱𝗲 𝘀𝗲𝗿 𝗿𝗲𝗰𝗹𝗮𝗺𝗮𝗱𝗼 𝗽𝗼𝗿 𝗗𝗶𝗼𝗻𝗲𝗶𝗯𝗶!', m);
         }
 
         if (character.user && character.user !== userId) {
