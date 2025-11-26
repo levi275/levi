@@ -7,6 +7,10 @@ let handler = async (m, { conn }) => {
 > ✦ Waifu o husbando aleatorio.
 ̟ׄ🐟▒⃝᪶ᩙ᷼͠꜇ָ—— *#claim • #c • #reclamar*
 > ✦ Reclamar un personaje.
+🐟▒⃝᪶ᩙ᷼͠꜇ָ—— *#delclaimmsg*
+> ✦ Restablecer el mensaje al reclamar un personaje. 
+🐟▒⃝᪶ᩙ᷼͠꜇ָ—— *#setclaim • #setclaimmsg*
+> ✦ Modificar el mensaje al reclamar un personaje
 ̟ׄ🐟▒⃝᪶ᩙ᷼͠꜇ָ—— *#buycharacter • #buychar • #comprarwaifu*
 > ✦ Comprar un personaje en venta.
 ̟ׄ🐟▒⃝᪶ᩙ᷼͠꜇ָ—— *#harem • #waifus • #claims*
