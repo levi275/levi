@@ -57,14 +57,32 @@ try { m.quoted.sender = pInfo.id } catch (e) {}
 }
 }
 if (m.mentionedJid && m.mentionedJid.length > 0) {
+const lidMap = {};
 const normalizedMentions = m.mentionedJid.map(jid => {
 if (jid.endsWith('@lid')) {
 const pInfo = participants.find(p => p.lid === jid);
-return (pInfo && pInfo.id) ? pInfo.id : jid;
+if (pInfo && pInfo.id) {
+lidMap[jid] = pInfo.id;
+return pInfo.id;
+}
 }
 return jid;
 });
 try { m.mentionedJid = normalizedMentions } catch (e) {}
+if (Object.keys(lidMap).length > 0) {
+const replaceLidInText = (text) => {
+if (!text) return text;
+let newText = text;
+Object.entries(lidMap).forEach(([lid, jid]) => {
+const lidNum = lid.split('@')[0];
+const jidNum = jid.split('@')[0];
+const regex = new RegExp(`@${lidNum}\\b`, 'g');
+newText = newText.replace(regex, `@${jidNum}`);
+});
+return newText;
+};
+m.text = replaceLidInText(m.text);
+}
 }
 }
 m.exp = 0
