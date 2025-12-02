@@ -55,7 +55,11 @@ let handler = async (m, { conn }) => {
     try {
         const characters = await loadCharacters();
         const randomCharacter = characters[Math.floor(Math.random() * characters.length)];
-        const randomImage = randomCharacter.img[Math.floor(Math.random() * randomCharacter.img.length)];
+        
+        let randomImage = randomCharacter.img[Math.floor(Math.random() * randomCharacter.img.length)];
+        if (randomImage.includes('.webp')) {
+            randomImage = `https://wsrv.nl/?url=${encodeURIComponent(randomImage)}&output=png`;
+        }
 
         const harem = await loadHarem();
         const userEntry = harem.find(entry => entry.characterId === randomCharacter.id);
