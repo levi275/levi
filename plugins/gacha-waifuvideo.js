@@ -1,7 +1,5 @@
 import { promises as fs } from 'fs'
 import axios from 'axios'
-import { tmpdir } from 'os'
-import path from 'path'
 
 const charactersFilePath = './src/database/characters.json'
 const haremFilePath = './src/database/harem.json'
@@ -11,24 +9,22 @@ async function loadCharacters() {
         const data = await fs.readFile(charactersFilePath, 'utf-8')
         return JSON.parse(data)
     } catch (error) {
-        throw new Error('❀ No se pudo cargar characters.json.')
+        throw new Error('❀ No se pudo cargar el archivo characters.json.')
     }
 }
 
-async function downloadToMp4(url) {
+async function loadHarem() {
     try {
-        const tempPath = path.join(tmpdir(), `video_${Date.now()}.mp4`)
-        const response = await axios.get(url, { responseType: 'arraybuffer' })
-        await fs.writeFile(tempPath, response.data)
-        return tempPath
-    } catch {
-        return null
+        const data = await fs.readFile(haremFilePath, 'utf-8')
+        return JSON.parse(data)
+    } catch (error) {
+        return []
     }
 }
 
 let handler = async (m, { conn, args }) => {
     if (!args.length) {
-        return conn.reply(m.chat, `《✧》Por favor, proporciona el nombre de un personaje.`, m)
+        return await conn.reply(m.chat, `《✧》Debes escribir el nombre del personaje.`, m)
     }
 
     const characterName = args.join(' ').toLowerCase().trim()
@@ -38,7 +34,7 @@ let handler = async (m, { conn, args }) => {
         const character = characters.find(c => c.name.toLowerCase() === characterName)
 
         if (!character) {
-            return conn.reply(m.chat, `《✧》No se encontró el personaje *${characterName}*.`, m)
+            return conn.reply(m.chat, `《✧》No se encontró a *${characterName}*.`, m)
         }
 
         if (!character.vid || character.vid.length === 0) {
@@ -46,36 +42,44 @@ let handler = async (m, { conn, args }) => {
         }
 
         const randomVideo = character.vid[Math.floor(Math.random() * character.vid.length)]
-
-        const msg = `❀ Nombre » *${character.name}*
+        const message = `❀ Nombre » *${character.name}*
 ⚥ Género » *${character.gender}*
 ❖ Fuente » *${character.source}*`
 
-        let videoPath = randomVideo
+        const isGif = randomVideo.endsWith('.gif')
 
-        if (!randomVideo.endsWith('.mp4')) {
-            videoPath = await downloadToMp4(randomVideo)
-            if (!videoPath) {
-                return conn.reply(m.chat, `✘ Error: WhatsApp no acepta este tipo de video.`, m)
+        try {
+            if (isGif) {
+                await conn.sendMessage(m.chat, {
+                    video: { url: randomVideo },
+                    gifPlayback: true,
+                    caption: message,
+                }, { quoted: m })
+            } else {
+                await conn.sendMessage(m.chat, {
+                    video: { url: randomVideo },
+                    caption: message,
+                }, { quoted: m })
             }
+            return
+        } catch (e) {
+            console.log("❌ Envío directo falló, intentando descarga → reenvío")
         }
 
-        await conn.sendMessage(
-            m.chat,
-            { video: videoPath, caption: msg },
-            { quoted: m }
-        )
+        const buffer = (await axios.get(randomVideo, { responseType: "arraybuffer" })).data
 
-        if (videoPath !== randomVideo) {
-            setTimeout(() => fs.unlink(videoPath), 5000)
-        }
+        await conn.sendMessage(m.chat, {
+            video: buffer,
+            caption: message,
+            gifPlayback: isGif,
+        }, { quoted: m })
 
-    } catch (e) {
-        await conn.reply(m.chat, `✘ Error al reproducir el video: ${e.message}`, m)
+    } catch (error) {
+        await conn.reply(m.chat, `✘ Error al cargar video: ${error.message}`, m)
     }
 }
 
-handler.help = ['wvideo <nombre>']
+handler.help = ['wvideo <personaje>']
 handler.tags = ['anime']
 handler.command = ['charvideo', 'wvideo', 'waifuvideo']
 handler.group = true
