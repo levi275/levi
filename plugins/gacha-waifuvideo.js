@@ -1,44 +1,34 @@
 import { promises as fs } from 'fs'
-import fetch from 'node-fetch'
-import { spawn } from 'child_process'
+import axios from 'axios'
+import { tmpdir } from 'os'
+import path from 'path'
 
 const charactersFilePath = './src/database/characters.json'
-const tmpVideo = './tmpvideo.mp4'
+const haremFilePath = './src/database/harem.json'
 
 async function loadCharacters() {
     try {
         const data = await fs.readFile(charactersFilePath, 'utf-8')
         return JSON.parse(data)
-    } catch {
-        throw new Error('❀ No se pudo cargar el archivo characters.json.')
+    } catch (error) {
+        throw new Error('❀ No se pudo cargar characters.json.')
     }
 }
 
-async function downloadVideo(url) {
-    const res = await fetch(url)
-    if (!res.ok) throw new Error('No se pudo descargar el video')
-    return Buffer.from(await res.arrayBuffer())
-}
-
-async function convertToMp4(inputBuffer) {
-    await fs.writeFile(tmpVideo, inputBuffer)
-    return new Promise((resolve, reject) => {
-        const output = './out.mp4'
-        const ff = spawn('ffmpeg', ['-y','-i', tmpVideo,'-c:v','libx264','-c:a','aac','-movflags','faststart',output])
-        ff.on('close', async (code) => {
-            if (code !== 0) return reject(new Error('Error al convertir el video'))
-            const converted = await fs.readFile(output)
-            await fs.unlink(tmpVideo).catch(() => {})
-            await fs.unlink(output).catch(() => {})
-            resolve(converted)
-        })
-    })
+async function downloadToMp4(url) {
+    try {
+        const tempPath = path.join(tmpdir(), `video_${Date.now()}.mp4`)
+        const response = await axios.get(url, { responseType: 'arraybuffer' })
+        await fs.writeFile(tempPath, response.data)
+        return tempPath
+    } catch {
+        return null
+    }
 }
 
 let handler = async (m, { conn, args }) => {
     if (!args.length) {
-        await conn.reply(m.chat, '《✧》Por favor, proporciona el nombre de un personaje.', m)
-        return
+        return conn.reply(m.chat, `《✧》Por favor, proporciona el nombre de un personaje.`, m)
     }
 
     const characterName = args.join(' ').toLowerCase().trim()
@@ -48,38 +38,44 @@ let handler = async (m, { conn, args }) => {
         const character = characters.find(c => c.name.toLowerCase() === characterName)
 
         if (!character) {
-            await conn.reply(m.chat, `《✧》No se encontró el personaje *${characterName}*.`, m)
-            return
+            return conn.reply(m.chat, `《✧》No se encontró el personaje *${characterName}*.`, m)
         }
 
-        if (!character.vid?.length) {
-            await conn.reply(m.chat, `《✧》No se encontró video para *${character.name}*.`, m)
-            return
+        if (!character.vid || character.vid.length === 0) {
+            return conn.reply(m.chat, `《✧》No hay videos para *${character.name}*.`, m)
         }
 
-        const url = character.vid[Math.floor(Math.random() * character.vid.length)]
-        let videoBuffer = null
+        const randomVideo = character.vid[Math.floor(Math.random() * character.vid.length)]
 
-        try {
-            videoBuffer = await downloadVideo(url)
-        } catch {
-            throw new Error('El enlace del video es inválido o no permite descargas.')
-        }
-
-        const mp4Buffer = await convertToMp4(videoBuffer)
-
-        const message = `❀ Nombre » *${character.name}*
+        const msg = `❀ Nombre » *${character.name}*
 ⚥ Género » *${character.gender}*
 ❖ Fuente » *${character.source}*`
 
-        await conn.sendMessage(m.chat, { video: mp4Buffer, caption: message }, { quoted: m })
+        let videoPath = randomVideo
 
-    } catch (error) {
-        await conn.reply(m.chat, `✘ Error al cargar el video: ${error.message}`, m)
+        if (!randomVideo.endsWith('.mp4')) {
+            videoPath = await downloadToMp4(randomVideo)
+            if (!videoPath) {
+                return conn.reply(m.chat, `✘ Error: WhatsApp no acepta este tipo de video.`, m)
+            }
+        }
+
+        await conn.sendMessage(
+            m.chat,
+            { video: videoPath, caption: msg },
+            { quoted: m }
+        )
+
+        if (videoPath !== randomVideo) {
+            setTimeout(() => fs.unlink(videoPath), 5000)
+        }
+
+    } catch (e) {
+        await conn.reply(m.chat, `✘ Error al reproducir el video: ${e.message}`, m)
     }
 }
 
-handler.help = ['wvideo <nombre del personaje>']
+handler.help = ['wvideo <nombre>']
 handler.tags = ['anime']
 handler.command = ['charvideo', 'wvideo', 'waifuvideo']
 handler.group = true
