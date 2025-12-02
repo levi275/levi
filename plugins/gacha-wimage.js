@@ -26,6 +26,7 @@ v1[j+1]=Math.min(v1[j]+1,v0[j+1]+1,v0[j]+cost)
 }
 return v0[n]
 }
+function formatUrl(url){if(!url)return url;if(url.includes('github.com')&&url.includes('/blob/')){return url.replace('github.com','raw.githubusercontent.com').replace('/blob/','/')}return url.trim()}
 
 let handler=async(m,{conn,args})=>{
 if(args.length===0){await conn.reply(m.chat,`《✧》Por favor, proporciona el nombre de un personaje.`,m);return}
@@ -63,7 +64,8 @@ if(score>bestScore){bestScore=score;best=c}
 if(bestScore>=0.6){character=best}
 }
 if(!character){await conn.reply(m.chat,`《✧》No se ha encontrado el personaje *${characterNameRaw}*. Asegúrate de que el nombre esté correcto.`,m);return}
-const randomImage=character.img[Math.floor(Math.random()*character.img.length)]
+let randomImage=character.img[Math.floor(Math.random()*character.img.length)]
+randomImage=formatUrl(randomImage)
 const message=`❀ Nombre » *${character.name}*
 ⚥ Género » *${character.gender}*
 ❖ Fuente » *${character.source}*`
