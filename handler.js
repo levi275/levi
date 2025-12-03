@@ -10,6 +10,7 @@ import failureHandler from './lib/respuesta.js';
 const { proto } = (await import('@whiskeysockets/baileys')).default;
 const isNumber = x => typeof x === 'number' && !isNaN(x);
 const delay = ms => isNumber(ms) && new Promise(resolve => setTimeout(function() { clearTimeout(this); resolve(); }, ms));
+
 export async function handler(chatUpdate) {
     this.msgqueque = this.msgqueque || [];
     this.uptime = this.uptime || Date.now();
@@ -18,7 +19,13 @@ export async function handler(chatUpdate) {
     let m = chatUpdate.messages[chatUpdate.messages.length - 1];
     if (!m) return;
     if (global.db.data == null) await global.loadDatabase();
+    
+    // --- ARREGLO AQUÍ: Variables definidas FUERA del try para que no den error de 'not defined' ---
     let sender;
+    let groupMetadata = {};
+    let participants = [];
+    // ------------------------------------------------------------------------------------------
+
     try {
         m = smsg(this, m) || m;
         if (!m) return;
@@ -31,8 +38,8 @@ export async function handler(chatUpdate) {
             }
         }
         sender = m.isGroup ? (m.key.participant ? m.key.participant : m.sender) : m.key.remoteJid;
-        let groupMetadata = {};
-        let participants = [];
+        
+        // Aquí ya usamos las variables definidas arriba, sin poner 'let' de nuevo
         if (m.isGroup) {
             try { groupMetadata = (this.chats[m.chat]?.metadata || await this.groupMetadata(m.chat)) || {} } catch (e) { groupMetadata = {} }
             participants = (groupMetadata.participants || []).map(p => ({ id: p.jid, jid: p.jid, lid: p.lid, admin: p.admin }));
@@ -68,10 +75,13 @@ export async function handler(chatUpdate) {
         if (typeof settings !== 'object') global.db.data.settings[this.user.jid] = defaultSettings;
         else { for (const key in defaultSettings) { if (!(key in settings)) settings[key] = defaultSettings[key]; } }
     } catch (e) { console.error(e) }
+    
     if (opts['nyimak']) return;
     if (!m.fromMe && opts['self']) return;
     if (opts['swonly'] && m.chat !== 'status@broadcast') return;
     if (typeof m.text !== 'string') m.text = '';
+    
+    // Ahora 'participants' y 'sender' existen aquí abajo porque los declaramos antes del try
     const _user = global.db.data.users[sender];
     const userGroup = m.isGroup ? participants.find(u => u.jid == sender) || {} : {};
     const botGroup = m.isGroup ? participants.find(u => u.jid == this.user.jid) || {} : {};
@@ -84,6 +94,7 @@ export async function handler(chatUpdate) {
     const isMods = isOwner || global.mods.map(v => v.replace(/[^0-9]/g, '')).includes(senderNum);
     const isPrems = isROwner || global.prems.map(v => v.replace(/[^0-9]/g, '')).includes(senderNum) || _user?.premium === true;
     m.moneda = global.db.data.settings[this.user.jid]?.moneda || 'Coins';
+    
     if (opts['queque'] && m.text && !(isMods || isPrems)) {
         let queque = this.msgqueque, time = 1000 * 5;
         const previousID = queque[queque.length - 1];
