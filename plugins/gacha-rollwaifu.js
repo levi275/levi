@@ -1,80 +1,95 @@
-import { promises as fs } from 'fs';
-
-const charactersFilePath = './src/database/characters.json';
-const haremFilePath = './src/database/harem.json';
-
-export const cooldowns = {};
-
-global.activeRolls = global.activeRolls || {};
-
-async function loadCharacters() {
-    try {
-        const data = await fs.readFile(charactersFilePath, 'utf-8');
-        return JSON.parse(data);
-    } catch (error) {
-        throw new Error('❀ No se pudo cargar el archivo characters.json.');
-    }
+import { promises as fs } from 'fs'
+import { cooldowns as rwCooldowns } from './gacha-rollwaifu.js'
+import { cooldowns as claimCooldowns } from './gacha-claim.js'
+import { cooldowns as voteCooldowns, voteCooldownTime } from './gacha-vote.js'
+const charactersFilePath = './src/database/characters.json'
+function formatTime(ms) {
+if (!ms || ms <= 0) return 'Ahora.'
+const totalSeconds = Math.ceil(ms / 1000)
+const minutes = Math.floor(totalSeconds / 60)
+const seconds = totalSeconds % 60
+return `${minutes} minutos ${seconds} segundos`
 }
-
-async function saveCharacters(characters) {
-    try {
-        await fs.writeFile(charactersFilePath, JSON.stringify(characters, null, 2), 'utf-8');
-    } catch (error) {
-        throw new Error('❀ No se pudo guardar el archivo characters.json.');
-    }
-}
-
-async function loadHarem() {
-    try {
-        const data = await fs.readFile(haremFilePath, 'utf-8');
-        return JSON.parse(data);
-    } catch (error) {
-        return [];
-    }
-}
-
-async function saveHarem(harem) {
-    try {
-        await fs.writeFile(haremFilePath, JSON.stringify(harem, null, 2), 'utf-8');
-    } catch (error) {
-        throw new Error('❀ No se pudo guardar el archivo harem.json.');
-    }
-}
-
 let handler = async (m, { conn }) => {
-    const userId = m.sender;
-    const now = Date.now();
+const userId = m.sender
+const now = Date.now()
+let userName = await conn.getName(userId).catch(() => userId)
+try {
+const rwRemaining = (rwCooldowns?.[userId] || 0) - now
+const claimRemaining = (claimCooldowns?.[userId] || 0) - now
+let voteRemaining = 0
+if (voteCooldowns?.get) {
+const lastVote = voteCooldowns.get(userId)
+if (lastVote) voteRemaining = (lastVote + (voteCooldownTime || 0)) - now
+}
+let allCharacters = []
+try {
+const data = await fs.readFile(charactersFilePath, 'utf-8')
+allCharacters = JSON.parse(data)
+} catch (e) {
+return conn.reply(m.chat, '《✧》Hubo un error al cargar la base de datos.', m)
+}
+let claimedCount = 0
+let totalValue = 0
+for (let i = 0; i < allCharacters.length; i++) {
+if (allCharacters[i].user === userId) {
+claimedCount++
+totalValue += (Number(allCharacters[i].value) || 0)
+}
+}
+let response = `*❀ Usuario \`<${userName}>\`*\n\n`
+response += `ⴵ RollWaifu » *${formatTime(rwRemaining)}*\n`
+response += `ⴵ Claim » *${formatTime(claimRemaining)}*\n`
+response += `ⴵ Vote » *${formatTime(voteRemaining)}*\n\n`
+response += `♡ Personajes reclamados » *${claimedCount} / ${allCharacters.length}*\n`
+response += `✰ Valor total » *${totalValue.toLocaleString('es-ES')}*`
+await conn.reply(m.chat, response, m)
+} catch (e) {
+console.error(e)
+await conn.reply(m.chat, '✘ Ocurrió un error al verificar tu estado.', m)
+}
+}
+handler.help = ['estado', 'status', 'cooldowns', 'cd']
+handler.tags = ['info']
+handler.command = ['infogacha', 'ginfo', 'gachainfo']
+handler.group = true
+handler.register = true
+export default handler
 
-    if (cooldowns[userId] && now < cooldowns[userId]) {
-        const remainingTime = Math.ceil((cooldowns[userId] - now) / 1000);
-        const minutes = Math.floor(remainingTime / 60);
-        const seconds = remainingTime % 60;
-        return await conn.reply(m.chat, `( ⸝⸝･̆⤚･̆⸝⸝) ¡𝗗𝗲𝗯𝗲𝘀 𝗲𝘀𝗽𝗲𝗿𝗮𝗿 *${minutes} minutos y ${seconds} segundos* 𝗽𝗮𝗿𝗮 𝘃𝗼𝗹𝘃𝗲𝗿 𝗮 𝘂𝘀𝗮𝗿 *#rw* 𝗱𝗲 𝗻𝘂𝗲𝘃𝗼.`, m);
-    }
+### Tercer Plugin: RollWaifu
+**Cambios:** Eliminadas las funciones `saveCharacters` y `saveHarem` (no se usaban en este bloque), limpieza de variables y optimización de la lógica de selección de imagen.
 
-    try {
-        const characters = await loadCharacters();
-        const randomCharacter = characters[Math.floor(Math.random() * characters.length)];
-        
-        let randomImage = randomCharacter.img[Math.floor(Math.random() * randomCharacter.img.length)];
-        if (randomImage.includes('.webp')) {
-            randomImage = `https://wsrv.nl/?url=${encodeURIComponent(randomImage)}&output=png`;
-        }
-
-        const harem = await loadHarem();
-        const userEntry = harem.find(entry => entry.characterId === randomCharacter.id);
-        const statusMessage = randomCharacter.user 
-            ? `Reclamado por @${randomCharacter.user.split('@')[0]}` 
-            : 'Libre';
-
-        if (!randomCharacter.user) {
-            global.activeRolls[randomCharacter.id] = {
-                user: userId,
-                time: Date.now()
-            };
-        }
-
-        const message = `╔◡╍┅•.⊹︵ࣾ᷼ ׁ𖥓┅╲۪ ⦙᷼͝🧸᷼͝⦙ ׅ╱ׅ╍𖥓 ︵ࣾ᷼︵ׄׄ᷼⊹┅╍◡╗
+import { promises as fs } from 'fs'
+const charactersFilePath = './src/database/characters.json'
+const haremFilePath = './src/database/harem.json'
+export const cooldowns = {}
+global.activeRolls = global.activeRolls || {}
+async function loadJSON(path) {
+try {
+const data = await fs.readFile(path, 'utf-8')
+return JSON.parse(data)
+} catch { return [] }
+}
+let handler = async (m, { conn }) => {
+const userId = m.sender
+const now = Date.now()
+if (cooldowns[userId] && now < cooldowns[userId]) {
+const remainingTime = Math.ceil((cooldowns[userId] - now) / 1000)
+const minutes = Math.floor(remainingTime / 60)
+const seconds = remainingTime % 60
+return await conn.reply(m.chat, `( ⸝⸝･̆⤚･̆⸝⸝) ¡𝗗𝗲𝗯𝗲𝘀 𝗲𝘀𝗽𝗲𝗿𝗮𝗿 *${minutes} minutos y ${seconds} segundos* 𝗽𝗮𝗿𝗮 𝘃𝗼𝗹𝘃𝗲𝗿 𝗮 𝘂𝘀𝗮𝗿 *#rw* 𝗱𝗲 𝗻𝘂𝗲𝘃𝗼.`, m)
+}
+try {
+const characters = await loadJSON(charactersFilePath)
+if (!characters.length) throw new Error('Base de datos vacía')
+const randomCharacter = characters[Math.floor(Math.random() * characters.length)]
+let randomImage = randomCharacter.img[Math.floor(Math.random() * randomCharacter.img.length)]
+if (randomImage.includes('.webp')) randomImage = `https://wsrv.nl/?url=${encodeURIComponent(randomImage)}&output=png`
+const statusMessage = randomCharacter.user ? `Reclamado por @${randomCharacter.user.split('@')[0]}` : 'Libre'
+if (!randomCharacter.user) {
+global.activeRolls[randomCharacter.id] = { user: userId, time: Date.now() }
+}
+const message = `╔◡╍┅•.⊹︵ࣾ᷼ ׁ𖥓┅╲۪ ⦙᷼͝🧸᷼͝⦙ ׅ╱ׅ╍𖥓 ︵ࣾ᷼︵ׄׄ᷼⊹┅╍◡╗
 ┋  ⣿̶ֻ〪ׅ⃕݊⃧🐚⃚̶̸͝ᤢ֠◌ִ̲ 𝑪𝑯𝑨𝑹𝑨𝑪𝑻𝑬𝑹 𝑹𝑨𝑵𝑫𝑶𝑴 🐸ꨪ̸⃙ׅᮬֺ๋֢᳟  ┋
 ╚◠┅┅˙•⊹.⁀𖥓 ׅ╍╲۪ ⦙᷼͝🎠᷼͝⦙ ׅ╱ׅ╍𖥓 ◠˙⁀۪ׄ⊹˙╍┅◠╝
 
@@ -85,21 +100,16 @@ let handler = async (m, { conn }) => {
 > ᠙᳞✿̶᮫᮫ְְׅ᳝ׅ᳝᳞᳞࣪᪲࣪֘⣷ׅ᳝࣪ ࣪࣪𖡻ְְׅ᳝ׅׅ࣪࣪֘ᰰ🪄᮫ְׅ᳝࣪᪲⃞̶𝝸𝕝᮫ְ᳝᳝⃨۪۪۪ׅ᳝࣪࣪っְְׅ᳝۪⃨۪۪۪࣪:   𝙀𝘚𝘛𝘈𝘋𝘖: ${statusMessage}
 > ᠙᳞✿̶᮫᮫ְְׅ᳝ׅ᳝᳞᳞࣪᪲࣪֘⣷ׅ᳝࣪ ࣪࣪𖡻ְְׅ᳝ׅׅ࣪࣪֘ᰰ📚᮫ְׅ᳝࣪᪲⃞̶𝝸𝕝᮫ְ᳝᳝⃨۪۪۪ׅ᳝࣪࣪っְְׅ᳝۪⃨۪۪۪࣪:   𝙁𝘜𝘌𝘕𝘛𝘌: *${randomCharacter.source}*
 > ᠙᳞✿̶᮫᮫ְְׅ᳝ׅ᳝᳞᳞࣪᪲࣪֘⣷ׅ᳝࣪ ࣪࣪𖡻ְְׅ᳝ׅׅ࣪࣪֘ᰰ🆔᮫ְׅ᳝࣪᪲⃞̶𝝸𝕝᮫ְ᳝᳝⃨۪۪۪ׅ᳝࣪࣪っְְׅ᳝۪⃨۪۪۪࣪:   𝙄𝘿: *${randomCharacter.id}*
-꥓໋╰ׅ۬═ֽ̥࣪━᜔๋݈═𑂺ׄ︵ິּ֙᷼⌒݈᳹᪾̯ ⋮꥓ּ࣭ׄ🐦‍🔥⋮⌒ໍּ֣ׄ═ᮣໍ࣭ׄ━𑂺᜔꥓໋┉꥓ׂ᷼━᜔࣭֙━๋݈═̥࣭۬╯`;
-
-        const mentions = statusMessage.startsWith('Reclamado por') ? [randomCharacter.user] : [];
-        await conn.sendFile(m.chat, randomImage, `${randomCharacter.name}.jpg`, message, m, { mentions });
-
-        cooldowns[userId] = now + 15 * 60 * 1000;
-
-    } catch (error) {
-        await conn.reply(m.chat, `✘ 𝗘𝗿𝗿𝗼𝗿 𝗮𝗹 𝗰𝗮𝗿𝗴𝗮𝗿 𝗲𝗹 𝗽𝗲𝗿𝘀𝗼𝗻𝗮𝗷𝗲: ${error.message}`, m);
-    }
-};
-
-handler.help = ['rw', 'rollwaifu'];
-handler.tags = ['gacha'];
-handler.command = ['rw', 'rollwaifu'];
-handler.group = true;
-
-export default handler;
+꥓໋╰ׅ۬═ֽ̥࣪━᜔๋݈═𑂺ׄ︵ິּ֙᷼⌒݈᳹᪾̯ ⋮꥓ּ࣭ׄ🐦‍🔥⋮⌒ໍּ֣ׄ═ᮣໍ࣭ׄ━𑂺᜔꥓໋┉꥓ׂ᷼━᜔࣭֙━๋݈═̥࣭۬╯`
+const mentions = statusMessage.startsWith('Reclamado por') ? [randomCharacter.user] : []
+await conn.sendFile(m.chat, randomImage, `${randomCharacter.name}.jpg`, message, m, { mentions })
+cooldowns[userId] = now + 15 * 60 * 1000
+} catch (error) {
+await conn.reply(m.chat, `✘ 𝗘𝗿𝗿𝗼𝗿 𝗮𝗹 𝗰𝗮𝗿𝗴𝗮𝗿 𝗲𝗹 𝗽𝗲𝗿𝘀𝗼𝗻𝗮𝗷𝗲: ${error.message}`, m)
+}
+}
+handler.help = ['rw', 'rollwaifu']
+handler.tags = ['gacha']
+handler.command = ['rw', 'rollwaifu']
+handler.group = true
+export default handler
