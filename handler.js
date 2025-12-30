@@ -26,6 +26,7 @@ let participants = []
 try {
 m = smsg(this, m) || m
 if (!m) return
+if (m.messageTimestamp && (Date.now() - (typeof m.messageTimestamp === 'number' ? m.messageTimestamp : m.messageTimestamp.toNumber()) * 1000 > 10000)) return
 if (m.isGroup) {
 const chat = global.db.data.chats[m.chat]
 if (chat?.primaryBot) {
