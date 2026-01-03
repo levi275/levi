@@ -1,4 +1,4 @@
-import axios from 'axios'
+import axios from 'axios';
 
 let handler = async (m, { conn }) => {
     const smokeGifs = [
@@ -25,35 +25,31 @@ let handler = async (m, { conn }) => {
     await m.react('🚬');
 
     try {
-        // --- LA MAGIA DEL PROXY ---
-        // Usamos weserv.nl para procesar el GIF de Pinterest. 
-        // El parámetro &n=-1 es para que mantenga todas las capas de la animación.
-        const proxyUrl = `https://images.weserv.nl/?url=${encodeURIComponent(randomGif)}&n=-1`;
-        
-        const response = await axios.get(proxyUrl, { responseType: 'arraybuffer' });
+        // --- USANDO TU LÓGICA DE HEADERS ---
+        const response = await axios.get(randomGif, {
+            responseType: 'arraybuffer',
+            headers: {
+                'accept': 'image/avif,image/webp,image/apng,image/svg+xml,image/*,*/*;q=0.8',
+                'accept-language': 'es-ES,es;q=0.9,en;q=0.8',
+                'referer': 'https://www.pinterest.com/',
+                'user-agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/114.0.0.0 Safari/537.36'
+            }
+        });
+
         const buffer = Buffer.from(response.data, 'binary');
 
+        // Enviamos el mensaje
         await conn.sendMessage(m.chat, { 
             video: buffer, 
             gifPlayback: true, 
             caption: caption, 
             mentions: [who, m.sender],
-            mimetype: 'video/mp4' // Forzamos MP4 para que WhatsApp lo reproduzca fluido
+            mimetype: 'video/mp4' // Clave para que WhatsApp lo trate como GIF reproducible
         }, { quoted: m });
 
     } catch (e) {
-        console.error("Error con el proxy:", e);
-        // PLAN B: Si el proxy falla, lo enviamos como documento (así se descarga el archivo real)
-        try {
-            await conn.sendMessage(m.chat, { 
-                document: { url: randomGif }, 
-                mimetype: 'image/gif', 
-                fileName: 'smoke.gif', 
-                caption: caption 
-            }, { quoted: m });
-        } catch (e2) {
-            m.reply('¡Rayos! Pinterest está bloqueando el acceso. Intenta más tarde.');
-        }
+        console.error("Error al descargar de Pinterest:", e);
+        m.reply('Hubo un error al procesar el GIF. Asegúrate de que el bot tenga FFmpeg instalado.');
     }
 };
 
