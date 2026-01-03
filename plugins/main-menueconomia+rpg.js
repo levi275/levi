@@ -63,23 +63,23 @@ let handler = async (m, { conn }) => {
 ╰────︶.︶ ⸙ ͛ ͎ ͛  ︶.︶ ੈ₊˚༅,
   `.trim();
 
-  conn.sendFile(m.chat, 'https://files.catbox.moe/hs7g62.jpg', 'descargas.jpg', texto, m, false, {
-    contextInfo: {
-      mentionedJid: [m.sender],
-      externalAdReply: {
-        title: '🌵 ¡chambea, gana y diviertete con estos grandiosos comandos!',
-        body: '🤖 comandos de economía y rpg 🌟',
-        thumbnailUrl: 'https://files.catbox.moe/bi19e7.png',
-        mediaType: 1,
-        renderLargerThumbnail: false,
-        showAdAttribution: true,
-        mediaUrl: 'https://whatsapp.com/channel/0029VakLbM76mYPPFL0IFI3P',
-        sourceUrl: 'https://whatsapp.com/channel/0029VakLbM76mYPPFL0IFI3P',
+  await conn.sendMessage(
+    m.chat,
+    {
+      image: { url: 'https://files.catbox.moe/tw0g5u.png' },
+      caption: texto,
+      contextInfo: {
+        mentionedJid: [m.sender],
+        isForwarded: true,
+        forwardedNewsletterMessageInfo: {
         newsletterJid: '120363335626706839@newsletter',
-        newsletterName: '⏤͟͞ू⃪፝͜⁞⟡『 𝙍𝙪𝙗𝙮 𝙃𝙤𝙨𝙝𝙞𝙣𝙤 𝘽𝙤𝙩 』࿐⟡'
-      }
-    }
-  });
+        newsletterName: '..⃗. 💌 ⌇ ¡Noticias y más de tu idol favorita! ⊹ ִ ּ',
+          serverMessageId: -1,
+        },
+      },
+    },
+    { quoted: fkontak }
+  );
 };
 
 handler.command = ['menueconomia', 'rpgmenu', 'menurpg'];
