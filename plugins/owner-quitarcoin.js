@@ -1,50 +1,31 @@
-import db from '../lib/database.js';
-import MessageType from '@whiskeysockets/baileys';
-
-let impts = 0;
-
+import db from '../lib/database.js'
 let handler = async (m, { conn, text }) => {
-    let who;
-    if (m.isGroup) {
-        if (m.mentionedJid.length > 0) {
-            who = m.mentionedJid[0];
-        } else {
-            const quoted = m.quoted ? m.quoted.sender : null;
-            who = quoted ? quoted : m.chat;
-        }
-    } else {
-        who = m.chat;
-    }
-
-    if (!who) return m.reply(`${emoji} Por favor, menciona al usuario o cita un mensaje.`);
-
-    let txt = text.replace('@' + who.split`@`[0], '').trim();
-    let dmt;
-
-    if (txt.toLowerCase() === 'all') {
-        dmt = global.db.data.users[who].coin;
-    } else {
-        if (!txt) return m.reply(`${emoji} Por favor, ingresa la cantidad que deseas quitar.`);
-        if (isNaN(txt)) return m.reply(`${emoji2} sólo números.`);
-
-        dmt = parseInt(txt);
-    }
-
-    let users = global.db.data.users;
-
-    if (users[who].coin < dmt) {
-        return m.reply(`${emoji2} El usuario no tiene suficientes coin para quitar. Tiene ${users[who].coin} ${m.moneda}.`);
-    }
-
-    users[who].coin -= dmt;
-
-    m.reply(`💸 *Quitado:*
-» ${dmt} \n@${who.split('@')[0]}, te han quitado ${dmt} 💸`, null, { mentions: [who] });
-};
-
-handler.help = ['quitarcoin *<@user>*', 'quitarcoin all'];
-handler.tags = ['owner'];
-handler.command = ['quitarcoin', 'removecoin', 'removecoins']; 
-handler.rowner = true;
-
-export default handler;
+let who
+if (m.isGroup) {
+who = m.mentionedJid[0] ? m.mentionedJid[0] : m.quoted ? m.quoted.sender : false
+} else {
+who = m.chat
+}
+if (!who) return m.reply('⚠️ Por favor, menciona al usuario o cita un mensaje.')
+if (who.includes('@lid')) return m.reply('⚠️ Error de identificación (LID). Por favor menciona al usuario (@etiqueta) en lugar de citarlo.')
+let user = global.db.data.users[who]
+if (!user) {
+user = global.db.data.users[who] = { coin: 0 }
+}
+let dmt
+if (text.toLowerCase().includes('all') || text.toLowerCase().includes('todo')) {
+dmt = user.coin
+} else {
+let coinMatch = text.match(/(\d+)/)
+if (!coinMatch) return m.reply('⚠️ Por favor, ingresa la cantidad de Coins que deseas quitar.')
+dmt = parseInt(coinMatch[0])
+}
+if (user.coin < dmt) return m.reply(`⚠️ El usuario no tiene suficientes Coins para quitar. Tiene ${user.coin}.`)
+user.coin -= dmt
+conn.reply(m.chat, `💸 *COINS QUITADOS*\n\n» *Cantidad:* ${dmt}\n» *Usuario:* @${who.split('@')[0]}\n» *Restante:* ${user.coin}`, m, { mentions: [who] })
+}
+handler.help = ['quitarcoin *<@user>*']
+handler.tags = ['owner']
+handler.command = ['quitarcoin', 'removecoin', 'removecoins']
+handler.rowner = true
+export default handler
