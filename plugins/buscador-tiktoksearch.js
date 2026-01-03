@@ -4,14 +4,16 @@ const { proto, generateWAMessageFromContent, prepareWAMessageMedia, generateWAMe
 let handler = async (m, { conn, text, usedPrefix, command }) => {
     if (!text) return conn.reply(m.chat, '🍟 *Por favor, ingresa un texto para buscar en TikTok*', m)
 
+    // Función de espera (La clave para arreglar el bug)
+    const sleep = (ms) => new Promise(resolve => setTimeout(resolve, ms))
+
     // Función para texto "Fancy"
     const toFancy = str => {
         const map = { 'a': 'ᥲ', 'b': 'ᑲ', 'c': 'ᥴ', 'd': 'ᑯ', 'e': 'ᥱ', 'f': '𝖿', 'g': 'g', 'h': 'һ', 'i': 'і', 'j': 'j', 'k': 'k', 'l': 'ᥣ', 'm': 'm', 'n': 'ᥒ', 'o': '᥆', 'p': '⍴', 'q': 'q', 'r': 'r', 's': 's', 't': '𝗍', 'u': 'ᥙ', 'v': '᥎', 'w': 'ɯ', 'x': 'x', 'y': 'ᥡ', 'z': 'z', 'A': 'A', 'B': 'B', 'C': 'C', 'D': 'D', 'E': 'E', 'F': 'F', 'G': 'G', 'H': 'H', 'I': 'I', 'J': 'J', 'K': 'K', 'L': 'L', 'M': 'M', 'N': 'N', 'O': 'O', 'P': 'P', 'Q': 'Q', 'R': 'R', 'S': 'S', 'T': 'T', 'U': 'U', 'V': 'V', 'W': 'W', 'X': 'X', 'Y': 'Y', 'Z': 'Z' };
         return str.split('').map(c => map[c] || c).join('')
     }
 
-    // --- CAMBIO 1: Función para descargar el video a Buffer ---
-    // Esto asegura que cada video tenga su propia identidad única
+    // Descargar buffer
     const getBuffer = async (url) => {
         try {
             const response = await axios.get(url, {
@@ -27,17 +29,17 @@ let handler = async (m, { conn, text, usedPrefix, command }) => {
         }
     }
 
-    // Función para crear el mensaje de video DESDE BUFFER
+    // --- CAMBIO CLAVE: Usamos prepareWAMessageMedia ---
     async function createVideoMessage(buffer) {
-        const { videoMessage } = await generateWAMessageContent({
-            video: buffer // Pasamos el archivo real, no la URL
+        const media = await prepareWAMessageMedia({
+            video: buffer 
         }, {
             upload: conn.waUploadToServer
         });
-        return videoMessage;
+        return media.videoMessage;
     }
 
-    // Función para mezclar resultados
+    // Función para mezclar
     async function shuffleArray(array) {
         for (let i = array.length - 1; i > 0; i--) {
             const j = Math.floor(Math.random() * (i + 1));
@@ -50,11 +52,11 @@ let handler = async (m, { conn, text, usedPrefix, command }) => {
 
         let searchResults = []
         try {
-            // Opción 1: TikWM Search
+            // Opción 1: TikWM
             let { data: response } = await axios.post('https://www.tikwm.com/api/feed/search', 
                 new URLSearchParams({
                     keywords: text,
-                    count: 10, // Pedimos un poco menos para no saturar la descarga
+                    count: 10,
                     cursor: 0,
                     web: 1,
                     hd: 1
@@ -80,32 +82,31 @@ let handler = async (m, { conn, text, usedPrefix, command }) => {
                 })
             }
         } catch (e) {
-            console.log("Error en TikWM:", e)
             try {
                 // Opción 2: Agatz
                 let { data: response } = await axios.get('https://api.agatz.xyz/api/tiktoksearch?message=' + text)
                 searchResults = response.data
             } catch (e2) {
-                console.log("Error en Agatz:", e2)
+                console.log("Error en APIs:", e2)
             }
         }
 
         if (!searchResults || !searchResults.length) return conn.reply(m.chat, 'No se encontraron resultados', m)
 
         shuffleArray(searchResults)
-        // Reducimos a 6 para evitar timeouts largos por la descarga de buffers
-        let selectedResults = searchResults.splice(0, 6)
+        // Mantenemos 5-6 resultados máximo
+        let selectedResults = searchResults.splice(0, 5)
         let results = []
 
-        // Iteramos sobre los resultados
+        // --- BUCLE CON PAUSA ---
         for (let result of selectedResults) {
             try {
-                // --- CAMBIO 2: Descargamos el video antes de crear la tarjeta ---
-                // Si la descarga falla, saltamos este video en lugar de romper el código
                 let videoBuffer = await getBuffer(result.nowm || result.url);
-                
-                if (!videoBuffer) continue; // Si no hay buffer, saltamos al siguiente
+                if (!videoBuffer) continue; 
 
+                // Creamos el mensaje multimedia
+                let vidMsg = await createVideoMessage(videoBuffer)
+                
                 results.push({
                     body: proto.Message.InteractiveMessage.Body.fromObject({
                         text: toFancy(result.title || "Tiktok Video")
@@ -116,7 +117,7 @@ let handler = async (m, { conn, text, usedPrefix, command }) => {
                     header: proto.Message.InteractiveMessage.Header.fromObject({
                         title: '',
                         hasMediaAttachment: true,
-                        videoMessage: await createVideoMessage(videoBuffer) // Usamos el Buffer
+                        videoMessage: vidMsg
                     }),
                     nativeFlowMessage: proto.Message.InteractiveMessage.NativeFlowMessage.fromObject({
                         buttons: [{
@@ -129,13 +130,19 @@ let handler = async (m, { conn, text, usedPrefix, command }) => {
                         }]
                     })
                 })
+
+                // PAUSA DE 2.5 SEGUNDOS
+                // Esto es lo que arregla que se repita el video. 
+                // Le da tiempo a WhatsApp de procesar el SHA256 único de cada archivo.
+                await sleep(2500) 
+
             } catch (err) {
-                console.log("Error procesando video individual:", err)
+                console.log("Error procesando video:", err)
                 continue;
             }
         }
 
-        if (results.length === 0) return conn.reply(m.chat, 'Error: No se pudieron descargar los videos. Intenta de nuevo.', m)
+        if (results.length === 0) return conn.reply(m.chat, 'Error: No se pudieron descargar los videos.', m)
 
         const responseMessage = generateWAMessageFromContent(m.chat, {
             viewOnceMessage: {
