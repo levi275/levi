@@ -1,9 +1,6 @@
+import fetch from 'node-fetch'
+
 let handler = async (m, { conn }) => {
-    // -------------------------------------------------------------------------------------
-    // ÁREA DE CONFIGURACIÓN
-    // Aquí puedes añadir o borrar links fácilmente. Solo asegúrate de ponerlos entre comillas 
-    // y separados por una coma.
-    // -------------------------------------------------------------------------------------
     const smokeGifs = [
         'https://i.pinimg.com/originals/5c/8e/bb/5c8ebbfa78bef8b0a51259d10fbbc929.gif',
         'https://i.pinimg.com/originals/29/7c/bb/297cbb4ffe4b7a96cbc1d913917dad27.gif',
@@ -14,43 +11,36 @@ let handler = async (m, { conn }) => {
         'https://i.pinimg.com/originals/87/cb/bf/87cbbf238f7ec3a6b6577fea262ac484.gif',
         'https://i.pinimg.com/originals/29/92/fb/2992fb9c44cdc817e6cbc0782fbc6276.gif'
     ];
-    // -------------------------------------------------------------------------------------
 
-    // 1. Identificar a quién se dirige la acción (mención, respuesta o uno mismo)
-    let who;
-    if (m.mentionedJid.length > 0) {
-        who = m.mentionedJid[0];
-    } else if (m.quoted) {
-        who = m.quoted.sender;
-    } else {
-        who = m.sender;
-    }
-
-    // 2. Obtener nombres
+    let who = m.mentionedJid && m.mentionedJid[0] ? m.mentionedJid[0] : m.quoted ? m.quoted.sender : m.sender;
     let nameSender = conn.getName(m.sender);
     let nameTarget = conn.getName(who);
 
-    // 3. Crear el texto del mensaje
-    let caption;
-    if (who === m.sender) {
-        // Caso: Fumando solo
-        caption = `\`${nameSender}\` *está fumando* 🚬.`;
-    } else {
-        // Caso: Fumando con alguien
-        caption = `\`${nameSender}\` *está fumando con* \`${nameTarget}\` 🚬.`;
-    }
+    let caption = who === m.sender 
+        ? `\`${nameSender}\` *está fumando* 🚬.` 
+        : `\`${nameSender}\` *está fumando con* \`${nameTarget}\` 🚬.`;
     
-    // 4. Elegir un GIF aleatorio de la lista de arriba
     const randomGif = smokeGifs[Math.floor(Math.random() * smokeGifs.length)];
 
-    // 5. Enviar mensaje
     await m.react('🚬');
-    await conn.sendMessage(m.chat, { 
-        video: { url: randomGif }, 
-        gifPlayback: true, 
-        caption: caption, 
-        mentions: [who, m.sender] 
-    }, { quoted: m });
+
+    try {
+        // --- LA SOLUCIÓN ESTÁ AQUÍ ---
+        // Descargamos el contenido del link antes de enviarlo
+        const response = await fetch(randomGif);
+        const buffer = await response.buffer();
+
+        await conn.sendMessage(m.chat, { 
+            video: buffer, // Enviamos el buffer descargado, no el link directo
+            gifPlayback: true, 
+            caption: caption, 
+            mentions: [who, m.sender] 
+        }, { quoted: m });
+        
+    } catch (e) {
+        console.error(e);
+        m.reply('¡Ups! Hubo un error al cargar el GIF de Pinterest. Inténtalo de nuevo.');
+    }
 };
 
 handler.help = ['smoke', 'fumar'];
