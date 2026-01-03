@@ -1,9 +1,5 @@
 import axios from 'axios'
 
-// Ya no necesitamos importar todas las herramientas de mensajes interactivos complejos, 
-// pero mantenemos lo básico por si tu bot lo requiere en otros lados.
-const { generateWAMessageFromContent } = (await import("@whiskeysockets/baileys")).default
-
 let handler = async (m, { conn, text, usedPrefix, command }) => {
     if (!text) return conn.reply(m.chat, '🍟 *Por favor, ingresa un texto para buscar en TikTok*', m)
 
@@ -25,12 +21,14 @@ let handler = async (m, { conn, text, usedPrefix, command }) => {
         await m.react('🕒')
 
         let searchResults = []
+        
+        // --- BÚSQUEDA (Misma lógica que tenías) ---
         try {
-            // Opción 1: TikWM Search
+            // Opción 1: TikWM
             let { data: response } = await axios.post('https://www.tikwm.com/api/feed/search', 
                 new URLSearchParams({
                     keywords: text,
-                    count: 12,
+                    count: 12, 
                     cursor: 0,
                     web: 1,
                     hd: 1
@@ -45,20 +43,17 @@ let handler = async (m, { conn, text, usedPrefix, command }) => {
             if (response.data && response.data.videos) {
                 searchResults = response.data.videos.map(v => {
                     let videoUrl = v.play
-                    if (!videoUrl.startsWith('http')) {
-                        videoUrl = `https://www.tikwm.com${v.play}`
-                    }
-
+                    if (!videoUrl.startsWith('http')) videoUrl = `https://www.tikwm.com${v.play}`
                     return {
                         title: v.title,
                         nowm: videoUrl, 
-                        origin_url: `https://www.tiktok.com/@${v.author.unique_id}/video/${v.video_id}`
+                        author: v.author.nickname
                     }
                 })
             }
         } catch (e) {
             console.log("Error en TikWM:", e)
-            // Fallback (Opción 2: Agatz)
+            // Fallback Opción 2: Agatz
             try {
                 let { data: response } = await axios.get('https://api.agatz.xyz/api/tiktoksearch?message=' + text)
                 searchResults = response.data
@@ -70,35 +65,41 @@ let handler = async (m, { conn, text, usedPrefix, command }) => {
         if (!searchResults || !searchResults.length) return conn.reply(m.chat, 'No se encontraron resultados', m)
 
         shuffleArray(searchResults)
-        // Seleccionamos 7 videos (o menos si quieres que cargue más rápido)
+        // Seleccionamos un máximo de videos para el álbum (ej: 5 o 7)
         let selectedResults = searchResults.splice(0, 7)
 
-        // Enviamos mensaje inicial
-        await conn.reply(m.chat, `${toFancy("ᰔᩚ ᥱs𝗍᥆s s᥆ᥒ ᥣ᥆s rᥱsᥙᥣ𝗍ᥲძ᥆s ძᥱ:")} ${text}`, m)
-
-        // Bucle para enviar los videos como "Album"
-        // Al enviarse secuencialmente, WhatsApp los agrupa
+        // --- CONSTRUCCIÓN DEL ÁLBUM ---
+        // Creamos el array con la estructura exacta que pediste:
+        // { video: { url: ... }, caption: ... }
+        
+        let albumContent = []
+        
         for (let result of selectedResults) {
-            if (!result.nowm && !result.url) continue;
-            
-            try {
-                await conn.sendMessage(m.chat, {
-                    video: { url: result.nowm || result.url },
-                    caption: toFancy(result.title || 'Tiktok Video'),
-                    mimetype: 'video/mp4'
-                }, { quoted: m })
-            } catch (err) {
-                console.log("Error enviando video individual:", err)
-                continue; 
-            }
+            // Verificamos que tenga URL válida
+            let url = result.nowm || result.url
+            if (!url) continue
+
+            albumContent.push({
+                video: { url: url },
+                caption: toFancy(result.title || 'Tiktok Search')
+            })
         }
+
+        if (albumContent.length === 0) return conn.reply(m.chat, 'Error al procesar los videos.', m)
+
+        // Enviamos usando la propiedad 'album'
+        await conn.sendMessage(m.chat, {
+            text: `${toFancy("ᰔᩚ ᥱs𝗍᥆s s᥆ᥒ ᥣ᥆s rᥱsᥙᥣ𝗍ᥲძ᥆s ძᥱ:")} ${text}`,
+            album: albumContent
+        }, { quoted: m })
 
         await m.react('✅')
 
     } catch (error) {
         await m.react('❌')
         console.error(error)
-        await conn.reply(m.chat, error.toString(), m)
+        // Si falla porque el 'conn' no soporta 'album', avisamos:
+        await conn.reply(m.chat, 'Ocurrió un error. Asegúrate de que tu bot soporte la función { album }.\n\n' + error.toString(), m)
     }
 }
 
