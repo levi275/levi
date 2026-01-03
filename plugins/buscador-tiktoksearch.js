@@ -10,10 +10,27 @@ let handler = async (m, { conn, text, usedPrefix, command }) => {
         return str.split('').map(c => map[c] || c).join('')
     }
 
-    // Función para crear el mensaje de video
-    async function createVideoMessage(url) {
+    // --- CAMBIO 1: Función para descargar el video a Buffer ---
+    // Esto asegura que cada video tenga su propia identidad única
+    const getBuffer = async (url) => {
+        try {
+            const response = await axios.get(url, {
+                responseType: 'arraybuffer',
+                headers: {
+                    'User-Agent': 'Mozilla/5.0 (Linux; Android 10; K) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/118.0.0.0 Mobile Safari/537.36'
+                }
+            });
+            return response.data;
+        } catch (error) {
+            console.error("Error descargando buffer:", error);
+            return null;
+        }
+    }
+
+    // Función para crear el mensaje de video DESDE BUFFER
+    async function createVideoMessage(buffer) {
         const { videoMessage } = await generateWAMessageContent({
-            video: { url }
+            video: buffer // Pasamos el archivo real, no la URL
         }, {
             upload: conn.waUploadToServer
         });
@@ -37,7 +54,7 @@ let handler = async (m, { conn, text, usedPrefix, command }) => {
             let { data: response } = await axios.post('https://www.tikwm.com/api/feed/search', 
                 new URLSearchParams({
                     keywords: text,
-                    count: 12,
+                    count: 10, // Pedimos un poco menos para no saturar la descarga
                     cursor: 0,
                     web: 1,
                     hd: 1
@@ -51,13 +68,10 @@ let handler = async (m, { conn, text, usedPrefix, command }) => {
 
             if (response.data && response.data.videos) {
                 searchResults = response.data.videos.map(v => {
-                    // --- CORRECCIÓN AQUÍ ---
-                    // Si el link no empieza con http, le agregamos el dominio de tikwm
                     let videoUrl = v.play
                     if (!videoUrl.startsWith('http')) {
                         videoUrl = `https://www.tikwm.com${v.play}`
                     }
-
                     return {
                         title: v.title,
                         nowm: videoUrl, 
@@ -67,8 +81,8 @@ let handler = async (m, { conn, text, usedPrefix, command }) => {
             }
         } catch (e) {
             console.log("Error en TikWM:", e)
-            // Fallback (Opción 2: Agatz)
             try {
+                // Opción 2: Agatz
                 let { data: response } = await axios.get('https://api.agatz.xyz/api/tiktoksearch?message=' + text)
                 searchResults = response.data
             } catch (e2) {
@@ -79,14 +93,19 @@ let handler = async (m, { conn, text, usedPrefix, command }) => {
         if (!searchResults || !searchResults.length) return conn.reply(m.chat, 'No se encontraron resultados', m)
 
         shuffleArray(searchResults)
-        let selectedResults = searchResults.splice(0, 7)
+        // Reducimos a 6 para evitar timeouts largos por la descarga de buffers
+        let selectedResults = searchResults.splice(0, 6)
         let results = []
 
+        // Iteramos sobre los resultados
         for (let result of selectedResults) {
-            // Validación extra por si la URL viene vacía
-            if (!result.nowm && !result.url) continue;
-            
             try {
+                // --- CAMBIO 2: Descargamos el video antes de crear la tarjeta ---
+                // Si la descarga falla, saltamos este video en lugar de romper el código
+                let videoBuffer = await getBuffer(result.nowm || result.url);
+                
+                if (!videoBuffer) continue; // Si no hay buffer, saltamos al siguiente
+
                 results.push({
                     body: proto.Message.InteractiveMessage.Body.fromObject({
                         text: toFancy(result.title || "Tiktok Video")
@@ -97,7 +116,7 @@ let handler = async (m, { conn, text, usedPrefix, command }) => {
                     header: proto.Message.InteractiveMessage.Header.fromObject({
                         title: '',
                         hasMediaAttachment: true,
-                        videoMessage: await createVideoMessage(result.nowm || result.url)
+                        videoMessage: await createVideoMessage(videoBuffer) // Usamos el Buffer
                     }),
                     nativeFlowMessage: proto.Message.InteractiveMessage.NativeFlowMessage.fromObject({
                         buttons: [{
@@ -111,12 +130,12 @@ let handler = async (m, { conn, text, usedPrefix, command }) => {
                     })
                 })
             } catch (err) {
-                console.log("Error creando tarjeta de video:", err)
-                continue; // Si falla un video, que siga con el siguiente
+                console.log("Error procesando video individual:", err)
+                continue;
             }
         }
 
-        if (results.length === 0) return conn.reply(m.chat, 'No se pudieron procesar los videos encontrados.', m)
+        if (results.length === 0) return conn.reply(m.chat, 'Error: No se pudieron descargar los videos. Intenta de nuevo.', m)
 
         const responseMessage = generateWAMessageFromContent(m.chat, {
             viewOnceMessage: {
