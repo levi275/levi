@@ -40,7 +40,9 @@ let stiker = await sticker(null, s[Math.floor(Math.random() * s.length)], nombre
 await delay(5 * 5000)
 if (stiker) conn.sendFile(m.chat, stiker, 'sticker.webp', '',m, true, { contextInfo: { 'forwardingScore': 200, 'isForwarded': false, externalAdReply:{ showAdAttribution: false, title: wm, body: `h`, mediaType: 2, sourceUrl: nn, thumbnail: imagen1}}}, { quoted: m })
 }
-handler.customPrefix = /lindo|linda|cariño|love|corazón|bonita|bonito/i 
-handler.command = new RegExp
-export default handler
-const delay = (ms) => new Promise((resolve) => setTimeout(resolve, ms))
+handler.help = ['smoke', 'fumar'];
+handler.tags = ['anime'];
+handler.command = ['smoke', 'fumar'];
+handler.group = true;
+
+export default handler;
