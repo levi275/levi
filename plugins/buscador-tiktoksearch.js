@@ -1,16 +1,20 @@
 import axios from 'axios'
+const { 
+    generateWAMessageFromContent, 
+    prepareWAMessageMedia, 
+    proto 
+} = (await import("@whiskeysockets/baileys")).default
 
-// Asegúrate de que tu bot soporte la estructura de 'cards' según la librería que usas (@itsukichan/baileys)
 let handler = async (m, { conn, text, usedPrefix, command }) => {
-    if (!text) return conn.reply(m.chat, '🍟 *¿Qué video de TikTok buscas hoy?*', m)
+    if (!text) return conn.reply(m.chat, '🍟 *¿Qué deseas buscar en TikTok? Ingresa un texto.*', m)
 
-    // Función "Fancy" para texto bonito
+    // Función estética para texto (La mantenemos porque te gusta lo bonito)
     const toFancy = str => {
-        const map = { 'a': 'ᥲ', 'b': 'ᑲ', 'c': 'ᥴ', 'd': 'ᑯ', 'e': 'ᥱ', 'f': '𝖿', 'g': 'g', 'h': 'һ', 'i': 'і', 'j': 'j', 'k': 'k', 'l': 'ᥣ', 'm': 'm', 'n': 'ᥒ', 'o': '᥆', 'p': '⍴', 'q': 'q', 'r': 'r', 's': 's', 't': '𝗍', 'u': 'ᥙ', 'v': '᥎', 'w': 'ɯ', 'x': 'x', 'y': 'ᥡ', 'z': 'z', 'A': 'A', 'B': 'B', 'C': 'C', 'D': 'D', 'E': 'E', 'F': 'F', 'G': 'G', 'H': 'H', 'I': 'I', 'J': 'J', 'K': 'K', 'L': 'L', 'M': 'M', 'N': 'N', 'O': 'O', 'P': 'P', 'Q': 'Q', 'R': 'R', 'S': 'S', 'T': 'T', 'U': 'U', 'V': 'V', 'W': 'W', 'X': 'X', 'Y': 'Y', 'Z': 'Z' };
+        const map = { 'a': 'ᥲ', 'b': 'ᑲ', 'c': 'ᥴ', 'd': 'ᑯ', 'e': 'ᥱ', 'f': '𝖿', 'g': 'g', 'h': 'һ', 'i': 'і', 'j': 'j', 'k': 'k', 'l': 'ᥣ', 'm': 'm', 'n': 'ᥒ', 'o': '᥆', 'p': '⍴', 'q': 'q', 'r': 'r', 's': 's', 't': '𝗍', 'u': 'ᥙ', 'v': '᥎', 'w': 'ɯ', 'x': 'x', 'y': 'ᥡ', 'z': 'z' };
         return str.split('').map(c => map[c] || c).join('')
     }
 
-    // Función para mezclar resultados
+    // Mezclar array
     async function shuffleArray(array) {
         for (let i = array.length - 1; i > 0; i--) {
             const j = Math.floor(Math.random() * (i + 1));
@@ -21,86 +25,133 @@ let handler = async (m, { conn, text, usedPrefix, command }) => {
     try {
         await m.react('🕒')
 
+        // --- LÓGICA DE BÚSQUEDA (IGUAL QUE TU CÓDIGO ORIGINAL) ---
         let searchResults = []
-        
-        // --- BÚSQUEDA (Misma lógica que tenías, funciona bien) ---
         try {
+            // Opción 1: TikWM
             let { data: response } = await axios.post('https://www.tikwm.com/api/feed/search', 
-                new URLSearchParams({ keywords: text, count: 12, cursor: 0, web: 1, hd: 1 }), 
-                { headers: { "Content-Type": "application/x-www-form-urlencoded; charset=UTF-8", "User-Agent": "Mozilla/5.0 (Linux; Android 10; K) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/118.0.0.0 Mobile Safari/537.36" }}
+                new URLSearchParams({ keywords: text, count: 12, cursor: 0, web: 1, hd: 1 }), {
+                    headers: { "Content-Type": "application/x-www-form-urlencoded; charset=UTF-8", "User-Agent": "Mozilla/5.0" }
+                }
             )
-
-            if (response.data && response.data.videos) {
-                searchResults = response.data.videos.map(v => {
-                    let videoUrl = v.play
-                    if (!videoUrl.startsWith('http')) videoUrl = `https://www.tikwm.com${v.play}`
-                    return {
-                        title: v.title,
-                        nowm: videoUrl, 
-                        author: v.author.nickname || 'TikTok User',
-                        origin_url: `https://www.tiktok.com/@${v.author.unique_id}/video/${v.video_id}`
-                    }
-                })
+            if (response.data?.videos) {
+                searchResults = response.data.videos.map(v => ({
+                    title: v.title,
+                    nowm: v.play.startsWith('http') ? v.play : `https://www.tikwm.com${v.play}`, 
+                    cover: v.cover.startsWith('http') ? v.cover : `https://www.tikwm.com${v.cover}`,
+                    author: v.author.nickname,
+                    url: `https://www.tiktok.com/@${v.author.unique_id}/video/${v.video_id}`
+                }))
             }
         } catch (e) {
-            console.log("Error en TikWM:", e)
+            console.log("Error TikWM, probando Agatz...")
+            // Fallback Opción 2: Agatz
             try {
                 let { data: response } = await axios.get('https://api.agatz.xyz/api/tiktoksearch?message=' + text)
-                searchResults = response.data.map(v => ({...v, author: 'TikTok User'})) // Adaptación simple
-            } catch (e2) { console.log("Error en Agatz:", e2) }
+                searchResults = response.data.map(v => ({
+                    title: v.title,
+                    nowm: v.nowm || v.url,
+                    cover: v.cover || 'https://i.imgur.com/95t44C0.png', // Cover por defecto
+                    author: 'TikTok User',
+                    url: v.url
+                }))
+            } catch (e2) { console.log("Error Agatz:", e2) }
         }
 
-        if (!searchResults || !searchResults.length) return conn.reply(m.chat, '❌ No encontré nada, intenta con otra palabra.', m)
+        if (!searchResults.length) return conn.reply(m.chat, '❌ No se encontraron videos.', m)
 
         shuffleArray(searchResults)
-        // 🔥 IMPORTANTE: Reducimos a 5 videos para que el mensaje "Carousel" no sea muy pesado y cargue rápido.
-        let selectedResults = searchResults.splice(0, 5)
+        // IMPORTANTE: Para carruseles de video, usa MAXIMO 5 o 6 para evitar timeouts de subida
+        let selectedResults = searchResults.splice(0, 5) 
 
-        // --- CONSTRUCCIÓN DEL CARRUSEL (CARDS) ---
+        // --- CREACIÓN DEL MENSAJE INTERACTIVO "CAROUSEL" ---
         
-        // Mapeamos los resultados al formato de Cards de tu documentación
-        const cardsData = selectedResults.map(result => {
-            return {
-                // Aquí usamos 'video' según tu documentación, pasando la URL
-                video: { url: result.nowm }, 
-                title: toFancy(result.title.substring(0, 40) + '...'), // Título corto y bonito
-                body: `👤 ${result.author}`, // El cuerpo de la tarjeta
-                footer: toFancy('Tiktok Search Result'), // Footer estético
-                buttons: [
-                    {
-                        // Botón para ir al enlace original (útil para verificar)
-                        name: 'cta_url',
-                        buttonParamsJson: JSON.stringify({
-                            display_text: '🔗 Ver Original',
-                            url: result.origin_url || 'https://tiktok.com'
-                        })
-                    },
-                    // Puedes agregar un botón de copiado si quieres
-                    {
-                        name: 'cta_copy',
-                        buttonParamsJson: JSON.stringify({
-                            display_text: '📋 Copiar Enlace',
-                            copy_code: result.nowm
-                        })
-                    }
-                ]
+        let cards = []
+        
+        // Iteramos los videos para prepararlos
+        for (let result of selectedResults) {
+            // Preparamos el video o imagen. 
+            // NOTA: Si el video es muy pesado, el carrusel puede fallar. 
+            // Si falla mucho, cambia 'video' por 'image: { url: result.cover }' y pon el video en un botón.
+            let mediaMessage;
+            try {
+                mediaMessage = await prepareWAMessageMedia({ 
+                    video: { url: result.nowm } 
+                }, { upload: conn.waUploadToServer })
+            } catch (e) {
+                // Si falla cargando el video, usa la imagen de portada
+                mediaMessage = await prepareWAMessageMedia({ 
+                    image: { url: result.cover } 
+                }, { upload: conn.waUploadToServer })
             }
-        })
 
-        // --- ENVÍO DEL MENSAJE ESTÉTICO ---
-        await conn.sendMessage(m.chat, {
-            text: `${toFancy("Aquí tienes los mejores resultados para:")} *${text}*`,
-            footer: 'Desliza para ver más ➡️',
-            cards: cardsData // Enviamos el array de tarjetas creado arriba
+            cards.push({
+                body: proto.Message.InteractiveMessage.Body.fromObject({
+                    text: toFancy(result.title.substring(0, 50) + "...") // Recortamos texto largo
+                }),
+                footer: proto.Message.InteractiveMessage.Footer.fromObject({
+                    text: `👤 ${result.author}`
+                }),
+                header: proto.Message.InteractiveMessage.Header.fromObject({
+                    title: toFancy("TikTok Video"),
+                    hasMediaAttachment: true,
+                    ...mediaMessage // Aquí va el video/imagen preparado
+                }),
+                nativeFlowMessage: proto.Message.InteractiveMessage.NativeFlowMessage.fromObject({
+                    buttons: [
+                        {
+                            "name": "cta_url",
+                            "buttonParamsJson": JSON.stringify({
+                                "display_text": "🔗 Ver en TikTok",
+                                "url": result.url,
+                                "merchant_url": result.url
+                            })
+                        },
+                        {
+                            "name": "cta_copy",
+                            "buttonParamsJson": JSON.stringify({
+                                "display_text": "📋 Copiar Enlace",
+                                "copy_code": result.url
+                            })
+                        }
+                    ]
+                })
+            })
+        }
+
+        // Construcción final del mensaje
+        const messageContent = generateWAMessageFromContent(m.chat, {
+            viewOnceMessage: {
+                message: {
+                    messageContextInfo: {
+                        deviceListMetadata: {},
+                        deviceListMetadataVersion: 2
+                    },
+                    interactiveMessage: proto.Message.InteractiveMessage.fromObject({
+                        body: proto.Message.InteractiveMessage.Body.create({
+                            text: `${toFancy("✦ Rᥱsᥙᥣ𝗍ᥲძ᥆s ძᥱ:")} ${text}\n_Desliza para ver más videos 👉_`
+                        }),
+                        footer: proto.Message.InteractiveMessage.Footer.create({
+                            text: "🔎 TikTok Search"
+                        }),
+                        header: proto.Message.InteractiveMessage.Header.create({
+                            hasMediaAttachment: false
+                        }),
+                        carouselMessage: proto.Message.InteractiveMessage.CarouselMessage.fromObject({
+                            cards: cards
+                        })
+                    })
+                }
+            }
         }, { quoted: m })
 
+        await conn.relayMessage(m.chat, messageContent.message, { messageId: messageContent.key.id })
         await m.react('✅')
 
     } catch (error) {
         await m.react('❌')
         console.error(error)
-        // Fallback: Si fallan las Cards (por versión de WA), envía mensaje simple.
-        await conn.reply(m.chat, 'Ocurrió un error al generar la galería. ' + error.toString(), m)
+        conn.reply(m.chat, 'Ocurrió un error al generar el carrusel. Intenta de nuevo.', m)
     }
 }
 
