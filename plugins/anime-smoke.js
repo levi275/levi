@@ -1,45 +1,64 @@
-import { sticker } from '../lib/sticker.js'
-let handler = async(m, { conn }) => {
-if (!db.data.chats[m.chat].stickers && m.isGroup) throw 0
+import axios from 'axios';
 
-let nombre = ''
-let nombre2 = '' 
- 
-const s = [
-'https://media1.giphy.com/media/2dQ3FMaMFccpi/giphy.gif?cid=ecf05e476azkdvh2cu7b567gbpgyc6q7qd38pklqp12npygv&rid=giphy.gif&ct=g',
-'https://media3.giphy.com/media/cuUVK6p5YrGbC/giphy.gif?cid=ecf05e4749iutq8ycis7x4mlesz3vq4z9wzy9luesfrx5fl1&rid=giphy.gif&ct=g',
-'https://media3.giphy.com/media/lqMxLjlpyAaAjfJ9yj/giphy.gif?cid=ecf05e47l6yo1v7gr5b82228pdw55t2dmxet4sf2f8cosi2t&rid=giphy.gif&ct=g',
-'https://media1.giphy.com/media/3o7qDJKIO5rSeyHhvO/giphy.gif?cid=ecf05e47wbv1k4le0x9o71uuni46evr2rrqz2c5nbpncbz7q&rid=giphy.gif&ct=g',
-'https://media4.giphy.com/media/7WH2eHCxpFcI0/giphy.gif?cid=ecf05e47cjkpwersiadjgg6qsuzl4svavugz7ken1we6sfp2&rid=giphy.gif&ct=g',
-'https://media0.giphy.com/media/guvCWEaSNe7iE/giphy.gif?cid=ecf05e47cjkpwersiadjgg6qsuzl4svavugz7ken1we6sfp2&rid=giphy.gif&ct=g',
-'https://media2.giphy.com/media/l0HlGdXFWYbKv5rby/giphy.gif?cid=ecf05e47sja0atawmyn9ycshzdkzwsphs6aonhzkiuem4m43&rid=giphy.gif&ct=g',
-'https://c.tenor.com/2HJox6Gn7AkAAAAC/anime-hearts.gif',
-'https://c.tenor.com/hwsbuAcG8UQAAAAC/foxplushy-foxy.gif',
-'https://c.tenor.com/qK_49TUnuJMAAAAC/love-anime-anime-girl.gif',
-'https://c.tenor.com/PGXshKPAUh4AAAAC/my-dress-up-darling-anime-love.gif',
-'https://c.tenor.com/11XPK5HEweUAAAAd/koisuru-asteroid-asteroid-in-love.gif',
-'https://c.tenor.com/OaSQqWO4-YUAAAAC/snuggle-anime.gif',
-'https://i.pinimg.com/originals/d7/08/56/d708566c82aa43ca60a50332b508e430.gif',
-'https://s11.favim.com/orig/7/779/7794/77949/funny-cute-kawaii-Favim.com-7794969.gif',
-'https://i.gifer.com/ZBFI.gif',
-'https://pa1.narvii.com/6139/a3d520c7458530f3f63cedbfbd3d4b420a502602_hq.gif',
-'https://st1.uvnimg.com/dims4/default/0110acc/2147483647/thumbnail/400x225/quality/75/format/jpg/?url=https%3A%2F%2Fuvn-brightspot.s3.amazonaws.com%2Fassets%2Fvixes%2Fbtg%2Fseries.batanga.com%2Ffiles%2Fcosas-que-extra%C3%B1amos-de-sailor-moon-5.gif',
-'https://acegif.com/wp-content/uploads/gif/anime-hug-59.gif',
-'https://acegif.com/wp-content/uploads/anime-love-29.gif',
-'https://c.tenor.com/DZll3gcSP04AAAAC/love.gif',
-'https://c.tenor.com/8ZQda51r0EsAAAAC/hi-love.gif',
-'https://c.tenor.com/F__giz9_y90AAAAC/love.gif',
-'https://media4.giphy.com/media/bMLGNRoAy0Yko/giphy.gif?cid=ecf05e472u70ws0e40cyvl5u6lywrmgvzzhp9qoew670oqfi&rid=giphy.gif&ct=g',
-'https://media4.giphy.com/media/Z21HJj2kz9uBG/giphy.gif?cid=ecf05e472u70ws0e40cyvl5u6lywrmgvzzhp9qoew670oqfi&rid=giphy.gif&ct=g',
-'https://media2.giphy.com/media/5bdhq6YF0szPaCEk9Y/giphy.gif?cid=ecf05e47izw67d3ltxeaaij9htevgdp0x4jg3xujxs3bptnk&rid=giphy.gif&ct=g',
-'https://media3.giphy.com/media/l3vR8xgaVJIDE8ec0/giphy.gif?cid=ecf05e47izw67d3ltxeaaij9htevgdp0x4jg3xujxs3bptnk&rid=giphy.gif&ct=g',
-'https://media4.giphy.com/media/10tTOmhZzHMoW4/giphy.gif?cid=ecf05e47zgffwvy8mvp1j71e71c780oz9uzgru9atqecf91q&rid=giphy.gif&ct=g'
-];  
- 
-let stiker = await sticker(null, s[Math.floor(Math.random() * s.length)], nombre, nombre2)
-await delay(5 * 5000)
-if (stiker) conn.sendFile(m.chat, stiker, 'sticker.webp', '',m, true, { contextInfo: { 'forwardingScore': 200, 'isForwarded': false, externalAdReply:{ showAdAttribution: false, title: wm, body: `h`, mediaType: 2, sourceUrl: nn, thumbnail: imagen1}}}, { quoted: m })
-}
+let handler = async (m, { conn }) => {
+    const smokeGifs = [
+        'https://i.pinimg.com/originals/5c/8e/bb/5c8ebbfa78bef8b0a51259d10fbbc929.gif',
+        'https://i.pinimg.com/originals/29/7c/bb/297cbb4ffe4b7a96cbc1d913917dad27.gif',
+        'https://i.pinimg.com/originals/fb/56/48/fb5648dc6e39b7b724cb0daf3693610f.gif',
+        'https://i.pinimg.com/originals/70/56/56/705656e8c01d3668bc496bef826a21f6.gif',
+        'https://i.pinimg.com/originals/b4/f9/35/b4f9350ae84bc8f0dd76c51f85ee5392.gif',
+        'https://i.pinimg.com/originals/f0/1e/4b/f01e4b59c072d8857f22be2a6a9a55b9.gif',
+        'https://i.pinimg.com/originals/87/cb/bf/87cbbf238f7ec3a6b6577fea262ac484.gif',
+        'https://i.pinimg.com/originals/29/92/fb/2992fb9c44cdc817e6cbc0782fbc6276.gif'
+    ];
+
+    let who = m.mentionedJid && m.mentionedJid[0] ? m.mentionedJid[0] : m.quoted ? m.quoted.sender : m.sender;
+    let nameSender = conn.getName(m.sender);
+    let nameTarget = conn.getName(who);
+
+    let caption = who === m.sender 
+        ? `\`${nameSender}\` *está fumando* 🚬.` 
+        : `\`${nameSender}\` *está fumando con* \`${nameTarget}\` 🚬.`;
+    
+    const randomGif = smokeGifs[Math.floor(Math.random() * smokeGifs.length)];
+
+    await m.react('🚬');
+
+    try {
+        // DESCARGA USANDO TUS HEADERS DE PINTEREST
+        const res = await axios.get(randomGif, {
+            responseType: 'arraybuffer',
+            headers: {
+                'user-agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/140.0.0.0 Safari/537.36',
+                'referer': 'https://id.pinterest.com/'
+            }
+        });
+
+        const buffer = Buffer.from(res.data, 'utf-8');
+
+        // MÉTODO ALTERNATIVO: Usar conn.sendFile si tu bot lo tiene (es más potente)
+        // Si no tienes sendFile, usa sendMessage abajo
+        if (conn.sendFile) {
+            await conn.sendFile(m.chat, buffer, 'error.gif', caption, m, true, {
+                mimetype: 'image/gif',
+                asGif: true
+            });
+        } else {
+            // Si usas sendMessage estándar:
+            await conn.sendMessage(m.chat, { 
+                video: buffer, 
+                caption: caption, 
+                gifPlayback: true,
+                mimetype: 'video/mp4' 
+            }, { quoted: m });
+        }
+
+    } catch (e) {
+        console.error(e);
+        m.reply('Error al obtener el GIF de Pinterest. Intenta de nuevo.');
+    }
+};
+
 handler.help = ['smoke', 'fumar'];
 handler.tags = ['anime'];
 handler.command = ['smoke', 'fumar'];
