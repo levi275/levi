@@ -58,8 +58,8 @@ let handler = async (m, { conn }) => {
         mentionedJid: [m.sender],
         isForwarded: true,
         forwardedNewsletterMessageInfo: {
-          newsletterJid: canalIdM,
-          newsletterName: namechannel,
+        newsletterJid: '120363335626706839@newsletter',
+        newsletterName: '..⃗. 💌 ⌇ ¡Noticias y más de tu idol favorita! ⊹ ִ ּ',
           serverMessageId: -1,
         },
       },
