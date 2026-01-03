@@ -30,13 +30,10 @@ let handler = async (m, { conn, text, usedPrefix, command }) => {
 
     try {
         await m.react('🕒')
-        
-        // --- AQUÍ ESTÁ EL CAMBIO ---
-        // Usamos una API alternativa para buscar ya que starlights está caída.
-        // Esta API devuelve resultados de búsqueda reales.
+
         let searchResults = []
         try {
-            // Opción 1: TikWM Search (Más estable)
+            // Opción 1: TikWM Search
             let { data: response } = await axios.post('https://www.tikwm.com/api/feed/search', 
                 new URLSearchParams({
                     keywords: text,
@@ -51,18 +48,32 @@ let handler = async (m, { conn, text, usedPrefix, command }) => {
                     }
                 }
             )
-            
+
             if (response.data && response.data.videos) {
-                searchResults = response.data.videos.map(v => ({
-                    title: v.title,
-                    nowm: v.play, // URL del video sin marca de agua
-                    origin_url: `https://www.tiktok.com/@${v.author.unique_id}/video/${v.video_id}`
-                }))
+                searchResults = response.data.videos.map(v => {
+                    // --- CORRECCIÓN AQUÍ ---
+                    // Si el link no empieza con http, le agregamos el dominio de tikwm
+                    let videoUrl = v.play
+                    if (!videoUrl.startsWith('http')) {
+                        videoUrl = `https://www.tikwm.com${v.play}`
+                    }
+
+                    return {
+                        title: v.title,
+                        nowm: videoUrl, 
+                        origin_url: `https://www.tiktok.com/@${v.author.unique_id}/video/${v.video_id}`
+                    }
+                })
             }
         } catch (e) {
-            // Fallback si la primera falla (Opción 2: Agatz)
-            let { data: response } = await axios.get('https://api.agatz.xyz/api/tiktoksearch?message=' + text)
-            searchResults = response.data
+            console.log("Error en TikWM:", e)
+            // Fallback (Opción 2: Agatz)
+            try {
+                let { data: response } = await axios.get('https://api.agatz.xyz/api/tiktoksearch?message=' + text)
+                searchResults = response.data
+            } catch (e2) {
+                console.log("Error en Agatz:", e2)
+            }
         }
 
         if (!searchResults || !searchResults.length) return conn.reply(m.chat, 'No se encontraron resultados', m)
@@ -72,30 +83,40 @@ let handler = async (m, { conn, text, usedPrefix, command }) => {
         let results = []
 
         for (let result of selectedResults) {
-            results.push({
-                body: proto.Message.InteractiveMessage.Body.fromObject({
-                    text: toFancy(result.title || "Tiktok Video")
-                }),
-                footer: proto.Message.InteractiveMessage.Footer.fromObject({
-                    text: toFancy('Tiktok Search')
-                }),
-                header: proto.Message.InteractiveMessage.Header.fromObject({
-                    title: '',
-                    hasMediaAttachment: true,
-                    videoMessage: await createVideoMessage(result.nowm || result.url) // Soporte para ambas APIs
-                }),
-                nativeFlowMessage: proto.Message.InteractiveMessage.NativeFlowMessage.fromObject({
-                    buttons: [{
-                        name: "cta_url",
-                        buttonParamsJson: JSON.stringify({
-                            display_text: toFancy("vᥱr ᥱᥒ tіkt᥆k ⧉"),
-                            url: result.origin_url || "https://www.tiktok.com",
-                            merchant_url: result.origin_url || "https://www.tiktok.com"
-                        })
-                    }]
+            // Validación extra por si la URL viene vacía
+            if (!result.nowm && !result.url) continue;
+            
+            try {
+                results.push({
+                    body: proto.Message.InteractiveMessage.Body.fromObject({
+                        text: toFancy(result.title || "Tiktok Video")
+                    }),
+                    footer: proto.Message.InteractiveMessage.Footer.fromObject({
+                        text: toFancy('Tiktok Search')
+                    }),
+                    header: proto.Message.InteractiveMessage.Header.fromObject({
+                        title: '',
+                        hasMediaAttachment: true,
+                        videoMessage: await createVideoMessage(result.nowm || result.url)
+                    }),
+                    nativeFlowMessage: proto.Message.InteractiveMessage.NativeFlowMessage.fromObject({
+                        buttons: [{
+                            name: "cta_url",
+                            buttonParamsJson: JSON.stringify({
+                                display_text: toFancy("vᥱr ᥱᥒ tіkt᥆k ⧉"),
+                                url: result.origin_url || "https://www.tiktok.com",
+                                merchant_url: result.origin_url || "https://www.tiktok.com"
+                            })
+                        }]
+                    })
                 })
-            })
+            } catch (err) {
+                console.log("Error creando tarjeta de video:", err)
+                continue; // Si falla un video, que siga con el siguiente
+            }
         }
+
+        if (results.length === 0) return conn.reply(m.chat, 'No se pudieron procesar los videos encontrados.', m)
 
         const responseMessage = generateWAMessageFromContent(m.chat, {
             viewOnceMessage: {
