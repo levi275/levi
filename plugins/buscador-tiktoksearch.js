@@ -21,14 +21,12 @@ let handler = async (m, { conn, text, usedPrefix, command }) => {
         await m.react('🕒')
 
         let searchResults = []
-        
-        // --- BÚSQUEDA (Misma lógica que tenías) ---
         try {
-            // Opción 1: TikWM
+            // Opción 1: TikWM Search
             let { data: response } = await axios.post('https://www.tikwm.com/api/feed/search', 
                 new URLSearchParams({
                     keywords: text,
-                    count: 12, 
+                    count: 12, // Buscamos 12 para tener variedad
                     cursor: 0,
                     web: 1,
                     hd: 1
@@ -43,17 +41,19 @@ let handler = async (m, { conn, text, usedPrefix, command }) => {
             if (response.data && response.data.videos) {
                 searchResults = response.data.videos.map(v => {
                     let videoUrl = v.play
-                    if (!videoUrl.startsWith('http')) videoUrl = `https://www.tikwm.com${v.play}`
+                    if (!videoUrl.startsWith('http')) {
+                        videoUrl = `https://www.tikwm.com${v.play}`
+                    }
                     return {
                         title: v.title,
                         nowm: videoUrl, 
-                        author: v.author.nickname
+                        origin_url: `https://www.tiktok.com/@${v.author.unique_id}/video/${v.video_id}`
                     }
                 })
             }
         } catch (e) {
             console.log("Error en TikWM:", e)
-            // Fallback Opción 2: Agatz
+            // Fallback (Opción 2: Agatz)
             try {
                 let { data: response } = await axios.get('https://api.agatz.xyz/api/tiktoksearch?message=' + text)
                 searchResults = response.data
@@ -65,41 +65,38 @@ let handler = async (m, { conn, text, usedPrefix, command }) => {
         if (!searchResults || !searchResults.length) return conn.reply(m.chat, 'No se encontraron resultados', m)
 
         shuffleArray(searchResults)
-        // Seleccionamos un máximo de videos para el álbum (ej: 5 o 7)
-        let selectedResults = searchResults.splice(0, 7)
-
-        // --- CONSTRUCCIÓN DEL ÁLBUM ---
-        // Creamos el array con la estructura exacta que pediste:
-        // { video: { url: ... }, caption: ... }
         
+        // Seleccionamos máximo 8 resultados para que el álbum no sea demasiado pesado
+        let selectedResults = searchResults.splice(0, 8)
         let albumContent = []
-        
-        for (let result of selectedResults) {
-            // Verificamos que tenga URL válida
-            let url = result.nowm || result.url
-            if (!url) continue
 
+        for (let result of selectedResults) {
+            // Validamos que tenga URL
+            if (!result.nowm && !result.url) continue;
+
+            // Estructura requerida para el álbum según tu documentación
             albumContent.push({
-                video: { url: url },
-                caption: toFancy(result.title || 'Tiktok Search')
+                video: { url: result.nowm || result.url },
+                caption: toFancy(result.title || "Tiktok Video")
             })
         }
 
-        if (albumContent.length === 0) return conn.reply(m.chat, 'Error al procesar los videos.', m)
+        if (albumContent.length === 0) return conn.reply(m.chat, 'Error procesando videos.', m)
 
-        // Enviamos usando la propiedad 'album'
+        // Enviamos el mensaje usando la propiedad 'album'
         await conn.sendMessage(m.chat, {
             text: `${toFancy("ᰔᩚ ᥱs𝗍᥆s s᥆ᥒ ᥣ᥆s rᥱsᥙᥣ𝗍ᥲძ᥆s ძᥱ:")} ${text}`,
             album: albumContent
-        }, { quoted: m })
+        }, { 
+            quoted: m 
+        })
 
         await m.react('✅')
 
     } catch (error) {
         await m.react('❌')
         console.error(error)
-        // Si falla porque el 'conn' no soporta 'album', avisamos:
-        await conn.reply(m.chat, 'Ocurrió un error. Asegúrate de que tu bot soporte la función { album }.\n\n' + error.toString(), m)
+        await conn.reply(m.chat, error.toString(), m)
     }
 }
 
