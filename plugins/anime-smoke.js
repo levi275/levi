@@ -1,4 +1,4 @@
-import fetch from 'node-fetch'
+import axios from 'axios'
 
 let handler = async (m, { conn }) => {
     const smokeGifs = [
@@ -25,21 +25,38 @@ let handler = async (m, { conn }) => {
     await m.react('🚬');
 
     try {
-        // --- LA SOLUCIÓN ESTÁ AQUÍ ---
-        // Descargamos el contenido del link antes de enviarlo
-        const response = await fetch(randomGif);
-        const buffer = await response.buffer();
+        // Usamos axios con un User-Agent para que Pinterest no nos bloquee la descarga
+        const response = await axios.get(randomGif, { 
+            responseType: 'arraybuffer',
+            headers: {
+                'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/91.0.4472.124 Safari/537.36'
+            }
+        });
 
+        const buffer = Buffer.from(response.data, 'binary');
+
+        // IMPORTANTE: Enviamos como VIDEO pero con gifPlayback
+        // Esto obliga a WhatsApp a convertir el GIF en un bucle infinito
         await conn.sendMessage(m.chat, { 
-            video: buffer, // Enviamos el buffer descargado, no el link directo
+            video: buffer, 
             gifPlayback: true, 
             caption: caption, 
-            mentions: [who, m.sender] 
+            mentions: [who, m.sender],
+            mimetype: 'video/mp4' // Aunque sea un GIF, le decimos que lo trate como video
         }, { quoted: m });
-        
+
     } catch (e) {
-        console.error(e);
-        m.reply('¡Ups! Hubo un error al cargar el GIF de Pinterest. Inténtalo de nuevo.');
+        console.error("Error enviando GIF de Pinterest:", e);
+        // Si falla como video, intentamos enviarlo como imagen/gif (como último recurso)
+        try {
+            await conn.sendMessage(m.chat, { 
+                image: { url: randomGif }, 
+                caption: caption, 
+                mimetype: 'image/gif' 
+            }, { quoted: m });
+        } catch (e2) {
+            m.reply('No pude cargar el GIF, parece que el enlace está temporalmente caído.');
+        }
     }
 };
 
