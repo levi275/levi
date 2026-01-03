@@ -25,37 +25,34 @@ let handler = async (m, { conn }) => {
     await m.react('🚬');
 
     try {
-        // Usamos axios con un User-Agent para que Pinterest no nos bloquee la descarga
-        const response = await axios.get(randomGif, { 
-            responseType: 'arraybuffer',
-            headers: {
-                'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/91.0.4472.124 Safari/537.36'
-            }
-        });
-
+        // --- LA MAGIA DEL PROXY ---
+        // Usamos weserv.nl para procesar el GIF de Pinterest. 
+        // El parámetro &n=-1 es para que mantenga todas las capas de la animación.
+        const proxyUrl = `https://images.weserv.nl/?url=${encodeURIComponent(randomGif)}&n=-1`;
+        
+        const response = await axios.get(proxyUrl, { responseType: 'arraybuffer' });
         const buffer = Buffer.from(response.data, 'binary');
 
-        // IMPORTANTE: Enviamos como VIDEO pero con gifPlayback
-        // Esto obliga a WhatsApp a convertir el GIF en un bucle infinito
         await conn.sendMessage(m.chat, { 
             video: buffer, 
             gifPlayback: true, 
             caption: caption, 
             mentions: [who, m.sender],
-            mimetype: 'video/mp4' // Aunque sea un GIF, le decimos que lo trate como video
+            mimetype: 'video/mp4' // Forzamos MP4 para que WhatsApp lo reproduzca fluido
         }, { quoted: m });
 
     } catch (e) {
-        console.error("Error enviando GIF de Pinterest:", e);
-        // Si falla como video, intentamos enviarlo como imagen/gif (como último recurso)
+        console.error("Error con el proxy:", e);
+        // PLAN B: Si el proxy falla, lo enviamos como documento (así se descarga el archivo real)
         try {
             await conn.sendMessage(m.chat, { 
-                image: { url: randomGif }, 
-                caption: caption, 
-                mimetype: 'image/gif' 
+                document: { url: randomGif }, 
+                mimetype: 'image/gif', 
+                fileName: 'smoke.gif', 
+                caption: caption 
             }, { quoted: m });
         } catch (e2) {
-            m.reply('No pude cargar el GIF, parece que el enlace está temporalmente caído.');
+            m.reply('¡Rayos! Pinterest está bloqueando el acceso. Intenta más tarde.');
         }
     }
 };
