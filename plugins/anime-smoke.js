@@ -25,37 +25,50 @@ let handler = async (m, { conn }) => {
     await m.react('🚬');
 
     try {
-        // DESCARGA USANDO TUS HEADERS DE PINTEREST
-        const res = await axios.get(randomGif, {
+        console.log(`Intentando descargar: ${randomGif}`); // Log para consola
+
+        const response = await axios({
+            method: 'get',
+            url: randomGif,
             responseType: 'arraybuffer',
             headers: {
-                'user-agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/140.0.0.0 Safari/537.36',
-                'referer': 'https://id.pinterest.com/'
-            }
+                'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/110.0.0.0 Safari/537.36',
+                'Accept': 'image/avif,image/webp,image/apng,image/svg+xml,image/*,*/*;q=0.8',
+                'Referer': 'https://www.pinterest.com/'
+            },
+            timeout: 10000 // Si tarda más de 10 seg, aborta
         });
 
-        const buffer = Buffer.from(res.data, 'utf-8');
+        // Convertimos a Buffer correctamente
+        const buffer = Buffer.from(response.data);
 
-        // MÉTODO ALTERNATIVO: Usar conn.sendFile si tu bot lo tiene (es más potente)
-        // Si no tienes sendFile, usa sendMessage abajo
-        if (conn.sendFile) {
-            await conn.sendFile(m.chat, buffer, 'error.gif', caption, m, true, {
-                mimetype: 'image/gif',
-                asGif: true
-            });
-        } else {
-            // Si usas sendMessage estándar:
-            await conn.sendMessage(m.chat, { 
-                video: buffer, 
-                caption: caption, 
-                gifPlayback: true,
-                mimetype: 'video/mp4' 
-            }, { quoted: m });
+        if (buffer.length < 100) {
+            throw new Error('El archivo descargado es demasiado pequeño o está corrupto.');
         }
 
-    } catch (e) {
-        console.error(e);
-        m.reply('Error al obtener el GIF de Pinterest. Intenta de nuevo.');
+        // ENVIAR COMO VIDEO (Para que sea GIF con reproducción automática)
+        await conn.sendMessage(m.chat, { 
+            video: buffer, 
+            caption: caption, 
+            gifPlayback: true,
+            mentions: [who, m.sender],
+            mimetype: 'video/mp4' 
+        }, { quoted: m });
+
+    } catch (error) {
+        console.error("ERROR DETECTADO:", error.message);
+        
+        // PLAN DE EMERGENCIA: Si falla como video, enviarlo como imagen/GIF simple
+        try {
+            console.log("Reintentando como imagen GIF simple...");
+            await conn.sendMessage(m.chat, { 
+                image: { url: randomGif }, 
+                caption: caption + "\n\n*(Enviado como imagen porque el proceso de video falló)*",
+                mimetype: 'image/gif'
+            }, { quoted: m });
+        } catch (e2) {
+            m.reply('No pude procesar el GIF de Pinterest. Es probable que el servidor del bot no tenga FFmpeg instalado para convertir GIFs de 9MB.');
+        }
     }
 };
 
