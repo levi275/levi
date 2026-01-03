@@ -8,7 +8,7 @@ const {
 let handler = async (m, { conn, text, usedPrefix, command }) => {
     if (!text) return conn.reply(m.chat, '🍟 *¿Qué deseas buscar en TikTok? Ingresa un texto.*', m)
 
-    // Función estética para texto (La mantenemos porque te gusta lo bonito)
+    // Función estética (La mantenemos igual)
     const toFancy = str => {
         const map = { 'a': 'ᥲ', 'b': 'ᑲ', 'c': 'ᥴ', 'd': 'ᑯ', 'e': 'ᥱ', 'f': '𝖿', 'g': 'g', 'h': 'һ', 'i': 'і', 'j': 'j', 'k': 'k', 'l': 'ᥣ', 'm': 'm', 'n': 'ᥒ', 'o': '᥆', 'p': '⍴', 'q': 'q', 'r': 'r', 's': 's', 't': '𝗍', 'u': 'ᥙ', 'v': '᥎', 'w': 'ɯ', 'x': 'x', 'y': 'ᥡ', 'z': 'z' };
         return str.split('').map(c => map[c] || c).join('')
@@ -25,7 +25,7 @@ let handler = async (m, { conn, text, usedPrefix, command }) => {
     try {
         await m.react('🕒')
 
-        // --- LÓGICA DE BÚSQUEDA (IGUAL QUE TU CÓDIGO ORIGINAL) ---
+        // --- LÓGICA DE BÚSQUEDA ---
         let searchResults = []
         try {
             // Opción 1: TikWM
@@ -51,7 +51,7 @@ let handler = async (m, { conn, text, usedPrefix, command }) => {
                 searchResults = response.data.map(v => ({
                     title: v.title,
                     nowm: v.nowm || v.url,
-                    cover: v.cover || 'https://i.imgur.com/95t44C0.png', // Cover por defecto
+                    cover: v.cover || 'https://i.imgur.com/95t44C0.png', 
                     author: 'TikTok User',
                     url: v.url
                 }))
@@ -60,66 +60,27 @@ let handler = async (m, { conn, text, usedPrefix, command }) => {
 
         if (!searchResults.length) return conn.reply(m.chat, '❌ No se encontraron videos.', m)
 
+        // Mezclamos y tomamos EL PRIMER video para mostrarlo en grande (evita el bug del carrusel)
         shuffleArray(searchResults)
-        // IMPORTANTE: Para carruseles de video, usa MAXIMO 5 o 6 para evitar timeouts de subida
-        let selectedResults = searchResults.splice(0, 5) 
+        let result = searchResults[0]
 
-        // --- CREACIÓN DEL MENSAJE INTERACTIVO "CAROUSEL" ---
-        
-        let cards = []
-        
-        // Iteramos los videos para prepararlos
-        for (let result of selectedResults) {
-            // Preparamos el video o imagen. 
-            // NOTA: Si el video es muy pesado, el carrusel puede fallar. 
-            // Si falla mucho, cambia 'video' por 'image: { url: result.cover }' y pon el video en un botón.
-            let mediaMessage;
-            try {
-                mediaMessage = await prepareWAMessageMedia({ 
-                    video: { url: result.nowm } 
-                }, { upload: conn.waUploadToServer })
-            } catch (e) {
-                // Si falla cargando el video, usa la imagen de portada
-                mediaMessage = await prepareWAMessageMedia({ 
-                    image: { url: result.cover } 
-                }, { upload: conn.waUploadToServer })
-            }
-
-            cards.push({
-                body: proto.Message.InteractiveMessage.Body.fromObject({
-                    text: toFancy(result.title.substring(0, 50) + "...") // Recortamos texto largo
-                }),
-                footer: proto.Message.InteractiveMessage.Footer.fromObject({
-                    text: `👤 ${result.author}`
-                }),
-                header: proto.Message.InteractiveMessage.Header.fromObject({
-                    title: toFancy("TikTok Video"),
-                    hasMediaAttachment: true,
-                    ...mediaMessage // Aquí va el video/imagen preparado
-                }),
-                nativeFlowMessage: proto.Message.InteractiveMessage.NativeFlowMessage.fromObject({
-                    buttons: [
-                        {
-                            "name": "cta_url",
-                            "buttonParamsJson": JSON.stringify({
-                                "display_text": "🔗 Ver en TikTok",
-                                "url": result.url,
-                                "merchant_url": result.url
-                            })
-                        },
-                        {
-                            "name": "cta_copy",
-                            "buttonParamsJson": JSON.stringify({
-                                "display_text": "📋 Copiar Enlace",
-                                "copy_code": result.url
-                            })
-                        }
-                    ]
-                })
-            })
+        // --- PREPARACIÓN DEL MEDIO (VIDEO O IMAGEN) ---
+        let mediaMessage;
+        try {
+            // Intentamos cargar el video
+            mediaMessage = await prepareWAMessageMedia({ 
+                video: { url: result.nowm } 
+            }, { upload: conn.waUploadToServer })
+        } catch (e) {
+            // Si el video falla (muy pesado), usamos la portada
+            mediaMessage = await prepareWAMessageMedia({ 
+                image: { url: result.cover } 
+            }, { upload: conn.waUploadToServer })
         }
 
-        // Construcción final del mensaje
+        // --- CREACIÓN DEL MENSAJE INTERACTIVO (SIN CARRUSEL) ---
+        // Usamos nativeFlowMessage directo, que es más estable.
+        
         const messageContent = generateWAMessageFromContent(m.chat, {
             viewOnceMessage: {
                 message: {
@@ -129,16 +90,40 @@ let handler = async (m, { conn, text, usedPrefix, command }) => {
                     },
                     interactiveMessage: proto.Message.InteractiveMessage.fromObject({
                         body: proto.Message.InteractiveMessage.Body.create({
-                            text: `${toFancy("✦ Rᥱsᥙᥣ𝗍ᥲძ᥆s ძᥱ:")} ${text}\n_Desliza para ver más videos 👉_`
+                            text: `${toFancy("✦ Rᥱsᥙᥣ𝗍ᥲძ᥆:")} ${text}\n\n📝 *Titulo:* ${result.title}\n👤 *Autor:* ${result.author}`
                         }),
                         footer: proto.Message.InteractiveMessage.Footer.create({
-                            text: "🔎 TikTok Search"
+                            text: "🔎 TikTok Search • " + toFancy("Bot")
                         }),
                         header: proto.Message.InteractiveMessage.Header.create({
-                            hasMediaAttachment: false
+                            hasMediaAttachment: true,
+                            ...mediaMessage // Aquí va el video o imagen
                         }),
-                        carouselMessage: proto.Message.InteractiveMessage.CarouselMessage.fromObject({
-                            cards: cards
+                        nativeFlowMessage: proto.Message.InteractiveMessage.NativeFlowMessage.fromObject({
+                            buttons: [
+                                {
+                                    "name": "cta_url",
+                                    "buttonParamsJson": JSON.stringify({
+                                        "display_text": "🔗 Ver en TikTok",
+                                        "url": result.url,
+                                        "merchant_url": result.url
+                                    })
+                                },
+                                {
+                                    "name": "cta_copy",
+                                    "buttonParamsJson": JSON.stringify({
+                                        "display_text": "📋 Copiar Enlace",
+                                        "copy_code": result.url
+                                    })
+                                },
+                                {
+                                    "name": "quick_reply",
+                                    "buttonParamsJson": JSON.stringify({
+                                        "display_text": "🔄 Siguiente Resultado",
+                                        "id": `${usedPrefix + command} ${text}`
+                                    })
+                                }
+                            ]
                         })
                     })
                 }
@@ -151,7 +136,7 @@ let handler = async (m, { conn, text, usedPrefix, command }) => {
     } catch (error) {
         await m.react('❌')
         console.error(error)
-        conn.reply(m.chat, 'Ocurrió un error al generar el carrusel. Intenta de nuevo.', m)
+        conn.reply(m.chat, 'Ocurrió un error al procesar el video. Intenta de nuevo.', m)
     }
 }
 
