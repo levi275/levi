@@ -82,7 +82,7 @@ let handler = async (m, { conn }) => {
 ╰┈➤ ❝ ${randomCharacter.name} ❞
 
 ▓𓏴𓏴 ۪ ֹ 🅅꯭🄰꯭🄻꯭🄾꯭🅁 :
-╰┈➤ 🪙 𝟓,𝟎𝟎𝟎 ✦ ${randomCharacter.value}
+╰┈➤ 🪙 ${randomCharacter.value}
 
 ▓𓏴𓏴 ۪ ֹ 🄴꯭🅂꯭🅃꯭🄰꯭🄳꯭🄾 :
 ╰┈➤ ${statusIcon} ${statusText}
