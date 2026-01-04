@@ -37,25 +37,23 @@ let handler = async (m, { conn }) => {
 ᷼︶۪۪۪۪፝֟᷼︶᷼╰──────✧──────╯᷼︶᷼
   `.trim();
 
-  await conn.sendMessage(m.chat, {
-    image: { url: 'https://files.catbox.moe/jau272.jpeg' },
-    caption: texto,
-    contextInfo: {
-      mentionedJid: [m.sender],
-      externalAdReply: {
-        title: '🔍 Comandos de Búsqueda Global',
-        body: 'Encuentra videos, imágenes e información',
-        thumbnail: icons,
-        mediaType: 1,
-        renderLargerThumbnail: false,
-        showAdAttribution: true,
-        mediaUrl: 'https://whatsapp.com/channel/0029VakLbM76mYPPFL0IFI3P',
-        sourceUrl: 'https://whatsapp.com/channel/0029VakLbM76mYPPFL0IFI3P',
+    await conn.sendMessage(
+    m.chat,
+    {
+      image: { url: 'https://files.catbox.moe/jau272.jpeg' },
+      caption: texto,
+      contextInfo: {
+        mentionedJid: [m.sender],
+        isForwarded: true,
+        forwardedNewsletterMessageInfo: {
         newsletterJid: '120363335626706839@newsletter',
-        newsletterName: author,
-      }
-    }
-  }, { quoted: m });
+        newsletterName: '..⃗. 💌 ⌇ ¡Noticias y más de tu idol favorita! ⊹ ִ ּ',
+          serverMessageId: -1,
+        },
+      },
+    },
+    { quoted: fkontak }
+  );
 };
 
 handler.command = ['menubusquedas', 'busquedamenu'];
