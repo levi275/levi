@@ -1,23 +1,34 @@
 import { WAMessageStubType } from '@whiskeysockets/baileys'
 import fetch from 'node-fetch'
 
+// Función para texto "Fancy" (Negrita Serif - Estilo Aesthetic)
 const styleText = (text) => {
     const map = {
-        'a': '𝘢', 'b': '𝘣', 'c': '𝘤', 'd': '𝘥', 'e': '𝘦', 'f': '𝘧', 'g': '𝘨', 'h': '𝘩', 'i': '𝘪', 'j': '𝘫', 'k': '𝘬', 'l': '𝘭', 'm': '𝘮', 'n': '𝘯', 'o': '𝘰', 'p': '𝘱', 'q': '𝘲', 'r': '𝘳', 's': '𝘴', 't': '𝘵', 'u': '𝘶', 'v': '𝘷', 'w': '𝘸', 'x': '𝘹', 'y': '𝘺', 'z': '𝘻',
-        'A': '𝘼', 'B': '𝘽', 'C': '𝘾', 'D': '𝘿', 'E': '𝙀', 'F': '𝙁', 'G': '𝙂', 'H': '𝙃', 'I': '𝙄', 'J': '𝙅', 'K': '𝙆', 'L': '𝙇', 'M': '𝙈', 'N': '𝙉', 'O': '𝙊', 'P': '𝙋', 'Q': '𝙌', 'R': '𝙍', 'S': '𝙎', 'T': '𝙏', 'U': '𝙐', 'V': '𝙑', 'W': '𝙒', 'X': '𝙓', 'Y': '𝙔', 'Z': '𝙕',
+        'a': '𝐚', 'b': '𝐛', 'c': '𝐜', 'd': '𝐝', 'e': '𝐞', 'f': '𝐟', 'g': '𝐠', 'h': '𝐡', 'i': '𝐢', 'j': '𝐣', 'k': '𝐤', 'l': '𝐥', 'm': '𝐦', 'n': '𝐧', 'o': '𝐨', 'p': '𝐩', 'q': '𝐪', 'r': '𝐫', 's': '𝐬', 't': '𝐭', 'u': '𝐮', 'v': '𝐯', 'w': '𝐰', 'x': '𝐱', 'y': '𝐲', 'z': '𝐳',
+        'A': '𝐀', 'B': '𝐁', 'C': '𝐂', 'D': '𝐃', 'E': '𝐄', 'F': '𝐅', 'G': '𝐆', 'H': '𝐇', 'I': '𝐈', 'J': '𝐉', 'K': '𝐊', 'L': '𝐋', 'M': '𝐌', 'N': '𝐍', 'O': '𝐎', 'P': '𝐏', 'Q': '𝐐', 'R': '𝐑', 'S': '𝐒', 'T': '𝐓', 'U': '𝐔', 'V': '𝐕', 'W': '𝐖', 'X': '𝐗', 'Y': '𝐘', 'Z': '𝐙',
         '0': '𝟎', '1': '𝟏', '2': '𝟐', '3': '𝟑', '4': '𝟒', '5': '𝟓', '6': '𝟔', '7': '𝟕', '8': '𝟖', '9': '𝟗'
     };
     return text.split('').map(char => map[char] || char).join('');
+}
+
+// Función para texto "Monospace" (Para detalles técnicos)
+const monoText = (text) => {
+    return '```' + text + '```';
 }
 
 let handler = m => m
 
 handler.before = async function (m, { conn, participants, groupMetadata }) {
     if (!m.messageStubType || !m.isGroup) return
-    let chat = global.db.data.chats[m.chat]
-    let usuario = m.sender.split('@')[0]
     
+    let chat = global.db.data.chats[m.chat] || {}
+    // Solo se ejecuta si la detección está activada en el chat (opcional, depende de tu base de datos)
+    // Si quieres que funcione siempre, quita la condición "&& chat.detect" de los ifs abajo.
+
+    let usuario = m.sender.split('@')[0]
     let fkontak = null;
+
+    // Descargamos la imagen para la miniatura
     try {
         const res = await fetch('https://i.postimg.cc/6562JdR7/Hoshino-Ruby-(2).jpg');
         const thumb2 = await res.buffer();
@@ -38,78 +49,148 @@ handler.before = async function (m, { conn, participants, groupMetadata }) {
     let text = ''
     let mentions = [m.sender]
 
+    // Estructura Decorativa Base
+    const header = `＿＿＿＿＿＿＿＿⵿\n༕ 𝐍𝐎𝐓𝐈𝐅𝐈𝐂𝐀𝐂𝐈𝐎𝐍 𝐆𝐑𝐔𝐏𝐀𝐋\n｜＼                     ／｜`
+    const separator = `╭──┈ ׅ ׁ ᮫ ּ ┈──`
+    const end = `╰──┈ ׅ ׁ ᮫ ּ ┈──`
 
-    const footer = `‿︵‿︵‿︵୨˚̣̣̣͙୧ - - ୨˚̣̣̣͙୧‿︵‿︵‿︵`
+    // --- LÓGICA DE DETECCIÓN ---
 
+    // 21: Cambio de Nombre del Grupo
     if (chat.detect && m.messageStubType == 21) {
         text = `
-       𖥔    　     *@${usuario}* ࣪      ˖ؚ
-ㅤだ ㅤׄㅤ *#* ㅤִㅤ✿ㅤׄ﹕ 𝐂𝐡𝐚𝐧𝐠𝐞𝐝 𝐍𝐚𝐦𝐞.   𖤝        
-꒰꒰ 🐻‍❄️ 𝐍𝐞𝐰 𝐍𝐚𝐦𝐞 Ი꯭ᰍ
-> 🏷️ ${styleText(m.messageStubParameters[0])}`
+${header}
+${separator}
+╳⃟꫶໋ᯓְ֟፝݃ 𝐂𝐀𝐌𝐁𝐈𝐎 𝐃𝐄 𝐍𝐎𝐌𝐁𝐑𝐄
+ 
+> 🏷️ ${styleText("Nuevo Titulo:")}
+> ${m.messageStubParameters[0]}
 
+> 👤 ${styleText("Hecho por:")}
+> @${usuario}
+${end}`
+
+    // 22: Cambio de Imagen del Grupo
     } else if (chat.detect && m.messageStubType == 22) {
         text = `
-       𖥔    　     *@${usuario}* ࣪      ˖ؚ
-ㅤだ ㅤׄㅤ *#* ㅤִㅤ✿ㅤׄ﹕ 𝐂𝐡𝐚𝐧𝐠𝐞𝐝 𝐈𝐜𝐨𝐧.   𖤝        
-꒰꒰ 🖼️ 𝐍𝐞𝐰 𝐈𝐦𝐚𝐠𝐞 Ი꯭ᰍ
-> 🫧 ${styleText("Aesthetic Mode On")}`
+${header}
+${separator}
+╳⃟꫶໋ᯓְ֟፝݃ 𝐅𝐎𝐓𝐎 𝐀𝐂𝐓𝐔𝐀𝐋𝐈𝐙𝐀𝐃𝐀
+ 
+> 🖼️ ${styleText("Estado:")}
+> ¡El grupo tiene una nueva imagen de perfil!
 
+> 👤 ${styleText("Hecho por:")}
+> @${usuario}
+${end}`
+
+    // 23: Enlace de Invitación Revocado
     } else if (chat.detect && m.messageStubType == 23) {
         text = `
-       𖥔    　     *@${usuario}* ࣪      ˖ؚ
-ㅤだ ㅤׄㅤ *#* ㅤִㅤ✿ㅤׄ﹕ 𝐑𝐞𝐯𝐨𝐤𝐞𝐝 𝐋𝐢𝐧𝐤.   𖤝        
-꒰꒰ 🔗 𝐒𝐭𝐚𝐭𝐮𝐬 Ი꯭ᰍ
-> 🚫 ${styleText("Old link is dead")}`
+${header}
+${separator}
+╳⃟꫶໋ᯓְ֟፝݃ 𝐄𝐍𝐋𝐀𝐂𝐄 𝐑𝐄𝐕𝐎𝐂𝐀𝐃𝐎
+ 
+> 🔗 ${styleText("Atencion:")}
+> El enlace de invitación anterior ya no funciona.
 
+> 👤 ${styleText("Hecho por:")}
+> @${usuario}
+${end}`
+
+    // 25: Editar Info del Grupo (Quién puede editar nombre/descripción)
     } else if (chat.detect && m.messageStubType == 25) {
-        let type = m.messageStubParameters[0] == 'on' ? '𝐀𝐝𝐦𝐢𝐧𝐬 𝐎𝐧𝐥𝐲' : '𝐀𝐥𝐥 𝐔𝐬𝐞𝐫𝐬'
+        let type = m.messageStubParameters[0] == 'on' ? '🔒 Solo Admins' : '🔓 Todos los miembros'
         text = `
-       𖥔    　     *@${usuario}* ࣪      ˖ؚ
-ㅤだ ㅤׄㅤ *#* ㅤִㅤ✿ㅤׄ﹕ 𝐄𝐝𝐢𝐭 𝐒𝐞𝐭𝐭𝐢𝐧𝐠𝐬.   𖤝        
-꒰꒰ ⚙️ 𝐈𝐧𝐟𝐨 𝐆𝐫𝐨𝐮𝐩 Ი꯭ᰍ
-> 🔓 ${styleText(type)}`
+${header}
+${separator}
+╳⃟꫶໋ᯓְ֟፝݃ 𝐀𝐉𝐔𝐒𝐓𝐄𝐒 𝐃𝐄𝐋 𝐆𝐑𝐔𝐏𝐎
+ 
+> ⚙️ ${styleText("Editar Info:")}
+> Ahora configurado para: ${type}
 
+> 👤 ${styleText("Hecho por:")}
+> @${usuario}
+${end}`
+
+    // 26: Estado del Chat (Cerrar/Abrir chat para enviar mensajes)
     } else if (chat.detect && m.messageStubType == 26) {
-        let type = m.messageStubParameters[0] == 'on' ? '🔒 𝐂𝐥𝐨𝐬𝐞𝐝' : '🔓 𝐎𝐩𝐞𝐧'
+        let type = m.messageStubParameters[0] == 'on' ? '🔒 Cerrado (Solo Admins)' : '🔓 Abierto (Todos)'
         text = `
-       𖥔    　     *@${usuario}* ࣪      ˖ؚ
-ㅤだ ㅤׄㅤ *#* ㅤִㅤ✿ㅤׄ﹕ 𝐂𝐡𝐚𝐭 𝐒𝐭𝐚𝐭𝐮𝐬.   𖤝        
-꒰꒰ 💬 𝐌𝐞𝐬𝐬𝐚𝐠𝐞𝐬 Ი꯭ᰍ
-> ${styleText(type)}`
+${header}
+${separator}
+╳⃟꫶໋ᯓְ֟፝݃ 𝐄𝐒𝐓𝐀𝐃𝐎 𝐃𝐄𝐋 𝐂𝐇𝐀𝐓
+ 
+> 💬 ${styleText("Mensajes:")}
+> El chat ahora está: ${type}
 
+> 👤 ${styleText("Hecho por:")}
+> @${usuario}
+${end}`
+
+    // 27: Nuevo Miembro (Bienvenida simple por detección)
     } else if (chat.detect2 && m.messageStubType == 27) {
         let nuevo = m.messageStubParameters[0]
         mentions.push(nuevo)
         text = `
-       𖥔    　     *@${usuario}* ࣪      ˖ؚ
-ㅤだ ㅤׄㅤ *#* ㅤִㅤ✿ㅤׄ﹕ 𝐍𝐞𝐰 𝐌𝐞𝐦𝐛𝐞𝐫.   𖤝        
-꒰꒰ 🧸 𝐖𝐞𝐥𝐜𝐨𝐦𝐞 Ი꯭ᰍ
-> 👋 @${nuevo.split('@')[0]}`
+${header}
+${separator}
+╳⃟꫶໋ᯓְ֟፝݃ 𝐍𝐔𝐄𝐕𝐎 𝐌𝐈𝐄𝐌𝐁𝐑𝐎
+ 
+> 👋 ${styleText("Bienvenido/a:")}
+> @${nuevo.split('@')[0]}
 
+> 🌸 ${styleText("Disfruta tu estancia")}
+${end}`
+
+    // 29: Nuevo Admin (Promote)
     } else if (chat.detect && m.messageStubType == 29) {
         let nuevoAdmin = m.messageStubParameters[0]
         mentions.push(nuevoAdmin)
         text = `
-       𖥔    　     *@${usuario}* ࣪      ˖ؚ
-ㅤだ ㅤׄㅤ *#* ㅤִㅤ✿ㅤׄ﹕ 𝐍𝐞𝐰 𝐀𝐝𝐦𝐢𝐧.   𖤝        
-꒰꒰ 👑 𝐏𝐫𝐨𝐦𝐨𝐭𝐞𝐝 Ი꯭ᰍ
-> 🫡 @${nuevoAdmin.split('@')[0]}`
+${header}
+${separator}
+╳⃟꫶໋ᯓְ֟፝݃ 𝐍𝐔𝐄𝐕𝐎 𝐀𝐃𝐌𝐈𝐍
+ 
+> 👑 ${styleText("Usuario Promovido:")}
+> @${nuevoAdmin.split('@')[0]}
 
+> 👤 ${styleText("Promovido por:")}
+> @${usuario}
+${end}`
+
+    // 30: Quitar Admin (Demote)
     } else if (chat.detect && m.messageStubType == 30) {
         let exAdmin = m.messageStubParameters[0]
         mentions.push(exAdmin)
         text = `
-       𖥔    　     *@${usuario}* ࣪      ˖ؚ
-ㅤだ ㅤׄㅤ *#* ㅤִㅤ✿ㅤׄ﹕ 𝐃𝐞𝐦𝐨𝐭𝐞𝐝 𝐔𝐬𝐞𝐫.   𖤝        
-꒰꒰ 📉 𝐅𝐞𝐥𝐥 𝐎𝐟𝐟 Ი꯭ᰍ
-> 😔 @${exAdmin.split('@')[0]}`
+${header}
+${separator}
+╳⃟꫶໋ᯓְ֟፝݃ 𝐃𝐄𝐆𝐑𝐀𝐃𝐀𝐃𝐎
+ 
+> 📉 ${styleText("Ya no es Admin:")}
+> @${exAdmin.split('@')[0]}
+
+> 👤 ${styleText("Degradado por:")}
+> @${usuario}
+${end}`
     }
 
+    // Enviar el mensaje si hubo algún cambio detectado
     if (text) {
         await conn.sendMessage(m.chat, { 
             text: text, 
-            mentions: mentions
+            mentions: mentions,
+            contextInfo: {
+                externalAdReply: {
+                    title: "𝐍𝐨𝐭𝐢𝐟𝐢𝐜𝐚𝐜𝐢𝐨𝐧𝐞𝐬 𝐝𝐞𝐥 𝐒𝐢𝐬𝐭𝐞𝐦𝐚",
+                    body: "Grupo Actualizado",
+                    thumbnail: thumb2 ? await res.buffer() : null, // Reutilizamos el buffer si existe
+                    sourceUrl: null,
+                    mediaType: 1,
+                    renderLargerThumbnail: true
+                }
+            }
         }, { quoted: fkontak || m })
     }
 }
