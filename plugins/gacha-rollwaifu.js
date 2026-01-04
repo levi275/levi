@@ -59,11 +59,12 @@ let handler = async (m, { conn }) => {
 
         const harem = await loadHarem();
         const userEntry = harem.find(entry => entry.characterId === randomCharacter.id);
-
-        // Formato para el estado (más limpio)
-        const statusMessage = randomCharacter.user 
-            ? `🚫 Ocupado (@${randomCharacter.user.split('@')[0]})` 
-            : '✅ Libre';
+        
+        // Lógica de estado personalizada para el diseño
+        const isClaimed = !!randomCharacter.user;
+        const statusUser = isClaimed ? `@${randomCharacter.user.split('@')[0]}` : 'Nadie';
+        const statusText = isClaimed ? '꯭🚫 ꯭O꯭ᴄ꯭ᴜ꯭ᴘ꯭ᴀ꯭ᴅ꯭ᴏ' : '꯭✅ ꯭L꯭ɪ꯭ʙ꯭ʀ꯭ᴇ';
+        const statusIcon = isClaimed ? '🥀' : '✨';
 
         if (!randomCharacter.user) {
             global.activeRolls[randomCharacter.id] = {
@@ -72,26 +73,38 @@ let handler = async (m, { conn }) => {
             };
         }
 
-        const message = `︵ᮬ⌒⏜︵፝֟ᮬ⏜︵ᮬ⌒⏜ᮬ
- ꒰͜  ✦ 𝐂𝐇𝐀𝐑𝐀𝐂𝐓𝐄𝐑 𝐑𝐎𝐋𝐋 ✦ ͜꒱
-⎯⎯⎯⎯⎯⎯  ׁ︩︪᷼  ᮫ ︪︩ໍ ܻ݊᷼🍂ܻ݊᷼ᩨᤢ ︩︪᷼ ᮫ ࣫⎯⎯⎯⎯⎯⎯⎯
+        const message = `
+ㅤㅤ⏜⋮ㅤㅤ꒰ㅤ꒰ㅤㅤ𖹭⃞🎲⃞𖹭ㅤㅤ꒱ㅤ꒱ㅤㅤ⋮⏜
+ㅤ  ꒰ㅤ꒰͡ㅤㅤ✨ㅤㅤ🄽꯭🄴꯭🅆꯭ 🄲꯭🄷꯭🄰꯭🅁꯭🄰ㅤㅤ🫴🏻᪲ㅤㅤ͡꒱ㅤ꒱
+🧸ㅤㅤ𝗿ᨵ꯭𝗹𝗹ㅤㅤᰖᰖㅤㅤ𝗀ɑᥴ꯭hɑㅤㅤ𝕓ᧉɑυłꪱ𝖿υᥣㅤㅤ🍽️
 
-👤 𝐍𝐨𝐦𝐛𝐫𝐞 ╰┈➤ *${randomCharacter.name}*
-⚧ 𝐆𝐞𝐧𝐞𝐫𝐨 ╰┈➤ *${randomCharacter.gender}*
-🪙 𝐕𝐚𝐥𝐨𝐫   ╰┈➤ *${randomCharacter.value}*
-📊 𝐄𝐬𝐭𝐚𝐝𝐨  ╰┈➤ ${statusMessage}
-📖 𝐅𝐮𝐞𝐧𝐭𝐞  ╰┈➤ *${randomCharacter.source}*
-🆔 𝐈𝐃      ╰┈➤ *${randomCharacter.id}*
+▓𓏴𓏴 ۪ ֹ 🄽꯭🄾꯭🄼꯭🄱꯭🅁꯭🄴 :
+╰┈➤ ❝ ${randomCharacter.name} ❞
 
-⎯⎯⎯⎯⎯⎯  ׁ︩︪᷼  ᮫ ︪︩ໍ ܻ݊᷼🍪ܻ݊᷼ᩨᤢ ︩︪᷼ ᮫ ࣫⎯⎯⎯⎯⎯⎯⎯`;
+▓𓏴𓏴 ۪ ֹ 🅅꯭🄰꯭🄻꯭🄾꯭🅁 :
+╰┈➤ 🪙 𝟓,𝟎𝟎𝟎 ✦ ${randomCharacter.value}
 
-        const mentions = statusMessage.includes('@') ? [randomCharacter.user] : [];
+▓𓏴𓏴 ۪ ֹ 🄴꯭🅂꯭🅃꯭🄰꯭🄳꯭🄾 :
+╰┈➤ ${statusIcon} ${statusText}
+
+▓𓏴𓏴 ۪ ֹ 🄳꯭🅄꯭🄴꯭🄽꯭̃🄾 :
+╰┈➤ 👤 ${statusUser}
+
+▓𓏴𓏴 ۪ ֹ 🄵꯭🅄꯭🄴꯭🄽꯭🅃꯭🄴 :
+╰┈➤ 📖 ${randomCharacter.source}
+
+┉͜┄͜─┈┉⃛┄─꒰֟፝͡ 🅸🅳: ${randomCharacter.id} ꒱─┄⃨┉┈─͡┄͡┉
+ㅤㅤㅤㅤㅤㅤ©ㅤᑲ᥆𝗍ㅤ𝗀ɑᥴ꯭hɑㅤ𝗌𝗒sł꯭ᥱꭑ꒱`;
+
+        const mentions = isClaimed ? [randomCharacter.user] : [];
+        
         await conn.sendFile(m.chat, randomImage, `${randomCharacter.name}.jpg`, message, m, { mentions });
 
         cooldowns[userId] = now + 15 * 60 * 1000;
 
     } catch (error) {
-        await conn.reply(m.chat, `✘ 𝗘𝗿𝗿𝗼𝗿 𝗮𝗹 𝗰𝗮𝗿𝗴𝗮𝗿 𝗲𝗹 𝗽𝗲𝗿𝘀𝗼𝗻𝗮𝗷𝗲: ${error.message}`, m);
+        console.error(error);
+        await conn.reply(m.chat, `✘ 𝗘𝗿𝗿𝗼𝗿 𝗮𝗹 𝗰𝗮𝗿𝗴𝗮𝗿 𝗲𝗹 𝗽𝗲𝗿𝘀𝗼𝗻𝗮𝗷𝗲.`, m);
     }
 };
 
