@@ -69,25 +69,23 @@ let handler = async (m, { conn }) => {
 ╰────︶.︶ ⸙ ͛ ͎ ͛  ︶.︶ ੈ₊˚༅
   `.trim();
 
-  await conn.sendMessage(m.chat, {
-    image: { url: 'https://files.catbox.moe/i64e5t.jpeg' },
-    caption: texto,
-    contextInfo: {
-      mentionedJid: [m.sender],
-      externalAdReply: {
-        title: '👥 Gestión de Grupos',
-        body: 'Herramientas para administradores',
-        thumbnail: icons,
-        mediaType: 1,
-        renderLargerThumbnail: false,
-        showAdAttribution: true,
-        mediaUrl: 'https://whatsapp.com/channel/0029VakLbM76mYPPFL0IFI3P',
-        sourceUrl: 'https://whatsapp.com/channel/0029VakLbM76mYPPFL0IFI3P',
+    await conn.sendMessage(
+    m.chat,
+    {
+      image: { url: 'https://files.catbox.moe/bi19e7.png' },
+      caption: texto,
+      contextInfo: {
+        mentionedJid: [m.sender],
+        isForwarded: true,
+        forwardedNewsletterMessageInfo: {
         newsletterJid: '120363335626706839@newsletter',
-        newsletterName: '⏤͟͞ू⃪፝͜⁞⟡『 𝙍𝙪𝙗𝙮 𝙃𝙤𝙨𝙝𝙞𝙣𝙤 𝘽𝙤𝙩 』࿐⟡'
-      }
-    }
-  }, { quoted: m });
+        newsletterName: '..⃗. 💌 ⌇ ¡Noticias y más de tu idol favorita! ⊹ ִ ּ',
+          serverMessageId: -1,
+        },
+      },
+    },
+    { quoted: fkontak }
+  );
 };
 
 handler.command = ['menugrupo', 'gruposmenu'];
