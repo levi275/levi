@@ -195,7 +195,7 @@ ${end}`
                     thumbnail: fkontak ? fkontak.message.locationMessage.jpegThumbnail : null,
                     sourceUrl: null,
                     mediaType: 1,
-                    renderLargerThumbnail: true
+                    renderLargerThumbnail: false
                 }
             }
         }, { quoted: fkontak || m })
