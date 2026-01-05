@@ -90,6 +90,6 @@ await conn.reply(m.chat,`✘ Error: ${error.message}`,m)
 }
 handler.help=['ainfo <serie>']
 handler.tags=['gacha']
-handler.command = ['animeinfo', 'serieinfo', 'ainfo']
+handler.command=['ainfo','animeinfo']
 handler.group=true
 export default handler
