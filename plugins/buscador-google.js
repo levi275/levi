@@ -2,10 +2,10 @@ import { promises as fs } from 'fs'
 
 const charactersFilePath = './src/database/characters.json'
 
-// Función de "IA" para calcular similitud de texto
+// Función de IA para similitud
 function similarity(s1, s2) {
-    let longer = s1.toLowerCase();
-    let shorter = s2.toLowerCase();
+    let longer = s1.toLowerCase().trim();
+    let shorter = s2.toLowerCase().trim();
     if (longer.length < shorter.length) { [longer, shorter] = [shorter, longer]; }
     let longerLength = longer.length;
     if (longerLength === 0) return 1.0;
@@ -18,14 +18,12 @@ function editDistance(s1, s2) {
         let lastValue = i;
         for (let j = 0; j <= s2.length; j++) {
             if (i == 0) costs[j] = j;
-            else {
-                if (j > 0) {
-                    let newValue = costs[j - 1];
-                    if (s1.charAt(i - 1) != s2.charAt(j - 1))
-                        newValue = Math.min(Math.min(newValue, lastValue), costs[j]) + 1;
-                    costs[j - 1] = lastValue;
-                    lastValue = newValue;
-                }
+            else if (j > 0) {
+                let newValue = costs[j - 1];
+                if (s1.charAt(i - 1) != s2.charAt(j - 1))
+                    newValue = Math.min(Math.min(newValue, lastValue), costs[j]) + 1;
+                costs[j - 1] = lastValue;
+                lastValue = newValue;
             }
         }
         if (i > 0) costs[s2.length] = lastValue;
@@ -43,31 +41,43 @@ async function loadCharacters() {
 }
 
 let handler = async (m, { conn, args }) => {
-    let query = args.join(' ').replace(/\d+$/, '').trim() // Separamos el nombre del posible número de página
-    if (!query) return conn.reply(m.chat, '❀ Ingresa el nombre de una serie. Ejemplo: `#ainfo fire force`', m)
+    let query = args.join(' ').replace(/\d+$/, '').trim() 
+    if (!query) return conn.reply(m.chat, '❀ Ingresa el nombre de una serie. Ejemplo: `#ainfo blue lock`', m)
 
     try {
         const allCharacters = await loadCharacters()
         
-        // Obtener todas las series únicas de la base de datos
-        const allSources = [...new Set(allCharacters.map(c => c.source))]
+        // --- MEJORA: Normalización de fuentes ---
+        // Extraemos todas las fuentes únicas ignorando mayúsculas/minúsculas
+        const sourceMap = new Map();
+        allCharacters.forEach(c => {
+            const normalized = c.source.toLowerCase().trim();
+            if (!sourceMap.has(normalized)) {
+                sourceMap.set(normalized, c.source); // Guardamos la versión original como referencia
+            }
+        });
+
+        const allNormalizedSources = Array.from(sourceMap.keys());
         
-        // Buscar coincidencia exacta o parcial
-        let bestMatch = allSources.find(s => s.toLowerCase() === query.toLowerCase())
+        // Buscar la mejor coincidencia
+        let bestMatchNormalized = allNormalizedSources.find(s => s === query.toLowerCase());
         
-        // Si no hay coincidencia exacta, activar la "IA" de búsqueda
-        if (!bestMatch) {
-            let matches = allSources.map(s => ({ source: s, score: similarity(query, s) }))
+        if (!bestMatchNormalized) {
+            let matches = allNormalizedSources.map(s => ({ source: s, score: similarity(query, s) }))
             matches.sort((a, b) => b.score - a.score)
-            
-            if (matches[0].score > 0.4) { // Umbral de confianza
-                bestMatch = matches[0].source
+            if (matches[0].score > 0.4) {
+                bestMatchNormalized = matches[0].source;
             }
         }
 
-        if (!bestMatch) return conn.reply(m.chat, `✘ No pude encontrar ninguna serie que se parezca a "${query}".`, m)
+        if (!bestMatchNormalized) return conn.reply(m.chat, `✘ No encontré nada parecido a "${query}".`, m)
 
-        const animeChars = allCharacters.filter(c => c.source === bestMatch)
+        // --- FILTRADO INTELIGENTE ---
+        // Filtramos comparando en minúsculas para que "Blue lock" y "Blue Lock" se junten
+        const animeChars = allCharacters.filter(c => 
+            c.source.toLowerCase().trim() === bestMatchNormalized
+        )
+
         const totalChars = animeChars.length
         const claimedChars = animeChars.filter(c => c.user)
         const claimedCount = claimedChars.length
@@ -83,13 +93,16 @@ let handler = async (m, { conn, args }) => {
 
         if (page < 1 || page > totalPages) return conn.reply(m.chat, `❀ Página no válida. Total: *${totalPages}*`, m)
 
-        let message = `*❀ Nombre: \`<${bestMatch}>\`*\n\n`
+        // Usamos el nombre de la serie que mejor esté escrito
+        const displayTitle = animeChars[0].source;
+
+        let message = `*❀ Nombre: \`<${displayTitle}>\`*\n\n`
         message += `❏ Personajes » *\`${totalChars}\`*\n`
         message += `♡ Reclamados » *\`${claimedCount}/${totalChars} (${percentage}%)\`*\n`
         message += `❏ Lista de personajes:​​\n\n`
 
         const listSlice = animeChars
-            .sort((a, b) => parseInt(b.value) - parseInt(a.value)) // Ordenar por valor (value)
+            .sort((a, b) => parseInt(b.value) - parseInt(a.value)) 
             .slice(startIndex, endIndex)
 
         for (const char of listSlice) {
@@ -102,8 +115,6 @@ let handler = async (m, { conn, args }) => {
                     status = `Reclamado por @${char.user.split('@')[0]}`
                 }
             }
-            
-            // Aquí usamos char.value en lugar de char.id
             message += `» *${char.name}* (${char.value}) • ${status}\n`
         }
 
@@ -113,7 +124,7 @@ let handler = async (m, { conn, args }) => {
 
     } catch (error) {
         console.error(error)
-        await conn.reply(m.chat, `✘ Error crítico: ${error.message}`, m)
+        await conn.reply(m.chat, `✘ Error: ${error.message}`, m)
     }
 }
 
