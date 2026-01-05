@@ -21,6 +21,8 @@ let handler = async (m, { conn }) => {
 > ✦ Poner un personaje a la venta.
 ̟ׄ🐟▒⃝᪶ᩙ᷼͠꜇ָ—— *#charimage • #waifuimage • #wimage*
 > ✦ Ver una imagen aleatoria de un personaje.
+🐟▒⃝᪶ᩙ᷼͠꜇ָ—— *#serieinfo • #ainfo • #animeinfo _[nombre]_*
+> Ver todos los personajes de una serie.
 ̟ׄ🐟▒⃝᪶ᩙ᷼͠꜇ָ—— *#charinfo • #winfo • #waifuinfo*
 > ✦ Ver información de un personaje.
 ̟ׄ🐟▒⃝᪶ᩙ᷼͠꜇ָ—— *#favoritetop • #favtop*
