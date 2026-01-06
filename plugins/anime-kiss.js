@@ -55,7 +55,7 @@ const kissGifs=[
 'https://media.tenor.com/b7DWF8ecBkIAAAAM/kiss-anime-anime.gif',
 'https://media.tenor.com/g92jdEmFrn0AAAAM/anime-kiss-anime.gif',
 'https://media.tenor.com/ZDqsYLDQzIUAAAAM/shirayuki-zen-kiss-anime.gif',
-'https://media.tenor.com/6o7pJb2d2fUAAAAC/anime-kiss.gif',
+'https://media.tenor.com/vByy30BRy6EAAAAM/kiss-gif-kiss-gif-couple.gif',
 'https://media.tenor.com/6o7pJb2d2fUAAAAC/anime-kiss.gif',
 'https://media.tenor.com/6o7pJb2d2fUAAAAC/anime-kiss.gif',
 'https://media.tenor.com/6o7pJb2d2fUAAAAC/anime-kiss.gif',
