@@ -27,7 +27,7 @@ reject(err)
 
 let handler=async(m,{conn})=>{
 const sleepGifs=[
-'https://telegra.ph/file/0684477ff198a678d4821.mp4',
+'https://i.pinimg.com/originals/e4/17/e7/e417e7504c33fdafb7736ce4b54b05d9.gif',
 'https://telegra.ph/file/583b7a7322fd6722751b5.mp4',
 'https://telegra.ph/file/e6ff46f4796c57f2235bd.mp4',
 'https://telegra.ph/file/06b4469cd5974cf4e28ff.mp4',
