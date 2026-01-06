@@ -27,7 +27,7 @@ reject(err)
 
 let handler=async(m,{conn})=>{
 const patGifs=[
-'https://media.tenor.com/1C8K5wG7PjQAAAAC/anime-headpat.gif',
+'https://i.pinimg.com/originals/63/82/a7/6382a71ef92eb583e2218af754163c4d.gif',
 'https://media.tenor.com/F1qf9Yx2Z3AAAAAC/anime-pat.gif',
 'https://media.tenor.com/9JtY9C2F8YkAAAAC/anime-pat-head.gif',
 'https://media.tenor.com/3Fq8g5cF8ZQAAAAC/anime-pat.gif',
