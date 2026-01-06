@@ -36,7 +36,7 @@ const thinkGifs=[
 'https://media.tenor.com/AXRuwBk2UWQAAAAM/nazuna-nanakusa-call-of-the-night.gif', 
 'https://media.tenor.com/vSTMJK6qiakAAAAM/anime-anna.gif', 
 'https://media.tenor.com/IwyNIipPItQAAAAM/anime-naruto.gif', 
-'https://media.tenor.com/_3mRz2cE5G4AAAAC/anime-thinking.gif', 
+'https://media.tenor.com/dj9pddUEV0kAAAAM/anime-chibi.gif', 
 'https://media.tenor.com/_3mRz2cE5G4AAAAC/anime-thinking.gif', 
 'https://media.tenor.com/_3mRz2cE5G4AAAAC/anime-thinking.gif', 
 'https://media.tenor.com/_3mRz2cE5G4AAAAC/anime-thinking.gif', 
