@@ -35,7 +35,7 @@ const kissGifs=[
 'https://i.pinimg.com/originals/5c/01/b9/5c01b9519ebdad0ed42dd2eb0a215fcc.gif', 
 'https://i.pinimg.com/originals/b3/2c/83/b32c83dad2eae8c430f8ecf3b8f5654f.gif', 
 'https://i.pinimg.com/originals/81/a4/4e/81a44e96f35a9b19df0231727b910692.gif', 
-'https://media.tenor.com/6o7pJb2d2fUAAAAC/anime-kiss.gif', 
+'https://i.pinimg.com/originals/d0/cd/64/d0cd64030f383d56e7edc54a484d4b8d.gif', 
 'https://media.tenor.com/6o7pJb2d2fUAAAAC/anime-kiss.gif', 
 'https://media.tenor.com/6o7pJb2d2fUAAAAC/anime-kiss.gif', 
 'https://media.tenor.com/6o7pJb2d2fUAAAAC/anime-kiss.gif', 
