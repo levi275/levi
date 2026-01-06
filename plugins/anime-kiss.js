@@ -43,7 +43,7 @@ const kissGifs=[
 'https://media.tenor.com/kmxEaVuW8AoAAAAM/kiss-gentle-kiss.gif',
 'https://media.tenor.com/YhGc7aQAI4oAAAAM/megumi-kato-kiss.gif',
 'https://media.tenor.com/sbMBW4a-VN4AAAAM/anime-kiss.gif',
-'https://media.tenor.com/6o7pJb2d2fUAAAAC/anime-kiss.gif',
+'https://media.tenor.com/_8oadF3hZwIAAAAM/kiss.gif',
 'https://media.tenor.com/6o7pJb2d2fUAAAAC/anime-kiss.gif',
 'https://media.tenor.com/6o7pJb2d2fUAAAAC/anime-kiss.gif',
 'https://media.tenor.com/6o7pJb2d2fUAAAAC/anime-kiss.gif',
