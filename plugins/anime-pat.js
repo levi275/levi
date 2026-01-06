@@ -49,8 +49,8 @@ const patGifs=[
 'https://media.tenor.com/Z-28SFKJaIsAAAAM/anime-pat.gif', 
 'https://media.tenor.com/cQzScx6m9xEAAAAM/anime-elf.gif', 
 'https://media.tenor.com/Vw4wf7gsD4cAAAA1/lawrence-wolf-girl.webp', 
-'https://media.tenor.com/PqT70paf394AAAAM/pat.gif', 
-'https://media.tenor.com/PqT70paf394AAAAM/pat.gif', 
+'https://media.tenor.com/mecnd_qE8p8AAAAM/anime-pat.gif', 
+'https://media.tenor.com/mYzBXEhbbvgAAAAM/anime-pat.gif', 
 ]
 
 let who=m.mentionedJid&&m.mentionedJid[0]?m.mentionedJid[0]:m.quoted?m.quoted.sender:m.sender
