@@ -27,11 +27,20 @@ reject(err)
 
 let handler=async(m,{conn})=>{
 const kissGifs=[
-'https://media.tenor.com/0H0J8H3sC0sAAAAC/anime-kiss.gif',
-'https://media.tenor.com/ZGm7YQvR4EwAAAAC/anime-kiss.gif',
-'https://media.tenor.com/4t6QY5s1R3kAAAAC/anime-kiss.gif',
-'https://media.tenor.com/8H7cFqZ0JHcAAAAC/anime-kiss.gif',
-'https://media.tenor.com/6o7pJb2d2fUAAAAC/anime-kiss.gif'
+'https://i.pinimg.com/originals/6c/05/e5/6c05e58405258b50711b84ac9db7441a.gif',
+'https://i.pinimg.com/originals/5d/28/23/5d2823c3a0d739ffb6c221708127b9ae.gif',
+'https://i.pinimg.com/originals/8e/36/da/8e36dab30ae3e74a17c1fca0e7092e1a.gif',
+'https://i.pinimg.com/originals/10/5a/7a/105a7ad7edbe74e5ca834348025cc650.gif',
+'https://i.pinimg.com/originals/0c/2a/89/0c2a89004ebf7f6b6a4b0b5553dc8776.gif', 
+'https://media.tenor.com/6o7pJb2d2fUAAAAC/anime-kiss.gif', 
+'https://media.tenor.com/6o7pJb2d2fUAAAAC/anime-kiss.gif', 
+'https://media.tenor.com/6o7pJb2d2fUAAAAC/anime-kiss.gif', 
+'https://media.tenor.com/6o7pJb2d2fUAAAAC/anime-kiss.gif', 
+'https://media.tenor.com/6o7pJb2d2fUAAAAC/anime-kiss.gif', 
+'https://media.tenor.com/6o7pJb2d2fUAAAAC/anime-kiss.gif', 
+'https://media.tenor.com/6o7pJb2d2fUAAAAC/anime-kiss.gif', 
+'https://media.tenor.com/6o7pJb2d2fUAAAAC/anime-kiss.gif', 
+'https://media.tenor.com/6o7pJb2d2fUAAAAC/anime-kiss.gif', 
 ]
 
 let who=m.mentionedJid&&m.mentionedJid[0]?m.mentionedJid[0]:m.quoted?m.quoted.sender:m.sender
