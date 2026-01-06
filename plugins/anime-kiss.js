@@ -27,20 +27,18 @@ reject(err)
 
 let handler=async(m,{conn})=>{
 const kissGifs=[
-'https://media.tenor.com/0AVbKGY_MxMAAAAC/anime-kiss.gif',
-'https://media.tenor.com/5mjEw9EJ9kQAAAAC/anime-kiss-love.gif',
-'https://media.tenor.com/9wE5r5C6Qw8AAAAC/anime-kiss.gif',
-'https://media.tenor.com/Y7bKZK9yZqgAAAAC/anime-kiss.gif',
-'https://media.tenor.com/5Qf8y9H6q0cAAAAC/anime-kiss.gif'
+'https://media.tenor.com/0H0J8H3sC0sAAAAC/anime-kiss.gif',
+'https://media.tenor.com/ZGm7YQvR4EwAAAAC/anime-kiss.gif',
+'https://media.tenor.com/4t6QY5s1R3kAAAAC/anime-kiss.gif',
+'https://media.tenor.com/8H7cFqZ0JHcAAAAC/anime-kiss.gif',
+'https://media.tenor.com/6o7pJb2d2fUAAAAC/anime-kiss.gif'
 ]
 
 let who=m.mentionedJid&&m.mentionedJid[0]?m.mentionedJid[0]:m.quoted?m.quoted.sender:m.sender
 let nameSender=conn.getName(m.sender)
 let nameTarget=conn.getName(who)
 
-let caption=who===m.sender
-?`💋 \`${nameSender}\` *se dio un besito* ( ˘ ³˘)♥`
-:`.。･:*:･( ◕3◕)💋 \`${nameSender}\` *le dio un beso a* \`${nameTarget}\` (◕ε◕✿)･:*:･。.`
+let caption=who===m.sender?`\`${nameSender}\` *se besó a sí mismo ( ˘ ³˘)♥*`:`\`${nameSender}\` *besó a* \`${nameTarget}\` 💋.`
 
 const randomGif=kissGifs[Math.floor(Math.random()*kissGifs.length)]
 
