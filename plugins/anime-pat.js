@@ -47,7 +47,7 @@ const patGifs=[
 'https://media.tenor.com/u10UVE5aQVkAAAAM/miss-kobayashi%27s-dragon-maid-kanna.gif', 
 'https://media.tenor.com/MDc4TSck5PQAAAAM/frieren-anime.gif', 
 'https://media.tenor.com/Z-28SFKJaIsAAAAM/anime-pat.gif', 
-'https://media.tenor.com/PqT70paf394AAAAM/pat.gif', 
+'https://media.tenor.com/cQzScx6m9xEAAAAM/anime-elf.gif', 
 'https://media.tenor.com/PqT70paf394AAAAM/pat.gif', 
 'https://media.tenor.com/PqT70paf394AAAAM/pat.gif', 
 'https://media.tenor.com/PqT70paf394AAAAM/pat.gif', 
