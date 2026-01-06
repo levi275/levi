@@ -35,12 +35,14 @@ const smokeGifs=[
 'https://i.pinimg.com/originals/3f/4e/1c/3f4e1cd6530eb5f5e5fc9c00aaf651f3.gif',
 'https://i.pinimg.com/originals/73/47/19/7347192ae9916c177229ba972ccf8a68.gif',
 'https://i.pinimg.com/originals/8c/3d/19/8c3d19d72075c06a391e89de5b6f9c09.gif',
-'https://i.pinimg.com/originals/29/7c/bb/297cbb4ffe4b7a96cbc1d913917dad27.gif',
-'https://i.pinimg.com/originals/29/7c/bb/297cbb4ffe4b7a96cbc1d913917dad27.gif',
-'https://i.pinimg.com/originals/29/7c/bb/297cbb4ffe4b7a96cbc1d913917dad27.gif',
-'https://i.pinimg.com/originals/29/7c/bb/297cbb4ffe4b7a96cbc1d913917dad27.gif',
-'https://i.pinimg.com/originals/29/7c/bb/297cbb4ffe4b7a96cbc1d913917dad27.gif',
-'https://i.pinimg.com/originals/29/7c/bb/297cbb4ffe4b7a96cbc1d913917dad27.gif',
+'https://i.pinimg.com/originals/b0/25/ac/b025ac44f93f30d6dd2a8aa78707ac4d.gif',
+'https://i.pinimg.com/originals/70/56/56/705656e8c01d3668bc496bef826a21f6.gif',
+'https://i.pinimg.com/originals/10/c9/b9/10c9b928fd086f489b86cdf0c9055b78.gif',
+'https://i.pinimg.com/originals/54/38/5c/54385ce9a95f06c5c8dbefdebc9219a0.gif',
+'https://i.pinimg.com/originals/5d/27/01/5d2701b887ad04de38ce9d53bd840cc9.gif',
+'https://i.pinimg.com/originals/71/77/ee/7177ee788a96d55c860ccd9d66d44aab.gif',
+'https://i.pinimg.com/originals/69/32/fb/6932fb1df3d3405cacaae1a89fc3c49d.gif',
+'https://i.pinimg.com/originals/b0/25/ac/b025ac44f93f30d6dd2a8aa78707ac4d.gif'
 ]
 
 let who=m.mentionedJid&&m.mentionedJid[0]?m.mentionedJid[0]:m.quoted?m.quoted.sender:m.sender
