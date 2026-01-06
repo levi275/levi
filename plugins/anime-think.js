@@ -47,7 +47,7 @@ const thinkGifs=[
 'https://media.tenor.com/YBDLlOOCtrsAAAAM/anime-think.gif', 
 'https://media.tenor.com/vfvlq0vmir0AAAAM/makima-chainsaw-man.gif', 
 'https://media.tenor.com/Y5Gm2dq65xYAAAAM/kyoukai-no-kanata-thinking.gif', 
-'https://media.tenor.com/_3mRz2cE5G4AAAAC/anime-thinking.gif', 
+'https://media.tenor.com/5g-hgOAftZoAAAAM/mugi-tsumugi.gif', 
 'https://media.tenor.com/_3mRz2cE5G4AAAAC/anime-thinking.gif', 
 'https://media.tenor.com/_3mRz2cE5G4AAAAC/anime-thinking.gif', 
 'https://media.tenor.com/_3mRz2cE5G4AAAAC/anime-thinking.gif', 
