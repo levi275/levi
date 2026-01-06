@@ -52,7 +52,7 @@ const kissGifs=[
 'https://media.tenor.com/9u2vmryDP-cAAAAM/horimiya-animes.gif',
 'https://media.tenor.com/g8AeFZoe7dsAAAAM/kiss-anime-kiss.gif',
 'https://media.tenor.com/SZ8-4vDwi6cAAAAM/miyamura-hori.gif',
-'https://media.tenor.com/6o7pJb2d2fUAAAAC/anime-kiss.gif',
+'https://media.tenor.com/b7DWF8ecBkIAAAAM/kiss-anime-anime.gif',
 'https://media.tenor.com/6o7pJb2d2fUAAAAC/anime-kiss.gif',
 'https://media.tenor.com/6o7pJb2d2fUAAAAC/anime-kiss.gif',
 'https://media.tenor.com/6o7pJb2d2fUAAAAC/anime-kiss.gif',
