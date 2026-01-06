@@ -39,7 +39,7 @@ const thinkGifs=[
 'https://media.tenor.com/dj9pddUEV0kAAAAM/anime-chibi.gif', 
 'https://media.tenor.com/SG0YhQcldrkAAAAM/zero-two-thinking.gif', 
 'https://media.tenor.com/B8PaZ6UGHwYAAAAM/aurora-somnia-goodereste-princess-syalis.gif', 
-'https://media.tenor.com/_3mRz2cE5G4AAAAC/anime-thinking.gif', 
+'https://media.tenor.com/9xR5Er9fQ24AAAAM/anya-anya-forger.gif', 
 'https://media.tenor.com/_3mRz2cE5G4AAAAC/anime-thinking.gif', 
 'https://media.tenor.com/_3mRz2cE5G4AAAAC/anime-thinking.gif', 
 'https://media.tenor.com/_3mRz2cE5G4AAAAC/anime-thinking.gif'
