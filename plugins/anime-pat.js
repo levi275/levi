@@ -48,7 +48,7 @@ const patGifs=[
 'https://media.tenor.com/MDc4TSck5PQAAAAM/frieren-anime.gif', 
 'https://media.tenor.com/Z-28SFKJaIsAAAAM/anime-pat.gif', 
 'https://media.tenor.com/cQzScx6m9xEAAAAM/anime-elf.gif', 
-'https://media.tenor.com/PqT70paf394AAAAM/pat.gif', 
+'https://media.tenor.com/Vw4wf7gsD4cAAAA1/lawrence-wolf-girl.webp', 
 'https://media.tenor.com/PqT70paf394AAAAM/pat.gif', 
 'https://media.tenor.com/PqT70paf394AAAAM/pat.gif', 
 ]
