@@ -1,20 +1,65 @@
 import { promises as fs } from 'fs'
+import path from 'path'
+import axios from 'axios'
+import { spawn } from 'child_process'
+import { tmpdir } from 'os'
 
 const charactersFilePath = './src/database/characters.json'
 const haremFilePath = './src/database/harem.json'
 
+// --- FUNCIÓN DE CONVERSIÓN (LA MAGIA) ---
+// Esta función toma el archivo descargado y lo "limpia/convierte" a un MP4
+// compatible con WhatsApp usando FFmpeg.
+function gifToMp4(buffer) {
+    return new Promise((resolve, reject) => {
+        const tempInput = path.join(tmpdir(), `${Date.now()}_in.bin`);
+        const tempOutput = path.join(tmpdir(), `${Date.now()}_out.mp4`);
+
+        // Guardamos el buffer descargado en un archivo temporal
+        fs.writeFile(tempInput, buffer)
+            .then(() => {
+                const ffmpeg = spawn('ffmpeg', [
+                    '-y', 
+                    '-i', tempInput, 
+                    '-c:v', 'libx264', 
+                    '-pix_fmt', 'yuv420p', 
+                    '-vf', 'scale=trunc(iw/2)*2:trunc(ih/2)*2', // Asegura dimensiones pares
+                    '-movflags', '+faststart',
+                    tempOutput
+                ]);
+
+                ffmpeg.on('close', async (code) => {
+                    // Limpiamos el archivo de entrada
+                    await fs.unlink(tempInput).catch(() => {});
+
+                    if (code === 0) {
+                        try {
+                            const mp4Buffer = await fs.readFile(tempOutput);
+                            await fs.unlink(tempOutput).catch(() => {}); // Limpiamos salida
+                            resolve(mp4Buffer);
+                        } catch (e) {
+                            reject(e);
+                        }
+                    } else {
+                        reject(new Error(`FFmpeg falló con código ${code}`));
+                    }
+                });
+
+                ffmpeg.on('error', async (err) => {
+                    await fs.unlink(tempInput).catch(() => {});
+                    reject(err);
+                });
+            })
+            .catch(reject);
+    });
+}
+
 // Función para corregir enlaces rotos o indirectos
 function formatUrl(url) {
     if (!url) return url
-    
-    // 1. Corregir enlaces de GitHub que apuntan al visor web (/blob/) en lugar del archivo raw
     if (url.includes('github.com') && url.includes('/blob/')) {
         return url.replace('github.com', 'raw.githubusercontent.com').replace('/blob/', '/')
     }
-    
-    // 2. Corregir enlaces de Tenor que a veces dan problemas si no terminan en extensión de archivo
-    // (Opcional, pero ayuda si usas la API de tenor, aunque aquí asumimos enlaces directos)
-    
     return url.trim()
 }
 
@@ -27,16 +72,7 @@ async function loadCharacters() {
     }
 }
 
-async function loadHarem() {
-    try {
-        const data = await fs.readFile(haremFilePath, 'utf-8')
-        return JSON.parse(data)
-    } catch (error) {
-        return []
-    }
-}
-
-let handler = async (m, { conn, command, args }) => {
+let handler = async (m, { conn, args }) => {
     if (args.length === 0) {
         await conn.reply(m.chat, `《✧》Por favor, proporciona el nombre de un personaje.`, m)
         return
@@ -46,7 +82,6 @@ let handler = async (m, { conn, command, args }) => {
 
     try {
         const characters = await loadCharacters()
-        // Buscamos el personaje (convirtiendo ambos a minúsculas para evitar errores)
         const character = characters.find(c => c.name.toLowerCase() === characterName)
 
         if (!character) {
@@ -61,33 +96,68 @@ let handler = async (m, { conn, command, args }) => {
 
         // Seleccionar video al azar
         let randomVideo = character.vid[Math.floor(Math.random() * character.vid.length)]
-        
-        // --- PASO CRITICO: LIMPIEZA DE URL ---
         const cleanUrl = formatUrl(randomVideo)
 
         const message = `❀ Nombre » *${character.name}*
 ⚥ Género » *${character.gender}*
 ❖ Fuente » *${character.source}*`
 
-        // --- LÓGICA DE DETECCIÓN DE TIPO ---
-        // Si el link termina en .gif o viene de Tenor/Pinterest y parece un gif, forzamos gifPlayback
-        const isGif = cleanUrl.endsWith('.gif') || 
-                      cleanUrl.includes('.gif') || 
-                      cleanUrl.includes('tenor.com') ||
-                      cleanUrl.includes('pinimg.com') 
+        await m.react('⏳'); // Reacción de espera
 
-        // Enviamos el mensaje
-        await conn.sendMessage(m.chat, { 
-            video: { url: cleanUrl }, 
-            caption: message,
-            // Si es un GIF, OBLIGAMOS gifPlayback: true. Si es MP4, lo dejamos opcional o false.
-            // Esto soluciona el error de "falla en reproducción" en archivos .gif
-            gifPlayback: isGif 
-        }, { quoted: m })
+        // --- PASO 1: DESCARGAR EL ARCHIVO ---
+        // Usamos axios para obtener el buffer real, ignorando si la URL es "mentirosa"
+        try {
+            const response = await axios({
+                method: 'get',
+                url: cleanUrl,
+                responseType: 'arraybuffer',
+                headers: {
+                    'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/110.0.0.0 Safari/537.36'
+                }
+            });
+
+            let buffer = Buffer.from(response.data);
+
+            // --- PASO 2: INTENTAR CONVERTIR/SANITIZAR CON FFMPEG ---
+            // Esto arreglará tanto GIFs de Pinterest como MP4s con codecs raros
+            try {
+                const videoBuffer = await gifToMp4(buffer);
+                
+                // --- PASO 3: ENVIAR COMO VIDEO ---
+                await conn.sendMessage(m.chat, { 
+                    video: videoBuffer, 
+                    caption: message,
+                    gifPlayback: true, // Loop automático
+                    mimetype: 'video/mp4' 
+                }, { quoted: m });
+
+                await m.react('✅');
+
+            } catch (ffmpegError) {
+                console.error("Falló la conversión FFmpeg:", ffmpegError);
+                throw new Error("Conversion Failed"); // Forzar salto al catch del handler
+            }
+
+        } catch (downloadError) {
+            console.error("Error en el proceso de video:", downloadError);
+            
+            // --- PLAN B: SI TODO FALLA, ENVIAR COMO IMAGEN/GIF SIMPLE ---
+            // Si FFmpeg falla o la descarga se corrompe, intentamos enviarlo 
+            // como imagen simple usando la URL original.
+            try {
+                await conn.sendMessage(m.chat, { 
+                    image: { url: cleanUrl }, 
+                    caption: message + "\n\n*(Se envió como imagen por error técnico en video)*",
+                    mimetype: 'image/gif'
+                }, { quoted: m });
+            } catch (e) {
+                 await conn.reply(m.chat, `✘ Error crítico: No se pudo procesar el enlace del personaje.`, m)
+            }
+        }
 
     } catch (error) {
-        console.error(error) // Útil para ver el error real en la consola
-        await conn.reply(m.chat, `✘ Error al cargar el video del personaje. Verifica que los enlaces en el JSON sean directos (raw).`, m)
+        console.error(error)
+        await conn.reply(m.chat, `✘ Ocurrió un error al buscar el personaje.`, m)
     }
 }
 
