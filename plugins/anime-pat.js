@@ -44,7 +44,7 @@ const patGifs=[
 'https://media.tenor.com/hR_7bvEw3l0AAAAM/clannad-anime.gif', 
 'https://media.tenor.com/8o4fWGwBY1EAAAAM/aharensan-aharen.gif', 
 'https://media.tenor.com/r3LCBlmezPcAAAAM/can-a-boy-girl-friendship-survive-danjo-no-yuujou-wa-seiritsu-suru.gif', 
-'https://media.tenor.com/PqT70paf394AAAAM/pat.gif', 
+'https://media.tenor.com/u10UVE5aQVkAAAAM/miss-kobayashi%27s-dragon-maid-kanna.gif', 
 'https://media.tenor.com/PqT70paf394AAAAM/pat.gif', 
 'https://media.tenor.com/PqT70paf394AAAAM/pat.gif', 
 'https://media.tenor.com/PqT70paf394AAAAM/pat.gif', 
