@@ -50,7 +50,7 @@ const thinkGifs=[
 'https://media.tenor.com/5g-hgOAftZoAAAAM/mugi-tsumugi.gif', 
 'https://media.tenor.com/seGiM0wL9VkAAAAM/yui-yui-hirasawa.gif', 
 'https://media.tenor.com/_qYjKjL_06wAAAAM/anime-thinking.gif', 
-'https://media.tenor.com/_3mRz2cE5G4AAAAC/anime-thinking.gif', 
+'https://media.tenor.com/Wi8SGf7DctYAAAAM/chainsaw-man-csm.gif', 
 'https://media.tenor.com/_3mRz2cE5G4AAAAC/anime-thinking.gif', 
 'https://media.tenor.com/_3mRz2cE5G4AAAAC/anime-thinking.gif'
 ]
