@@ -76,7 +76,7 @@ let handler = async (m, { conn }) => {
     await conn.sendMessage(
     m.chat,
     {
-      image: { url: 'https://files.catbox.moe/bi19e7.png' },
+      image: { url: 'https://i.pinimg.com/originals/8d/7d/44/8d7d44aca722a5df1a5e9c7e7efab53f.png' },
       caption: texto,
       contextInfo: {
         mentionedJid: [m.sender],
