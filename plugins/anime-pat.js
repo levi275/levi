@@ -32,6 +32,7 @@ const patGifs=[
 'https://i.pinimg.com/originals/27/da/ce/27dace4b6aec7de261ddb5d9444e716a.gif',
 'https://i.pinimg.com/originals/8b/42/6c/8b426c9bedc37054cd7e73925fa10da5.gif',
 'https://i.pinimg.com/originals/73/08/9d/73089d4e4b3f570ef3d5a7ca9f68e622.gif'
+'https://media.tenor.com/PkWttKcH1xMAAAAM/kobayashi-dragon.gif'
 ]
 
 let who=m.mentionedJid&&m.mentionedJid[0]?m.mentionedJid[0]:m.quoted?m.quoted.sender:m.sender
