@@ -40,7 +40,7 @@ const patGifs=[
 'https://media.tenor.com/CIF_Pa3yepwAAAAM/rika-higurashi.gif', 
 'https://media.tenor.com/Zm71HaIh7wwAAAAM/pat-pat.gif', 
 'https://media.tenor.com/YMRmKEdwZCgAAAAM/anime-hug-anime.gif', 
-'https://i.pinimg.com/originals/73/08/9d/73089d4e4b3f570ef3d5a7ca9f68e622.gif', 
+'https://media.tenor.com/079CvbmFPe8AAAAM/qualidea-code-head-pat.gif', 
 'https://i.pinimg.com/originals/73/08/9d/73089d4e4b3f570ef3d5a7ca9f68e622.gif'
 ]
 
