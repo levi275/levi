@@ -29,7 +29,7 @@ let handler=async(m,{conn})=>{
 const sleepGifs=[
 'https://i.pinimg.com/originals/e4/17/e7/e417e7504c33fdafb7736ce4b54b05d9.gif',
 'https://i.pinimg.com/originals/ba/62/95/ba6295233b4bafd88512569b03697acd.gif',
-'https://telegra.ph/file/e6ff46f4796c57f2235bd.mp4',
+'https://i.pinimg.com/originals/a7/e8/e8/a7e8e8f9fd0a8784012d8f14b09da4a8.gif',
 'https://telegra.ph/file/06b4469cd5974cf4e28ff.mp4',
 'https://telegra.ph/file/9213f74b91f8a96c43922.mp4',
 'https://telegra.ph/file/b93da0c01981f17c05858.mp4',
