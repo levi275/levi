@@ -31,7 +31,7 @@ const thinkGifs=[
 'https://i.pinimg.com/originals/04/8c/c3/048cc35b45c1545328f41a03d0177ffa.gif',
 'https://i.pinimg.com/originals/47/65/fe/4765fec13f4823254d87ef4bda3aa565.gif',
 'https://i.pinimg.com/originals/75/40/22/7540222bc7526cb2a9b729248c1a4be1.gif',
-'https://media.tenor.com/_3mRz2cE5G4AAAAC/anime-thinking.gif', 
+'https://media.tenor.com/f3XybJki0H4AAAAM/anime-thinking.gif', 
 'https://media.tenor.com/_3mRz2cE5G4AAAAC/anime-thinking.gif', 
 'https://media.tenor.com/_3mRz2cE5G4AAAAC/anime-thinking.gif', 
 'https://media.tenor.com/_3mRz2cE5G4AAAAC/anime-thinking.gif', 
