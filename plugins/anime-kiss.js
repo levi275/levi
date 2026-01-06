@@ -50,7 +50,7 @@ const kissGifs=[
 'https://media.tenor.com/BZyWzw2d5tAAAAAM/hyakkano-100-girlfriends.gif',
 'https://media.tenor.com/HdnsMy2ELv8AAAAM/kiss.gif',
 'https://media.tenor.com/9u2vmryDP-cAAAAM/horimiya-animes.gif',
-'https://media.tenor.com/6o7pJb2d2fUAAAAC/anime-kiss.gif',
+'https://media.tenor.com/g8AeFZoe7dsAAAAM/kiss-anime-kiss.gif',
 'https://media.tenor.com/6o7pJb2d2fUAAAAC/anime-kiss.gif',
 'https://media.tenor.com/6o7pJb2d2fUAAAAC/anime-kiss.gif',
 'https://media.tenor.com/6o7pJb2d2fUAAAAC/anime-kiss.gif',
