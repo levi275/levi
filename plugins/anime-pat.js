@@ -37,7 +37,7 @@ const patGifs=[
 'https://media.tenor.com/wLqFGYigJuIAAAAM/mai-sakurajima.gif', 
 'https://media.tenor.com/fro6pl7src0AAAAM/hugtrip.gif', 
 'https://media.tenor.com/Dbg-7wAaiJwAAAAM/aharen-aharen-san.gif', 
-'https://i.pinimg.com/originals/73/08/9d/73089d4e4b3f570ef3d5a7ca9f68e622.gif', 
+'https://media.tenor.com/CIF_Pa3yepwAAAAM/rika-higurashi.gif', 
 'https://i.pinimg.com/originals/73/08/9d/73089d4e4b3f570ef3d5a7ca9f68e622.gif', 
 'https://i.pinimg.com/originals/73/08/9d/73089d4e4b3f570ef3d5a7ca9f68e622.gif', 
 'https://i.pinimg.com/originals/73/08/9d/73089d4e4b3f570ef3d5a7ca9f68e622.gif', 
