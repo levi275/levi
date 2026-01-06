@@ -27,8 +27,8 @@ reject(err)
 
 let handler=async(m,{conn})=>{
 const thinkGifs=[
-'https://media.tenor.com/fp8Hc9s3mKkAAAAC/anime-thinking.gif',
-'https://media.tenor.com/w7x4f2sF0qQAAAAC/anime-think.gif',
+'https://i.pinimg.com/originals/36/d8/59/36d859f2c539abcd0c0dc9bb82380644.gif',
+'https://i.pinimg.com/originals/04/8c/c3/048cc35b45c1545328f41a03d0177ffa.gif',
 'https://media.tenor.com/9rQ3zZ6XG0sAAAAC/anime-thinking.gif',
 'https://media.tenor.com/f9L7G9Hc2kEAAAAC/anime-thoughtful.gif',
 'https://media.tenor.com/_3mRz2cE5G4AAAAC/anime-thinking.gif'
