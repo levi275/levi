@@ -34,7 +34,7 @@ const smokeGifs=[
 'https://i.pinimg.com/originals/29/92/fb/2992fb9c44cdc817e6cbc0782fbc6276.gif',
 'https://i.pinimg.com/originals/3f/4e/1c/3f4e1cd6530eb5f5e5fc9c00aaf651f3.gif',
 'https://i.pinimg.com/originals/73/47/19/7347192ae9916c177229ba972ccf8a68.gif',
-'https://i.pinimg.com/originals/29/7c/bb/297cbb4ffe4b7a96cbc1d913917dad27.gif',
+'https://i.pinimg.com/originals/8c/3d/19/8c3d19d72075c06a391e89de5b6f9c09.gif',
 'https://i.pinimg.com/originals/29/7c/bb/297cbb4ffe4b7a96cbc1d913917dad27.gif',
 'https://i.pinimg.com/originals/29/7c/bb/297cbb4ffe4b7a96cbc1d913917dad27.gif',
 'https://i.pinimg.com/originals/29/7c/bb/297cbb4ffe4b7a96cbc1d913917dad27.gif',
