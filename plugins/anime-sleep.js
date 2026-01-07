@@ -46,7 +46,7 @@ const sleepGifs=[
 'https://media.tenor.com/Cj0YvuE94eoAAAAM/onimai-anime-sleep.gif',
 'https://media.tenor.com/3gD4PpwP4e8AAAAM/anime-sleep.gif',
 'https://media.tenor.com/lc_ZdiRuc-4AAAAM/yawn-anime.gif',
-'https://telegra.ph/file/6b8e6cc26de052d4018ba.mp4',
+'https://media.tenor.com/faQ4oQImga0AAAAM/konosuba-konosuba-s3.gif',
 'https://telegra.ph/file/6b8e6cc26de052d4018ba.mp4',
 'https://telegra.ph/file/6b8e6cc26de052d4018ba.mp4',
 'https://telegra.ph/file/6b8e6cc26de052d4018ba.mp4',
