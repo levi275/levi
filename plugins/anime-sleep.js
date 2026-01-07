@@ -41,7 +41,7 @@ const sleepGifs=[
 'https://i.pinimg.com/originals/8d/74/d0/8d74d090209a9f763f7a4331a4c1b693.gif',
 'https://media.tenor.com/nqw8PQ6u01cAAAAM/sanchit-sleepy-sleep.gif',
 'https://media.tenor.com/jfwf7xpv5p0AAAAM/sleep-anime.gif',
-'https://telegra.ph/file/6b8e6cc26de052d4018ba.mp4',
+'https://media.tenor.com/mN-2yFvFO8UAAAAM/anime-sleep-sleepy.gif',
 'https://telegra.ph/file/6b8e6cc26de052d4018ba.mp4',
 'https://telegra.ph/file/6b8e6cc26de052d4018ba.mp4',
 'https://telegra.ph/file/6b8e6cc26de052d4018ba.mp4',
