@@ -51,7 +51,7 @@ const sleepGifs=[
 'https://media.tenor.com/GOEO_QhhtlYAAAAM/go-to-sleep-anime.gif',
 'https://media.tenor.com/yiRSKkvLUX8AAAAM/chainsaw-man-denji.gif',
 'https://media.tenor.com/ukBByoKUNFEAAAAM/cuddle-anime.gif',
-'https://telegra.ph/file/6b8e6cc26de052d4018ba.mp4', 
+'https://telegra.ph/file/6b8e6cc26de052d4018ba.mp4'
 ]
 
 let who=m.mentionedJid&&m.mentionedJid[0]?m.mentionedJid[0]:m.quoted?m.quoted.sender:m.sender
