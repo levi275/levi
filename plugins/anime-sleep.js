@@ -32,7 +32,7 @@ const sleepGifs=[
 'https://i.pinimg.com/originals/a7/e8/e8/a7e8e8f9fd0a8784012d8f14b09da4a8.gif',
 'https://i.pinimg.com/originals/88/fa/62/88fa62689b47a6c4324b486f0c2fb997.gif',
 'https://i.pinimg.com/originals/85/3e/f8/853ef80465a07f0258e86336a5e82425.gif',
-'https://telegra.ph/file/b93da0c01981f17c05858.mp4',
+'https://i.pinimg.com/originals/7a/33/08/7a330848c62f1ad0b8eb5f94ca4059b9.gif',
 'https://telegra.ph/file/8e0b0fe1d653d6956608a.mp4',
 'https://telegra.ph/file/3b091f28e5f52bc774449.mp4',
 'https://telegra.ph/file/7c795529b38d1a93395f6.mp4',
