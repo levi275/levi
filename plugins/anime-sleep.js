@@ -49,7 +49,7 @@ const sleepGifs=[
 'https://media.tenor.com/faQ4oQImga0AAAAM/konosuba-konosuba-s3.gif',
 'https://media.tenor.com/BsoscZUHi-gAAAAM/sleepy-sleep.gif',
 'https://media.tenor.com/GOEO_QhhtlYAAAAM/go-to-sleep-anime.gif',
-'https://telegra.ph/file/6b8e6cc26de052d4018ba.mp4',
+'https://media.tenor.com/yiRSKkvLUX8AAAAM/chainsaw-man-denji.gif',
 'https://telegra.ph/file/6b8e6cc26de052d4018ba.mp4',
 'https://telegra.ph/file/6b8e6cc26de052d4018ba.mp4', 
 ]
