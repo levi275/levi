@@ -37,7 +37,7 @@ let caption=who===m.sender
 await m.react('😨')
 
 const scaredGifs=[
-'https://i.pinimg.com/originals/90/6d/61/906d61263992beb3000e6beab2d860aa.gif',
+'https://i.pinimg.com/originals/ac/ed/dd/aceddd9405a53c356a38d15b89bd6213.gif',
 'https://i.pinimg.com/originals/3d/8b/fb/3d8bfbf749cda06946013d39bf62bc84.gif',
 'https://i.pinimg.com/originals/88/c4/d4/88c4d4f9a7f4cd145aeca51c4b9cf016.gif',
 'https://telegra.ph/file/eae6dd9d45e45fe3a95ab.mp4',
