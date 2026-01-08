@@ -1,80 +1,60 @@
 import { promises as fs } from 'fs';
+import {
+  loadHarem,
+  saveHarem,
+  userKey,
+  charKey,
+  addOrUpdateClaim,
+  findClaim
+} from '../src/lib/gacha-group.js';
 
 const charactersFilePath = './src/database/characters.json';
-const haremFilePath = './src/database/harem.json';
+export const cooldowns = {}; // clave: `${groupId}:${userId}`
 
-export const cooldowns = {};
-
-global.activeRolls = global.activeRolls || {};
+global.activeRolls = global.activeRolls || {}; // claves: `${groupId}:${characterId}`
 
 async function loadCharacters() {
-    try {
-        const data = await fs.readFile(charactersFilePath, 'utf-8');
-        return JSON.parse(data);
-    } catch (error) {
-        throw new Error('❀ No se pudo cargar el archivo characters.json.');
-    }
-}
-
-async function saveCharacters(characters) {
-    try {
-        await fs.writeFile(charactersFilePath, JSON.stringify(characters, null, 2), 'utf-8');
-    } catch (error) {
-        throw new Error('❀ No se pudo guardar el archivo characters.json.');
-    }
-}
-
-async function loadHarem() {
-    try {
-        const data = await fs.readFile(haremFilePath, 'utf-8');
-        return JSON.parse(data);
-    } catch (error) {
-        return [];
-    }
-}
-
-async function saveHarem(harem) {
-    try {
-        await fs.writeFile(haremFilePath, JSON.stringify(harem, null, 2), 'utf-8');
-    } catch (error) {
-        throw new Error('❀ No se pudo guardar el archivo harem.json.');
-    }
+  try {
+    const data = await fs.readFile(charactersFilePath, 'utf-8');
+    return JSON.parse(data);
+  } catch (error) {
+    throw new Error('❀ No se pudo cargar el archivo characters.json.');
+  }
 }
 
 let handler = async (m, { conn }) => {
-    const userId = m.sender;
-    const now = Date.now();
+  const userId = m.sender;
+  const groupId = m.chat;
+  const now = Date.now();
 
-    if (cooldowns[userId] && now < cooldowns[userId]) {
-        const remainingTime = Math.ceil((cooldowns[userId] - now) / 1000);
-        const minutes = Math.floor(remainingTime / 60);
-        const seconds = remainingTime % 60;
-        return await conn.reply(m.chat, `( ⸝⸝･̆⤚･̆⸝⸝) ¡𝗗𝗲𝗯𝗲𝘀 𝗲𝘀𝗽𝗲𝗿𝗮𝗿 *${minutes} minutos y ${seconds} segundos* 𝗽𝗮𝗿𝗮 𝘃𝗼𝗹𝘃𝗲𝗿 𝗮 𝘂𝘀𝗮𝗿 *#rw* 𝗱𝗲 𝗻𝘂𝗲𝘃𝗼.`, m);
+  const key = `${groupId}:${userId}`;
+  if (cooldowns[key] && now < cooldowns[key]) {
+    const remainingTime = Math.ceil((cooldowns[key] - now) / 1000);
+    const minutes = Math.floor(remainingTime / 60);
+    const seconds = remainingTime % 60;
+    return await conn.reply(m.chat, `( ⸝⸝･̆⤚･̆⸝⸝) ¡Debes esperar *${minutes} minutos y ${seconds} segundos* para volver a usar *#rollwaifu* en este grupo.`, m);
+  }
+
+  try {
+    const characters = await loadCharacters();
+    const randomCharacter = characters[Math.floor(Math.random() * characters.length)];
+    const randomImage = randomCharacter.img[Math.floor(Math.random() * randomCharacter.img.length)];
+
+    // estado por grupo: buscamos si ya está reclamado en este grupo
+    const harem = await loadHarem();
+    const claimedInGroup = findClaim(harem, groupId, randomCharacter.id);
+
+    const statusMessage = claimedInGroup ? `🚫 Ocupado (@${claimedInGroup.userId.split('@')[0]})` : '✅ Libre';
+
+    // Solo creamos activeRolls para personajes libres en el grupo
+    if (!claimedInGroup) {
+      global.activeRolls[`${groupId}:${randomCharacter.id}`] = {
+        user: userId,
+        time: Date.now()
+      };
     }
 
-    try {
-        const characters = await loadCharacters();
-        const randomCharacter = characters[Math.floor(Math.random() * characters.length)];
-        const randomImage = randomCharacter.img[Math.floor(Math.random() * randomCharacter.img.length)];
-
-        const harem = await loadHarem();
-        const userEntry = harem.find(entry => entry.characterId === randomCharacter.id);
-        
-        // Lógica de estado personalizada para el diseño
-        const isClaimed = !!randomCharacter.user;
-        const statusUser = isClaimed ? `@${randomCharacter.user.split('@')[0]}` : 'Nadie';
-        const statusText = isClaimed ? '꯭🚫 ꯭O꯭ᴄ꯭ᴜ꯭ᴘ꯭ᴀ꯭ᴅ꯭ᴏ' : '꯭✅ ꯭L꯭ɪ꯭ʙ꯭ʀ꯭ᴇ';
-        const statusIcon = isClaimed ? '🥀' : '✨';
-
-        if (!randomCharacter.user) {
-            global.activeRolls[randomCharacter.id] = {
-                user: userId,
-                time: Date.now()
-            };
-        }
-
-        const message = `
-ㅤㅤ⏜⋮ㅤㅤ꒰ㅤ꒰ㅤㅤ𖹭⃞🎲⃞𖹭ㅤㅤ꒱ㅤ꒱ㅤㅤ⋮⏜
+    const message = `ㅤㅤ⏜⋮ㅤㅤ꒰ㅤ꒰ㅤㅤ𖹭⃞🎲⃞𖹭ㅤㅤ꒱ㅤ꒱ㅤㅤ⋮⏜
 ꒰ㅤ꒰͡ㅤ 🄽🅄🄴🅅🄾 🄿🄴🅁🅂🄾🄽🄰🄹🄴ㅤㅤ͡꒱ㅤ꒱
 
 ▓𓏴𓏴 ۪ ֹ 🄽꯭🄾꯭🄼꯭🄱꯭🅁꯭🄴 :
@@ -95,16 +75,15 @@ let handler = async (m, { conn }) => {
 ┉͜┄͜─┈┉⃛┄─꒰֟፝͡ 🅸🅳: ${randomCharacter.id} ꒱─┄⃨┉┈─͡┄͡┉
 ㅤㅤㅤㅤㅤㅤ©ㅤᑲ᥆𝗍ㅤ𝗀ɑᥴ꯭hɑㅤ𝗌𝗒sł꯭ᥱꭑ꒱`;
 
-        const mentions = isClaimed ? [randomCharacter.user] : [];
-        
-        await conn.sendFile(m.chat, randomImage, `${randomCharacter.name}.jpg`, message, m, { mentions });
+    const mentions = claimedInGroup ? [claimedInGroup.userId] : [];
+    await conn.sendFile(m.chat, randomImage, `${randomCharacter.name}.jpg`, message, m, { mentions });
 
-        cooldowns[userId] = now + 15 * 60 * 1000;
+    // cooldown por grupo
+    cooldowns[key] = now + 15 * 60 * 1000;
 
-    } catch (error) {
-        console.error(error);
-        await conn.reply(m.chat, `✘ 𝗘𝗿𝗿𝗼𝗿 𝗮𝗹 𝗰𝗮𝗿𝗴𝗮𝗿 𝗲𝗹 𝗽𝗲𝗿𝘀𝗼𝗻𝗮𝗷𝗲.`, m);
-    }
+  } catch (error) {
+    await conn.reply(m.chat, `✘ Error al cargar el personaje: ${error.message}`, m);
+  }
 };
 
 handler.help = ['rw', 'rollwaifu'];
