@@ -52,7 +52,7 @@ const slapGifs=[
 'https://media.tenor.com/eU5H6GbVjrcAAAAM/slap-jjk.gif',
 'https://media.tenor.com/cpWuWnOU64MAAAAM/bofetada.gif',
 'https://media.tenor.com/XiYuU9h44-AAAAAM/anime-slap-mad.gif',
-'https://i.pinimg.com/originals/0c/09/ec/0c09ecfac6e0d93b894ec13fa900f9fa.gif',
+'https://media.tenor.com/E3OW-MYYum0AAAAM/no-angry.gif',
 'https://i.pinimg.com/originals/0c/09/ec/0c09ecfac6e0d93b894ec13fa900f9fa.gif',
 'https://i.pinimg.com/originals/0c/09/ec/0c09ecfac6e0d93b894ec13fa900f9fa.gif',
 'https://i.pinimg.com/originals/0c/09/ec/0c09ecfac6e0d93b894ec13fa900f9fa.gif',
