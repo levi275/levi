@@ -60,7 +60,7 @@ const scaredGifs=[
 'https://media.tenor.com/Q2o3TEOqHIwAAAAM/nervous-scared.gif',
 'https://media.tenor.com/UZ0ul8ARdCkAAAAM/ruby-hoshino-anime.gif',
 'https://media.tenor.com/zh85z3B9LHYAAAAM/trembling-fear.gif',
-'https://telegra.ph/file/dcde646a58d8e9bf44867.mp4',
+'https://media.tenor.com/P9LxKFsp5VMAAAAM/shiro-senko-san.gif',
 'https://telegra.ph/file/dcde646a58d8e9bf44867.mp4',
 ]
 
