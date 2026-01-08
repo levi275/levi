@@ -57,7 +57,7 @@ const sadGifs=[
 'https://media.tenor.com/E4dgZ9qMqasAAAAM/hidamari-hidamari-sketch.gif',
 'https://media.tenor.com/HPdVPFR-BasAAAAM/anime-sad.gif',
 'https://telegra.ph/file/3e940fb5e2b2277dc754b.mp4',
-'https://telegra.ph/file/3e940fb5e2b2277dc754b.mp4',
+'https://media.tenor.com/SgTOd0XbpS0AAAAM/bandori-bang-dream.gif',
 'https://telegra.ph/file/3e940fb5e2b2277dc754b.mp4',
 'https://telegra.ph/file/3e940fb5e2b2277dc754b.mp4',
 'https://telegra.ph/file/3e940fb5e2b2277dc754b.mp4',
