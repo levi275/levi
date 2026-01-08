@@ -47,7 +47,7 @@ const punchGifs=[
 'https://i.pinimg.com/originals/7c/17/7f/7c177fc5545cf5939bfa37ca1fb8797b.gif',
 'https://i.pinimg.com/originals/4f/90/40/4f9040a91c1a888a9e0ff2f02f2a64fc.gif',
 'https://media.tenor.com/yA_KtmPI1EMAAAAM/hxh-hunter-x-hunter.gif',
-'https://telegra.ph/file/c4c27701496fec28d6f8a.mp4',
+'https://media.tenor.com/Ru5PhSjAJ3gAAAAm/hikari-shupogaki.webp',
 'https://telegra.ph/file/c8e5a210a3a34e23391ee.mp4',
 'https://telegra.ph/file/70bac5a760539efad5aad.mp4',
 'https://telegra.ph/file/70bac5a760539efad5aad.mp4',
