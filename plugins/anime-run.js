@@ -47,7 +47,7 @@ const runGifs=[
 'https://i.pinimg.com/originals/ef/38/0a/ef380a406926eabb03a31a1c988fcc0b.gif',
 'https://i.pinimg.com/originals/1f/35/2b/1f352b6df5319c76ccc1c03e693ebd9d.gif',
 'https://media.tenor.com/mUIXigPWPuYAAAAM/anime-anime-girl-running.gif',
-'https://qu.ax/OPMAT.mp4',
+'https://media.tenor.com/fCNJ5gEgwEYAAAAM/naruto-anime.gif',
 'https://qu.ax/OPMAT.mp4',
 'https://qu.ax/OPMAT.mp4',
 'https://qu.ax/OPMAT.mp4',
