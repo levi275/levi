@@ -49,7 +49,7 @@ const slapGifs=[
 'https://i.pinimg.com/originals/0c/09/ec/0c09ecfac6e0d93b894ec13fa900f9fa.gif',
 'https://media.tenor.com/Ws6Dm1ZW_vMAAAAM/girl-slap.gif',
 'https://media.tenor.com/Sv8LQZAoQmgAAAAM/chainsaw-man-csm.gif',
-'https://i.pinimg.com/originals/0c/09/ec/0c09ecfac6e0d93b894ec13fa900f9fa.gif',
+'https://media.tenor.com/eU5H6GbVjrcAAAAM/slap-jjk.gif',
 'https://i.pinimg.com/originals/0c/09/ec/0c09ecfac6e0d93b894ec13fa900f9fa.gif',
 'https://i.pinimg.com/originals/0c/09/ec/0c09ecfac6e0d93b894ec13fa900f9fa.gif',
 'https://i.pinimg.com/originals/0c/09/ec/0c09ecfac6e0d93b894ec13fa900f9fa.gif',
