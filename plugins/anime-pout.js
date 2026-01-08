@@ -54,7 +54,7 @@ const poutGifs=[
 'https://media.tenor.com/d_pL1WslyB8AAAAM/anime-pout.gif',
 'https://media.tenor.com/Fkgun6veQW0AAAAM/akane-kurokawa-kurokawa-akane.gif',
 'https://media.tenor.com/FHTOu1fN6DcAAAAM/angry-anime.gif',
-'https://telegra.ph/file/ec2d25e70b165a19e7ef7.mp4',
+'https://media.tenor.com/7VbjUU3dLl8AAAAM/momo-ayase-dandadan.gif',
 'https://telegra.ph/file/ec2d25e70b165a19e7ef7.mp4',
 'https://telegra.ph/file/ec2d25e70b165a19e7ef7.mp4',
 'https://telegra.ph/file/ec2d25e70b165a19e7ef7.mp4',
