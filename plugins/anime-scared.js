@@ -46,7 +46,7 @@ const scaredGifs=[
 'https://media.tenor.com/Zs2uw1Zot_gAAAAM/bocchi-the-rock-gotou-hitori.gif',
 'https://media.tenor.com/TwMG4-blLaEAAAAM/choso-jjk-choso.gif',
 'https://media.tenor.com/uAUAg8fASUcAAAAM/anime-girl-gamerkhasan24.gif',
-'https://telegra.ph/file/dcde646a58d8e9bf44867.mp4',
+'https://media.tenor.com/le8dL1RTwHQAAAAM/taiyo-taiyou.gif',
 'https://telegra.ph/file/dcde646a58d8e9bf44867.mp4',
 'https://telegra.ph/file/dcde646a58d8e9bf44867.mp4',
 'https://telegra.ph/file/dcde646a58d8e9bf44867.mp4',
