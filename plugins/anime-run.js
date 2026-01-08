@@ -49,7 +49,7 @@ const runGifs=[
 'https://media.tenor.com/mUIXigPWPuYAAAAM/anime-anime-girl-running.gif',
 'https://media.tenor.com/fCNJ5gEgwEYAAAAM/naruto-anime.gif',
 'https://media.tenor.com/Hh50s01qUF4AAAAM/samurai-champloo-mugen.gif',
-'https://qu.ax/OPMAT.mp4',
+'https://media.tenor.com/XbfdY2Lx-zwAAAAM/zenitsu-running-away.gif',
 'https://qu.ax/OPMAT.mp4',
 'https://qu.ax/OPMAT.mp4',
 'https://qu.ax/OPMAT.mp4',
