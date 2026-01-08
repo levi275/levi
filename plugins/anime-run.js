@@ -55,7 +55,7 @@ const runGifs=[
 'https://media.tenor.com/SKuTZ44qa0IAAAAM/mob-psycho-mob-psycho-season3.gif',
 'https://media.tenor.com/POl8wXpZBH0AAAAM/black-clover-charlotte.gif',
 'https://media.tenor.com/U4EmRZtCQN0AAAAM/run.gif',
-'https://qu.ax/OPMAT.mp4'
+'https://media.tenor.com/vR_UG67oFQgAAAAM/project-sekai-project-sekai-akito.gif'
 ]
 
 const randomGif=runGifs[Math.floor(Math.random()*runGifs.length)]
