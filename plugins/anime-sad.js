@@ -49,7 +49,7 @@ const sadGifs=[
 'https://i.pinimg.com/originals/ac/14/46/ac14460aea55c0ea380c1042cd56e9a6.gif',
 'https://media.tenor.com/ukwvYi0Olk8AAAAM/sad-anime-guy-lonely-anime-guy.gif',
 'https://media.tenor.com/EudvjJemPC0AAAAM/bocchi-the.gif',
-'https://telegra.ph/file/3e940fb5e2b2277dc754b.mp4',
+'https://media.tenor.com/5kwtBdNCeEoAAAAM/ichigo-rain-ichigo.gif',
 'https://telegra.ph/file/3e940fb5e2b2277dc754b.mp4',
 'https://telegra.ph/file/3e940fb5e2b2277dc754b.mp4',
 'https://telegra.ph/file/3e940fb5e2b2277dc754b.mp4',
