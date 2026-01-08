@@ -2,7 +2,7 @@ import fs from 'fs';
 import {
   loadVentas,
   getVentasInGroup
-} from '../src/lib/gacha-group.js';
+} from '../lib/gacha-group.js';
 
 const charPath = './src/database/characters.json';
 
