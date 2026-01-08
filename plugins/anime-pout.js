@@ -66,7 +66,7 @@ const poutGifs=[
 'https://telegra.ph/file/ec2d25e70b165a19e7ef7.mp4',
 'https://telegra.ph/file/ec2d25e70b165a19e7ef7.mp4',
 'https://telegra.ph/file/ec2d25e70b165a19e7ef7.mp4',
-'https://telegra.ph/file/ec2d25e70b165a19e7ef7.mp4',
+'https://telegra.ph/file/ec2d25e70b165a19e7ef7.mp4'
 ]
 
 const randomGif=poutGifs[Math.floor(Math.random()*poutGifs.length)]
