@@ -59,7 +59,7 @@ const sadGifs=[
 'https://media.tenor.com/IWdHxxaoXGYAAAAM/suigintou-sad.gif',
 'https://media.tenor.com/SgTOd0XbpS0AAAAM/bandori-bang-dream.gif',
 'https://media.tenor.com/opUBGwM4o48AAAAM/ghoul.gif',
-'https://telegra.ph/file/3e940fb5e2b2277dc754b.mp4',
+'https://media.tenor.com/KMK8l8SqB28AAAAM/cute-anime-boy-sakura-haruka.gif',
 'https://telegra.ph/file/3e940fb5e2b2277dc754b.mp4',
 'https://telegra.ph/file/3e940fb5e2b2277dc754b.mp4',
 'https://telegra.ph/file/3e940fb5e2b2277dc754b.mp4',
