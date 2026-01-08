@@ -65,7 +65,7 @@ const sadGifs=[
 'https://media.tenor.com/n85DUKiUX94AAAAM/yuji-yuji-itadori.gif',
 'https://media.tenor.com/k6A8_2g8bcAAAAAM/azumanga-daioh.gif',
 'https://media.tenor.com/Udqe4XY6Av4AAAAM/anime-purple.gif',
-'https://telegra.ph/file/3e940fb5e2b2277dc754b.mp4'
+'https://media.tenor.com/8Ob5KEU7vKAAAAAM/anime-my-dress-up-darling.gif'
 ]
 
 const randomGif=sadGifs[Math.floor(Math.random()*sadGifs.length)]
