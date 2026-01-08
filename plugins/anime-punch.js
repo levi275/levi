@@ -53,7 +53,7 @@ const punchGifs=[
 'https://media.tenor.com/p_mMicg1pgUAAAAM/anya-forger-damian-spy-x-family.gif',
 'https://media.tenor.com/qDDsivB4UEkAAAAM/anime-fight.gif',
 'https://media.tenor.com/ObgxhbfdVCAAAAAM/luffy-anime.gif',
-'https://telegra.ph/file/70bac5a760539efad5aad.mp4',
+'https://media.tenor.com/gmvdv-e1EhcAAAAM/weliton-amogos.gif',
 'https://telegra.ph/file/70bac5a760539efad5aad.mp4',
 'https://telegra.ph/file/70bac5a760539efad5aad.mp4',
 'https://telegra.ph/file/70bac5a760539efad5aad.mp4',
