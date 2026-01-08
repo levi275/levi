@@ -40,7 +40,7 @@ const runGifs=[
 'https://i.pinimg.com/originals/0c/e8/be/0ce8bec2543d81ba65eefd309f0f0c5b.gif',
 'https://i.pinimg.com/originals/43/d2/23/43d223fbcd3cd1fd9bee5b805ca21f64.gif',
 'https://i.pinimg.com/originals/33/c9/9a/33c99abddaca08bafd75384d3ee7e677.gif',
-'https://qu.ax/ejZJD.mp4',
+'https://i.pinimg.com/originals/e5/dd/c0/e5ddc029075f2f1ef6781835d144ea10.gif',
 'https://qu.ax/UOLym.mp4',
 'https://qu.ax/qTAxM.mp4',
 'https://qu.ax/oCYed.mp4',
