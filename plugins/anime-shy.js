@@ -64,7 +64,7 @@ const shyGifs=[
 'https://media.tenor.com/Y3d58v49KMsAAAAM/sailor-moon-fingers.gif',
 'https://media.tenor.com/rVVbXeg8II0AAAAM/shy-anime-girl-mohime-mohime.gif',
 'https://media.tenor.com/JkHl5wwOABMAAAAM/shy-girl.gif',
-'https://telegra.ph/file/654313ad5a3e8b43fc535.mp4',
+'https://media.tenor.com/Le2wxDEnJIUAAAAM/anime-witch.gif'
 ]
 
 const randomGif=shyGifs[Math.floor(Math.random()*shyGifs.length)]
