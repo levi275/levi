@@ -44,7 +44,7 @@ const videos=[
 'https://media.tenor.com/crYa4JHw9r0AAAAM/anime-good-night.gif',
 'https://media.tenor.com/zW-7t1j_GSEAAAAM/yu-goodnight-chat.gif',
 'https://media.tenor.com/EiHHJZv_FfgAAAAM/gn-owo.gif',
-'https://files.catbox.moe/3kyhf0.mp4',
+'https://media.tenor.com/A5VeJzOyicMAAAAM/couple-anime.gif',
 'https://files.catbox.moe/4qokmi.mp4'
 ]
 
