@@ -59,7 +59,7 @@ const slapGifs=[
 'https://media.tenor.com/7xFcP1KWjY0AAAAM/no.gif',
 'https://media.tenor.com/yJmrNruFNtEAAAAM/slap.gif',
 'https://i.pinimg.com/originals/0c/09/ec/0c09ecfac6e0d93b894ec13fa900f9fa.gif',
-'https://media.tenor.com/Xwe3ku5WF-YAAAAM/slap-chie.gif',
+'https://media.tenor.com/Xwe3ku5WF-YAAAAM/slap-chie.gif'
 ]
 
 const randomGif=slapGifs[Math.floor(Math.random()*slapGifs.length)]
