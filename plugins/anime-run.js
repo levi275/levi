@@ -44,7 +44,7 @@ const runGifs=[
 'https://i.pinimg.com/originals/31/67/80/316780713631c15539e0ebddd7e8a572.gif',
 'https://i.pinimg.com/originals/81/21/85/8121852ccbb18e7c70cb53fd81f27a54.gif',
 'https://i.pinimg.com/originals/65/09/f1/6509f18c8bc3c58bdaec05c75b24a817.gif',
-'https://qu.ax/OPMAT.mp4',
+'https://i.pinimg.com/originals/ef/38/0a/ef380a406926eabb03a31a1c988fcc0b.gif',
 'https://qu.ax/OPMAT.mp4',
 'https://qu.ax/OPMAT.mp4',
 'https://qu.ax/OPMAT.mp4',
