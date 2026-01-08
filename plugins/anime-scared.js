@@ -41,7 +41,7 @@ const scaredGifs=[
 'https://i.pinimg.com/originals/3d/8b/fb/3d8bfbf749cda06946013d39bf62bc84.gif',
 'https://i.pinimg.com/originals/88/c4/d4/88c4d4f9a7f4cd145aeca51c4b9cf016.gif',
 'https://i.pinimg.com/originals/dc/97/17/dc97177aa75d3f14a5835e735e3553c6.gif',
-'https://telegra.ph/file/1785e535a4463c2a337c5.mp4',
+'https://i.pinimg.com/originals/56/3c/3c/563c3c6974edee36c2493fac78a9a8a6.gif',
 'https://telegra.ph/file/c1673b418bc61db1e51a0.mp4',
 'https://telegra.ph/file/9774e1d74c3abf083ae01.mp4',
 'https://telegra.ph/file/dcde646a58d8e9bf44867.mp4'
