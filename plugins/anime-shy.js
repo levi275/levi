@@ -55,7 +55,7 @@ const shyGifs=[
 'https://i.pinimg.com/originals/8a/62/60/8a6260a1ea0e398dd8de16f4fc99932a.gif',
 'https://i.pinimg.com/originals/98/ed/29/98ed29a15944ee61c41c0e340f698b57.gif',
 'https://media.tenor.com/ZWop2tkzsakAAAAM/magirevo-anis-shy.gif',
-'https://telegra.ph/file/654313ad5a3e8b43fc535.mp4',
+'https://media.tenor.com/3EC7nfDexUEAAAA1/i%27mikra.webp',
 'https://telegra.ph/file/654313ad5a3e8b43fc535.mp4',
 'https://telegra.ph/file/654313ad5a3e8b43fc535.mp4',
 'https://telegra.ph/file/654313ad5a3e8b43fc535.mp4',
