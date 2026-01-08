@@ -37,7 +37,7 @@ let caption=who===m.sender
 await m.react('😛')
 
 const shyGifs=[
-'https://telegra.ph/file/a9ccfa5013d58fad2e677.mp4',
+'https://i.pinimg.com/originals/df/aa/d1/dfaad160939b71b8b361b98e389f7b13.gif',
 'https://telegra.ph/file/2cd355afa143095b97890.mp4',
 'https://telegra.ph/file/362c8566dc9367a5a473d.mp4',
 'https://telegra.ph/file/4f9323ca22e126b9d275c.mp4',
