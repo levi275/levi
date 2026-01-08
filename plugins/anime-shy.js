@@ -38,7 +38,7 @@ await m.react('😛')
 
 const shyGifs=[
 'https://i.pinimg.com/originals/df/aa/d1/dfaad160939b71b8b361b98e389f7b13.gif',
-'https://telegra.ph/file/2cd355afa143095b97890.mp4',
+'https://i.pinimg.com/originals/ad/ce/cb/adcecba1d189dc3ae2a11fa77a2c6c11.gif',
 'https://telegra.ph/file/362c8566dc9367a5a473d.mp4',
 'https://telegra.ph/file/4f9323ca22e126b9d275c.mp4',
 'https://telegra.ph/file/51b688e0c5295bc37ca92.mp4',
