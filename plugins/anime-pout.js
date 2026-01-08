@@ -63,7 +63,7 @@ const poutGifs=[
 'https://media.tenor.com/Mf_UetbqAMIAAAAM/oshi-no-ko-onk.gif',
 'https://media.tenor.com/Ff7mEcLQ8XkAAAAm/pouting-frieren.webp',
 'https://media.tenor.com/ob2MggREvn0AAAAM/angry-hmph.gif',
-'https://telegra.ph/file/ec2d25e70b165a19e7ef7.mp4',
+'https://media.tenor.com/3EgO4ozQzp4AAAAM/anime-raphtalia.gif',
 'https://telegra.ph/file/ec2d25e70b165a19e7ef7.mp4',
 'https://telegra.ph/file/ec2d25e70b165a19e7ef7.mp4',
 'https://telegra.ph/file/ec2d25e70b165a19e7ef7.mp4'
