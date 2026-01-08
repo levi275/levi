@@ -47,7 +47,7 @@ const sadGifs=[
 'https://i.pinimg.com/originals/6f/2e/cb/6f2ecb53bd6fd49edcecec92a7872bb5.gif',
 'https://i.pinimg.com/originals/13/3f/5a/133f5a089704bc70809609735a7dfe4b.gif',
 'https://i.pinimg.com/originals/ac/14/46/ac14460aea55c0ea380c1042cd56e9a6.gif',
-'https://telegra.ph/file/3e940fb5e2b2277dc754b.mp4',
+'https://media.tenor.com/ukwvYi0Olk8AAAAM/sad-anime-guy-lonely-anime-guy.gif',
 'https://telegra.ph/file/3e940fb5e2b2277dc754b.mp4',
 'https://telegra.ph/file/3e940fb5e2b2277dc754b.mp4',
 'https://telegra.ph/file/3e940fb5e2b2277dc754b.mp4',
