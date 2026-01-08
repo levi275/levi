@@ -1,53 +1,71 @@
-//Codígo creado por Destroy wa.me/584120346669
+import axios from 'axios'
+import fs from 'fs'
+import path from 'path'
+import { spawn } from 'child_process'
+import { tmpdir } from 'os'
 
-import fs from 'fs';
-import path from 'path';
-
-let handler = async (m, { conn, usedPrefix }) => {
-    let who;
-
-    if (m.mentionedJid.length > 0) {
-        who = m.mentionedJid[0];
-    } else if (m.quoted) {
-        who = m.quoted.sender;
-    } else {
-        who = m.sender;
-    }
-
-    let name = conn.getName(who);
-    let name2 = conn.getName(m.sender);
-    m.react('😏');
-
-    let str;
-    if (m.mentionedJid.length > 0) {
-        str = `\`${name2}\` *esta seduciendo a* \`${name || who}\`.`;
-    } else if (m.quoted) {
-        str = `\`${name2}\` *está seduciendo a*  \`${name || who}\` *( ͡° ͜ʖ ͡°)*.`;
-    } else {
-        str = `\`${name2}\` *está seduciendo ( ͡° ͜ʖ ͡°).*`.trim();
-    }
-    
-    if (m.isGroup) { 
-        let pp = 'https://qu.ax/lcXFM.mp4';
-        let pp2 = 'https://qu.ax/jjo.mp4';
-        let pp3 = 'https://qu.ax/GLhdl.mp4';
-        let pp4 = 'https://qu.ax/cmYSY.mp4';
-        let pp5 = 'https://qu.ax/fYPjB.mp4';
-        let pp6 = 'https://qu.ax/QyVWf.mp4';
-        let pp7 = 'https://qu.ax/HzEnD.mp4';
-        let pp8 = 'https://qu.ax/bFbTk.mp4';
-
-        const videos = [pp, pp2, pp3, pp4, pp5, pp6, pp7, pp8];
-        const video = videos[Math.floor(Math.random() * videos.length)];
-
-        let mentions = [who];
-        conn.sendMessage(m.chat, { video: { url: video }, gifPlayback: true, caption: str, mentions }, { quoted: m });
-    }
+function gifToMp4(gifBuffer){
+return new Promise((resolve,reject)=>{
+const tempGif=path.join(tmpdir(),`${Date.now()}.gif`)
+const tempMp4=path.join(tmpdir(),`${Date.now()}.mp4`)
+fs.writeFileSync(tempGif,gifBuffer)
+const ffmpeg=spawn('ffmpeg',['-y','-i',tempGif,'-c:v','libx264','-pix_fmt','yuv420p','-vf','scale=trunc(iw/2)*2:trunc(ih/2)*2','-movflags','+faststart',tempMp4])
+ffmpeg.on('close',code=>{
+fs.unlinkSync(tempGif)
+if(code===0){
+const mp4Buffer=fs.readFileSync(tempMp4)
+fs.unlinkSync(tempMp4)
+resolve(mp4Buffer)
+}else reject(new Error(`ffmpeg error ${code}`))
+})
+ffmpeg.on('error',err=>{
+fs.unlinkSync(tempGif)
+reject(err)
+})
+})
 }
 
-handler.help = ['seduce/seducir @tag'];
-handler.tags = ['anime'];
-handler.command = ['seduce','seducir'];
-handler.group = true;
+let handler=async(m,{conn})=>{
+let who=m.mentionedJid&&m.mentionedJid[0]?m.mentionedJid[0]:m.quoted?m.quoted.sender:m.sender
+let nameSender=conn.getName(m.sender)
+let nameTarget=conn.getName(who)
 
-export default handler;
+let caption=who===m.sender
+? `\`${nameSender}\` *está seduciendo ( ͡° ͜ʖ ͡°).*`
+: `\`${nameSender}\` *está seduciendo a* \`${nameTarget}\` *( ͡° ͜ʖ ͡°)*.`
+
+await m.react('😏')
+
+const seduceGifs=[
+'https://qu.ax/lcXFM.mp4',
+'https://qu.ax/jjo.mp4',
+'https://qu.ax/GLhdl.mp4',
+'https://qu.ax/cmYSY.mp4',
+'https://qu.ax/fYPjB.mp4',
+'https://qu.ax/QyVWf.mp4',
+'https://qu.ax/HzEnD.mp4',
+'https://qu.ax/bFbTk.mp4'
+]
+
+const randomGif=seduceGifs[Math.floor(Math.random()*seduceGifs.length)]
+
+try{
+const response=await axios({method:'get',url:randomGif,responseType:'arraybuffer',headers:{'User-Agent':'Mozilla/5.0','Referer':'https://google.com/'}})
+let buffer=Buffer.from(response.data)
+try{
+buffer=await gifToMp4(buffer)
+await conn.sendMessage(m.chat,{video:buffer,caption:caption,gifPlayback:true,mentions:[who,m.sender],mimetype:'video/mp4'},{quoted:m})
+}catch{
+throw new Error('conversion fail')
+}
+}catch{
+await conn.sendMessage(m.chat,{video:{url:randomGif},caption:caption,gifPlayback:true,mentions:[who,m.sender]},{quoted:m})
+}
+}
+
+handler.help=['seduce','seducir']
+handler.tags=['anime']
+handler.command=['seduce','seducir']
+handler.group=true
+
+export default handler
