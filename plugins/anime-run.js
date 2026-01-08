@@ -38,7 +38,7 @@ await m.react('🏃')
 
 const runGifs=[
 'https://i.pinimg.com/originals/0c/e8/be/0ce8bec2543d81ba65eefd309f0f0c5b.gif',
-'https://qu.ax/iUjgV.mp4',
+'https://i.pinimg.com/originals/43/d2/23/43d223fbcd3cd1fd9bee5b805ca21f64.gif',
 'https://qu.ax/wjheu.mp4',
 'https://qu.ax/ejZJD.mp4',
 'https://qu.ax/UOLym.mp4',
