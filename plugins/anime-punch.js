@@ -54,7 +54,7 @@ const punchGifs=[
 'https://media.tenor.com/qDDsivB4UEkAAAAM/anime-fight.gif',
 'https://media.tenor.com/ObgxhbfdVCAAAAAM/luffy-anime.gif',
 'https://media.tenor.com/gmvdv-e1EhcAAAAM/weliton-amogos.gif',
-'https://telegra.ph/file/70bac5a760539efad5aad.mp4',
+'https://media.tenor.com/0ssFlowQEUQAAAAM/naru-punch.gif',
 'https://telegra.ph/file/70bac5a760539efad5aad.mp4',
 'https://telegra.ph/file/70bac5a760539efad5aad.mp4',
 'https://telegra.ph/file/70bac5a760539efad5aad.mp4',
