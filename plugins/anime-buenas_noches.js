@@ -38,7 +38,7 @@ const messages=[
 ]
 
 const videos=[
-'https://files.catbox.moe/0n2bf5.mp4',
+'https://i.pinimg.com/originals/8f/ee/cb/8feecbd791f6d57d9c9eabf2131a7f43.gif',
 'https://i.pinimg.com/originals/6f/2e/99/6f2e99eeb5fd538f04545315f786ea97.gif',
 'https://files.catbox.moe/0im4vk.mp4',
 'https://files.catbox.moe/9cm0x9.mp4',
