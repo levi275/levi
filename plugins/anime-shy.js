@@ -58,7 +58,7 @@ const shyGifs=[
 'https://media.tenor.com/3EC7nfDexUEAAAA1/i%27mikra.webp',
 'https://media.tenor.com/kHovgXapj6MAAAAM/corada.gif',
 'https://media.tenor.com/FlIDq9xkDJkAAAAM/kowloon-generic-romance-kowloon.gif',
-'https://telegra.ph/file/654313ad5a3e8b43fc535.mp4',
+'https://media.tenor.com/DE327HSCNlMAAAAM/hanako-kun-anime.gif',
 'https://telegra.ph/file/654313ad5a3e8b43fc535.mp4',
 'https://telegra.ph/file/654313ad5a3e8b43fc535.mp4',
 'https://telegra.ph/file/654313ad5a3e8b43fc535.mp4',
