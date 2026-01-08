@@ -40,7 +40,7 @@ caption=`\`${nameSender}\` *golpeó a* \`${nameTarget}\`.`
 await m.react('👊')
 
 const punchGifs=[
-'https://telegra.ph/file/8e60a6379c1b72e4fbe0f.mp4',
+'https://i.pinimg.com/originals/8d/50/60/8d50607e59db86b5afcc21304194ba57.gif',
 'https://telegra.ph/file/8ac9ca359cac4c8786194.mp4',
 'https://telegra.ph/file/cc20935de6993dd391af1.mp4',
 'https://telegra.ph/file/9c0bba4c6b71979e56f55.mp4',
