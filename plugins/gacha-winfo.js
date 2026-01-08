@@ -1,60 +1,51 @@
 import { promises as fs } from 'fs';
+import { loadHarem } from '../lib/gacha-group.js';
 
 const charactersFilePath = './src/database/characters.json';
-// const haremFilePath = './src/database/harem.json'; 
 
 async function loadCharacters() {
-    try {
-        const data = await fs.readFile(charactersFilePath, 'utf-8');
-        return JSON.parse(data);
-    } catch (error) {
-        throw new Error('No se pudo cargar el archivo characters.json.');
-    }
+  try {
+    const data = await fs.readFile(charactersFilePath, 'utf-8');
+    return JSON.parse(data);
+  } catch (error) {
+    throw new Error('No se pudo cargar el archivo characters.json.');
+  }
 }
-
-/*
-async function loadHarem() {
-    try {
-        const data = await fs.readFile(haremFilePath, 'utf-8');
-        return JSON.parse(data);
-    } catch (error) {
-        return [];
-    }
-}
-*/
 
 let handler = async (m, { conn, args }) => {
-    if (args.length === 0) {
-        await conn.reply(m.chat, '《✧》Debes especificar un personaje para ver su información.\n> Ejemplo » *#winfo Aika Sano*', m);
-        return;
+  if (args.length === 0) {
+    await conn.reply(m.chat, 'Debes especificar un personaje para ver su información.\n> Ejemplo » *#winfo Aika Sano*', m);
+    return;
+  }
+
+  const characterName = args.join(' ').toLowerCase().trim();
+  const groupId = m.chat;
+
+  try {
+    const characters = await loadCharacters();
+    const character = characters.find(c => c.name.toLowerCase() === characterName);
+
+    if (!character) {
+      await conn.reply(m.chat, `No se encontró el personaje *${characterName}*.`, m);
+      return;
     }
 
-    const characterName = args.join(' ').toLowerCase().trim();
+    const harem = await loadHarem();
+    const claim = harem.find(e => e.groupId === groupId && e.characterId === character.id);
 
-    try {
-        const characters = await loadCharacters();
-        const character = characters.find(c => c.name.toLowerCase() === characterName);
+    const statusMessage = claim
+      ? `Reclamado por @${claim.userId.split('@')[0]}`
+      : 'Libre';
 
-        if (!character) {
-            await conn.reply(m.chat, `《✧》No se encontró el personaje *${characterName}*.`, m);
-            return;
-        }
+    const mentions = claim ? [claim.userId] : [];
 
-        
-        const statusMessage = character.user 
-            ? `Reclamado por @${character.user.split('@')[0]}` 
-            : 'Libre';
+    const message = `❀ Nombre » *${character.name}*\n⚥ Género » *${character.gender}*\n✰ Valor » *${character.value}*\n♡ Estado » ${statusMessage}\n❖ Fuente » *${character.source}*`;
 
-        const mentions = character.user ? [character.user] : [];
-        
+    await conn.reply(m.chat, message, m, { mentions });
 
-        const message = `❀ Nombre » *${character.name}*\n⚥ Género » *${character.gender}*\n✰ Valor » *${character.value}*\n♡ Estado » ${statusMessage}\n❖ Fuente » *${character.source}*`;
-
-        await conn.reply(m.chat, message, m, { mentions }); 
-
-    } catch (error) {
-        await conn.reply(m.chat, `✘ Error al cargar la información del personaje: ${error.message}`, m);
-    }
+  } catch (error) {
+    await conn.reply(m.chat, `✘ Error al cargar la información del personaje: ${error.message}`, m);
+  }
 };
 
 handler.help = ['charinfo <nombre del personaje>', 'winfo <nombre del personaje>', 'waifuinfo <nombre del personaje>'];
