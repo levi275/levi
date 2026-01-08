@@ -45,6 +45,7 @@ const videos=[
 'https://media.tenor.com/zW-7t1j_GSEAAAAM/yu-goodnight-chat.gif',
 'https://media.tenor.com/EiHHJZv_FfgAAAAM/gn-owo.gif',
 'https://media.tenor.com/A5VeJzOyicMAAAAM/couple-anime.gif',
+'https://media.tenor.com/EiHHJZv_FfgAAAAM/gn-owo.gif',
 'https://media.tenor.com/R4tXGv8T4uYAAAA1/buenas-noches-a-mimir.webp'
 ]
 
