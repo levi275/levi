@@ -37,7 +37,7 @@ let caption=who===m.sender
 await m.react('👊')
 
 const slapGifs=[
-'https://telegra.ph/file/3ba192c3806b097632d3f.mp4',
+'https://i.pinimg.com/originals/2b/3a/3e/2b3a3e107ac57d4f170a8f8e414fec9f.gif',
 'https://telegra.ph/file/58b33c082a81f761bbee8.mp4',
 'https://telegra.ph/file/da5011a1c504946832c81.mp4',
 'https://telegra.ph/file/20ac5be925e6cd48f549f.mp4',
