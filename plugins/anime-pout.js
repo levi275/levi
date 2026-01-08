@@ -66,7 +66,7 @@ const poutGifs=[
 'https://media.tenor.com/3EgO4ozQzp4AAAAM/anime-raphtalia.gif',
 'https://media.tenor.com/Up7hRFmFY9AAAAAM/anime-sad-anime-pout.gif',
 'https://media.tenor.com/DQTx0EdSdX8AAAAM/akane-kurokawa-kurokawa-akane.gif',
-'https://telegra.ph/file/ec2d25e70b165a19e7ef7.mp4'
+'https://media.tenor.com/bqdATAYxLd4AAAAM/senpai-hachioji-naoto.gif'
 ]
 
 const randomGif=poutGifs[Math.floor(Math.random()*poutGifs.length)]
