@@ -44,7 +44,7 @@ const seduceGifs=[
 'https://qu.ax/fYPjB.mp4',
 'https://media.tenor.com/xuBjhmC2p9AAAAAM/zero-two-darling-in-the-franxx.gif',
 'https://media.tenor.com/pF3s48bhdIsAAAAM/marin-kitagawa-anime-shy.gif',
-'https://qu.ax/bFbTk.mp4',
+'https://media.tenor.com/vqPt7f8PxtkAAAAM/marrochi-evil.gif',
 'https://qu.ax/bFbTk.mp4',
 'https://qu.ax/bFbTk.mp4',
 'https://qu.ax/bFbTk.mp4',
