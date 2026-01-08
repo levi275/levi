@@ -55,7 +55,7 @@ const scaredGifs=[
 'https://media.tenor.com/RhyxCbENd6YAAAAM/umaru-chan-scared.gif',
 'https://media.tenor.com/FLiPfaiTRScAAAAm/terrified-panic.webp',
 'https://media.tenor.com/nEh0yvlMrEgAAAAM/anime-scare.gif',
-'https://telegra.ph/file/dcde646a58d8e9bf44867.mp4',
+'https://media.tenor.com/cls2f5d1hOUAAAAM/akane-kurokawa-kurokawa-akane.gif',
 'https://telegra.ph/file/dcde646a58d8e9bf44867.mp4',
 'https://telegra.ph/file/dcde646a58d8e9bf44867.mp4',
 'https://telegra.ph/file/dcde646a58d8e9bf44867.mp4',
