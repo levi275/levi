@@ -53,7 +53,7 @@ const runGifs=[
 'https://media.tenor.com/cNDIhw7jkbcAAAAM/vegeta-running.gif',
 'https://media.tenor.com/h4VdXrF6vUYAAAAM/gojo-satoru.gif',
 'https://media.tenor.com/SKuTZ44qa0IAAAAM/mob-psycho-mob-psycho-season3.gif',
-'https://qu.ax/OPMAT.mp4',
+'https://media.tenor.com/POl8wXpZBH0AAAAM/black-clover-charlotte.gif',
 'https://qu.ax/OPMAT.mp4',
 'https://qu.ax/OPMAT.mp4'
 ]
