@@ -38,7 +38,7 @@ await m.react('😨')
 
 const scaredGifs=[
 'https://i.pinimg.com/originals/90/6d/61/906d61263992beb3000e6beab2d860aa.gif',
-'https://telegra.ph/file/0c802b4fa616aaf1da229.mp4',
+'https://i.pinimg.com/originals/3d/8b/fb/3d8bfbf749cda06946013d39bf62bc84.gif',
 'https://telegra.ph/file/d0b166d9a363765e51657.mp4',
 'https://telegra.ph/file/eae6dd9d45e45fe3a95ab.mp4',
 'https://telegra.ph/file/1785e535a4463c2a337c5.mp4',
