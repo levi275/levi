@@ -62,7 +62,7 @@ const shyGifs=[
 'https://media.tenor.com/CR3t6UiFYSwAAAA1/waguri-the-fragrant-flower-blooms-with-dignity.webp',
 'https://media.tenor.com/Lx42NK_3nRAAAAAM/anime-guild-receptionist.gif',
 'https://media.tenor.com/Y3d58v49KMsAAAAM/sailor-moon-fingers.gif',
-'https://telegra.ph/file/654313ad5a3e8b43fc535.mp4',
+'https://media.tenor.com/rVVbXeg8II0AAAAM/shy-anime-girl-mohime-mohime.gif',
 'https://telegra.ph/file/654313ad5a3e8b43fc535.mp4',
 'https://telegra.ph/file/654313ad5a3e8b43fc535.mp4',
 ]
