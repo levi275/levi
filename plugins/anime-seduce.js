@@ -37,7 +37,7 @@ let caption=who===m.sender
 await m.react('😏')
 
 const seduceGifs=[
-'https://qu.ax/lcXFM.mp4',
+'https://i.pinimg.com/originals/7f/f3/1c/7ff31ce12432d90fa944748021941b6a.gif',
 'https://qu.ax/jjo.mp4',
 'https://qu.ax/GLhdl.mp4',
 'https://qu.ax/cmYSY.mp4',
