@@ -1,6 +1,9 @@
 import fs from 'fs';
+import {
+  loadVentas,
+  getVentasInGroup
+} from '../src/lib/gacha-group.js';
 
-const ventaPath = './src/database/waifusVenta.json';
 const charPath = './src/database/characters.json';
 
 function formatoFecha(fechaMs) {
@@ -16,36 +19,39 @@ let handler = async (m, { conn, args }) => {
   let ventas = [], personajes = [];
 
   try {
-    ventas = JSON.parse(fs.readFileSync(ventaPath, 'utf-8'));
+    ventas = await loadVentas();
     personajes = JSON.parse(fs.readFileSync(charPath, 'utf-8'));
     if (!Array.isArray(ventas) || !Array.isArray(personajes)) throw new Error('Error en la estructura de los archivos.');
   } catch (e) {
     return m.reply(`✘ Error al leer los datos.\n*Detalles:* ${e.message}`);
   }
 
-  if (!ventas.length) {
-    return m.reply('✿ Actualmente no hay waifus en venta.');
+  const groupId = m.chat;
+  const ventasGrupo = getVentasInGroup(ventas, groupId);
+
+  if (!ventasGrupo.length) {
+    return m.reply('✿ Actualmente no hay waifus en venta en este grupo.');
   }
 
   let page = parseInt(args[0]) || 1;
   const pageSize = 10;
-  const totalPages = Math.ceil(ventas.length / pageSize);
+  const totalPages = Math.ceil(ventasGrupo.length / pageSize);
   if (page < 1 || page > totalPages) {
     return m.reply(`✘ Página inválida. Hay *${totalPages}* página(s) disponibles.`);
   }
 
   const inicio = (page - 1) * pageSize;
-  const waifusPagina = ventas.slice(inicio, inicio + pageSize);
-  let texto = `◢✿ *Waifus en venta* ✿◤\n\n`;
+  const waifusPagina = ventasGrupo.slice(inicio, inicio + pageSize);
+  let texto = `◢✿ *Waifus en venta en este grupo* ✿◤\n\n`;
   let mencionados = [];
 
   for (let i = 0; i < waifusPagina.length; i++) {
     try {
-      let { name, precio, vendedor, fecha } = waifusPagina[i];
+      let { name, precio, vendedor, fecha, id } = waifusPagina[i];
 
-      const p = personajes.find(p => p.name.toLowerCase() === name.toLowerCase());
+      const p = personajes.find(p => p.id === id || p.name.toLowerCase() === name.toLowerCase());
       const valorOriginal = p?.value || 'Desconocido';
-      const idPersonaje = p?.id || 'Desconocido';
+      const idPersonaje = p?.id || id || 'Desconocido';
 
       let username;
       try {
@@ -54,7 +60,7 @@ let handler = async (m, { conn, args }) => {
         username = `@${(vendedor || '').split('@')[0] || 'desconocido'}`;
       }
 
-      texto += `✰ ${inicio + i + 1} » *${name}* (*${valorOriginal.toLocaleString()})*\n`;
+      texto += `✰ ${inicio + i + 1} » *${name}* (*${valorOriginal}*)\n`;
       texto += `  🛒 Precio de venta: *¥${(precio || 0).toLocaleString()} ${m.moneda}*\n`;
       texto += `  🆔 ID: *${idPersonaje}*\n`;
       texto += `  👤 Vendedor: ${username}\n`;
@@ -85,6 +91,5 @@ handler.help = ['waifusventa [página]'];
 handler.tags = ['waifus'];
 handler.command = ['haremshop', 'tiendawaifus', 'wshop'];
 handler.group = true;
-handler.register = true;
 
 export default handler;
