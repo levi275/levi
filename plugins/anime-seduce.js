@@ -40,7 +40,7 @@ const seduceGifs=[
 'https://i.pinimg.com/originals/7f/f3/1c/7ff31ce12432d90fa944748021941b6a.gif',
 'https://i.pinimg.com/originals/ea/de/5b/eade5b83bc8764de3037fcab1f5e2dec.gif',
 'https://media.tenor.com/KsxNSrBLntQAAAAM/zero-two-anime.gif',
-'https://qu.ax/cmYSY.mp4',
+'https://media.tenor.com/R7sidYP5IhgAAAAM/blushing-anime-cute-anime.gif',
 'https://qu.ax/fYPjB.mp4',
 'https://qu.ax/QyVWf.mp4',
 'https://qu.ax/HzEnD.mp4',
