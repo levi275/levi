@@ -49,7 +49,7 @@ const seduceGifs=[
 'https://media.tenor.com/pZHdmpV3A8IAAAAM/annited.gif',
 'https://media.tenor.com/9iKiVuCdZu8AAAAM/anime-nisekoi.gif',
 'https://media.tenor.com/HG_dSaso5YAAAAAM/anime-hajimete-no-gal.gif',
-'https://qu.ax/bFbTk.mp4'
+'https://media.tenor.com/7P2NiwpYJlMAAAAM/anime-shikimoris-not-just-cute.gif'
 ]
 
 const randomGif=seduceGifs[Math.floor(Math.random()*seduceGifs.length)]
