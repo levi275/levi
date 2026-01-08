@@ -42,7 +42,7 @@ await m.react('🥺')
 const poutGifs=[
 'https://i.pinimg.com/originals/b2/5c/32/b25c3211c622490eef77f8878f2c8fc8.gif',
 'https://i.pinimg.com/originals/cb/80/bc/cb80bc66f74ce929839569bd9f68b5c2.gif',
-'https://telegra.ph/file/63564769ec715d3b6379d.mp4',
+'https://i.pinimg.com/originals/ff/39/a7/ff39a7a27f918204e575f4cdc2c2bbd6.gif',
 'https://telegra.ph/file/06f7458e3a6a19deb5173.mp4',
 'https://telegra.ph/file/cdd5e7db98e1d3a46231a.mp4',
 'https://telegra.ph/file/070e2c38c9569a764cc10.mp4',
