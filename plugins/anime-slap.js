@@ -42,7 +42,7 @@ const slapGifs=[
 'https://i.pinimg.com/originals/8f/52/09/8f52096d6a1a333ece0fcc501eec106c.gif',
 'https://i.pinimg.com/originals/a9/b8/bd/a9b8bd2060d76ec286ec8b4c61ec1f5a.gif',
 'https://i.pinimg.com/originals/2e/83/32/2e833278b7ed147adb4e9a1f571c1352.gif',
-'https://telegra.ph/file/080f08d0faa15119621fe.mp4',
+'https://i.pinimg.com/originals/13/81/03/1381036c9dcf14117351747e672ed515.gif',
 'https://telegra.ph/file/eb0b010b2f249dd189d06.mp4',
 'https://telegra.ph/file/734cb1e4416d80a299dac.mp4',
 'https://telegra.ph/file/fc494a26b4e46c9b147d2.mp4'
