@@ -47,7 +47,7 @@ const seduceGifs=[
 'https://media.tenor.com/vqPt7f8PxtkAAAAM/marrochi-evil.gif',
 'https://media.tenor.com/db96_0PFMpcAAAAM/ano-natsu-ano-natsu-de-matteru.gif',
 'https://media.tenor.com/pZHdmpV3A8IAAAAM/annited.gif',
-'https://qu.ax/bFbTk.mp4',
+'https://media.tenor.com/9iKiVuCdZu8AAAAM/anime-nisekoi.gif',
 'https://qu.ax/bFbTk.mp4',
 'https://qu.ax/bFbTk.mp4',
 ]
