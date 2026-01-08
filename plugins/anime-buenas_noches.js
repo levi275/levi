@@ -43,7 +43,7 @@ const videos=[
 'https://i.pinimg.com/originals/ed/11/69/ed11698bb08895d3c2f2709382c79b73.gif',
 'https://media.tenor.com/crYa4JHw9r0AAAAM/anime-good-night.gif',
 'https://media.tenor.com/zW-7t1j_GSEAAAAM/yu-goodnight-chat.gif',
-'https://files.catbox.moe/id09sr.mp4',
+'https://media.tenor.com/EiHHJZv_FfgAAAAM/gn-owo.gif',
 'https://files.catbox.moe/3kyhf0.mp4',
 'https://files.catbox.moe/4qokmi.mp4'
 ]
