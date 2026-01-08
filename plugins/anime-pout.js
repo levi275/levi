@@ -58,7 +58,7 @@ const poutGifs=[
 'https://media.tenor.com/0wCnjnexH3IAAAAM/vic.gif',
 'https://media.tenor.com/YseiXI4o5bsAAAAM/sad-pout.gif',
 'https://media.tenor.com/2b8bkKXIUBUAAAAM/nico-wakatsuki.gif',
-'https://telegra.ph/file/ec2d25e70b165a19e7ef7.mp4',
+'https://media.tenor.com/_22_7mYKy5EAAAAM/bocchi-bocchi-the-rock.gif',
 'https://telegra.ph/file/ec2d25e70b165a19e7ef7.mp4',
 'https://telegra.ph/file/ec2d25e70b165a19e7ef7.mp4',
 'https://telegra.ph/file/ec2d25e70b165a19e7ef7.mp4',
