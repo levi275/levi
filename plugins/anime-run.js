@@ -37,7 +37,7 @@ let caption=who===m.sender
 await m.react('🏃')
 
 const runGifs=[
-'https://qu.ax/acRFf.mp4',
+'https://i.pinimg.com/originals/0c/e8/be/0ce8bec2543d81ba65eefd309f0f0c5b.gif',
 'https://qu.ax/iUjgV.mp4',
 'https://qu.ax/wjheu.mp4',
 'https://qu.ax/ejZJD.mp4',
