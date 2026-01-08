@@ -62,7 +62,7 @@ const sadGifs=[
 'https://media.tenor.com/KMK8l8SqB28AAAAM/cute-anime-boy-sakura-haruka.gif',
 'https://media.tenor.com/q7cz_01J4zsAAAAM/maid-cute.gif',
 'https://media.tenor.com/Ifjf8kh9xi8AAAAM/last-tour-girl-sad-anime-melancholy.gif',
-'https://telegra.ph/file/3e940fb5e2b2277dc754b.mp4',
+'https://media.tenor.com/n85DUKiUX94AAAAM/yuji-yuji-itadori.gif',
 'https://telegra.ph/file/3e940fb5e2b2277dc754b.mp4',
 'https://telegra.ph/file/3e940fb5e2b2277dc754b.mp4',
 'https://telegra.ph/file/3e940fb5e2b2277dc754b.mp4'
