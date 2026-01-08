@@ -37,7 +37,7 @@ let caption=who===m.sender
 await m.react('😥')
 
 const sadGifs=[
-'https://telegra.ph/file/9c69837650993b40113dc.mp4',
+'https://i.pinimg.com/originals/c1/be/30/c1be3022e608a33db43ed06e629ae31a.gif',
 'https://telegra.ph/file/071f2b8d26bca81578dd0.mp4',
 'https://telegra.ph/file/0af82e78c57f7178a333b.mp4',
 'https://telegra.ph/file/8fb8739072537a63f8aee.mp4',
