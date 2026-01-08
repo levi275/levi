@@ -6,7 +6,7 @@ import {
   charKey,
   addOrUpdateClaim,
   findClaim
-} from '../src/lib/gacha-group.js';
+} from '../lib/gacha-group.js';
 
 const charactersFilePath = './src/database/characters.json';
 export const cooldowns = {}; // clave: `${groupId}:${userId}`
