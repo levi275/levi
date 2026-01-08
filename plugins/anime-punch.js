@@ -59,7 +59,7 @@ const punchGifs=[
 'https://media.tenor.com/nfpkrKeYyyEAAAAM/anime-sesshomaru.gif',
 'https://media.tenor.com/wYyB8BBA8fIAAAAM/some-guy-getting-punch-anime-punching-some-guy-anime.gif',
 'https://media.tenor.com/i3hP7zju5JYAAAAM/higurashi-sotsu.gif',
-'https://telegra.ph/file/70bac5a760539efad5aad.mp4',
+'https://media.tenor.com/vv1mgp7IQn8AAAAM/tgggg-anime.gif',
 'https://telegra.ph/file/70bac5a760539efad5aad.mp4',
 'https://telegra.ph/file/70bac5a760539efad5aad.mp4',
 'https://telegra.ph/file/70bac5a760539efad5aad.mp4',
