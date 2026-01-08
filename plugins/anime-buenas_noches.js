@@ -41,7 +41,7 @@ const videos=[
 'https://i.pinimg.com/originals/8f/ee/cb/8feecbd791f6d57d9c9eabf2131a7f43.gif',
 'https://i.pinimg.com/originals/6f/2e/99/6f2e99eeb5fd538f04545315f786ea97.gif',
 'https://i.pinimg.com/originals/ed/11/69/ed11698bb08895d3c2f2709382c79b73.gif',
-'https://files.catbox.moe/9cm0x9.mp4',
+'https://media.tenor.com/crYa4JHw9r0AAAAM/anime-good-night.gif',
 'https://files.catbox.moe/7kxjhv.mp4',
 'https://files.catbox.moe/id09sr.mp4',
 'https://files.catbox.moe/3kyhf0.mp4',
