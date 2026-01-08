@@ -49,7 +49,7 @@ const scaredGifs=[
 'https://media.tenor.com/le8dL1RTwHQAAAAM/taiyo-taiyou.gif',
 'https://media.tenor.com/v3BB4d8pbFoAAAAM/one-piece-one-piece-movie-6.gif',
 'https://media.tenor.com/2FPcjP8vlTwAAAAM/saitama-one-punch-man.gif',
-'https://telegra.ph/file/dcde646a58d8e9bf44867.mp4',
+'https://media.tenor.com/-QSwbUkUu8cAAAAM/scared-terrified.gif',
 'https://telegra.ph/file/dcde646a58d8e9bf44867.mp4',
 'https://telegra.ph/file/dcde646a58d8e9bf44867.mp4',
 'https://telegra.ph/file/dcde646a58d8e9bf44867.mp4',
