@@ -57,7 +57,7 @@ const slapGifs=[
 'https://media.tenor.com/mTmYJx-mIa0AAAAM/fighter-boy-anime-guy-dangerous.gif',
 'https://media.tenor.com/ZozZrvtEdAkAAAAM/slap.gif',
 'https://media.tenor.com/7xFcP1KWjY0AAAAM/no.gif',
-'https://i.pinimg.com/originals/0c/09/ec/0c09ecfac6e0d93b894ec13fa900f9fa.gif',
+'https://media.tenor.com/yJmrNruFNtEAAAAM/slap.gif',
 'https://i.pinimg.com/originals/0c/09/ec/0c09ecfac6e0d93b894ec13fa900f9fa.gif',
 'https://i.pinimg.com/originals/0c/09/ec/0c09ecfac6e0d93b894ec13fa900f9fa.gif',
 ]
