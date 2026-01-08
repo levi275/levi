@@ -51,7 +51,7 @@ const shyGifs=[
 'https://i.pinimg.com/originals/d7/c3/0e/d7c30e46a937aaade4d7bc20eb09339b.gif',
 'https://i.pinimg.com/originals/7b/6e/22/7b6e2264e1e041f706d264a7f41c694f.gif',
 'https://i.pinimg.com/originals/3c/e5/d6/3ce5d6af434f62cc185590e8f84f4d53.gif',
-'https://telegra.ph/file/654313ad5a3e8b43fc535.mp4',
+'https://i.pinimg.com/originals/60/bd/28/60bd28e041d83ed07ac88e00d30843d5.gif',
 'https://telegra.ph/file/654313ad5a3e8b43fc535.mp4',
 'https://telegra.ph/file/654313ad5a3e8b43fc535.mp4',
 'https://telegra.ph/file/654313ad5a3e8b43fc535.mp4',
