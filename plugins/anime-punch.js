@@ -41,7 +41,7 @@ await m.react('👊')
 
 const punchGifs=[
 'https://i.pinimg.com/originals/8d/50/60/8d50607e59db86b5afcc21304194ba57.gif',
-'https://telegra.ph/file/8ac9ca359cac4c8786194.mp4',
+'https://i.pinimg.com/originals/43/aa/c9/43aac9630b94800a6b18c20583275b61.gif',
 'https://telegra.ph/file/cc20935de6993dd391af1.mp4',
 'https://telegra.ph/file/9c0bba4c6b71979e56f55.mp4',
 'https://telegra.ph/file/5d22649b472e539f27df9.mp4',
