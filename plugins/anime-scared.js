@@ -61,7 +61,7 @@ const scaredGifs=[
 'https://media.tenor.com/UZ0ul8ARdCkAAAAM/ruby-hoshino-anime.gif',
 'https://media.tenor.com/zh85z3B9LHYAAAAM/trembling-fear.gif',
 'https://media.tenor.com/P9LxKFsp5VMAAAAM/shiro-senko-san.gif',
-'https://media.tenor.com/ipuY9Vouk8wAAAAM/wakatsuki-nico.gif',
+'https://media.tenor.com/ipuY9Vouk8wAAAAM/wakatsuki-nico.gif'
 ]
 
 const randomGif=scaredGifs[Math.floor(Math.random()*scaredGifs.length)]
