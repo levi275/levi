@@ -44,7 +44,7 @@ const slapGifs=[
 'https://i.pinimg.com/originals/2e/83/32/2e833278b7ed147adb4e9a1f571c1352.gif',
 'https://i.pinimg.com/originals/13/81/03/1381036c9dcf14117351747e672ed515.gif',
 'https://i.pinimg.com/originals/b4/94/ab/b494ab93b90c81a747e0493f5cdd9d1f.gif',
-'https://telegra.ph/file/734cb1e4416d80a299dac.mp4',
+'https://i.pinimg.com/originals/6a/60/d1/6a60d1eaf8c7317f7dfb0a892789c490.gif',
 'https://telegra.ph/file/fc494a26b4e46c9b147d2.mp4'
 ]
 
