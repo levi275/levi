@@ -1,53 +1,71 @@
-//Codígo creado por Destroy wa.me/584120346669
+import axios from 'axios'
+import fs from 'fs'
+import path from 'path'
+import { spawn } from 'child_process'
+import { tmpdir } from 'os'
 
-import fs from 'fs';
-import path from 'path';
-
-let handler = async (m, { conn, usedPrefix }) => {
-    let who;
-
-    if (m.mentionedJid.length > 0) {
-        who = m.mentionedJid[0];
-    } else if (m.quoted) {
-        who = m.quoted.sender;
-    } else {
-        who = m.sender;
-    }
-
-    let name = conn.getName(who);
-    let name2 = conn.getName(m.sender);
-    m.react('😥');
-
-    let str;
-    if (m.mentionedJid.length > 0) {
-        str = `\`${name2}\` *está triste por* \`${name || who}\`.`;
-    } else if (m.quoted) {
-        str = `\`${name2}\` *está triste por* \`${name || who}\`.`;
-    } else {
-        str = `\`${name2}\` *está muy triste.*`.trim();
-    }
-    
-    if (m.isGroup) {
-        let pp = 'https://telegra.ph/file/9c69837650993b40113dc.mp4'; 
-        let pp2 = 'https://telegra.ph/file/071f2b8d26bca81578dd0.mp4'; 
-        let pp3 = 'https://telegra.ph/file/0af82e78c57f7178a333b.mp4';
-        let pp4 = 'https://telegra.ph/file/8fb8739072537a63f8aee.mp4';
-        let pp5 = 'https://telegra.ph/file/4f81cb97f31ce497c3a81.mp4';
-        let pp6 = 'https://telegra.ph/file/6d626e72747e0c71eb920.mp4';
-        let pp7 = 'https://telegra.ph/file/8fd1816d52cf402694435.mp4';
-        let pp8 = 'https://telegra.ph/file/3e940fb5e2b2277dc754b.mp4';
-        
-        const videos = [pp, pp2, pp3, pp4, pp5, pp6, pp7, pp8];
-        const video = videos[Math.floor(Math.random() * videos.length)];
-
-        let mentions = [who];
-        conn.sendMessage(m.chat, { video: { url: video }, gifPlayback: true, caption: str, mentions }, { quoted: m });
-    }
+function gifToMp4(gifBuffer){
+return new Promise((resolve,reject)=>{
+const tempGif=path.join(tmpdir(),`${Date.now()}.gif`)
+const tempMp4=path.join(tmpdir(),`${Date.now()}.mp4`)
+fs.writeFileSync(tempGif,gifBuffer)
+const ffmpeg=spawn('ffmpeg',['-y','-i',tempGif,'-c:v','libx264','-pix_fmt','yuv420p','-vf','scale=trunc(iw/2)*2:trunc(ih/2)*2','-movflags','+faststart',tempMp4])
+ffmpeg.on('close',code=>{
+fs.unlinkSync(tempGif)
+if(code===0){
+const mp4Buffer=fs.readFileSync(tempMp4)
+fs.unlinkSync(tempMp4)
+resolve(mp4Buffer)
+}else reject(new Error(`ffmpeg error ${code}`))
+})
+ffmpeg.on('error',err=>{
+fs.unlinkSync(tempGif)
+reject(err)
+})
+})
 }
 
-handler.help = ['sad/triste @tag'];
-handler.tags = ['anime'];
-handler.command = ['sad', 'triste'];
-handler.group = true;
+let handler=async(m,{conn})=>{
+let who=m.mentionedJid&&m.mentionedJid[0]?m.mentionedJid[0]:m.quoted?m.quoted.sender:m.sender
+let nameSender=conn.getName(m.sender)
+let nameTarget=conn.getName(who)
 
-export default handler;
+let caption=who===m.sender
+? `\`${nameSender}\` *está muy triste.*`
+: `\`${nameSender}\` *está triste por* \`${nameTarget}\`.`
+
+await m.react('😥')
+
+const sadGifs=[
+'https://telegra.ph/file/9c69837650993b40113dc.mp4',
+'https://telegra.ph/file/071f2b8d26bca81578dd0.mp4',
+'https://telegra.ph/file/0af82e78c57f7178a333b.mp4',
+'https://telegra.ph/file/8fb8739072537a63f8aee.mp4',
+'https://telegra.ph/file/4f81cb97f31ce497c3a81.mp4',
+'https://telegra.ph/file/6d626e72747e0c71eb920.mp4',
+'https://telegra.ph/file/8fd1816d52cf402694435.mp4',
+'https://telegra.ph/file/3e940fb5e2b2277dc754b.mp4'
+]
+
+const randomGif=sadGifs[Math.floor(Math.random()*sadGifs.length)]
+
+try{
+const response=await axios({method:'get',url:randomGif,responseType:'arraybuffer',headers:{'User-Agent':'Mozilla/5.0','Referer':'https://google.com/'}})
+let buffer=Buffer.from(response.data)
+try{
+buffer=await gifToMp4(buffer)
+await conn.sendMessage(m.chat,{video:buffer,caption:caption,gifPlayback:true,mentions:[who,m.sender],mimetype:'video/mp4'},{quoted:m})
+}catch{
+throw new Error('conversion fail')
+}
+}catch{
+await conn.sendMessage(m.chat,{video:{url:randomGif},caption:caption,gifPlayback:true,mentions:[who,m.sender]},{quoted:m})
+}
+}
+
+handler.help=['sad','triste']
+handler.tags=['anime']
+handler.command=['sad','triste']
+handler.group=true
+
+export default handler
