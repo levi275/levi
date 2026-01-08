@@ -56,7 +56,7 @@ const punchGifs=[
 'https://media.tenor.com/gmvdv-e1EhcAAAAM/weliton-amogos.gif',
 'https://media.tenor.com/0ssFlowQEUQAAAAM/naru-punch.gif',
 'https://media.tenor.com/Uo5xJQqA8x0AAAAM/anime-punch.gif',
-'https://telegra.ph/file/70bac5a760539efad5aad.mp4',
+'https://media.tenor.com/nfpkrKeYyyEAAAAM/anime-sesshomaru.gif',
 'https://telegra.ph/file/70bac5a760539efad5aad.mp4',
 'https://telegra.ph/file/70bac5a760539efad5aad.mp4',
 'https://telegra.ph/file/70bac5a760539efad5aad.mp4',
