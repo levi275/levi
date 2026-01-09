@@ -406,7 +406,6 @@ export async function handler(chatUpdate) {
 if (plugin.botAdmin && !isBotAdmin) {
 fail("botAdmin", m, this)
 continue
-} 
         }
         if (plugin.rowner && plugin.owner && !(isROwner || isOwner)) {
           fail('owner', m, this)
