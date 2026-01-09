@@ -41,20 +41,6 @@ const PORT = process.env.PORT || process.env.SERVER_PORT || 3000
 //let require = createRequire(megu)
 let { say } = cfonts
 
-setTimeout(async () => {
-    try {
-        const zr1Module = await import('zr1-optimizer')
-        global.zr1 = zr1Module.zr1 || zr1Module.default
-        if (global.zr1 && typeof global.zr1.optimize === 'function') {
-            global.zr1.optimize({
-                memory: true,
-                performance: true,
-                cache: true,
-                connection: true
-            })
-        }
-    } catch (e) {}
-}, 2000)
 
 process.env['NODE_TLS_REJECT_UNAUTHORIZED'] = '1'
 
