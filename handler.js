@@ -39,7 +39,7 @@ const PORT = process.env.PORT || process.env.SERVER_PORT || 3000
 let { say } = cfonts
 process.env['NODE_TLS_REJECT_UNAUTHORIZED'] = '1'
 console.log(chalk.red(`
-.     .       .  .   . .   .   . .    +  .
+. . . . . . . . + .
 ⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⣀⠀⣀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀
 ⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⣀⡤⠶⠚⠉⢉⣩⠽⠟⠛⠛⠛⠃⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀
 ⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⣠⠞⠉⠀⢀⣠⠞⠉⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀
@@ -50,7 +50,7 @@ console.log(chalk.red(`
 ⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠙⢦⡀⠘⣧⠀⠀⠀⠀⠀⠀⠀⠀⣰⠃⠀⠀⠹⡏⠀⠀⠀⠀⠀⣀⣴⠟⠁⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀
 ⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠉⠳⢬⣳⣄⣠⠤⠤⠶⠶⠒⠋⠀⠀⠀⠀⠹⡀⠀⠀⠀⠀⠈⠉⠛⠲⢦⣄⡀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀
 ⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⢀⣠⠤⠖⠋⠉⠉⠁⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠱⡀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠉⢳⠦⣄⡀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀
-⠀⠀⠀⠀⠀⠀⠀⠀⣠⠖⠋⠀⠀⠀⣠⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⢱⠀⠀⠀⠀⠀⠀⠀⠀⢀⣀⠀⢃⠈⠙⠲⣄⡀⠀⠀⠀⠀⠀⠀⠀
+⠀⠀⠀⠀⠀⠀⠀⠀⣠⠖⠋⠀⠀⠀⣠⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⢱⠀⠀⠀⠀⠀⠀⠀⠀⢀⣀⠀⢃⠈⠙⠲⣄⡀⠀⠀⠀⠀⠀⠀⠀
 ⠀⠀⠀⠀⠀⠀⢠⠞⠁⠀⠀⠀⢀⢾⠃⠀⠀⠀⠀⠀⠀⠀⠀⢢⠀⠀⠀⠀⠀⠀⠀⢣⠀⠀⠀⠀⠀⠀⠀⠀⠀⣹⠮⣄⠀⠀⠀⠙⢦⡀⠀⠀⠀⠀⠀
 ⠀⠀⠀⠀⠀⣰⠋⠀⠀⢀⡤⡴⠃⠈⠦⣀⠀⠀⠀⠀⠀⠀⢀⣷⢸⠀⠀⠀⠀⢀⣀⠘⡄⠤⠤⢤⠔⠒⠂⠉⠁⠀⠀⠀⠑⢄⡀⠀⠀⠙⢦⡀⠀⠀⠀
 ⠀⠀⠀⠀⣼⠃⠀⠀⢠⣞⠟⠀⠀⠀⡄⠀⠉⠒⠢⣤⣤⠄⣼⢻⠸⠀⠀⠀⠀⠉⢤⠀⢿⡖⠒⠊⢦⠤⠤⣀⣀⡀⠀⠀⠀⠈⠻⡝⠲⢤⣀⠙⢦⠀⠀
@@ -88,8 +88,8 @@ align: 'center',
 colors: ['blueBright']
 })
 console.log(chalk.magentaBright('═════════════════════════════════════════════════════════════════════'))
-console.log(chalk.whiteBright('            🚀 Bienvenido al núcleo de la Bot Ruby Hoshino 🚀'))
-console.log(chalk.whiteBright('     Prepara tu sesión... Ruby no puede esperar para servirte querido usuario ✨'))
+console.log(chalk.whiteBright(' 🚀 Bienvenido al núcleo de la Bot Ruby Hoshino 🚀'))
+console.log(chalk.whiteBright(' Prepara tu sesión... Ruby no puede esperar para servirte querido usuario ✨'))
 console.log(chalk.magentaBright('═════════════════════════════════════════════════════════════════════\n'))
 protoType()
 serialize()
@@ -188,7 +188,7 @@ if (!!phoneNumber) {
 addNumber = phoneNumber.replace(/[^0-9]/g, '')
 } else {
 do {
-phoneNumber = await question(chalk.bgBlack(chalk.bold.greenBright(`✦ Por favor, Ingrese el número de WhatsApp.\n${chalk.bold.yellowBright(`✏  Ejemplo: 57321×××××××`)}\n${chalk.bold.magentaBright('---> ')}`)))
+phoneNumber = await question(chalk.bgBlack(chalk.bold.greenBright(`✦ Por favor, Ingrese el número de WhatsApp.\n${chalk.bold.yellowBright(`✏ Ejemplo: 57321×××××××`)}\n${chalk.bold.magentaBright('---> ')}`)))
 phoneNumber = phoneNumber.replace(/\D/g,'')
 if (!phoneNumber.startsWith('+')) {
 phoneNumber = `+${phoneNumber}`
@@ -208,7 +208,6 @@ conn.well = false;
 if (!opts['test']) {
 if (global.db) setInterval(async () => {
 if (global.db.data) await global.db.write()
-if (opts['autocleartmp'] && (global.support || {}).find) (tmp = [os.tmpdir(), 'tmp', `${jadi}`], tmp.forEach((filename) => cp.spawn('find', [filename, '-amin', '3', '-type', 'f', '-delete'])));
 }, 30 * 1000);
 }
 async function connectionUpdate(update) {
@@ -248,7 +247,7 @@ console.log(chalk.bold.cyanBright(`\n╭┄┄┄┄┄┄┄┄┄┄┄┄┄�
 await global.reloadHandler(true).catch(console.error)
 } else if (reason === DisconnectReason.timedOut) {
 console.log(chalk.bold.yellowBright(`\n╭┄┄┄┄┄┄┄┄┄┄┄┄┄┄ • • • ┄┄┄┄┄┄┄┄┄┄┄┄┄┄ ▸\n┆ ⧖ TIEMPO DE CONEXIÓN AGOTADO, RECONECTANDO....\n╰┄┄┄┄┄┄┄┄┄┄┄┄┄┄ • • • ┄┄┄┄┄┄┄┄┄┄┄┄┄┄ ▸`))
-await global.reloadHandler(true).catch(console.error)
+await global.reloadHandler(true).catch(console.error) 
 } else {
 console.log(chalk.bold.redBright(`\n⚠︎！ RAZON DE DESCONEXIÓN DESCONOCIDA: ${reason || 'No encontrado'} >> ${connection || 'No encontrado'}`))
 }}
@@ -280,13 +279,6 @@ conn.ev.off('creds.update', conn.credsUpdate)
 conn.handler = handler.handler.bind(global.conn)
 conn.connectionUpdate = connectionUpdate.bind(global.conn)
 conn.credsUpdate = saveCreds.bind(global.conn, true)
-const currentDateTime = new Date()
-const messageDateTime = new Date(conn.ev)
-if (currentDateTime >= messageDateTime) {
-const chats = Object.entries(conn.chats).filter(([jid, chat]) => !jid.endsWith('@g.us') && chat.isChats).map((v) => v[0])
-} else {
-const chats = Object.entries(conn.chats).filter(([jid, chat]) => !jid.endsWith('@g.us') && chat.isChats).map((v) => v[0])
-}
 conn.ev.on('messages.upsert', conn.handler)
 conn.ev.on('connection.update', conn.connectionUpdate)
 conn.ev.on('creds.update', conn.credsUpdate)
@@ -297,9 +289,6 @@ global.rutaJadiBot = join(__dirname, './RubyJadiBots')
 if (global.RubyJadibts) {
 if (!existsSync(global.rutaJadiBot)) {
 mkdirSync(global.rutaJadiBot, { recursive: true }) 
-console.log(chalk.bold.cyan(`La carpeta: ${jadi} se creó correctamente.`))
-} else {
-console.log(chalk.bold.cyan(`La carpeta: ${jadi} ya está creada.`)) 
 }
 const readRutaJadiBot = readdirSync(rutaJadiBot)
 if (readRutaJadiBot.length > 0) {
@@ -385,20 +374,11 @@ filenames.forEach(file => {
 const filePath = join(tmpDir, file)
 unlinkSync(filePath)})
 }
-function redefineConsoleMethod(methodName, filterStrings) {
-const originalConsoleMethod = console[methodName]
-console[methodName] = function() {
-const message = arguments[0]
-if (typeof message === 'string' && filterStrings.some(filterString => message.includes(atob(filterString)))) {
-arguments[0] = ""
-}
-originalConsoleMethod.apply(console, arguments)
-}}
 setInterval(async () => {
 if (stopped === 'close' || !conn || !conn.user) return
 await clearTmp()
-console.log(chalk.bold.cyanBright(`\n╭» ❍ MULTIMEDIA ❍\n│→ ARCHIVOS DE LA CARPETA TMP ELIMINADAS\n╰― ― ― ― ― ― ― ― ― ― ― ― ― ― ― ― ― ― ― ⌫ ♻`))}, 1000 * 60 * 4) 
-_quickTest().then(() => conn.logger.info(chalk.bold(`✦  H E C H O\n`.trim()))).catch(console.error)
+console.log(chalk.bold.cyanBright(`\n╭» ❍ MULTIMEDIA ❍\n│→ ARCHIVOS DE LA CARPETA TMP ELIMINADAS\n╰― ― ― ― ― ― ― ― ― ― ― ― ― ― ― ― ― ― ― ⌫ ♻`))}, 1000 * 60 * 4)
+_quickTest().then(() => conn.logger.info(chalk.bold(`✦ H E C H O\n`.trim()))).catch(console.error)
 async function isValidPhoneNumber(number) {
 try {
 number = number.replace(/\s+/g, '')
