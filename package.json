@@ -46,7 +46,6 @@
 "chalk": "^5.1.0",
 "cfonts": "^3.3.0",
 "url-file-size": "^1.0.5-1",
-"fluid-spotify.js": "*",
 "cheerio": "npm:cheerio@1.0.0-rc.12",
 "express": "^4.18.1",
 "file-type": "^18.0.0",
