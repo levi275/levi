@@ -71,6 +71,7 @@ return path.dirname(global.__filename(pathURL, true))
 }; global.__require = function require(dir = import.meta.url) {
 return createRequire(dir)
 }
+global.__connectingSubBots = global.__connectingSubBots || new Set()
 global.API = (name, path = '/', query = {}, apikeyqueryname) => (name in global.APIs ? global.APIs[name] : name) + path + (query || apikeyqueryname ? '?' + new URLSearchParams(Object.entries({...query, ...(apikeyqueryname ? {[apikeyqueryname]: global.APIKeys[name in global.APIs ? global.APIs[name] : name]} : {})})) : '');
 global.timestamp = {start: new Date}
 const __dirname = global.__dirname(import.meta.url)
@@ -132,7 +133,7 @@ const connectionOptions = {
 logger: pino({ level: 'silent' }),
 printQRInTerminal: opcion == '1' ? true : methodCodeQR ? true : false,
 mobile: MethodMobile,
-browser: opcion == '1' ? [`${nameqr}`, 'Edge', '20.0.04'] : methodCodeQR ? [`${nameqr}`, 'Edge', '20.0.04'] : ['Ubuntu', 'Edge', '110.0.1587.56'],
+browser: opcion == '1' ? [`${nameqr}`, 'Edge', '110.0.1587.56'] : methodCodeQR ? [`${nameqr}`, 'Edge', '110.0.1587.56'] : ['Ubuntu', 'Edge', '110.0.1587.56'],
 auth: {
 creds: state.creds,
 keys: makeCacheableSignalKeyStore(state.keys, Pino({ level: "fatal" }).child({ level: "fatal" })),
@@ -357,6 +358,8 @@ const filePath = join(tmpDir, file)
 unlinkSync(filePath)})
 }
 function purgeRubySession() {
+try {
+if (global.__connectingSubBots && global.__connectingSubBots.size) return
 let prekey = []
 let directorio = readdirSync(`./${Rubysessions}`)
 let filesFolderPreKeys = directorio.filter(file => {
@@ -366,9 +369,13 @@ prekey = [...prekey, ...filesFolderPreKeys]
 filesFolderPreKeys.forEach(files => {
 unlinkSync(`./${Rubysessions}/${files}`)
 })
+} catch (e) {
+console.error('purgeRubySession error', e)
+}
 }
 function purgeRubySessionSB() {
 try {
+if (global.__connectingSubBots && global.__connectingSubBots.size) return
 const base = `./${jadi}/`
 if (!existsSync(base)) return
 const cutoff = Date.now() - 1000 * 60 * 60 * 24
@@ -398,6 +405,7 @@ console.error('Error en purgeRubySessionSB:', err)
 }
 function purgeOldFiles() {
 try {
+if (global.__connectingSubBots && global.__connectingSubBots.size) return
 const directories = [`./${Rubysessions}/`, `./${jadi}/`]
 const cutoff = Date.now() - 1000 * 60 * 60 * 24
 for (const dir of directories) {
