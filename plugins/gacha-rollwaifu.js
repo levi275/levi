@@ -54,15 +54,33 @@ let handler = async (m, { conn }) => {
       };
     }
 
-    const message = `︵ᮬ⌒⏜︵፝֟ᮬ⏜︵ᮬ⌒⏜ᮬ
- ꒰͜  ✦ 𝐂𝐇𝐀𝐑𝐀𝐂𝐓𝐄𝐑 𝐑𝐎𝐋𝐋 ✦ ͜꒱
+    const ownerName = claimedInGroup
+  ? `@${claimedInGroup.userId.split('@')[0]}`
+  : 'Nadie';
 
-👤 𝐍𝐨𝐦𝐛𝐫𝐞 ╰┈➤ *${randomCharacter.name}*
-⚧ 𝐆𝐞𝐧𝐞𝐫𝐨 ╰┈➤ *${randomCharacter.gender}*
-🪙 𝐕𝐚𝐥𝐨𝐫   ╰┈➤ *${randomCharacter.value}*
-📊 𝐄𝐬𝐭𝐚𝐝𝐨  ╰┈➤ ${statusMessage}
-📖 𝐅𝐮𝐞𝐧𝐭𝐞  ╰┈➤ *${randomCharacter.source}*
-🆔 𝐈𝐃      ╰┈➤ *${randomCharacter.id}*`;
+const message = `
+ㅤㅤ⏜⋮ㅤㅤ꒰ㅤ꒰ㅤㅤ𖹭⃞🎲⃞𖹭ㅤㅤ꒱ㅤ꒱ㅤㅤ⋮⏜
+꒰ㅤ꒰͡ㅤ 🄽🅄🄴🅅🄾 🄿🄴🅁🅂🄾🄽🄰🄹🄴ㅤㅤ͡꒱ㅤ꒱
+
+▓𓏴𓏴 ۪ ֹ 🄽꯭🄾꯭🄼꯭🄱꯭🅁꯭🄴 :
+╰┈➤ ❝ ${randomCharacter.name} ❞
+
+▓𓏴𓏴 ۪ ֹ 🅅꯭🄰꯭🄻꯭🄾꯭🅁 :
+╰┈➤ 🪙 ${randomCharacter.value}
+
+▓𓏴𓏴 ۪ ֹ 🄴꯭🅂꯭🅃꯭🄰꯭🄳꯭🄾 :
+╰┈➤ ✨ ꯭${claimedInGroup ? '🚫 Ocupado' : '✅ Libre'}
+
+▓𓏴𓏴 ۪ ֹ 🄳꯭🅄꯭🄴꯭🄽꯭̃🄾 :
+╰┈➤ 👤 ${ownerName}
+
+▓𓏴𓏴 ۪ ֹ 🄵꯭🅄꯭🄴꯭🄽꯭🅃꯭🄴 :
+╰┈➤ 📖 ${randomCharacter.source}
+
+┉͜┄͜─┈┉⃛┄─꒰֟፝͡ 🅸🅳: ${randomCharacter.id} ꒱─┄⃨┉┈─͡┄͡┉
+ㅤㅤㅤㅤㅤㅤ© ᑲ᥆𝗍 𝗀ɑᥴ꯭hɑ 𝗌𝗒sł꯭ᥱꭑ꒱
+`;
+
 
     const mentions = claimedInGroup ? [claimedInGroup.userId] : [];
     await conn.sendFile(m.chat, randomImage, `${randomCharacter.name}.jpg`, message, m, { mentions });
