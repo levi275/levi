@@ -1,5 +1,5 @@
 import { promises as fs } from 'fs'
-import { loadHarem } from '../src/lib/gacha-group.js'
+import { loadHarem } from '../lib/gacha-group.js'
 
 const charactersFilePath = './src/database/characters.json'
 
