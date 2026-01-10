@@ -94,15 +94,19 @@ const msgRetry = (MessageRetryMap) => { }
 const msgRetryCache = new NodeCache()
 const { state, saveState, saveCreds } = await useMultiFileAuthState(pathRubyJadiBot)
 const connectionOptions = {
- logger: pino({ level: "fatal" }),
- printQRInTerminal: false,
- auth: { creds: state.creds, keys: makeCacheableSignalKeyStore(state.keys, pino({level: 'silent'})) },
- msgRetry,
- msgRetryCache,
- browser: ['Ubuntu','Edge','110.0.1587.56'],
- version: version,
- generateHighQualityLinkPreview: true
+  logger: pino({ level: "fatal" }),
+  printQRInTerminal: false,
+  auth: { 
+    creds: state.creds, 
+    keys: makeCacheableSignalKeyStore(state.keys, pino({ level: 'silent' })) 
+  },
+  msgRetry,
+  msgRetryCache,
+  browser: ['Ubuntu','Edge','110.0.1587.56'],
+  version: [2, 3000, 1023223821],
+  generateHighQualityLinkPreview: true
 };
+
 let sock = makeWASocket(connectionOptions)
 sock.isInit = false
 let isInit = true
