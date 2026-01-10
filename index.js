@@ -36,76 +36,34 @@ import NodeCache from 'node-cache'
 const {CONNECTING} = ws
 const {chain} = lodash
 const PORT = process.env.PORT || process.env.SERVER_PORT || 3000
-
-//const yuw = dirname(fileURLToPath(import.meta.url))
-//let require = createRequire(megu)
 let { say } = cfonts
-
-
 process.env['NODE_TLS_REJECT_UNAUTHORIZED'] = '1'
-
-
 console.log(chalk.red(`
        .     .       .  .   . .   .   . .    +  .
 ⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⣀⠀⣀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀
 ⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⣀⡤⠶⠚⠉⢉⣩⠽⠟⠛⠛⠛⠃⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀
 ⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⣠⠞⠉⠀⢀⣠⠞⠉⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀
 ⠀⠀⠀⠀⠀⠀⠀⠀⠀⢀⡞⠁⠀⠀⣰⠋⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀
-⠀⠀⠀⠀⠀⠀⠀⠀⠀⣾⠀⠀⠀⡼⠁⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⢀⣀⣠⡤⠤⠄⢤⣄⣀⣀⣀⠀⠀⠀⠀⠀⠀⠀⠀
-⠀⠀⠀⠀⠀⠀⠀⠀⠀⡇⠀⠀⢰⡇⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⢀⣠⠴⠒⠋⠉⠀⠀⠀⣀⣤⠴⠒⠋⠉⠉⠀⠀⠀⠀⠀⠀⠀⠀
-⠀⠀⠀⠀⠀⠀⠀⠀⠀⠻⡄⠀⠀⣧⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⣠⠞⢳⡄⢀⡴⠚⠉⠀⠀⠀⠀⠀⣠⠴⠚⠉⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀
-⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠙⢦⡀⠘⣧⠀⠀⠀⠀⠀⠀⠀⠀⣰⠃⠀⠀⠹⡏⠀⠀⠀⠀⠀⣀⣴⠟⠁⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀
-⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠉⠳⢬⣳⣄⣠⠤⠤⠶⠶⠒⠋⠀⠀⠀⠀⠹⡀⠀⠀⠀⠀⠈⠉⠛⠲⢦⣄⡀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀
-⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⢀⣠⠤⠖⠋⠉⠉⠁⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠱⡀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠉⢳⠦⣄⡀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀
-⠀⠀⠀⠀⠀⠀⠀⠀⣠⠖⠋⠀⠀⠀⣠⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⢱⠀⠀⠀⠀⠀⠀⠀⠀⢀⣀⠀⢃⠈⠙⠲⣄⡀⠀⠀⠀⠀⠀⠀⠀
-⠀⠀⠀⠀⠀⠀⢠⠞⠁⠀⠀⠀⢀⢾⠃⠀⠀⠀⠀⠀⠀⠀⠀⢢⠀⠀⠀⠀⠀⠀⠀⢣⠀⠀⠀⠀⠀⠀⠀⠀⠀⣹⠮⣄⠀⠀⠀⠙⢦⡀⠀⠀⠀⠀⠀
-⠀⠀⠀⠀⠀⣰⠋⠀⠀⢀⡤⡴⠃⠈⠦⣀⠀⠀⠀⠀⠀⠀⢀⣷⢸⠀⠀⠀⠀⢀⣀⠘⡄⠤⠤⢤⠔⠒⠂⠉⠁⠀⠀⠀⠑⢄⡀⠀⠀⠙⢦⡀⠀⠀⠀
-⠀⠀⠀⠀⣼⠃⠀⠀⢠⣞⠟⠀⠀⠀⡄⠀⠉⠒⠢⣤⣤⠄⣼⢻⠸⠀⠀⠀⠀⠉⢤⠀⢿⡖⠒⠊⢦⠤⠤⣀⣀⡀⠀⠀⠀⠈⠻⡝⠲⢤⣀⠙⢦⠀⠀
-⠀⠀⠀⢰⠃⠀⠀⣴⣿⠎⠀⠀⢀⣜⠤⠄⢲⠎⠉⠀⠀⡼⠸⠘⡄⡇⠀⠀⠀⠀⢸⠀⢸⠘⢆⠀⠘⡄⠀⠀⠀⢢⠉⠉⠀⠒⠒⠽⡄⠀⠈⠙⠮⣷⡀
-⠀⠀⠀⡟⠀⠀⣼⢻⠧⠐⠂⠉⡜⠀⠀⡰⡟⠀⠀⠀⡰⠁⡇⠀⡇⡇⠀⠀⠀⠀⢺⠇⠀⣆⡨⢆⠀⢽⠀⠀⠀⠈⡷⡄⠀⠀⠀⠀⠹⡄⠀⠀⠀⠈⠁
-⠀⠀⢸⠃⠀⠀⢃⠎⠀⠀⠀⣴⠃⠀⡜⠹⠁⠀⠀⡰⠁⢠⠁⠀⢸⢸⠀⠀⠀⢠⡸⢣⠔⡏⠀⠈⢆⠀⣇⠀⠀⠀⢸⠘⢆⠀⠀⠀⠀⢳⠀⠀⠀⠀⠀
-⠀⠀⢸⠀⠀⠀⡜⠀⠀⢀⡜⡞⠀⡜⠈⠏⠀⠈⡹⠑⠒⠼⡀⠀⠀⢿⠀⠀⠀⢀⡇⠀⢇⢁⠀⠀⠈⢆⢰⠀⠀⠀⠈⡄⠈⢢⠀⠀⠀⠈⣇⠀⠀⠀⠀
-⠀⠀⢸⡀⠀⢰⠁⠀⢀⢮⠀⠇⡜⠀⠘⠀⠀⢰⠃⠀⠀⡇⠈⠁⠀⢘⡄⠀⠀⢸⠀⠀⣘⣼⠤⠤⠤⣈⡞⡀⠀⠀⠀⡇⠰⡄⢣⡀⠀⠀⢻⠀⠀⠀⠀
-⠀⠀⠈⡇⠀⡜⠀⢀⠎⢸⢸⢰⠁⠀⠄⠀⢠⠃⠀⠀⢸⠀⠀⠀⠀⠀⡇⠀⠀⡆⠀⠀⣶⣿⡿⠿⡛⢻⡟⡇⠀⠀⠀⡇⠀⣿⣆⢡⠀⠀⢸⡇⠀⠀⠀
-⠀⠀⢠⡏⠀⠉⢢⡎⠀⡇⣿⠊⠀⠀⠀⢠⡏⠀⠀⠀⠎⠀⠀⠀⠀⠀⡇⠀⡸⠀⠀⠀⡇⠀⢰⡆⡇⢸⢠⢹⠀⠀⠀⡇⠀⢹⠈⢧⣣⠀⠘⡇⠀⠀⠀
-⠀⠀⢸⡇⠀⠀⠀⡇⠀⡇⢹⠀⠀⠀⢀⡾⡇⠀⠀⠀⠀⠀⠀⠀⠀⠀⡇⢠⠃⠀⠀⠠⠟⡯⣻⣇⢃⠇⢠⠏⡇⠀⢸⡆⠀⢸⠀⠈⢳⡀⠀⡇⠀⠀⠀
-⠀⠀⠀⣇⠀⡔⠋⡇⠀⢱⢼⠀⠀⡂⣼⡇⢹⣶⣶⣶⣤⣤⣀⠀⠀⠀⣇⠇⠀⠀⠀⠀⣶⡭⢃⣏⡘⠀⡎⠀⠇⠀⡾⣷⠀⣼⠀⠀⠀⢻⡄⡇⠀⠀⠀
-⠀⠀⠀⣹⠜⠋⠉⠓⢄⡏⢸⠀⠀⢳⡏⢸⠹⢀⣉⢭⣻⡽⠿⠛⠓⠀⠋⠀⠀⠀⠀⠀⠘⠛⠛⠓⠀⡄⡇⠀⢸⢰⡇⢸⡄⡟⠀⠀⠀⠀⢳⡇⠀⠀⠀
-⠀⣠⠞⠁⠀⠀⠀⠀⠀⢙⠌⡇⠀⣿⠁⠀⡇⡗⠉⠁⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠰⠀⠀⠀⠀⠀⠀⠁⠁⠀⢸⣼⠀⠈⣇⡇⠀⠀⠀⠀⠀⠀⠀⠀⠀
-⢸⠁⠀⠀⢀⡠⠔⠚⠉⠉⢱⣇⢸⢧⠀⠀⠸⣱⠀⠀⠀⠀⠀⠀⠀⠀⣀⣀⡤⠦⡔⠀⠀⠀⠀⠀⢀⡼⠀⠀⣼⡏⠀⠀⢹⡇⠀⠀⠀⠀⠀⠀⠀⠀⠀
-⢸⠀⠀⠀⠋⠀⠀⠀⢀⡠⠤⣿⣾⣇⣧⠀⠀⢫⡆⠀⠀⠀⠀⠀⠀⠀⢨⠀⠀⣠⠇⠀⠀⢀⡠⣶⠋⠀⠀⡸⣾⠁⠀⠀⠈⠁⠀⠀⠀⠀⠀⠀⠀⠀⠀
-⢸⡄⠀⠀⠀⠀⠠⠊⠁⠀⠀⢸⢃⠘⡜⡵⡀⠈⢿⡱⢲⡤⠤⢀⣀⣀⡀⠉⠉⣀⡠⡴⠚⠉⣸⢸⠀⠀⢠⣿⣿⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀
-⠀⢧⠀⠀⠀⠀⠀⠀⠀⣀⠤⠚⠚⣤⣵⡰⡑⡄⠀⢣⡈⠳⡀⠀⠀⠀⢨⡋⠙⣆⢸⠀⠀⣰⢻⡎⠀⠀⡎⡇⡇⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀
-⠀⠈⢷⡀⠀⠀⠀⠀⠀⠁⠀⠀⠀⡸⢌⣳⣵⡈⢦⡀⠳⡀⠈⢦⡀⠀⠘⠏⠲⣌⠙⢒⠴⡧⣸⡇⠀⡸⢸⠇⡇⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀
-⠀⠀⢠⣿⠢⡀⠀⠀⠀⠠⠄⡖⠋⠀⠀⠙⢿⣳⡀⠑⢄⠹⣄⡀⠙⢄⡠⠤⠒⠚⡖⡇⠀⠘⣽⡇⢠⠃⢸⢀⡇⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀
-⠀⠀⣾⠃⠀⠀⠀⠀⠀⢀⡼⣄⠀⠀⠀⠀⠀⠑⣽⣆⠀⠑⢝⡍⠒⠬⢧⣀⡠⠊⠀⠸⡀⠀⢹⡇⡎⠀⡿⢸⠇⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀
-⠀⡼⠁⠀⠀⠀⠀⠀⠀⢀⠻⣺⣧⠀⠀⠀⠰⢢⠈⢪⡷⡀⠀⠙⡄⠀⠀⠱⡄⠀⠀⠀⢧⠀⢸⡻⠀⢠⡇⣾⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀
-⢰⠇⠀⠀⠀⠀⠀⠀⠀⢸⠀⡏⣿⠀⠀⠀⠀⢣⢇⠀⠑⣄⠀⠀⠸⡄⠀⠀⠘⡄⠀⠀⠸⡀⢸⠁⠀⡾⢰⡏⢳⡀
+⠀⠀⠀⠀⠀⠀⠀⠀⠀⣾⠀⠀⠀⡼⠁⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⢀⣀⣠⡤⠤⠄⢤⣄⣀⣀⣀⠀⠀⠀⠀⠀⠀⠀⠀
 `))
-
 cfonts.say('Ruby Hoshino Bot', {
-  font: 'chrome',
-  align: 'center',
-  gradient: ['#ff4fcb', '#ff77ff'],
-  transition: true,
-  env: 'node'
+font: 'chrome',
+align: 'center',
+gradient: ['#ff4fcb', '#ff77ff'],
+transition: true,
+env: 'node'
 })
-
-// Créditos
 cfonts.say('Developed By: Dioneibi-rip', {
-  font: 'console',
-  align: 'center',
-  colors: ['blueBright']
+font: 'console',
+align: 'center',
+colors: ['blueBright']
 })
-
 console.log(chalk.magentaBright('═════════════════════════════════════════════════════════════════════'))
 console.log(chalk.whiteBright('            🚀 Bienvenido al núcleo de la Bot Ruby Hoshino 🚀'))
 console.log(chalk.whiteBright('     Prepara tu sesión... Ruby no puede esperar para servirte querido usuario ✨'))
 console.log(chalk.magentaBright('═════════════════════════════════════════════════════════════════════\n'))
-
 protoType()
 serialize()
-
 global.__filename = function filename(pathURL = import.meta.url, rmPrefix = platform !== 'win32') {
 return rmPrefix ? /file:\/\/\//.test(pathURL) ? fileURLToPath(pathURL) : pathURL : pathToFileURL(pathURL).toString();
 }; global.__dirname = function dirname(pathURL) {
@@ -113,20 +71,13 @@ return path.dirname(global.__filename(pathURL, true))
 }; global.__require = function require(dir = import.meta.url) {
 return createRequire(dir)
 }
-
 global.API = (name, path = '/', query = {}, apikeyqueryname) => (name in global.APIs ? global.APIs[name] : name) + path + (query || apikeyqueryname ? '?' + new URLSearchParams(Object.entries({...query, ...(apikeyqueryname ? {[apikeyqueryname]: global.APIKeys[name in global.APIs ? global.APIs[name] : name]} : {})})) : '');
-
 global.timestamp = {start: new Date}
-
 const __dirname = global.__dirname(import.meta.url)
-
 global.opts = new Object(yargs(process.argv.slice(2)).exitProcess(false).parse())
 global.prefix = new RegExp('^[#/!.]')
-// global.opts['db'] = process.env['db']
-
 global.db = new Low(/https?:\/\//.test(opts['db'] || '') ? new cloudDBAdapter(opts['db']) : new JSONFile('./src/database/database.json'))
-
-global.DATABASE = global.db 
+global.DATABASE = global.db
 global.loadDatabase = async function loadDatabase() {
 if (global.db.READ) {
 return new Promise((resolve) => setInterval(async function() {
@@ -151,13 +102,11 @@ settings: {},
 global.db.chain = chain(global.db.data)
 }
 loadDatabase()
-
 const {state, saveState, saveCreds} = await useMultiFileAuthState(global.Rubysessions)
 const msgRetryCounterMap = (MessageRetryMap) => { };
 const msgRetryCounterCache = new NodeCache()
 const {version} = await fetchLatestBaileysVersion();
 let phoneNumber = global.botNumber
-
 const methodCodeQR = process.argv.includes("qr")
 const methodCode = !!phoneNumber || process.argv.includes("code")
 const MethodMobile = process.argv.includes("mobile")
@@ -166,7 +115,6 @@ const opcionQR = chalk.bold.green
 const opcionTexto = chalk.bold.cyan
 const rl = readline.createInterface({ input: process.stdin, output: process.stdout })
 const question = (texto) => new Promise((resolver) => rl.question(texto, resolver))
-
 let opcion
 if (methodCodeQR) {
 opcion = '1'
@@ -174,26 +122,23 @@ opcion = '1'
 if (!methodCodeQR && !methodCode && !fs.existsSync(`./${Rubysessions}/creds.json`)) {
 do {
 opcion = await question(colores('⌨ Seleccione una opción:\n') + opcionQR('1. Con código QR\n') + opcionTexto('2. Con código de texto de 8 dígitos\n--> '))
-
 if (!/^[1-2]$/.test(opcion)) {
 console.log(chalk.bold.redBright(`✦ No se permiten numeros que no sean 1 o 2, tampoco letras o símbolos especiales.`))
 }} while (opcion !== '1' && opcion !== '2' || fs.existsSync(`./${Rubysessions}/creds.json`))
-} 
-
-console.info = () => {} 
-console.debug = () => {} 
-
+}
+console.info = () => {}
+console.debug = () => {}
 const connectionOptions = {
 logger: pino({ level: 'silent' }),
 printQRInTerminal: opcion == '1' ? true : methodCodeQR ? true : false,
-mobile: MethodMobile, 
+mobile: MethodMobile,
 browser: opcion == '1' ? [`${nameqr}`, 'Edge', '20.0.04'] : methodCodeQR ? [`${nameqr}`, 'Edge', '20.0.04'] : ['Ubuntu', 'Edge', '110.0.1587.56'],
 auth: {
 creds: state.creds,
 keys: makeCacheableSignalKeyStore(state.keys, Pino({ level: "fatal" }).child({ level: "fatal" })),
 },
-markOnlineOnConnect: true, 
-generateHighQualityLinkPreview: true, 
+markOnlineOnConnect: true,
+generateHighQualityLinkPreview: true,
 getMessage: async (clave) => {
 let jid = jidNormalizedUser(clave.remoteJid)
 let msg = await store.loadMessage(jid, clave.id)
@@ -204,9 +149,7 @@ msgRetryCounterMap,
 defaultQueryTimeoutMs: undefined,
 version,
 }
-
 global.conn = makeWASocket(connectionOptions);
-
 if (!fs.existsSync(`./${Rubysessions}/creds.json`)) {
 if (opcion === '2' || methodCode) {
 opcion = '2'
@@ -231,20 +174,14 @@ console.log(chalk.bold.white(chalk.bgMagenta(`✧ CÓDIGO DE VINCULACIÓN ✧`))
 }, 3000)
 }}}
 }
-
 conn.isInit = false;
 conn.well = false;
-//conn.logger.info(`✦  H E C H O\n`)
-
 if (!opts['test']) {
 if (global.db) setInterval(async () => {
 if (global.db.data) await global.db.write()
 if (opts['autocleartmp'] && (global.support || {}).find) (tmp = [os.tmpdir(), 'tmp', `${jadi}`], tmp.forEach((filename) => cp.spawn('find', [filename, '-amin', '3', '-type', 'f', '-delete'])));
 }, 30 * 1000);
 }
-
-// if (opts['server']) (await import('./server.js')).default(global.conn, PORT);
-
 async function connectionUpdate(update) {
 const {connection, lastDisconnect, isNewLogin} = update;
 global.stopped = connection;
@@ -282,13 +219,12 @@ console.log(chalk.bold.cyanBright(`\n╭┄┄┄┄┄┄┄┄┄┄┄┄┄�
 await global.reloadHandler(true).catch(console.error)
 } else if (reason === DisconnectReason.timedOut) {
 console.log(chalk.bold.yellowBright(`\n╭┄┄┄┄┄┄┄┄┄┄┄┄┄┄ • • • ┄┄┄┄┄┄┄┄┄┄┄┄┄┄ ▸\n┆ ⧖ TIEMPO DE CONEXIÓN AGOTADO, RECONECTANDO....\n╰┄┄┄┄┄┄┄┄┄┄┄┄┄┄ • • • ┄┄┄┄┄┄┄┄┄┄┄┄┄┄ ▸`))
-await global.reloadHandler(true).catch(console.error) //process.send('reset')
+await global.reloadHandler(true).catch(console.error)
 } else {
 console.log(chalk.bold.redBright(`\n⚠︎！ RAZON DE DESCONEXIÓN DESCONOCIDA: ${reason || 'No encontrado'} >> ${connection || 'No encontrado'}`))
 }}
 }
 process.on('uncaughtException', console.error)
-
 let isInit = true;
 let handler = await import('./handler.js')
 global.reloadHandler = async function(restatConn) {
@@ -312,39 +248,30 @@ conn.ev.off('messages.upsert', conn.handler)
 conn.ev.off('connection.update', conn.connectionUpdate)
 conn.ev.off('creds.update', conn.credsUpdate)
 }
-
 conn.handler = handler.handler.bind(global.conn)
 conn.connectionUpdate = connectionUpdate.bind(global.conn)
 conn.credsUpdate = saveCreds.bind(global.conn, true)
-
 const currentDateTime = new Date()
 const messageDateTime = new Date(conn.ev)
 if (currentDateTime >= messageDateTime) {
 const chats = Object.entries(conn.chats).filter(([jid, chat]) => !jid.endsWith('@g.us') && chat.isChats).map((v) => v[0])
-
 } else {
 const chats = Object.entries(conn.chats).filter(([jid, chat]) => !jid.endsWith('@g.us') && chat.isChats).map((v) => v[0])
 }
-
 conn.ev.on('messages.upsert', conn.handler)
 conn.ev.on('connection.update', conn.connectionUpdate)
 conn.ev.on('creds.update', conn.credsUpdate)
 isInit = false
 return true
 };
-
-//Arranque nativo para subbots by - ReyEndymion >> https://github.com/ReyEndymion
-
 global.rutaJadiBot = join(__dirname, './RubyJadiBots')
-
 if (global.RubyJadibts) {
 if (!existsSync(global.rutaJadiBot)) {
-mkdirSync(global.rutaJadiBot, { recursive: true }) 
+mkdirSync(global.rutaJadiBot, { recursive: true })
 console.log(chalk.bold.cyan(`La carpeta: ${jadi} se creó correctamente.`))
 } else {
-console.log(chalk.bold.cyan(`La carpeta: ${jadi} ya está creada.`)) 
+console.log(chalk.bold.cyan(`La carpeta: ${jadi} ya está creada.`))
 }
-
 const readRutaJadiBot = readdirSync(rutaJadiBot)
 if (readRutaJadiBot.length > 0) {
 const creds = 'creds.json'
@@ -357,7 +284,6 @@ RubyJadiBot({pathRubyJadiBot: botPath, m: null, conn, args: '', usedPrefix: '/',
 }
 }
 }
-
 const pluginFolder = global.__dirname(join(__dirname, './plugins/index'))
 const pluginFilter = (filename) => /\.js$/.test(filename)
 global.plugins = {}
@@ -372,7 +298,6 @@ conn.logger.error(e)
 delete global.plugins[filename]
 }}}
 filesInit().then((_) => Object.keys(global.plugins)).catch(console.error);
-
 global.reload = async (_ev, filename) => {
 if (pluginFilter(filename)) {
 const dir = global.__filename(join(pluginFolder, filename), true);
@@ -392,7 +317,7 @@ try {
 const module = (await import(`${global.__filename(dir)}?update=${Date.now()}`));
 global.plugins[filename] = module.default || module;
 } catch (e) {
-conn.logger.error(`error require plugin '${filename}\n${format(e)}'`)
+conn.logger.error(`error require plugin '${filename}\n${format(e)}`)
 } finally {
 global.plugins = Object.fromEntries(Object.entries(global.plugins).sort(([a], [b]) => a.localeCompare(b)))
 }}
@@ -424,7 +349,6 @@ const [ffmpeg, ffprobe, ffmpegWebp, convert, magick, gm, find] = test;
 const s = global.support = {ffmpeg, ffprobe, ffmpegWebp, convert, magick, gm, find};
 Object.freeze(global.support);
 }
-
 function clearTmp() {
 const tmpDir = join(__dirname, 'tmp')
 const filenames = readdirSync(tmpDir)
@@ -432,7 +356,6 @@ filenames.forEach(file => {
 const filePath = join(tmpDir, file)
 unlinkSync(filePath)})
 }
-
 function purgeRubySession() {
 let prekey = []
 let directorio = readdirSync(`./${Rubysessions}`)
@@ -443,47 +366,61 @@ prekey = [...prekey, ...filesFolderPreKeys]
 filesFolderPreKeys.forEach(files => {
 unlinkSync(`./${Rubysessions}/${files}`)
 })
-} 
-
+}
 function purgeRubySessionSB() {
 try {
-const listaDirectorios = readdirSync(`./${jadi}/`);
-let SBprekey = [];
-listaDirectorios.forEach(directorio => {
-if (statSync(`./${jadi}/${directorio}`).isDirectory()) {
-const DSBPreKeys = readdirSync(`./${jadi}/${directorio}`).filter(fileInDir => {
-return fileInDir.startsWith('pre-key-')
-})
-SBprekey = [...SBprekey, ...DSBPreKeys];
-DSBPreKeys.forEach(fileInDir => {
-if (fileInDir !== 'creds.json') {
-unlinkSync(`./${jadi}/${directorio}/${fileInDir}`)
-}})
-}})
-if (SBprekey.length === 0) {
-console.log(chalk.bold.green(`\n╭» ❍ ${jadi} ❍\n│→ NADA POR ELIMINAR \n╰― ― ― ― ― ― ― ― ― ― ― ― ― ― ― ― ― ― ― ⌫ ♻︎`))
-} else {
-console.log(chalk.bold.cyanBright(`\n╭» ❍ ${jadi} ❍\n│→ ARCHIVOS NO ESENCIALES ELIMINADOS\n╰― ― ― ― ― ― ― ― ― ― ― ― ― ― ― ― ― ― ― ⌫ ♻︎︎`))
-}} catch (err) {
-console.log(chalk.bold.red(`\n╭» ❍ ${jadi} ❍\n│→ OCURRIÓ UN ERROR\n╰― ― ― ― ― ― ― ― ― ― ― ― ― ― ― ― ― ― ― ⌫ ♻\n` + err))
-}}
-
+const base = `./${jadi}/`
+if (!existsSync(base)) return
+const cutoff = Date.now() - 1000 * 60 * 60 * 24
+const listaDirectorios = readdirSync(base)
+for (const directorio of listaDirectorios) {
+const dirPath = path.join(base, directorio)
+if (!statSync(dirPath).isDirectory()) continue
+const archivos = readdirSync(dirPath)
+for (const archivo of archivos) {
+if (archivo.startsWith('pre-key-') && archivo !== 'creds.json') {
+const fpath = path.join(dirPath, archivo)
+try {
+const { mtimeMs } = statSync(fpath)
+if (mtimeMs < cutoff) {
+unlinkSync(fpath)
+console.log(`Eliminado pre-key antiguo: ${fpath}`)
+}
+} catch (errFile) {
+console.error('Error comprobando/eliminando pre-key:', fpath, errFile)
+}
+}
+}
+}
+} catch (err) {
+console.error('Error en purgeRubySessionSB:', err)
+}
+}
 function purgeOldFiles() {
+try {
 const directories = [`./${Rubysessions}/`, `./${jadi}/`]
-directories.forEach(dir => {
-readdirSync(dir, (err, files) => {
-if (err) throw err
-files.forEach(file => {
-if (file !== 'creds.json') {
-const filePath = path.join(dir, file);
-unlinkSync(filePath, err => {
-if (err) {
-console.log(chalk.bold.red(`\n╭» ❍ ARCHIVO ❍\n│→ ${file} NO SE LOGRÓ BORRAR\n╰― ― ― ― ― ― ― ― ― ― ― ― ― ― ― ― ― ― ― ⌫ ✘\n` + err))
-} else {
-console.log(chalk.bold.green(`\n╭» ❍ ARCHIVO ❍\n│→ ${file} BORRADO CON ÉXITO\n╰― ― ― ― ― ― ― ― ― ― ― ― ― ― ― ― ― ― ― ⌫ ♻`))
-} }) }
-}) }) }) }
-
+const cutoff = Date.now() - 1000 * 60 * 60 * 24
+for (const dir of directories) {
+if (!existsSync(dir)) continue
+const files = readdirSync(dir)
+for (const file of files) {
+if (file === 'creds.json') continue
+const filePath = path.join(dir, file)
+try {
+const { mtimeMs, isFile } = statSync(filePath)
+if (mtimeMs < cutoff && isFile()) {
+unlinkSync(filePath)
+console.log(`Archivo borrado por purgeOldFiles: ${filePath}`)
+}
+} catch (e) {
+console.error('Error en purgeOldFiles al procesar:', filePath, e)
+}
+}
+}
+} catch (e) {
+console.error('Error en purgeOldFiles:', e)
+}
+}
 function redefineConsoleMethod(methodName, filterStrings) {
 const originalConsoleMethod = console[methodName]
 console[methodName] = function() {
@@ -493,24 +430,19 @@ arguments[0] = ""
 }
 originalConsoleMethod.apply(console, arguments)
 }}
-
 setInterval(async () => {
 if (stopped === 'close' || !conn || !conn.user) return
 await clearTmp()
-console.log(chalk.bold.cyanBright(`\n╭» ❍ MULTIMEDIA ❍\n│→ ARCHIVOS DE LA CARPETA TMP ELIMINADAS\n╰― ― ― ― ― ― ― ― ― ― ― ― ― ― ― ― ― ― ― ⌫ ♻`))}, 1000 * 60 * 4) // 4 min 
-
- setInterval(async () => {
+console.log(chalk.bold.cyanBright(`\n╭» ❍ MULTIMEDIA ❍\n│→ ARCHIVOS DE LA CARPETA TMP ELIMINADAS\n╰― ― ― ― ― ― ― ― ― ― ― ― ― ― ― ― ― ― ― ⌫ ♻`))}, 1000 * 60 * 4)
+setInterval(async () => {
 if (stopped === 'close' || !conn || !conn.user) return
 await purgeRubySession()
-console.log(chalk.bold.cyanBright(`\n╭» ❍ ${global.Rubysessions} ❍\n│→ SESIONES NO ESENCIALES ELIMINADAS\n╰― ― ― ― ― ― ― ― ― ― ― ― ― ― ― ― ― ― ― ⌫ ♻`))}, 1000 * 60 * 10) 
-
+console.log(chalk.bold.cyanBright(`\n╭» ❍ ${global.Rubysessions} ❍\n│→ SESIONES NO ESENCIALES ELIMINADAS\n╰― ― ― ― ― ― ― ― ― ― ― ― ― ― ― ― ― ― ― ⌫ ♻`))}, 1000 * 60 * 10)
 setInterval(async () => {
 if (stopped === 'close' || !conn || !conn.user) return
 console.log(await purgeOldFiles());
 console.log(chalk.bold.cyanBright(`\n╭» ❍ ARCHIVOS ❍\n│→ ARCHIVOS RESIDUALES ELIMINADAS\n╰― ― ― ― ― ― ― ― ― ― ― ― ― ― ― ― ― ― ― ⌫ ♻`))}, 1000 * 60 * 10)
-
 _quickTest().then(() => conn.logger.info(chalk.bold(`✦  H E C H O\n`.trim()))).catch(console.error)
-
 async function isValidPhoneNumber(number) {
 try {
 number = number.replace(/\s+/g, '')
