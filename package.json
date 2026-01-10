@@ -31,7 +31,7 @@
 },
 "license": "MIT-License",
 "dependencies": {
-"@whiskeysockets/baileys": "github:Itsukichann/Baileys",
+"@whiskeysockets/baileys": "github:Dioneibi-rip/prueba-v2",
 "awesome-phonenumber": "^3.4.0",
 "ruhend-scraper": "^7.0.4",
 "gradient-string": "^2.0.2",
