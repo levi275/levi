@@ -1,16 +1,3 @@
-/*⚠ PROHIBIDO EDITAR ⚠
-Este codigo fue modificado, adaptado y mejorado por
-- ReyEndymion >> https://github.com/ReyEndymion
-El codigo de este archivo esta inspirado en el codigo original de:
-- Aiden_NotLogic >> https://github.com/ferhacks
-*El archivo original del MysticBot-MD fue liberado en mayo del 2024 aceptando su liberacion*
-El codigo de este archivo fue parchado en su momento por:
-- BrunoSobrino >> https://github.com/BrunoSobrino
-Contenido adaptado por:
-- GataNina-Li >> https://github.com/GataNina-Li
-- elrebelde21 >> https://github.com/elrebelde21
-*/
-
 const { useMultiFileAuthState, DisconnectReason, makeCacheableSignalKeyStore, fetchLatestBaileysVersion} = (await import("@whiskeysockets/baileys"));
 import qrcode from "qrcode"
 import NodeCache from "node-cache"
@@ -18,7 +5,7 @@ import fs from "fs"
 import path from "path"
 import pino from 'pino'
 import chalk from 'chalk'
-import util from 'util' 
+import util from 'util'
 import * as ws from 'ws'
 const { child, spawn, exec } = await import('child_process')
 const { CONNECTING } = ws
@@ -30,16 +17,17 @@ let crm3 = "SBpbmZvLWRvbmFyLmpz"
 let crm4 = "IF9hdXRvcmVzcG9uZGVyLmpz IGluZm8tYm90Lmpz"
 let drm1 = ""
 let drm2 = ""
-let rtx = "*\n\n✐ Cσɳҽxισɳ SυႦ-Bσƚ Mσԃҽ QR\n\n✰ Con otro celular o en la PC escanea este QR para convertirte en un *Sub-Bot* Temporal.\n\n\`1\` » Haga clic en los tres puntos en la esquina superior derecha\n\n\`2\` » Toque dispositivos vinculados\n\n\`3\` » Escanee este codigo QR para iniciar sesion con el bot\n\n✧ ¡Este código QR expira en 45 segundos!."
+let rtx = "*\n\n✐ Cσɳҽxισɳ SυႦ-Bσƚ Mσԃҽ QR\n\n✰ Con otro celular o en la PC escanea este QR para convertirte en un *Sub-Bot* Temporal.\n\n`1` » Haga clic en los tres puntos en la esquina superior derecha\n\n`2` » Toque dispositivos vinculados\n\n`3` » Escanee este codigo QR para iniciar sesion con el bot\n\n✧ ¡Este código QR expira en 45 segundos!."
 const __filename = fileURLToPath(import.meta.url)
 const __dirname = path.dirname(__filename)
 const RubyJBOptions = {}
 if (global.conns instanceof Array) console.log()
 else global.conns = []
+global.__connectingSubBots = global.__connectingSubBots || new Set()
 let handler = async (m, { conn, args, usedPrefix, command, isOwner }) => {
 let time = global.db.data.users[m.sender].Subs + 120000
 if (new Date - global.db.data.users[m.sender].Subs < 120000) return conn.reply(m.chat, `${emoji} Debes esperar ${msToTime(time - new Date())} para volver a vincular un *Sub-Bot.*`, m)
-const limiteSubBots = global.subbotlimitt || 25; 
+const limiteSubBots = global.subbotlimitt || 25;
 const subBots = [...new Set([...global.conns.filter((c) => c.user && c.ws.socket && c.ws.socket.readyState !== ws.CLOSED)])]
 const subBotsCount = subBots.length
 if (subBotsCount >= limiteSubBots) {
@@ -60,15 +48,15 @@ RubyJBOptions.command = command
 RubyJBOptions.fromCommand = true
 RubyJadiBot(RubyJBOptions)
 global.db.data.users[m.sender].Subs = new Date * 1
-} 
+}
 handler.help = ['qr', 'code']
 handler.tags = ['serbot']
 handler.command = ['qr', 'code']
-export default handler 
+export default handler
 export async function RubyJadiBot(options) {
 let { pathRubyJadiBot, m, conn, args, usedPrefix, command } = options
 if (command === 'code') {
-command = 'qr'; 
+command = 'qr';
 args.unshift('code')}
 const mcode = args[0] && /(--code|code)/.test(args[0].trim()) ? true : args[1] && /(--code|code)/.test(args[1].trim()) ? true : false
 let txtCode, codeBot, txtQR
@@ -93,34 +81,37 @@ let { version, isLatest } = await fetchLatestBaileysVersion()
 const msgRetry = (MessageRetryMap) => { }
 const msgRetryCache = new NodeCache()
 const { state, saveState, saveCreds } = await useMultiFileAuthState(pathRubyJadiBot)
+global.__connectingSubBots.add(pathRubyJadiBot)
 const connectionOptions = {
- logger: pino({ level: "fatal" }),
- printQRInTerminal: false,
- auth: { creds: state.creds, keys: makeCacheableSignalKeyStore(state.keys, pino({level: 'silent'})) },
- msgRetry,
- msgRetryCache,
- browser: ['Ubuntu','Edge','110.0.1587.56'],
- version: version,
- generateHighQualityLinkPreview: true
+logger: pino({ level: "fatal" }),
+printQRInTerminal: false,
+auth: { creds: state.creds, keys: makeCacheableSignalKeyStore(state.keys, pino({level: 'silent'})) },
+msgRetry,
+msgRetryCache,
+browser: ['Ubuntu','Edge','110.0.1587.56'],
+version: version,
+generateHighQualityLinkPreview: true
 };
-
 let sock = makeWASocket(connectionOptions)
 sock.isInit = false
 let isInit = true
+sock.ev.on('creds.update', saveCreds)
+sock.ev.on('creds.update', () => console.log(`[SUB-BOT:${path.basename(pathRubyJadiBot)}] creds.update`))
 async function connectionUpdate(update) {
 const { connection, lastDisconnect, isNewLogin, qr } = update
+console.log(`[SUB-BOT:${path.basename(pathRubyJadiBot)}] connection.update`, update)
 if (isNewLogin) sock.isInit = false
 if (qr && !mcode) {
 if (m?.chat) {
 txtQR = await conn.sendMessage(m.chat, { image: await qrcode.toBuffer(qr, { scale: 8 }), caption: rtx.trim()}, { quoted: m})
 } else {
-return 
+return
 }
 if (txtQR && txtQR.key) {
 setTimeout(() => { conn.sendMessage(m.sender, { delete: txtQR.key })}, 45000)
 }
 return
-} 
+}
 if (qr && mcode) {
 const rawCode = await sock.requestPairingCode(m.sender.split`@`[0]);
 const interactiveButtons = [{
@@ -153,8 +144,8 @@ sock.ws.close()
 } catch {
 }
 sock.ev.removeAllListeners()
-let i = global.conns.indexOf(sock) 
-if (i < 0) return 
+let i = global.conns.indexOf(sock)
+if (i < 0) return
 delete global.conns[i]
 global.conns.splice(i, 1)
 }}
@@ -198,15 +189,21 @@ await joinChannels(sock)
 m?.chat ? await conn.sendMessage(m.chat, {text: `@${m.sender.split('@')[0]}, ya estás conectado como Sub-Bot.`, mentions: [m.sender]}, { quoted: m }) : ''
 }}
 setInterval(async () => {
-if (!sock.user) {
-try { sock.ws.close() } catch (e) {      
-}
-sock.ev.removeAllListeners()
-let i = global.conns.indexOf(sock) 
-if (i < 0) return
-delete global.conns[i]
+try {
+if (!sock) return
+const readyState = sock?.ws?.socket?.readyState
+if (!sock.user && readyState !== CONNECTING && readyState !== ws.OPEN) {
+try { sock.ws.close() } catch (e) { console.error('Error cerrando sock.ws', e) }
+try { sock.ev.removeAllListeners() } catch {}
+let i = global.conns.indexOf(sock)
+if (i >= 0) {
 global.conns.splice(i, 1)
-}}, 60000)
+}
+}
+} catch (e) {
+console.error('Error en comprobación periódica de sub-bot:', e)
+}
+}, 60000)
 let handler = await import('../handler.js')
 let creloadHandler = async function (restatConn) {
 try {
@@ -228,19 +225,46 @@ sock.ev.off('creds.update', sock.credsUpdate)
 }
 sock.handler = handler.handler.bind(sock)
 sock.connectionUpdate = connectionUpdate.bind(sock)
-sock.credsUpdate = saveCreds.bind(sock, true)
 sock.ev.on("messages.upsert", sock.handler)
 sock.ev.on("connection.update", sock.connectionUpdate)
-sock.ev.on("creds.update", sock.credsUpdate)
+sock.ev.on("creds.update", saveCreds)
 isInit = false
 return true
 }
 creloadHandler(false)
+try {
+await new Promise((resolve, reject) => {
+const t = setTimeout(() => reject(new Error('timeout waiting open')), 90000)
+const onUpdate = (u) => {
+if (u.connection === 'open' && sock.user) {
+clearTimeout(t)
+sock.ev.off('connection.update', onUpdate)
+resolve()
+}
+if (u.connection === 'close' && u.lastDisconnect) {
+clearTimeout(t)
+sock.ev.off('connection.update', onUpdate)
+reject(u.lastDisconnect)
+}
+}
+sock.ev.on('connection.update', onUpdate)
+})
+console.log(`[SUB-BOT:${path.basename(pathRubyJadiBot)}] conectado correctamente`)
+} catch (err) {
+console.error(`[SUB-BOT:${path.basename(pathRubyJadiBot)}] fallo al conectar:`, err)
+try { sock.ws.close() } catch {}
+sock.ev.removeAllListeners()
+global.__connectingSubBots.delete(pathRubyJadiBot)
+let i = global.conns.indexOf(sock)
+if (i >= 0) global.conns.splice(i, 1)
+return
+}
+global.__connectingSubBots.delete(pathRubyJadiBot)
 })
 }
 const delay = (ms) => new Promise((resolve) => setTimeout(resolve, ms))
 function sleep(ms) {
-return new Promise(resolve => setTimeout(resolve, ms));}
+return new Promise(resolve => setTimeout(resolve));}
 function msToTime(duration) {
 var minutes = Math.floor((duration / (1000 * 60)) % 60),
 seconds = Math.floor((duration / 1000) % 60)
