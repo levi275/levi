@@ -73,7 +73,7 @@ global.comunidad1 = 'https://chat.whatsapp.com/K2CPrOTksiA36SW6k41yuR'
 global.channel = 'https://whatsapp.com/channel/0029VakLbM76mYPPFL0IFI3P'
 global.channel2 = 'https://whatsapp.com/channel/0029VakLbM76mYPPFL0IFI3P'
 global.md = 'https://github.com/Dioneibi-rip/Ruby-Hoshino-Bot'
-global.correo = 'dioneibipaselomendes@gmail.com'
+global.correo = 'nimierdalopondre@gmail.com'
 global.cn ='https://whatsapp.com/channel/0029VakLbM76mYPPFL0IFI3P';
 
 //*─ׄ─ׅ─ׄ─⭒─ׄ─ׅ─ׄ─⭒─ׄ─ׅ─ׄ─⭒─ׄ─ׅ─ׄ─⭒─ׄ─ׅ─ׄ─⭒─ׄ─ׅ─ׄ─*
