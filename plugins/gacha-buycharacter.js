@@ -45,7 +45,7 @@ let handler = async (m, { conn, args, participants }) => {
   await saveHarem(harem);
 
   let nombreComprador = await conn.getName(userId);
-  let textoPrivado = `✿ Tu waifu *${venta.name}* fue comprada por *${nombreComprador}*.\nGanaste *¥${precio.toLocaleString()} ${m.moneda}*.`;
+  let textoPrivado = `✿ Tu personaje *${venta.name}* fue comprada por *${nombreComprador}*.\nGanaste *¥${precio.toLocaleString()} ${m.moneda}*.`;
 
   await conn.sendMessage(venta.vendedor, { text: textoPrivado }, { quoted: m });
 
