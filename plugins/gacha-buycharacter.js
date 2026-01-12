@@ -1,65 +1,55 @@
-import fs from 'fs';
+import { loadVentas, saveVentas, removeVenta, loadHarem, saveHarem, addOrUpdateClaim } from '../lib/gacha-group.js';
 
-const charactersFilePath = './src/database/characters.json';
-const ventaFilePath = './src/database/waifusVenta.json';
+let handler = async (m, { conn, args, participants }) => {
+  let rawUserId = m.sender;
 
-async function loadCharacters() {
-  return JSON.parse(fs.readFileSync(charactersFilePath, 'utf-8'));
-}
+  if (rawUserId.endsWith('@lid') && m.isGroup) {
+    const pInfo = participants.find(p => p.lid === rawUserId);
+    if (pInfo?.id) rawUserId = pInfo.id;
+  }
 
-async function saveCharacters(characters) {
-  fs.writeFileSync(charactersFilePath, JSON.stringify(characters, null, 2), 'utf-8');
-}
-
-async function loadVentas() {
-  return JSON.parse(fs.readFileSync(ventaFilePath, 'utf-8'));
-}
-
-async function saveVentas(data) {
-  fs.writeFileSync(ventaFilePath, JSON.stringify(data, null, 2), 'utf-8');
-}
-
-let handler = async (m, { conn, args }) => {
-  const userId = m.sender;
+  const userId = rawUserId;
   const user = global.db.data.users[userId];
+  const groupId = m.chat;
 
-  if (!args[0]) return m.reply('✿ Usa: *#comprarwaifu <nombre de waifu>*');
+  if (!args[0]) {
+    return m.reply('✿ Usa: *#comprarwaifu <nombre del personaje>*');
+  }
 
   const nombre = args.join(' ').trim().toLowerCase();
 
   const ventas = await loadVentas();
-  const characters = await loadCharacters();
+  const harem = await loadHarem();
 
-  const venta = ventas.find(w => w.name.toLowerCase() === nombre);
-  if (!venta) return m.reply('✘ Esa waifu no está en venta.');
+  const venta = ventas.find(v => v.groupId === groupId && v.name.toLowerCase() === nombre);
 
+  if (!venta) return m.reply('✘ Ese personaje no está en venta en este grupo.');
   if (venta.vendedor === userId) return m.reply('✘ No puedes comprar tu propia waifu.');
 
-  const precio = parseInt(venta.precio);
+  const precio = Number(venta.precio || 0);
 
   if (user.coin < precio) {
     return m.reply(`✘ No tienes suficientes *${m.moneda}*. Necesitas *¥${precio.toLocaleString()} ${m.moneda}*.`);
   }
 
-  const waifu = characters.find(c => c.name.toLowerCase() === nombre);
-  if (!waifu) return m.reply('✘ No se encontró ese personaje en la base de datos.');
-
   user.coin -= precio;
-  const vendedorId = venta.vendedor;
-  global.db.data.users[vendedorId].coin += precio;
 
-  waifu.user = userId;
-  waifu.status = "Reclamado";
+  if (global.db.data.users[venta.vendedor]) {
+    global.db.data.users[venta.vendedor].coin += precio;
+  }
 
-  const nuevasVentas = ventas.filter(w => w.name.toLowerCase() !== nombre);
-  await saveVentas(nuevasVentas);
-  await saveCharacters(characters);
+  removeVenta(ventas, groupId, venta.id);
+  await saveVentas(ventas);
+
+  addOrUpdateClaim(harem, groupId, userId, venta.id);
+  await saveHarem(harem);
 
   let nombreComprador = await conn.getName(userId);
-  let textoPrivado = `✿ Tu waifu *${waifu.name}* fue comprada por *${nombreComprador}*.\nGanaste *¥${precio.toLocaleString()} ${m.moneda}*.`;
-  await conn.sendMessage(vendedorId, { text: textoPrivado }, { quoted: m });
+  let textoPrivado = `✿ Tu waifu *${venta.name}* fue comprada por *${nombreComprador}*.\nGanaste *¥${precio.toLocaleString()} ${m.moneda}*.`;
 
-  m.reply(`✿ Has comprado a *${waifu.name}* por *¥${precio.toLocaleString()} ${m.moneda}* exitosamente!\nAhora es parte de tu harem.`);
+  await conn.sendMessage(venta.vendedor, { text: textoPrivado }, { quoted: m });
+
+  m.reply(`✿ Has comprado a *${venta.name}* por *¥${precio.toLocaleString()} ${m.moneda}* exitosamente!\nAhora es parte de tu harem en este grupo.`);
 };
 
 handler.help = ['comprarwaifu <nombre>'];
