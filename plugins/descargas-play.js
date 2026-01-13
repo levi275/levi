@@ -56,10 +56,11 @@ const handler = async (m, { conn, text, command }) => {
       try {
         const r = await ytmp3(url)
         if (r?.status && r?.download?.url) {
-          audioData = { link: r.download.url, title: r.metadata?.title }
-        } else {
-          audioError = "Servidor no devolvió un link válido."
-        }
+  audioData = { link: r.download.url, title: r.metadata?.title }
+} else {
+  audioError = `Respuesta cruda:\n${JSON.stringify(r, null, 2)}`
+}
+
       } catch (e) {
         audioError = parseError(e)
         fullErrorLog("AUDIO", e, url)
