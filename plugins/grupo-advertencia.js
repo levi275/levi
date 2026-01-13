@@ -86,7 +86,6 @@ Lamentablemente no has cambiado tu actitud.
 ${header}
 
 ${body}
-
 ${footer}
 `.trim();
 
