@@ -87,7 +87,6 @@ ${header}
 
 ${body}
 
-     ${decoration} ㅤ⸺ࣶࣧ  ׅ ꨄ̸ִֹ   ٤ ॒ Ѕٜω٘߫ϵϵ۪τ  ϱًΓٟαςє۫
 ${footer}
 `.trim();
 
