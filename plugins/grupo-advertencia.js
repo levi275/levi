@@ -84,7 +84,6 @@ Lamentablemente no has cambiado tu actitud.
     // Construcción del mensaje final
     const mensajeFinal = `
 ${header}
-
 ${body}
 ${footer}
 `.trim();
