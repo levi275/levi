@@ -1,3 +1,22 @@
+# Instaladores
 git-installer.exe
 imagemagick-installer.exe
 node-installer.msi
+
+# Node
+node_modules/
+.npm/
+npm-debug.log*
+yarn-error.log*
+
+# Sesiones / temporales (bots)
+RubySessions/
+tmp/
+*.tmp
+
+# Archivos de entorno
+.env
+
+# Sistemas
+.DS_Store
+Thumbs.db
