@@ -29,12 +29,15 @@ const groupId = m.chat;
 const now = Date.now();
 
 const key = `${groupId}:${userId}`;
+
 if (cooldowns[key] && now < cooldowns[key]) {
 const remainingTime = Math.ceil((cooldowns[key] - now) / 1000);
 const minutes = Math.floor(remainingTime / 60);
 const seconds = remainingTime % 60;
 return await conn.reply(m.chat, `( ⸝⸝･̆⤚･̆⸝⸝) ¡Debes esperar *${minutes} minutos y ${seconds} segundos* para volver a usar *#rollwaifu* en este grupo.`, m);
 }
+
+cooldowns[key] = now + 15 * 60 * 1000;
 
 try {
 const characters = await loadCharacters();
@@ -82,9 +85,9 @@ const message = `
 const mentions = claimedInGroup ? [claimedInGroup.userId] : [];
 await conn.sendFile(m.chat, randomImage, `${randomCharacter.name}.jpg`, message, m, { mentions });
 
-cooldowns[key] = now + 15 * 60 * 1000;
-
 } catch (error) {
+delete cooldowns[key];
+console.error(error);
 await conn.reply(m.chat, `✘ Error al cargar el personaje: ${error.message}`, m);
 }
 };
