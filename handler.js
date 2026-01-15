@@ -8,82 +8,117 @@ import chalk from 'chalk'
 import fetch from 'node-fetch'
 import failureHandler from './lib/respuesta.js';
 
-// Importación dinámica segura de Baileys
 const { proto } = (await import('@whiskeysockets/baileys')).default
-
-// Funciones de utilidad
 const isNumber = x => typeof x === 'number' && !isNaN(x)
 const delay = ms => isNumber(ms) && new Promise(resolve => setTimeout(function () {
     clearTimeout(this)
     resolve()
 }, ms))
 
+// Variable global para controlar el inicio
+global.uptimeStart = Date.now();
+
 export async function handler(chatUpdate) {
     this.msgqueque = this.msgqueque || []
     this.uptime = this.uptime || Date.now()
-
-    // --- Validación inicial ---
-    if (!chatUpdate) return
-    this.pushMessage(chatUpdate.messages).catch(console.error)
     
+    if (!chatUpdate) return
+    
+    // --- OPTIMIZACIÓN 1: IGNORAR MENSAJES ANTIGUOS ---
+    // Si el mensaje se envió hace más de 60 segundos antes de que el bot procese esto, lo ignoramos.
+    // Esto evita el spam al encender.
+    try {
+        let mObj = chatUpdate.messages[chatUpdate.messages.length - 1];
+        if (!mObj) return;
+        
+        // Calculamos la antigüedad del mensaje
+        const messageTime = (mObj.messageTimestamp * 1000) || Date.now();
+        const timeDiff = Date.now() - messageTime;
+        
+        // Si el mensaje tiene más de 2 minutos de antigüedad (120000 ms), lo ignoramos.
+        // Ajusta 120000 a un valor menor si quieres ser más estricto.
+        if (timeDiff > 120000) { 
+            console.log(chalk.yellow(`[SISTEMA] Mensaje antiguo ignorado (${Math.floor(timeDiff/1000)}s de retraso)`));
+            return; 
+        }
+    } catch (e) {
+        console.error('Error al verificar timestamp:', e);
+    }
+    // --------------------------------------------------
+
+    this.pushMessage(chatUpdate.messages).catch(console.error)
     let m = chatUpdate.messages[chatUpdate.messages.length - 1]
     if (!m) return;
     
-    // Carga de base de datos
     if (global.db && global.db.data == null) await global.loadDatabase()
 
     try {
-        // --- Procesamiento del Mensaje ---
         m = smsg(this, m) || m
         if (!m) return
         
         const opts = this.opts || global.opts || {}
         
-        // Lógica de Bot Primario (Sub-bots)
+        // Filtro para bots primarios en grupos
         if (m.isGroup) {
-            const chat = global.db?.data?.chats?.[m.chat] || {};
-            if (chat.primaryBot) {
+            const chat = global.db?.data?.chats?.[m.chat];
+            if (chat?.primaryBot) {
                 const universalWords = ['resetbot', 'resetprimario', 'botreset'];
                 const firstWord = m.text ? m.text.trim().split(' ')[0].toLowerCase().replace(/^[./#]/, '') : '';
-                
-                if (!universalWords.includes(firstWord) && this.user?.jid !== chat.primaryBot) {
-                    return;
+                if (!universalWords.includes(firstWord)) {
+                    if (this?.user?.jid !== chat.primaryBot) return;
                 }
             }
         }
 
-        // Definición de participantes y emisor
         let sender = m.isGroup ? (m.key?.participant ? m.key.participant : m.sender) : m.key?.remoteJid;
+        
+        // Obtener Metadatos del grupo de forma segura
         const groupMetadata = m.isGroup ? (this.chats?.[m.chat]?.metadata || await this.groupMetadata(m.chat).catch(_ => null) || {}) : {}
         const rawParticipants = m.isGroup ? (groupMetadata.participants || []) : []
         
-        // Normalización de participantes (Optimizado)
-        const participants = rawParticipants.map(p => {
-            let jid = p.id || p.jid || p.participant || p?.[0] || (typeof p === 'string' ? p : null)
-            if (jid && !/@/.test(jid) && /^\d+$/.test(jid)) jid += '@s.whatsapp.net'
-            
+        const participants = (rawParticipants || []).map(p => {
+            let jid = typeof p === 'string' ? p : (p.id || p.jid || p.participant || p?.[0] || null)
+            if (jid && !/@/.test(jid)) {
+                if (/^\d+$/.test(jid)) jid = jid + '@s.whatsapp.net'
+            }
             let lid = p?.lid ?? (jid ? jid.split('@')[0] + '@lid' : undefined)
             let admin = false
-            
-            // Detección de rol
-            if (p?.admin === 'creator' || p?.admin === 'superadmin' || p?.isSuperAdmin || p?.role === 'creator') admin = 'superadmin'
-            else if (p?.admin === 'admin' || p?.isAdmin || p?.role === 'admin' || p?.admin === true) admin = 'admin'
-            
+            if (p) {
+                if (typeof p.admin === 'string') {
+                    if (['creator', 'superadmin', 'owner'].includes(p.admin)) admin = 'superadmin'
+                    else if (p.admin === 'admin') admin = 'admin'
+                } else if (p.admin === true) {
+                    admin = 'admin'
+                } else if (p.isSuperAdmin || p.isCreator) {
+                    admin = 'superadmin'
+                } else if (p.isAdmin) {
+                    admin = 'admin'
+                } else if (p.role) {
+                    if (p.role === 'creator') admin = 'superadmin'
+                    else if (p.role === 'admin') admin = 'admin'
+                }
+            }
             return { id: jid, jid: jid, lid, admin }
         })
 
-        // Ajuste de LID y menciones
+        // Normalización de menciones y LIDs
         if (m.isGroup) {
             if (sender && sender.endsWith('@lid')) {
                 const pInfo = participants.find(p => p.lid === sender)
-                if (pInfo?.id) {
+                if (pInfo && pInfo.id) {
                     sender = pInfo.id
                     if (m.key) m.key.participant = pInfo.id
                     try { m.sender = pInfo.id } catch (e) {}
                 }
             }
-            // ... (Normalización de menciones existente se mantiene igual por seguridad)
-             if (m.mentionedJid && m.mentionedJid.length > 0) {
+            if (m.quoted && m.quoted.sender && m.quoted.sender.endsWith('@lid')) {
+                const pInfo = participants.find(p => p.lid === m.quoted.sender)
+                if (pInfo && pInfo.id) {
+                    if (m.quoted.key) m.quoted.key.participant = pInfo.id
+                    try { m.quoted.sender = pInfo.id } catch (e) {}
+                }
+            }
+            if (m.mentionedJid && m.mentionedJid.length > 0) {
                 const normalizedMentions = m.mentionedJid.map(jid => {
                     if (jid && jid.endsWith('@lid')) {
                         const pInfo = participants.find(p => p.lid === jid)
@@ -98,144 +133,91 @@ export async function handler(chatUpdate) {
         m.exp = 0
         m.coin = false
 
-        // --- INICIALIZACIÓN DE DATOS (OPTIMIZADO) ---
-        // Se agrupa por bloques para mejor lectura y rendimiento
-        try {
-            let user = global.db.data.users[sender]
-            if (typeof user !== 'object') global.db.data.users[sender] = {}
-            user = global.db.data.users[sender]
+        // --- OPTIMIZACIÓN 2: GESTIÓN EFICIENTE DE BASE DE DATOS ---
+        // Usamos plantillas (Schemas) para cargar datos más rápido y con menos código
+        
+        const userDefault = {
+            exp: 0, coin: 10, joincount: 1, diamond: 3, lastadventure: 0, health: 100, 
+            lastclaim: 0, lastcofre: 0, lastdiamantes: 0, lastcode: 0, lastduel: 0, 
+            lastpago: 0, lastmining: 0, lastcodereg: 0, muto: false, premium: false, 
+            premiumTime: 0, registered: false, genre: '', birth: '', marry: '', 
+            description: '', packstickers: null, name: m.name || '', age: -1, 
+            regTime: -1, afk: -1, afkReason: '', role: 'Nuv', banned: false, 
+            useDocument: false, level: 0, bank: 0, warn: 0, crime: 0
+        };
 
-            if (user) {
-                // Sistema & Registro
-                if (!isNumber(user.exp)) user.exp = 0
-                if (!isNumber(user.coin)) user.coin = 10
-                if (!isNumber(user.joincount)) user.joincount = 1
-                if (!isNumber(user.diamond)) user.diamond = 3
-                if (!isNumber(user.regTime)) user.regTime = -1
-                if (!('premium' in user)) user.premium = false
-                if (!user.premium) user.premiumTime = 0
-                if (!('registered' in user)) user.registered = false
-                if (!('role' in user)) user.role = 'Nuv'
-                if (!('banned' in user)) user.banned = false
-                if (!('name' in user)) user.name = m.name
-                if (!isNumber(user.age)) user.age = -1
-                
-                // RPG & Stats
-                if (!isNumber(user.health)) user.health = 100
-                if (!isNumber(user.level)) user.level = 0
-                if (!isNumber(user.bank)) user.bank = 0
-                if (!isNumber(user.warn)) user.warn = 0
-                if (!isNumber(user.crime)) user.crime = 0
-                
-                // Cooldowns (Last...)
-                if (!isNumber(user.lastadventure)) user.lastadventure = 0
-                if (!isNumber(user.lastclaim)) user.lastclaim = 0
-                if (!isNumber(user.lastcofre)) user.lastcofre = 0
-                if (!isNumber(user.lastdiamantes)) user.lastdiamantes = 0
-                if (!isNumber(user.lastpago)) user.lastpago = 0
-                if (!isNumber(user.lastcode)) user.lastcode = 0
-                if (!isNumber(user.lastcodereg)) user.lastcodereg = 0
-                if (!isNumber(user.lastduel)) user.lastduel = 0
-                if (!isNumber(user.lastmining)) user.lastmining = 0
-                if (!isNumber(user.afk)) user.afk = -1
-                
-                // Info Extra
-                if (!('muto' in user)) user.muto = false
-                if (!('genre' in user)) user.genre = ''
-                if (!('birth' in user)) user.birth = ''
-                if (!('marry' in user)) user.marry = ''
-                if (!('description' in user)) user.description = ''
-                if (!('packstickers' in user)) user.packstickers = null
-                if (!('afkReason' in user)) user.afkReason = ''
-                if (!('useDocument' in user)) user.useDocument = false
+        const chatDefault = {
+            sAutoresponder: '', welcome: true, isBanned: false, autolevelup: false, 
+            autoresponder: false, delete: false, autoAceptar: false, autoRechazar: false, 
+            detect: true, antiBot: false, antiBot2: false, modoadmin: false, 
+            antiLink: true, antifake: false, antiArabe: false, reaction: false, 
+            nsw: false, expired: 0, welcomeText: null, byeText: null, audios: false, 
+            botPrimario: null, bannedBots: [], antiImg: false, nsfw: false
+        };
+        
+        const settingsDefault = {
+            self: false, restrict: true, jadibotmd: true, antiPrivate: false, 
+            moneda: 'Coins', autoread: false, status: 0
+        };
 
-            } else {
-                global.db.data.users[sender] = {
-                    exp: 0, coin: 10, joincount: 1, diamond: 3, lastadventure: 0, health: 100, 
-                    lastclaim: 0, lastcofre: 0, lastdiamantes: 0, lastcode: 0, lastduel: 0, 
-                    lastpago: 0, lastmining: 0, lastcodereg: 0, muto: false, premium: false, 
-                    premiumTime: 0, registered: false, genre: '', birth: '', marry: '', 
-                    description: '', packstickers: null, name: m.name || '', age: -1, 
-                    regTime: -1, afk: -1, afkReason: '', role: 'Nuv', banned: false, 
-                    useDocument: false, level: 0, bank: 0, warn: 0, crime: 0
-                }
+        // Cargar Usuario
+        let user = global.db.data.users[sender]
+        if (typeof user !== 'object') {
+            global.db.data.users[sender] = {}
+        }
+        user = global.db.data.users[sender]
+        
+        // Rellenar datos faltantes del usuario eficientemente
+        for (const key in userDefault) {
+            if (userDefault[key] === null) continue; // Skip nulls
+            if (typeof user[key] === 'undefined') {
+                user[key] = userDefault[key];
+            } else if (typeof userDefault[key] === 'number' && !isNumber(user[key])) {
+                user[key] = userDefault[key];
             }
-
-            // Inicialización del Chat
-            let chat = global.db.data.chats[m.chat]
-            if (typeof chat !== 'object') global.db.data.chats[m.chat] = {}
-            chat = global.db.data.chats[m.chat]
-            
-            if (chat) {
-                if (!('isBanned' in chat)) chat.isBanned = false
-                if (!('welcome' in chat)) chat.welcome = true
-                if (!('detect' in chat)) chat.detect = true
-                if (!('sAutoresponder' in chat)) chat.sAutoresponder = ''
-                if (!('welcomeText' in chat)) chat.welcomeText = null
-                if (!('byeText' in chat)) chat.byeText = null
-                if (!('bannedBots' in chat)) chat.bannedBots = []
-                if (!('antiLink' in chat)) chat.antiLink = true
-                if (!('delete' in chat)) chat.delete = false
-                if (!('modoadmin' in chat)) chat.modoadmin = false
-                if (!('antiBot' in chat)) chat.antiBot = false
-                if (!('antiBot2' in chat)) chat.antiBot2 = false
-                if (!('antiArabe' in chat)) chat.antiArabe = false
-                if (!('antifake' in chat)) chat.antifake = false
-                if (!('reaction' in chat)) chat.reaction = false
-                if (!('nsfw' in chat)) chat.nsfw = false
-                if (!('audios' in chat)) chat.audios = false
-                if (!('autolevelup' in chat)) chat.autolevelup = false
-                if (!('autoAceptar' in chat)) chat.autoAceptar = false
-                if (!('autoRechazar' in chat)) chat.autoRechazar = false
-                if (!('autosticker' in chat)) chat.autosticker = false
-                if (!('autoresponder' in chat)) chat.autoresponder = false
-                if (!('antiImg' in chat)) chat.antiImg = false
-                if (!isNumber(chat.expired)) chat.expired = 0
-                if (!('botPrimario' in chat)) chat.botPrimario = null
-            } else {
-                global.db.data.chats[m.chat] = {
-                    sAutoresponder: '', welcome: true, isBanned: false, autolevelup: false, 
-                    autoresponder: false, delete: false, autoAceptar: false, autoRechazar: false, 
-                    detect: true, antiBot: false, antiBot2: false, modoadmin: false, 
-                    antiLink: true, antifake: false, antiArabe: false, reaction: false, 
-                    nsw: false, expired: 0, welcomeText: null, byeText: null, audios: false, 
-                    botPrimario: null, bannedBots: []
-                }
-            }
-            
-            // Inicialización de Settings
-            let settings = global.db.data.settings?.[this.user?.jid]
-            if (typeof settings !== 'object') {
-                if (!global.db.data.settings) global.db.data.settings = {}
-                global.db.data.settings[this.user?.jid] = {}
-            }
-            settings = global.db.data.settings[this.user?.jid]
-            
-            if (settings) {
-                if (!('self' in settings)) settings.self = false
-                if (!('restrict' in settings)) settings.restrict = true
-                if (!('jadibotmd' in settings)) settings.jadibotmd = true
-                if (!('antiPrivate' in settings)) settings.antiPrivate = false
-                if (!('moneda' in settings)) settings.moneda = 'Coins'
-                if (!('autoread' in settings)) settings.autoread = false
-            } else {
-                global.db.data.settings[this.user?.jid] = {
-                    self: false, restrict: true, jadibotmd: true, antiPrivate: false, 
-                    moneda: 'Coins', autoread: false, status: 0
-                }
-            }
-        } catch (e) {
-            console.error(e)
         }
 
-        // --- Validaciones de Entorno ---
+        // Cargar Chat
+        if (m.chat) {
+            let chat = global.db.data.chats[m.chat]
+            if (typeof chat !== 'object') {
+                global.db.data.chats[m.chat] = {}
+            }
+            chat = global.db.data.chats[m.chat]
+            
+             // Rellenar datos faltantes del chat
+            for (const key in chatDefault) {
+                if (chatDefault[key] === null) continue;
+                if (typeof chat[key] === 'undefined') {
+                    chat[key] = chatDefault[key];
+                } else if (typeof chatDefault[key] === 'number' && !isNumber(chat[key])) {
+                    chat[key] = chatDefault[key];
+                }
+            }
+        }
+
+        // Cargar Settings
+        let settings = global.db.data.settings[this.user.jid]
+        if (typeof settings !== 'object') {
+            global.db.data.settings[this.user.jid] = {}
+        }
+        settings = global.db.data.settings[this.user.jid]
+        
+        for (const key in settingsDefault) {
+             if (typeof settings[key] === 'undefined') {
+                settings[key] = settingsDefault[key];
+            }
+        }
+        // ----------------------------------------------------------
+
         if (opts['nyimak']) return
         if (!m.fromMe && opts['self']) return
         if (opts['swonly'] && m.chat !== 'status@broadcast') return
         if (typeof m.text !== 'string') m.text = ''
 
-        // Helpers de participantes
         const _user = global.db.data.users[sender]
+        
+        // Funciones de ayuda
         const findParticipant = (jidToFind) => {
             if (!jidToFind) return undefined
             const target = (this.decodeJid && typeof this.decodeJid === 'function') ? this.decodeJid(jidToFind) : jidToFind
@@ -253,30 +235,27 @@ export async function handler(chatUpdate) {
         const userGroup = (m.isGroup ? findParticipant(sender) : {}) || {}
         const botGroup = (m.isGroup ? findParticipant(this.user.jid) : {}) || {}
         
-        // Roles y Permisos (Simplificado)
         const normalizeAdmin = (p) => {
             if (!p) return false
-            if (p.admin === 'superadmin' || p.isSuperAdmin || p.admin === 'creator' || p.role === 'creator') return 'superadmin'
-            if (p.admin === 'admin' || p.isAdmin || p.role === 'admin' || p.admin === true) return 'admin'
+            const a = p.admin ?? p.isAdmin ?? p.role ?? false
+            if (a === true || a === 'admin') return 'admin'
+            if (['creator', 'superadmin', 'owner'].includes(a) || p.isSuperAdmin || p.isCreator) return 'superadmin'
             return false
         }
-        
+
         const isRAdmin = normalizeAdmin(userGroup) === 'superadmin'
         const isAdmin = isRAdmin || normalizeAdmin(userGroup) === 'admin'
         const isBotAdmin = normalizeAdmin(botGroup) === 'admin' || normalizeAdmin(botGroup) === 'superadmin'
-        
-        const senderNum = String(sender || '').split('@')[0]
-        const globalOwners = [...global.owner.map(([number]) => number), this.user.jid.split('@')[0]]
-        const isROwner = globalOwners.includes(senderNum)
+
+        const senderNum = String(sender || '').split('@')[0];
+        const isROwner = [...global.owner.map(([number]) => number), this.user.jid.split('@')[0]].includes(senderNum);
         const isOwner = isROwner || m.fromMe
-        
         const isMods = isOwner || global.mods.map(v => v.replace(/[^0-9]/g, '')).includes(senderNum)
-        const isPrems = isROwner || global.prems.map(v => v.replace(/[^0-9]/g, '')).includes(senderNum) || _user?.premium === true
+        const isPrems = isROwner || global.prems.map(v => v.replace(/[^0-9]/g, '')).includes(senderNum) || _user?.premium == true
         
         const moneda = global.db.data.settings[this.user.jid]?.moneda || 'Coins'
-        m.moneda = moneda
+        m.moneda = moneda;
 
-        // Queue system (Anti-flood simple)
         if (opts['queque'] && m.text && !(isMods || isPrems)) {
             let queque = this.msgqueque, time = 1000 * 5
             const previousID = queque[queque.length - 1]
@@ -287,13 +266,12 @@ export async function handler(chatUpdate) {
             }, time)
         }
 
-        // Auto XP
         m.exp += Math.ceil(Math.random() * 10)
-
-        // --- ENGINE DE PLUGINS ---
         let usedPrefix
+
         const ___dirname = path.join(path.dirname(fileURLToPath(import.meta.url)), './plugins')
         
+        // Loop de Plugins Optimizado
         for (let name in global.plugins) {
             let plugin = global.plugins[name]
             if (!plugin) continue
@@ -301,42 +279,34 @@ export async function handler(chatUpdate) {
             
             const __filename = join(___dirname, name)
             
-            // Handler .all (mensajes sin prefijo)
             if (typeof plugin.all === 'function') {
                 try {
-                    await plugin.all.call(this, m, {
-                        chatUpdate, __dirname: ___dirname, __filename
-                    })
+                    await plugin.all.call(this, m, { chatUpdate, __dirname: ___dirname, __filename })
                 } catch (e) { console.error(e) }
             }
-
+            
             if (!opts['restrict'] && plugin.tags && plugin.tags.includes('admin')) continue
-
-            // Detector de prefijos
+            
             const str2Regex = str => str.replace(/[|\\{}()[\]^$+*?.]/g, '\\$&')
             let _prefix = plugin.customPrefix ? plugin.customPrefix : this.prefix ? this.prefix : global.prefix
+            
             let match = (_prefix instanceof RegExp ? [[_prefix.exec(m.text), _prefix]] :
-                Array.isArray(_prefix) ?
-                _prefix.map(p => {
+                Array.isArray(_prefix) ? _prefix.map(p => {
                     let re = p instanceof RegExp ? p : new RegExp(str2Regex(p))
                     return [re.exec(m.text), re]
                 }) :
                 typeof _prefix === 'string' ? [[new RegExp(str2Regex(_prefix)).exec(m.text), new RegExp(str2Regex(_prefix))]] : [[[], new RegExp]]
             ).find(p => p[1])
-
-            // Handler .before
+            
             if (typeof plugin.before === 'function') {
                 if (await plugin.before.call(this, m, {
-                    match, conn: this, participants, groupMetadata, user: userGroup, bot: botGroup, 
-                    isROwner, isOwner, isRAdmin, isAdmin, isBotAdmin, isPrems, chatUpdate, 
-                    __dirname: ___dirname, __filename
+                    match, conn: this, participants, groupMetadata, user: userGroup, bot: botGroup, isROwner, isOwner, isRAdmin, isAdmin, isBotAdmin, isPrems, chatUpdate, __dirname: ___dirname, __filename
                 })) continue
             }
-
+            
             if (typeof plugin !== 'function') continue
             if (!(match && match[0])) continue
-
-            // Preparación de comando
+            
             if ((usedPrefix = (match[0] || '')[0])) {
                 let noPrefix = m.text.replace(usedPrefix, '')
                 let [command, ...args] = noPrefix.trim().split` `.filter(v => v)
@@ -344,50 +314,44 @@ export async function handler(chatUpdate) {
                 let _args = noPrefix.trim().split` `.slice(1)
                 let text = _args.join` `
                 command = (command || '').toLowerCase()
-                
                 let fail = plugin.fail || global.dfail
+                
                 let isAccept = plugin.command instanceof RegExp ? plugin.command.test(command) :
-                    Array.isArray(plugin.command) ?
-                    plugin.command.some(cmd => cmd instanceof RegExp ? cmd.test(command) : cmd === command) :
+                    Array.isArray(plugin.command) ? plugin.command.some(cmd => cmd instanceof RegExp ? cmd.test(command) : cmd === command) :
                     typeof plugin.command === 'string' ? plugin.command === command : false
                 
                 global.comando = command
+                
                 if ((m.id && (m.id.startsWith('NJX-') || (m.id.startsWith('BAE5') && m.id.length === 16) || (m.id.startsWith('B24E') && m.id.length === 20)))) return
                 
                 if (!isAccept) continue
-
-                m.plugin = name
-                let chat = global.db.data.chats[m.chat] || {};
                 
-                // Verificación de Bot Baneado en Chat
-                const isBotBannedInThisChat = chat.bannedBots && chat.bannedBots.includes(this.user.jid);
-                const unbanCommandFiles = ['grupo-unbanchat.js']; // Comandos permitidos aunque el bot esté baneado
+                m.plugin = name
+                let chatData = global.db.data.chats[m.chat] || {};
+                const isBotBannedInThisChat = chatData.bannedBots && chatData.bannedBots.includes(this.user.jid);
+                const unbanCommandFiles = ['grupo-unbanchat.js'];
+                
                 if (isBotBannedInThisChat && !unbanCommandFiles.includes(name)) return;
-
-                // Verificaciones de Baneos y Seguridad
+                
                 if (m.chat in global.db.data.chats || sender in global.db.data.users) {
+                    let chat = global.db.data.chats[m.chat]
                     let user = global.db.data.users[sender]
-                    
-                    // Chat Baneado
                     if (!['grupo-unbanchat.js'].includes(name) && chat && chat.isBanned && !isROwner) return
-                    // Excepciones especiales de borrado
-                    if (!['grupo-unbanchat.js', 'owner-exec.js', 'owner-exec2.js', 'grupo-delete.js'].includes(name) && chat?.isBanned && !isROwner) return
+                    if (name != 'grupo-unbanchat.js' && name != 'owner-exec.js' && name != 'owner-exec2.js' && name != 'grupo-delete.js' && chat?.isBanned && !isROwner) return
                     
-                    // Anti-Spam Usuario
                     if (user && user.antispam > 2) return
-                    
-                    // Usuario Baneado
                     if (m.text && user && user.banned && !isROwner) {
-                        m.reply(`⚠️ *Usuario Baneado*\n\n${user.bannedReason ? `📌 *Razón:* ${user.bannedReason}` : '📌 *Razón:* No especificada'}\n\n> No puedes usar comandos.`)
+                         // Evitar spam de aviso de ban
+                        if (!user.lastBanMsg || Date.now() - user.lastBanMsg > 30000) {
+                             m.reply(`《✦》Estas baneado/a, no puedes usar comandos en este bot!\n\n${user.bannedReason ? `✰ *Motivo:* ${user.bannedReason}` : '✰ *Motivo:* Sin Especificar'}\n\n> ✧ Si este Bot es cuenta ...`)
+                             user.lastBanMsg = Date.now();
+                        }
                         user.antispam++
                         return
                     }
-                    if (user && user.antispam2 && isROwner) return
                 }
-
-                // Verificaciones de Permisos del Plugin
-                let hl = _prefix
-                let adminMode = global.db.data.chats[m.chat].modoadmin
+                
+                let adminMode = global.db.data.chats[m.chat]?.modoadmin
                 if (adminMode && m.isGroup && !isAdmin && !isOwner && !isROwner) return
 
                 if (plugin.botAdmin && !isBotAdmin) { fail("botAdmin", m, this); continue }
@@ -403,26 +367,23 @@ export async function handler(chatUpdate) {
 
                 m.isCommand = true
                 let xp = 'exp' in plugin ? parseInt(plugin.exp) : 17
-                if (xp > 200) m.reply('Hey, calma con la XP. 🤨')
+                if (xp > 200) m.reply('chirrido -_-')
                 else m.exp += xp
                 
                 if (!isPrems && plugin.coin && global.db.data.users[sender].coin < plugin.coin * 1) {
-                    this.reply(m.chat, `📉 *Saldo Insuficiente*\nNecesitas ${plugin.coin} ${m.moneda} para usar este comando.`, m)
+                    this.reply(m.chat, `❮✦❯ Se agotaron tus ${m.moneda}`, m)
                     continue
                 }
                 
                 if (plugin.level > _user.level) {
-                    this.reply(m.chat, `🔒 *Nivel Requerido*\n\n🔹 Necesitas nivel: *${plugin.level}*\n🔹 Tu nivel actual: *${_user.level}*\n\n> Usa *${usedPrefix}levelup* para subir.`, m)
+                    this.reply(m.chat, `❮✦❯ Se requiere el nivel: *${plugin.level}*\n\n• Tu nivel actual es: *${_user.level}*\n\n• Usa este comando para subir de nivel:\n*${usedPrefix}levelup*`, m)
                     continue
                 }
-
-                // Ejecución del Plugin
+                
                 let extra = {
-                    match, usedPrefix, noPrefix, _args, args, command, text, conn: this, participants, 
-                    groupMetadata, user: userGroup, bot: botGroup, isROwner, isOwner, isRAdmin, isAdmin, 
-                    isBotAdmin, isPrems, chatUpdate, __dirname: ___dirname, __filename
+                    match, usedPrefix, noPrefix, _args, args, command, text, conn: this, participants, groupMetadata, user: userGroup, bot: botGroup, isROwner, isOwner, isRAdmin, isAdmin, isBotAdmin, isPrems, chatUpdate, __dirname: ___dirname, __filename
                 }
-
+                
                 try {
                     await plugin.call(this, m, extra)
                     if (!isPrems) m.coin = m.coin || plugin.coin || false
@@ -432,7 +393,7 @@ export async function handler(chatUpdate) {
                     if (e) {
                         let text = format(e)
                         for (let key of Object.values(global.APIKeys || {}))
-                            text = text.replace(new RegExp(key, 'g'), '***********')
+                            text = text.replace(new RegExp(key, 'g'), 'Administrador')
                         m.reply(text)
                     }
                 } finally {
@@ -441,7 +402,7 @@ export async function handler(chatUpdate) {
                             await plugin.after.call(this, m, extra)
                         } catch (e) { console.error(e) }
                     }
-                    if (m.coin) this.reply(m.chat, `💸 Se descontaron ${+m.coin} ${m.moneda}`, m)
+                    if (m.coin) this.reply(m.chat, `❮✦❯ Utilizaste ${+m.coin} ${m.moneda}`, m)
                 }
                 break
             }
@@ -449,7 +410,7 @@ export async function handler(chatUpdate) {
     } catch (e) {
         console.error(e)
     } finally {
-        // Limpieza de Queue
+        // Limpieza de cola y stats
         try {
             if (this.msgqueque && (this.opts || global.opts || {})['queque'] && m && m.text) {
                 const quequeIndex = this.msgqueque.indexOf(m.id || m.key?.id)
@@ -457,26 +418,31 @@ export async function handler(chatUpdate) {
             }
         } catch (err) { }
         
-        // Estadísticas y Print
         let user, stats = global.db?.data?.stats || {}
         try {
             if (m) {
                 let utente = global.db.data.users[sender]
                 if (utente && utente.muto == true) {
+                    let bang = m.key.id
+                    let cancellazzione = m.key.participant
                     try {
-                        await this.sendMessage(m.chat, { delete: { remoteJid: m.chat, fromMe: false, id: m.key.id, participant: m.key.participant } })
+                        await this.sendMessage(m.chat, { delete: { remoteJid: m.chat, fromMe: false, id: bang, participant: cancellazzione } })
                     } catch (e) { }
                 }
                 if (sender && (user = global.db.data.users[sender])) {
                     user.exp += m.exp
                     user.coin -= (m.coin || 0) * 1
                 }
-                
+                let stat
                 if (m.plugin) {
                     let now = +new Date
-                    let stat = stats[m.plugin] || { total: 0, success: 0, last: 0, lastSuccess: 0 }
-                    if (!stats[m.plugin]) stats[m.plugin] = stat
-                    
+                    if (m.plugin in stats) {
+                        stat = stats[m.plugin]
+                        if (!isNumber(stat.total)) stat.total = 1
+                        if (!isNumber(stat.success)) stat.success = m.error != null ? 0 : 1
+                        if (!isNumber(stat.last)) stat.last = now
+                        if (!isNumber(stat.lastSuccess)) stat.lastSuccess = m.error != null ? 0 : now
+                    } else stat = stats[m.plugin] = { total: 1, success: m.error != null ? 0 : 1, last: now, lastSuccess: m.error != null ? 0 : now }
                     stat.total += 1
                     stat.last = now
                     if (m.error == null) {
@@ -495,12 +461,11 @@ export async function handler(chatUpdate) {
     }
 }
 
-// Watcher para recarga en caliente
 global.dfail = (type, m, conn) => { failureHandler(type, conn, m); };
 const file = global.__filename(import.meta.url, true);
 watchFile(file, async () => {
     unwatchFile(file);
-    console.log(chalk.green('⚡ handler.js actualizado correctamente'));
+    console.log(chalk.green('Actualizando "handler.js"'));
     if (global.conns && global.conns.length > 0) {
         const users = [...new Set([...global.conns.filter((conn) => conn.user && conn.ws && conn.ws.socket && conn.ws.socket.readyState !== ws.CLOSED).map((conn) => conn)])];
         for (const userr of users) { try { userr.subreloadHandler(false) } catch (e) { } }
