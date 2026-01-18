@@ -1,180 +1,198 @@
-import { promises as fs } from 'fs'
-import path from 'path'
+// Plugin para restaurar o dar personajes a un usuario (sobrescribe propietario actual)
+// Uso:
+//  - #rwrestaurar <nombre del personaje>           -> da ese personaje al autor
+//  - #rwrestaurar <nombre del personaje> @user     -> da ese personaje al usuario mencionado
+//  - Responder (#rwrestaurar) a un mensaje que contiene la lista -> da todos los personajes de la lista al usuario
+//
+
+import { promises as fs } from 'fs';
 import {
   loadHarem,
   saveHarem,
+  addOrUpdateClaim,
   bulkAddClaims
-} from '../lib/gacha-group.js'
+} from '../lib/gacha-group.js';
 
-const charactersFilePath = path.join(process.cwd(), 'src', 'database', 'characters.json')
+// Usamos la misma ruta que tu comando funcional para evitar errores de lectura
+const charactersFilePath = './src/database/characters.json';
 
 async function loadCharacters() {
   try {
-    const raw = await fs.readFile(charactersFilePath, 'utf-8')
-    const parsed = JSON.parse(raw)
-    return Array.isArray(parsed) ? parsed : []
-  } catch {
-    return []
+    const raw = await fs.readFile(charactersFilePath, 'utf-8');
+    const parsed = JSON.parse(raw);
+    return Array.isArray(parsed) ? parsed : [];
+  } catch (e) {
+    console.error('Error cargando characters.json:', e);
+    return [];
   }
 }
 
-function cleanWhitespaceAndControls(s = '') {
-  // elimina zero-width, isolates, NBSP, caracteres de control y colapsa espacios
-  return String(s || '')
-    .replace(/[\u200B-\u200D\u2060-\u2064\u2066-\u2069]/g, '') // ZW & isolates
-    .replace(/\u00A0/g, ' ') // NBSP -> space
-    .replace(/[\t\r]+/g, ' ')
-    .replace(/\s+/g, ' ')
-    .trim()
-}
-
+// Normalizador para comparar nombres ignorando acentos y mayúsculas
 function normalize(s = '') {
-  return cleanWhitespaceAndControls(String(s || ''))
-    .toLowerCase()
-    .normalize('NFD')
-    .replace(/[\u0300-\u036f]/g, '') // quitar acentos
-    .replace(/[^\p{L}\p{N}\s\-\.\,'’]/gu, '') // opcional: quitar emojis y símbolos no alfanuméricos (mantener letras, números y algunos signos)
-    .trim()
+  return s.toLowerCase().normalize('NFD').replace(/[\u0300-\u036f]/g, '').trim();
 }
 
 function extractNamesFromList(text) {
-  if (!text) return []
-  const raw = String(text).replace(/\r/g, '')
-  const names = new Set()
+  const names = [];
+  if (!text) return names;
 
-  // patrón 1: » *Name*  o - *Name*  (captura entre asteriscos)
-  const reStar = /[»›>\-\•••·]\s*\*\s*([^*]{2,}?)\s*\*/g
-  let m
-  while ((m = reStar.exec(raw)) !== null) {
-    const nm = m[1].trim()
-    if (nm) names.add(cleanWhitespaceAndControls(nm))
-  }
+  const lines = text.split(/\r?\n/);
+  
+  for (const line of lines) {
+    // Buscamos líneas que contengan "»" y "*"
+    // Formato esperado: » *Nombre del Personaje* (*1234*)
+    if (line.includes('»')) {
+      // 1. Quitar todo lo que esté antes del guion o flecha
+      let clean = line.substring(line.indexOf('»') + 1).trim();
+      
+      // 2. Quitar el valor entre paréntesis al final, ej: (*1234*)
+      // Esto elimina desde el último paréntesis de apertura encontrado hasta el final
+      clean = clean.replace(/\s*\(\s*\*?[\d,.]+\*?\s*\)$/, ''); 
+      clean = clean.replace(/\s*\(\s*[\d,.]+\s*\)$/, ''); // Backup por si no tiene asteriscos dentro
 
-  // patrón 2: líneas con » Name (number) o - Name (number) sin asteriscos
-  const reBullet = /^[\s]*[»›>\-\••·]?\s*([^\(\*\n]{2,}?)\s*(?:\(|$)/gm
-  while ((m = reBullet.exec(raw)) !== null) {
-    const nm = (m[1] || '').trim()
-    if (nm) names.add(cleanWhitespaceAndControls(nm))
-  }
+      // 3. Quitar los asteriscos que envuelven el nombre *Nombre*
+      clean = clean.replace(/^\*/, '').replace(/\*$/, '').trim();
 
-  // patrón 3: cualquier *Name* (fallback)
-  const reAnyStar = /\*\s*([^*]{2,}?)\s*\*/g
-  while ((m = reAnyStar.exec(raw)) !== null) {
-    const nm = m[1].trim()
-    if (nm) names.add(cleanWhitespaceAndControls(nm))
-  }
-
-  // patrón 4: líneas con texto antes de paréntesis, fallback estricto
-  if (names.size === 0) {
-    const lines = raw.split('\n')
-    for (const line of lines) {
-      const match = line.match(/^.*?([A-Za-zÀ-ÿ0-9\.\- ']{2,}?)\s*\(\s*\d{2,6}\s*\).*/i)
-      if (match && match[1]) names.add(cleanWhitespaceAndControls(match[1].trim()))
-    }
-  }
-
-  // patrón 5: si sigue vacío, agregar líneas no vacías de longitud > 2 (muy fallback)
-  if (names.size === 0) {
-    for (const line of raw.split('\n')) {
-      const t = cleanWhitespaceAndControls(line)
-      if (t && t.length > 2 && !/^(#|✿|♡|⌦|Página|Página\s*\d+)/i.test(t)) names.add(t)
-    }
-  }
-
-  return Array.from(names)
-}
-
-function robustMatchName(characters, candidate) {
-  const n = normalize(candidate)
-  if (!n) return null
-  // Primero búsqueda exacta o id
-  let ch = characters.find(c => normalize(c.name) === n || String(c.id) === n)
-  if (ch) return ch
-  // luego contains y startsWith
-  ch = characters.find(c => normalize(c.name).includes(n) || n.includes(normalize(c.name)))
-  if (ch) return ch
-  ch = characters.find(c => normalize(c.name).startsWith(n) || normalize(c.name).split(' ').some(w => w === n))
-  if (ch) return ch
-  // intento por palabras: todas las palabras del candidato deben aparecer en el nombre del personaje
-  const words = n.split(/\s+/).filter(Boolean)
-  if (words.length > 0) {
-    ch = characters.find(c => {
-      const nm = normalize(c.name)
-      return words.every(w => nm.includes(w))
-    })
-    if (ch) return ch
-  }
-  return null
-}
-
-let handler = async (m, { args, text }) => {
-  try {
-    const characters = await loadCharacters()
-    if (!characters.length) return m.reply('✘ No hay personajes en la base de datos.')
-
-    // target: si se menciona un JID explícito, usarlo; si se responde a un mensaje, usar el autor citado; sino el emisor
-    let targetJid = (m.mentionedJid && m.mentionedJid.length) ? m.mentionedJid[0] : (m.quoted?.sender || m.sender)
-
-    // Fuente de texto: preferir texto citado, luego el texto del mensaje (m.text provisto por smsg), luego text/args
-    const src = (m.quoted && (m.quoted.text || m.quoted.message?.extendedTextMessage?.text || m.quoted.message?.conversation))
-      || m.text || text || args.join(' ')
-    const sourceText = String(src || '')
-
-    let namesToGive = []
-
-    if (args && args.length) {
-      const combined = args.join(' ').trim()
-      // si hay comas/barras separadoras
-      const bySplit = combined.split(/\s*[,\|\/]\s*/).map(s => s.trim()).filter(Boolean)
-      if (bySplit.length > 1) namesToGive = bySplit
-      else {
-        // intentar extraer de sourceText si es más largo
-        const ext = extractNamesFromList(sourceText)
-        namesToGive = ext.length ? ext : [combined]
+      if (clean) {
+        names.push(clean);
       }
-    } else {
-      namesToGive = extractNamesFromList(sourceText)
+    }
+  }
+  
+  // Retornar nombres únicos para evitar procesar dobles
+  return [...new Set(names)];
+}
+
+let handler = async (m, { conn, args, participants, text }) => {
+  try {
+    // --- 1. Verificación de Permisos ---
+    const botOwners = Array.isArray(global.owner) ? global.owner : (global.owner ? [global.owner] : []);
+    let senderJid = m.sender;
+    
+    // Fix para LIDs (común en grupos nuevos)
+    if (senderJid.endsWith('@lid') && m.isGroup) {
+      const pInfo = participants.find(p => p.lid === senderJid);
+      if (pInfo && pInfo.id) senderJid = pInfo.id;
+    }
+    
+    const senderInfo = participants?.find(p => p.id === senderJid || p.lid === senderJid);
+    const isGroupAdmin = !!(senderInfo && (senderInfo.admin || senderInfo.isAdmin || senderInfo.role === 'admin'));
+    
+    // Convertir todo a string para comparar, por seguridad
+    const isOwner = botOwners.some(own => String(own).includes(senderJid.replace('@s.whatsapp.net', '')));
+
+    if (!isOwner && m.isGroup && !isGroupAdmin) {
+      return m.reply('✘ Este comando solo lo pueden usar los administradores del grupo o el propietario del bot.');
     }
 
-    if (!namesToGive || namesToGive.length === 0) {
-      // debug: mostrar lo que se recibió para ayudar a diagnosticar
-      return m.reply('✘ Escribe un nombre o responde a una lista. (No se extrajeron nombres)\n\nDEBUG: texto analizado:\n' + (sourceText.slice(0, 800) || '[vacío]'))
+    // --- 2. Determinar a QUIÉN se le darán los personajes ---
+    let targetJid = m.mentionedJid?.[0];
+    
+    // Si no menciona a nadie, mirar si citó un mensaje, pero CUIDADO:
+    // Si cita una lista, queremos los personajes de la lista, pero ¿para quién?
+    // Lógica: 
+    // - Si menciona @usuario -> para @usuario
+    // - Si responde a un mensaje de otro usuario (y no es el propio bot enviando la lista) -> para el usuario del mensaje citado
+    // - Si no hay mención ni usuario citado claro -> para quien ejecuta el comando
+    
+    if (!targetJid && m.quoted && m.quoted.sender && m.quoted.sender !== conn.user.jid) {
+       targetJid = m.quoted.sender;
+    }
+    
+    // Fix LIDs para target
+    if (targetJid && targetJid.endsWith('@lid') && m.isGroup) {
+      const pInfo = participants.find(p => p.lid === targetJid);
+      if (pInfo && pInfo.id) targetJid = pInfo.id;
+    }
+    
+    if (!targetJid) targetJid = senderJid; // Por defecto al que ejecuta el comando
+
+    // --- 3. Obtener Nombres ---
+    const characters = await loadCharacters();
+    if (!characters.length) return m.reply('✘ Error crítico: No se cargó la base de datos (characters.json).');
+
+    let namesToGive = [];
+
+    // CASO A: Argumentos directos (ej: #rwrestaurar Goku)
+    if (args && args.length > 0 && !args[0].startsWith('@')) { // Ignoramos si el primer arg es una mención
+      // Reconstruimos el nombre quitando menciones si las hay al final
+      const textWithoutMentions = args.filter(a => !a.startsWith('@')).join(' ');
+      if (textWithoutMentions) {
+         // Buscamos match directo
+         const candidate = characters.find(c => normalize(c.name) === normalize(textWithoutMentions)) ||
+                           characters.find(c => normalize(c.name).includes(normalize(textWithoutMentions)));
+         
+         if (candidate) namesToGive = [candidate.name];
+         else return m.reply(`✘ No encontré ningún personaje llamado: ${textWithoutMentions}`);
+      }
     }
 
-    const found = []
-    const notFound = []
+    // CASO B: Respondiendo a una lista (Si namesToGive sigue vacío)
+    if (namesToGive.length === 0) {
+      let sourceText = '';
+      if (m.quoted && m.quoted.text) sourceText = m.quoted.text;
+      else if (m.text) sourceText = m.text; // (Poco probable que funcione sin citar, pero se deja)
+
+      const extracted = extractNamesFromList(sourceText);
+      if (extracted.length > 0) {
+        namesToGive = extracted;
+      } else {
+        // Si llegamos aquí y no hay argumentos ni lista válida
+        return m.reply('✘ No detecté personajes.\n\nUso:\n1. Responde a una lista de harem con #rwrestaurar\n2. O escribe #rwrestaurar <Nombre Personaje>');
+      }
+    }
+
+    // --- 4. Procesar y Asignar ---
+    const groupId = m.chat;
+    const foundChars = [];
+    const notFound = [];
 
     for (const nm of namesToGive) {
-      const ch = robustMatchName(characters, nm)
-      if (ch) found.push(ch)
-      else notFound.push(nm)
+      const norm = normalize(nm);
+      // Intentar búsqueda exacta primero
+      let ch = characters.find(c => normalize(c.name) === norm);
+      
+      // Si falla, búsqueda flexible (contiene)
+      if (!ch) {
+        ch = characters.find(c => normalize(c.name).includes(norm) || norm.includes(normalize(c.name)));
+      }
+
+      if (ch) foundChars.push(ch);
+      else notFound.push(nm);
     }
 
-    if (!found.length) {
-      // debug para entender por qué no hubo coincidencias
-      return m.reply('✘ No se encontró ningún personaje.\n\nDEBUG: textos extraídos:\n' + JSON.stringify(namesToGive.slice(0, 50), null, 2) + '\n\n(Total personajes en DB: ' + characters.length + ')')
+    if (foundChars.length === 0) {
+      return m.reply(`✘ No pude identificar ningún personaje en la base de datos.\nNombres intentados: ${notFound.join(', ')}`);
     }
 
-    const harem = await loadHarem()
-    const ids = found.map(c => c.id)
-    const added = bulkAddClaims(harem, m.chat, targetJid, ids)
-    await saveHarem(harem)
+    // Guardar en Harem
+    const harem = await loadHarem();
+    const charIds = foundChars.map(c => c.id);
+    
+    // Función de tu librería para añadir en masa
+    const addedCount = bulkAddClaims(harem, groupId, targetJid, charIds);
+    await saveHarem(harem);
 
-    let msg = `✔ Se asignaron ${added} personaje(s):\n\n`
-    msg += found.map(c => `» *${c.name}*`).join('\n')
+    // --- 5. Respuesta Final ---
+    const givenList = foundChars.map(c => `» *${c.name}* (*${c.value || '?'}*)`).join('\n');
+    let replyMsg = `✔ *RESTAURACIÓN COMPLETADA*\n\n👤 *Usuario:* @${targetJid.split('@')[0]}\najustados *${addedCount}* personajes al inventario:\n\n${givenList}`;
+    
+    if (notFound.length > 0) {
+      replyMsg += `\n\n⚠ *No encontrados en DB:* ${notFound.join(', ')}`;
+    }
 
-    if (notFound.length) msg += `\n\n✘ No encontrados: ${notFound.join(', ')}`
-
-    await m.reply(msg)
+    await conn.sendMessage(m.chat, { text: replyMsg, mentions: [targetJid] }, { quoted: m });
 
   } catch (e) {
-    console.error(e)
-    m.reply('✘ Error en rwrestaurar:\n' + (e?.message || String(e)))
+    console.error(e);
+    m.reply(`✘ Ocurrió un error inesperado: ${e.message}`);
   }
-}
+};
 
-handler.help = ['rwrestaurar <nombre>']
-handler.tags = ['waifus']
-handler.command = ['rwrestaurar', 'rwrestore', 'restorewaifu']
+handler.help = ['rwrestaurar <nombre> | responder a lista'];
+handler.tags = ['waifus', 'admin'];
+handler.command = ['rwrestaurar', 'restaurar']; // Agregué un alias por si acaso
+handler.group = true;
+handler.admin = true; // Forzamos flag de admin por si el check manual falla en algunos frameworks
 
-export default handler
+export default handler;
