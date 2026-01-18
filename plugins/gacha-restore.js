@@ -33,7 +33,7 @@ function normalize(s = '') {
     .toLowerCase()
     .normalize('NFD')
     .replace(/[\u0300-\u036f]/g, '') // quitar acentos
-    .replace(/[^\p{L}\p{N}\s\-\.\,]/gu, '') // opcional: quitar emojis y símbolos no alfanuméricos (mantener letras, números y algunos signos)
+    .replace(/[^\p{L}\p{N}\s\-\.\,'’]/gu, '') // opcional: quitar emojis y símbolos no alfanuméricos (mantener letras, números y algunos signos)
     .trim()
 }
 
