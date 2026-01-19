@@ -25,9 +25,9 @@
     "value": "12400",
     "source": "Tokidoki Bosotto Russia-go de Dereru Tonari no Alya-san",
     "img": [
-      "https://i.pinimg.com/originals/61/25/50/612550ec4fc7c2c5b4cd990694b2beac.png",
-      "https://i.pinimg.com/originals/73/35/db/7335dbf057cab34d7f619ad79d776698.jpg",
-      "https://i.pinimg.com/originals/b9/9b/71/b99b71d53cd38ff5a3bbeb9ec83880a3.jpg"
+      "https://raw.githubusercontent.com/The-King-Destroy/Adiciones/main/Contenido/1742699105347.jpeg",
+      "https://raw.githubusercontent.com/The-King-Destroy/Adiciones/main/Contenido/1742698851202.jpeg",
+      "https://raw.githubusercontent.com/The-King-Destroy/Adiciones/main/Contenido/1742699105347.jpeg"
     ],
     "vid": [
       "https://raw.githubusercontent.com/The-King-Destroy/Adiciones/main/Contenido/1742704584808.mp4",
@@ -694,11 +694,11 @@
     "id": "38",
     "name": "Sung Jin-woo",
     "gender": "Hombre",
-    "value": "14850",
+    "value": "12800",
     "source": "Solo Leveling",
     "img": [
-      "https://i.pinimg.com/originals/c7/e3/f0/c7e3f032a16b4c859726cae27d3c93c7.png",
-      "https://i.pinimg.com/originals/00/93/b5/0093b5d340b5a615beaaf9e42fd3dced.jpg",
+      "https://files.catbox.moe/d42ftd.mp4",
+      "https://files.catbox.moe/ek082s.jpg",
       "https://raw.githubusercontent.com/The-King-Destroy/Adiciones/main/Contenido/1742705949538.jpeg"
     ],
     "vid": [
@@ -713,16 +713,16 @@
     "id": "39",
     "name": "Shinra Kusakabe",
     "gender": "Hombre",
-    "value": "14500",
+    "value": "11500",
     "source": "Fire Force",
     "img": [
-      "https://i.pinimg.com/originals/94/62/6f/94626fa28a7ba890be90d66d5afeca6b.jpg",
-      "https://i.pinimg.com/originals/91/45/fc/9145fcbbeb2281e48bb6ab278e2a9742.jpg",
-      "https://i.pinimg.com/originals/30/9f/23/309f23cd2d86895e1024b6786e903ae9.png"
+      "https://files.catbox.moe/x3xjya.jpg",
+      "https://files.catbox.moe/q6o1cs.jpg",
+      "https://files.catbox.moe/mn18g1.jpg"
     ],
     "vid": [
-      "https://i.pinimg.com/originals/40/ae/04/40ae0406f6c8d9d3b8349ed98fb4a81c.gif",
-      "https://i.pinimg.com/originals/17/26/59/172659538b77958d377238d872d777aa.gif"
+      "https://files.catbox.moe/i0npod.mp4",
+      "https://files.catbox.moe/131x7l.mp4"
     ],
     "user": null,
     "status": "Libre",
@@ -751,7 +751,7 @@
     "id": "41",
     "name": "Benimaru Shinmon",
     "gender": "Hombre",
-    "value": "13800",
+    "value": "11800",
     "source": "Fire Force",
     "img": [
       "https://files.catbox.moe/mwez4k.jpg",
@@ -3980,16 +3980,16 @@
       "id": "213",
       "name": "Ellen Joe",
       "gender": "Mujer",
-      "value": "14800",
+      "value": "13800",
       "source": "Zenless zone Zero",
       "img": [
-         "https://i.pinimg.com/originals/f7/20/e6/f720e6fbe6b400a3291c9f3415eed5a6.jpg",
+         "https://raw.githubusercontent.com/The-King-Destroy/Adiciones/main/Contenido/1742232387204.jpeg",
          "https://raw.githubusercontent.com/The-King-Destroy/Adiciones/main/Contenido/1742232331968.jpeg",
          "https://raw.githubusercontent.com/The-King-Destroy/Adiciones/main/Contenido/1742232295279.jpeg"
       ],
       "vid": [
-         "https://media.tenor.com/K31WX7ZfEZ8AAAAm/ellen-joe-zenless-zone-zero.webp",
-         "https://media.tenor.com/0GJUx58X_tkAAAAM/ellen-shark.gif"
+         "https://raw.githubusercontent.com/The-King-Destroy/Adiciones/main/Contenido/1742232303609.mp4",
+         "https://raw.githubusercontent.com/The-King-Destroy/Adiciones/main/Contenido/1742232390857.mp4"
       ],
       "user": null,
       "status": "Libre",
@@ -3999,7 +3999,7 @@
       "id": "214",
       "name": "Vermeil",
       "gender": "Mujer",
-      "value": "11500",
+      "value": "9500",
       "source": "Kinsou no Vermeil",
       "img": [
          "https://raw.githubusercontent.com/The-King-Destroy/Adiciones/main/Contenido/1742232615129.jpeg",
@@ -11245,6 +11245,22 @@
       "votes": 0
    },
    {
+      "id": "612",
+      "name": "Miyabi Hoshimi",
+      "gender": "Mujer",
+      "value": "12900",
+      "source": "Zenless Zone Zero",
+      "img": [
+         "https://raw.githubusercontent.com/https0J/Hoshino-Adiciones/main/Contenido/1746393834376.jpeg",
+         "https://raw.githubusercontent.com/https0J/Hoshino-Adiciones/main/Contenido/1746393845846.jpeg",
+         "https://raw.githubusercontent.com/https0J/Hoshino-Adiciones/main/Contenido/1746393871595.jpeg"
+      ],
+      "vid": [],
+      "user": null,
+      "status": "Libre",
+      "votes": 0
+   },
+   {
       "id": "613",
       "name": "Kei Kurono",
       "gender": "Hombre",
@@ -11674,19 +11690,38 @@
       "votes": 0
    },
    {
+      "id": "639",
+      "name": "Yanagi Tsukishiro",
+      "gender": "Mujer",
+      "value": "12900",
+      "source": "Zenless Zone Zero",
+      "img": [
+         "https://raw.githubusercontent.com/https0J/Hoshino-Adiciones/main/Contenido/1747862509718.jpeg",
+         "https://raw.githubusercontent.com/https0J/Hoshino-Adiciones/main/Contenido/1747862515464.jpeg",
+         "https://raw.githubusercontent.com/https0J/Hoshino-Adiciones/main/Contenido/1747862524075.jpeg"
+      ],
+      "vid": [
+         "https://raw.githubusercontent.com/https0J/Hoshino-Adiciones/main/Contenido/1747862546041.mp4",
+         "https://raw.githubusercontent.com/https0J/Hoshino-Adiciones/main/Contenido/1747862556224.mp4"
+      ],
+      "user": null,
+      "status": "Libre",
+      "votes": 0
+   },
+   {
       "id": "640",
       "name": "Jane Doe",
       "gender": "Mujer",
-      "value": "14400",
+      "value": "13400",
       "source": "Zenless Zone Zero",
       "img": [
-         "https://i.pinimg.com/originals/db/cd/e8/dbcde800aaa3080ce2afab2fad09de77.jpg",
-         "https://i.pinimg.com/originals/c0/c7/58/c0c758dc68417d31461d42dbea034dab.jpg",
-         "https://i.pinimg.com/originals/59/75/e6/5975e6dc3e3652569a0e8d50c82d8083.jpg"
+         "https://raw.githubusercontent.com/https0J/Hoshino-Adiciones/main/Contenido/1747863764740.jpeg",
+         "https://raw.githubusercontent.com/https0J/Hoshino-Adiciones/main/Contenido/1747863773809.jpeg",
+         "https://raw.githubusercontent.com/https0J/Hoshino-Adiciones/main/Contenido/1747863783829.jpeg"
       ],
       "vid": [
-         "https://i.pinimg.com/originals/09/a6/a4/09a6a4151cfb201e30d27c6ae0e01411.gif",
-         "https://i.pinimg.com/originals/0d/75/26/0d75262941ee6d40bdd5de79bb544e52.gif"
+         "https://raw.githubusercontent.com/https0J/Hoshino-Adiciones/main/Contenido/1747863818924.mp4",
+         "https://raw.githubusercontent.com/https0J/Hoshino-Adiciones/main/Contenido/1747863848145.mp4"
       ],
       "user": null,
       "status": "Libre",
@@ -13684,7 +13719,7 @@
       "value": "6500",
       "source": "Fire Force",
       "img": [
-         "https://i.pinimg.com/originals/ed/43/54/ed435498bcb880c0af0d9d015538fcde.jpg",
+         "https://i.pinimg.com/originals/ed/43/54/ed435498bcb880c0af0d9d015538fcde.jpg"
       ],
       "vid": [],
       "user": null,
@@ -13751,7 +13786,7 @@
          "https://i.pinimg.com/originals/3a/84/ce/3a84ce8bc9d746c2bae1042fd967a466.jpg"
       ],
       "vid": [
-         "https://i.pinimg.com/originals/c7/91/0f/c7910f5b03d8a7b07f69fe7091844d48.gif",
+         "https://i.pinimg.com/originals/c7/91/0f/c7910f5b03d8a7b07f69fe7091844d48.gif"
       ],
       "user": null,
       "status": "Libre",
@@ -16274,8 +16309,7 @@
          "https://i.pinimg.com/originals/7c/87/db/7c87db453c7e140d31b5a189a1f44457.png"
       ],
       "vid": [
-         "https://media.tenor.com/Eus5mXGxT88AAAA1/yanderesimulator-musume-ronshaku.webp",
-         ""
+         "https://media.tenor.com/Eus5mXGxT88AAAA1/yanderesimulator-musume-ronshaku.webp"
       ],
       "user": null,
       "status": "Libre",
@@ -16878,7 +16912,7 @@
          "https://i.pinimg.com/originals/05/f2/54/05f2549d1e6f1e5522e5413ba55114a3.jpg"
       ],
       "vid": [
-         "https://i.pinimg.com/originals/4d/20/3e/4d203eed3468d9c72fe8029f3380e750.gif",
+         "https://i.pinimg.com/originals/4d/20/3e/4d203eed3468d9c72fe8029f3380e750.gif"
       ],
       "user": null,
       "status": "Libre",
@@ -17263,7 +17297,7 @@
          "https://i.pinimg.com/originals/ad/d8/a2/add8a28a910cc668853eef62d1aab4c6.jpg"
       ],
       "vid": [
-         "https://i.pinimg.com/originals/3c/32/65/3c32654f3083b7e33390162baa0b3496.gif",
+         "https://i.pinimg.com/originals/3c/32/65/3c32654f3083b7e33390162baa0b3496.gif"
       ],
       "user": null,
       "status": "Libre",
@@ -19716,7 +19750,7 @@
       "value": "5500",
       "source": "Tokidoki Bosotto Russia-go de Dereru Tonari no Alya-san",
       "img": [
-         "https://otakotaku.com/asset/img/character/2024/09/yumi-suou-66dd544287d0ep.jpg
+         "https://otakotaku.com/asset/img/character/2024/09/yumi-suou-66dd544287d0ep.jpg"
       ],
       "vid": [],
       "user": null,
@@ -20262,5 +20296,5 @@
       "user": null,
       "status": "Libre",
       "votes": 0
-   }
+  }
 ]
