@@ -25,9 +25,9 @@
     "value": "12400",
     "source": "Tokidoki Bosotto Russia-go de Dereru Tonari no Alya-san",
     "img": [
-      "https://raw.githubusercontent.com/The-King-Destroy/Adiciones/main/Contenido/1742699105347.jpeg",
-      "https://raw.githubusercontent.com/The-King-Destroy/Adiciones/main/Contenido/1742698851202.jpeg",
-      "https://raw.githubusercontent.com/The-King-Destroy/Adiciones/main/Contenido/1742699105347.jpeg"
+      "https://i.pinimg.com/originals/61/25/50/612550ec4fc7c2c5b4cd990694b2beac.png",
+      "https://i.pinimg.com/originals/73/35/db/7335dbf057cab34d7f619ad79d776698.jpg",
+      "https://i.pinimg.com/originals/b9/9b/71/b99b71d53cd38ff5a3bbeb9ec83880a3.jpg"
     ],
     "vid": [
       "https://raw.githubusercontent.com/The-King-Destroy/Adiciones/main/Contenido/1742704584808.mp4",
@@ -694,11 +694,11 @@
     "id": "38",
     "name": "Sung Jin-woo",
     "gender": "Hombre",
-    "value": "12800",
+    "value": "14850",
     "source": "Solo Leveling",
     "img": [
-      "https://files.catbox.moe/d42ftd.mp4",
-      "https://files.catbox.moe/ek082s.jpg",
+      "https://i.pinimg.com/originals/c7/e3/f0/c7e3f032a16b4c859726cae27d3c93c7.png",
+      "https://i.pinimg.com/originals/00/93/b5/0093b5d340b5a615beaaf9e42fd3dced.jpg",
       "https://raw.githubusercontent.com/The-King-Destroy/Adiciones/main/Contenido/1742705949538.jpeg"
     ],
     "vid": [
@@ -713,16 +713,16 @@
     "id": "39",
     "name": "Shinra Kusakabe",
     "gender": "Hombre",
-    "value": "11500",
+    "value": "14500",
     "source": "Fire Force",
     "img": [
-      "https://files.catbox.moe/x3xjya.jpg",
-      "https://files.catbox.moe/q6o1cs.jpg",
-      "https://files.catbox.moe/mn18g1.jpg"
+      "https://i.pinimg.com/originals/94/62/6f/94626fa28a7ba890be90d66d5afeca6b.jpg",
+      "https://i.pinimg.com/originals/91/45/fc/9145fcbbeb2281e48bb6ab278e2a9742.jpg",
+      "https://i.pinimg.com/originals/30/9f/23/309f23cd2d86895e1024b6786e903ae9.png"
     ],
     "vid": [
-      "https://files.catbox.moe/i0npod.mp4",
-      "https://files.catbox.moe/131x7l.mp4"
+      "https://i.pinimg.com/originals/40/ae/04/40ae0406f6c8d9d3b8349ed98fb4a81c.gif",
+      "https://i.pinimg.com/originals/17/26/59/172659538b77958d377238d872d777aa.gif"
     ],
     "user": null,
     "status": "Libre",
@@ -751,7 +751,7 @@
     "id": "41",
     "name": "Benimaru Shinmon",
     "gender": "Hombre",
-    "value": "11800",
+    "value": "13800",
     "source": "Fire Force",
     "img": [
       "https://files.catbox.moe/mwez4k.jpg",
@@ -3980,16 +3980,16 @@
       "id": "213",
       "name": "Ellen Joe",
       "gender": "Mujer",
-      "value": "13800",
+      "value": "14800",
       "source": "Zenless zone Zero",
       "img": [
-         "https://raw.githubusercontent.com/The-King-Destroy/Adiciones/main/Contenido/1742232387204.jpeg",
+         "https://i.pinimg.com/originals/f7/20/e6/f720e6fbe6b400a3291c9f3415eed5a6.jpg",
          "https://raw.githubusercontent.com/The-King-Destroy/Adiciones/main/Contenido/1742232331968.jpeg",
          "https://raw.githubusercontent.com/The-King-Destroy/Adiciones/main/Contenido/1742232295279.jpeg"
       ],
       "vid": [
-         "https://raw.githubusercontent.com/The-King-Destroy/Adiciones/main/Contenido/1742232303609.mp4",
-         "https://raw.githubusercontent.com/The-King-Destroy/Adiciones/main/Contenido/1742232390857.mp4"
+         "https://media.tenor.com/K31WX7ZfEZ8AAAAm/ellen-joe-zenless-zone-zero.webp",
+         "https://media.tenor.com/0GJUx58X_tkAAAAM/ellen-shark.gif"
       ],
       "user": null,
       "status": "Libre",
@@ -3999,7 +3999,7 @@
       "id": "214",
       "name": "Vermeil",
       "gender": "Mujer",
-      "value": "9500",
+      "value": "11500",
       "source": "Kinsou no Vermeil",
       "img": [
          "https://raw.githubusercontent.com/The-King-Destroy/Adiciones/main/Contenido/1742232615129.jpeg",
@@ -11245,22 +11245,6 @@
       "votes": 0
    },
    {
-      "id": "612",
-      "name": "Miyabi Hoshimi",
-      "gender": "Mujer",
-      "value": "12900",
-      "source": "Zenless Zone Zero",
-      "img": [
-         "https://raw.githubusercontent.com/https0J/Hoshino-Adiciones/main/Contenido/1746393834376.jpeg",
-         "https://raw.githubusercontent.com/https0J/Hoshino-Adiciones/main/Contenido/1746393845846.jpeg",
-         "https://raw.githubusercontent.com/https0J/Hoshino-Adiciones/main/Contenido/1746393871595.jpeg"
-      ],
-      "vid": [],
-      "user": null,
-      "status": "Libre",
-      "votes": 0
-   },
-   {
       "id": "613",
       "name": "Kei Kurono",
       "gender": "Hombre",
@@ -11690,38 +11674,19 @@
       "votes": 0
    },
    {
-      "id": "639",
-      "name": "Yanagi Tsukishiro",
-      "gender": "Mujer",
-      "value": "12900",
-      "source": "Zenless Zone Zero",
-      "img": [
-         "https://raw.githubusercontent.com/https0J/Hoshino-Adiciones/main/Contenido/1747862509718.jpeg",
-         "https://raw.githubusercontent.com/https0J/Hoshino-Adiciones/main/Contenido/1747862515464.jpeg",
-         "https://raw.githubusercontent.com/https0J/Hoshino-Adiciones/main/Contenido/1747862524075.jpeg"
-      ],
-      "vid": [
-         "https://raw.githubusercontent.com/https0J/Hoshino-Adiciones/main/Contenido/1747862546041.mp4",
-         "https://raw.githubusercontent.com/https0J/Hoshino-Adiciones/main/Contenido/1747862556224.mp4"
-      ],
-      "user": null,
-      "status": "Libre",
-      "votes": 0
-   },
-   {
       "id": "640",
       "name": "Jane Doe",
       "gender": "Mujer",
-      "value": "13400",
+      "value": "14400",
       "source": "Zenless Zone Zero",
       "img": [
-         "https://raw.githubusercontent.com/https0J/Hoshino-Adiciones/main/Contenido/1747863764740.jpeg",
-         "https://raw.githubusercontent.com/https0J/Hoshino-Adiciones/main/Contenido/1747863773809.jpeg",
-         "https://raw.githubusercontent.com/https0J/Hoshino-Adiciones/main/Contenido/1747863783829.jpeg"
+         "https://i.pinimg.com/originals/db/cd/e8/dbcde800aaa3080ce2afab2fad09de77.jpg",
+         "https://i.pinimg.com/originals/c0/c7/58/c0c758dc68417d31461d42dbea034dab.jpg",
+         "https://i.pinimg.com/originals/59/75/e6/5975e6dc3e3652569a0e8d50c82d8083.jpg"
       ],
       "vid": [
-         "https://raw.githubusercontent.com/https0J/Hoshino-Adiciones/main/Contenido/1747863818924.mp4",
-         "https://raw.githubusercontent.com/https0J/Hoshino-Adiciones/main/Contenido/1747863848145.mp4"
+         "https://i.pinimg.com/originals/09/a6/a4/09a6a4151cfb201e30d27c6ae0e01411.gif",
+         "https://i.pinimg.com/originals/0d/75/26/0d75262941ee6d40bdd5de79bb544e52.gif"
       ],
       "user": null,
       "status": "Libre",
@@ -13719,7 +13684,7 @@
       "value": "6500",
       "source": "Fire Force",
       "img": [
-         "https://i.pinimg.com/originals/ed/43/54/ed435498bcb880c0af0d9d015538fcde.jpg"
+         "https://i.pinimg.com/originals/ed/43/54/ed435498bcb880c0af0d9d015538fcde.jpg",
       ],
       "vid": [],
       "user": null,
@@ -13786,7 +13751,7 @@
          "https://i.pinimg.com/originals/3a/84/ce/3a84ce8bc9d746c2bae1042fd967a466.jpg"
       ],
       "vid": [
-         "https://i.pinimg.com/originals/c7/91/0f/c7910f5b03d8a7b07f69fe7091844d48.gif"
+         "https://i.pinimg.com/originals/c7/91/0f/c7910f5b03d8a7b07f69fe7091844d48.gif",
       ],
       "user": null,
       "status": "Libre",
@@ -16309,7 +16274,8 @@
          "https://i.pinimg.com/originals/7c/87/db/7c87db453c7e140d31b5a189a1f44457.png"
       ],
       "vid": [
-         "https://media.tenor.com/Eus5mXGxT88AAAA1/yanderesimulator-musume-ronshaku.webp"
+         "https://media.tenor.com/Eus5mXGxT88AAAA1/yanderesimulator-musume-ronshaku.webp",
+         ""
       ],
       "user": null,
       "status": "Libre",
@@ -16912,7 +16878,7 @@
          "https://i.pinimg.com/originals/05/f2/54/05f2549d1e6f1e5522e5413ba55114a3.jpg"
       ],
       "vid": [
-         "https://i.pinimg.com/originals/4d/20/3e/4d203eed3468d9c72fe8029f3380e750.gif"
+         "https://i.pinimg.com/originals/4d/20/3e/4d203eed3468d9c72fe8029f3380e750.gif",
       ],
       "user": null,
       "status": "Libre",
@@ -17297,7 +17263,7 @@
          "https://i.pinimg.com/originals/ad/d8/a2/add8a28a910cc668853eef62d1aab4c6.jpg"
       ],
       "vid": [
-         "https://i.pinimg.com/originals/3c/32/65/3c32654f3083b7e33390162baa0b3496.gif"
+         "https://i.pinimg.com/originals/3c/32/65/3c32654f3083b7e33390162baa0b3496.gif",
       ],
       "user": null,
       "status": "Libre",
@@ -17921,6 +17887,2376 @@
          "https://i.pinimg.com/736x/ce/12/0b/ce120b01897969c8807e14b5b309efcd.jpg",
          "https://i.pinimg.com/736x/08/88/fc/0888fc107edaeb0f364bffe07703711f.jpg",
          "https://i.pinimg.com/736x/f7/33/4b/f7334bead1a8490f2b2043661554f351.jpg"
+      ],
+      "vid": [],
+      "user": null,
+      "status": "Libre",
+      "votes": 0
+   },
+   {
+      "id": "1045",
+      "name": "Anby Demara",
+      "gender": "Mujer",
+      "value": "11000",
+      "source": "Zenless Zone Zero",
+      "img": [
+         "https://i.pinimg.com/originals/c3/41/8c/c3418c9d496f29747163aba99355c97a.jpg",
+         "https://i.pinimg.com/originals/fa/5e/c0/fa5ec01418868daf53440520d551f23e.jpg",
+         "https://i.pinimg.com/originals/bb/2f/80/bb2f80cc9b742d874805ba220343ad8d.jpg"
+      ],
+      "vid": [
+         "https://i.pinimg.com/originals/cd/33/3b/cd333ba8e15ef3b370a86c76c7e9d67b.gif",
+         "https://i.pinimg.com/originals/eb/17/8c/eb178c29033c6c06251042748d6ff46f.gif"
+      ],
+      "user": null,
+      "status": "Libre",
+      "votes": 0
+   },
+   {
+      "id": "1046",
+      "name": "Nicole Demara",
+      "gender": "Mujer",
+      "value": "11500",
+      "source": "Zenless Zone Zero",
+      "img": [
+         "https://i.pinimg.com/originals/72/36/66/723666c26f5291765d87dc3ab681964e.jpg",
+         "https://i.pinimg.com/originals/d7/b6/8c/d7b68c6e6776769d18d730b9f800c062.jpg",
+         "https://i.pinimg.com/originals/38/9c/f8/389cf83b7cc7fd5026f6fea8fc1052e9.jpg"
+      ],
+      "vid": [
+         "https://media.tenor.com/mfKPRseThIsAAAA1/nicole-nicole-zzz.webp",
+         "https://media.tenor.com/T4yINh-wN6IAAAA1/nicole-zzz.webp"
+      ],
+      "user": null,
+      "status": "Libre",
+      "votes": 0
+   },
+   {
+      "id": "1047",
+      "name": "Billy Kid",
+      "gender": "Hombre",
+      "value": "9500",
+      "source": "Zenless Zone Zero",
+      "img": [
+         "https://i.pinimg.com/originals/6c/f7/ce/6cf7ce5715be6acb956cc932199ae3b9.jpg",
+         "https://i.pinimg.com/originals/02/ce/c0/02cec0fd3065ffe58f30e8069725aa60.jpg",
+         "https://i.pinimg.com/originals/1b/b0/2a/1bb02a6d3a3db38f3870fc8a3f876a99.png"
+      ],
+      "vid": [
+         "https://media.tenor.com/a5zvTTkIGkwAAAAM/zenless-zone-zero-billy.gif",
+         "https://media.tenor.com/uQrrtmJMHwYAAAAM/zenless-zone-zero-zzz.gif"
+      ],
+      "user": null,
+      "status": "Libre",
+      "votes": 0
+   },
+   {
+      "id": "1048",
+      "name": "Nekomiya Mana (Nekomata)",
+      "gender": "Mujer",
+      "value": "12500",
+      "source": "Zenless Zone Zero",
+      "img": [
+         "https://i.pinimg.com/originals/7b/6c/9c/7b6c9cb60579690c4c4f0ce8c5d745e4.jpg",
+         "https://i.pinimg.com/originals/e8/a9/e0/e8a9e097cecb0d21ec09b7a6715dccd8.jpg",
+         "https://i.pinimg.com/originals/06/c5/ab/06c5ab865e17499466525eee223ac452.jpg"
+      ],
+      "vid": [
+         "https://media.tenor.com/6_mofYHYvOEAAAAM/zenless-zone-zero-zzz.gif",
+         "https://media.tenor.com/pMzj5uUHCKMAAAAM/zzz-nekomata.gif"
+      ],
+      "user": null,
+      "status": "Libre",
+      "votes": 0
+   },
+   {
+      "id": "1049",
+      "name": "Zhu Yuan",
+      "gender": "Mujer",
+      "value": "13800",
+      "source": "Zenless Zone Zero",
+      "img": [
+         "https://i.pinimg.com/originals/8b/9e/37/8b9e371b12c9213a3395d1b470ad5b6d.jpg",
+         "https://i.pinimg.com/originals/3e/23/0c/3e230c79988082bb2d5cfc50a935284e.jpg",
+         "https://i.pinimg.com/originals/a7/1f/97/a71f97ee823f08541ca62c3e39cb56b0.jpg"
+      ],
+      "vid": [
+         "https://i.pinimg.com/originals/ba/31/95/ba3195212d7561feebbb773fa1d9574c.gif",
+         "https://i.pinimg.com/originals/c3/f7/a8/c3f7a8b137ebc9905a6c51f90a66c196.gif"
+      ],
+      "user": null,
+      "status": "Libre",
+      "votes": 0
+   },
+   {
+      "id": "1050",
+      "name": "Qingyi",
+      "gender": "Mujer",
+      "value": "13600",
+      "source": "Zenless Zone Zero",
+      "img": [
+         "https://i.pinimg.com/originals/97/d2/ce/97d2cec8cf83c8b9cc483f7a71b58fa5.jpg",
+         "https://i.pinimg.com/originals/43/bf/14/43bf1475a2639f99bef1da8b9cd45751.jpg",
+         "https://i.pinimg.com/originals/44/e7/04/44e7041a5d1ac333025e78d5a4872613.jpg"
+      ],
+      "vid": [
+         "https://media.tenor.com/tq6xGeegUVoAAAAM/zenlesszonezero-zzz.gif",
+         "https://media.tenor.com/TncWhqLMiAEAAAAM/zzz-zzzero.gif"
+      ],
+      "user": null,
+      "status": "Libre",
+      "votes": 0
+   },
+   {
+      "id": "1051",
+      "name": "Seth Lowell",
+      "gender": "Hombre",
+      "value": "10200",
+      "source": "Zenless Zone Zero",
+      "img": [
+         "https://i.pinimg.com/originals/14/66/1a/14661a57c44d246138633016d921ecbd.jpg",
+         "https://i.pinimg.com/originals/6e/61/2f/6e612f5568892b1d88f8ab58e518310b.png",
+         "https://i.pinimg.com/originals/4a/c4/a5/4ac4a537bf588686750fd57a9d8e565a.jpg"
+      ],
+      "vid": [
+         "https://media.tenor.com/Kw-qjsJfbM8AAAAM/seth-lowell-seth.gif",
+         "https://media.tenor.com/-mHgn7435jwAAAAM/seth-lowell-zzz.gif"
+      ],
+      "user": null,
+      "status": "Libre",
+      "votes": 0
+   },
+   {
+      "id": "1052",
+      "name": "Von Lycaon",
+      "gender": "Hombre",
+      "value": "13000",
+      "source": "Zenless Zone Zero",
+      "img": [
+         "https://i.pinimg.com/originals/c3/34/eb/c334eb1b76e95061b9bfd5eeefef20b6.png",
+         "https://i.pinimg.com/originals/5c/41/b1/5c41b13c3d24eceafda39bec23054be1.jpg",
+         "https://i.pinimg.com/originals/ec/7c/34/ec7c34556dab2fbf8e7ebee850513796.jpg"
+      ],
+      "vid": [
+         "https://i.pinimg.com/originals/85/ab/2e/85ab2edc077bdfbbfd546d56c5bcb89a.gif",
+         "https://i.pinimg.com/originals/e9/9f/53/e99f53d35a261879380b3e06ca15d606.gif"
+      ],
+      "user": null,
+      "status": "Libre",
+      "votes": 0
+   },
+   {
+      "id": "1053",
+      "name": "Alexandrina Sebastiane (Rina)",
+      "gender": "Mujer",
+      "value": "13200",
+      "source": "Zenless Zone Zero",
+      "img": [
+         "https://i.pinimg.com/originals/46/4b/d5/464bd5792390164a1ff6f5cd9274339c.jpg",
+         "https://i.pinimg.com/originals/bc/3f/d4/bc3fd4cea2a1d3675f99a555abd5d415.jpg",
+         "https://i.pinimg.com/originals/67/67/49/676749b12e391ecbf5fa0ca7a679f782.jpg"
+      ],
+      "vid": [
+         "https://media.tenor.com/u48lpJ-2oiUAAAAM/zenless-zone-zero-zzz.gif",
+         "https://media.tenor.com/GiZWr0BcnU8AAAAM/alexandrina-sebastiane-rina.gif"
+      ],
+      "user": null,
+      "status": "Libre",
+      "votes": 0
+   },
+   {
+      "id": "1054",
+      "name": "Corin Wickes",
+      "gender": "Mujer",
+      "value": "10500",
+      "source": "Zenless Zone Zero",
+      "img": [
+         "https://i.pinimg.com/originals/95/68/fa/9568fa7269583d5976952eb4d3eb6fe2.png",
+         "https://i.pinimg.com/originals/cf/7d/36/cf7d36a75213ddb47bb49b65e0876866.jpg",
+         "https://i.pinimg.com/originals/59/52/46/595246a3123591dc68f1300b46dd3bb5.webp"
+      ],
+      "vid": [
+         "https://media.tenor.com/zmakU6Wmu4gAAAA1/corin-wickes-corin.webp",
+         "https://media.tenor.com/bxn_chuOf34AAAAm/corin-wickes-corin.webp"
+      ],
+      "user": null,
+      "status": "Libre",
+      "votes": 0
+   },
+   {
+      "id": "1055",
+      "name": "Soldier 11",
+      "gender": "Mujer",
+      "value": "12800",
+      "source": "Zenless Zone Zero",
+      "img": [
+         "https://i.pinimg.com/originals/81/5f/03/815f038add52493ca263cd8e3396fec9.jpg",
+         "https://i.pinimg.com/originals/2c/83/a5/2c83a5dc4066b9d60ec31ee6b518c680.jpg",
+         "https://i.pinimg.com/originals/b9/7c/97/b97c97cca3159d67190d5e97c9a71889.jpg"
+      ],
+      "vid": [
+         "https://media.tenor.com/B8QliHmqNmwAAAAM/soldier-11-goggles-off.gif",
+         "https://media.tenor.com/m6jSBaahITsAAAAM/zzz-zenless-zone.gif"
+      ],
+      "user": null,
+      "status": "Libre",
+      "votes": 0
+   },
+   {
+      "id": "1056",
+      "name": "Koleda Belobog",
+      "gender": "Mujer",
+      "value": "12000",
+      "source": "Zenless Zone Zero",
+      "img": [
+         "https://i.pinimg.com/originals/a6/47/1b/a6471b7d814890392187a899825b22e5.jpg",
+         "https://i.pinimg.com/originals/19/04/fc/1904fc1d2b8a12004cfc0a7b1517cf60.png",
+         "https://i.pinimg.com/originals/d0/80/6c/d0806c2fd9309c95b8c691dd467ea30e.jpg"
+      ],
+      "vid": [
+         "https://media.tenor.com/wQBiPzXynwMAAAA1/zenless-zone-zero-koleda.webp",
+         "https://media.tenor.com/g4TJkRoUyScAAAAM/koleda-belobog.gif"
+      ],
+      "user": null,
+      "status": "Libre",
+      "votes": 0
+   },
+   {
+      "id": "1057",
+      "name": "Grace Howard",
+      "gender": "Mujer",
+      "value": "13500",
+      "source": "Zenless Zone Zero",
+      "img": [
+         "https://i.pinimg.com/originals/0e/4c/e5/0e4ce518be7fa62518b2a8b6dfbfe7f3.jpg",
+         "https://i.pinimg.com/originals/5a/de/f6/5adef6d3423fe7b03ce2da275ca0c5e5.png",
+         "https://i.pinimg.com/originals/3b/14/8c/3b148cbad0b9fa873173aa0bc1f505af.jpg"
+      ],
+      "vid": [
+         "https://media.tenor.com/GrmPRrFGu60AAAAM/grace-howard-zenless-zone-zero.gif",
+         "https://media.tenor.com/EnK1Y8SiGUEAAAAM/zenless-zone-zero-zzz.gif"
+      ],
+      "user": null,
+      "status": "Libre",
+      "votes": 0
+   },
+   {
+      "id": "1058",
+      "name": "Ben Bigger",
+      "gender": "Hombre",
+      "value": "9200",
+      "source": "Zenless Zone Zero",
+      "img": [
+         "https://i.pinimg.com/originals/0c/bd/0b/0cbd0b9a82e44b2445379773ec90c607.webp",
+         "https://i.pinimg.com/originals/10/8a/a5/108aa5d2ee49d6e98bbad560c942e2ee.jpg",
+         "https://i.pinimg.com/originals/7d/99/30/7d9930b90923d3dd5127ef6c8b610f29.jpg"
+      ],
+      "vid": [
+         "https://media.tenor.com/BUe_rcP5NTsAAAAM/zenless-zone-zero-zzz.gif",
+         "https://media.tenor.com/OVmZEBPWgVQAAAAM/zzz-zenless-zone-zero.gif"
+      ],
+      "user": null,
+      "status": "Libre",
+      "votes": 0
+   },
+   {
+      "id": "1059",
+      "name": "Anton Ivanov",
+      "gender": "Hombre",
+      "value": "9000",
+      "source": "Zenless Zone Zero",
+      "img": [
+         "https://i.pinimg.com/originals/d4/9e/d8/d49ed86f00fdfc83838323b0c20a0db0.jpg",
+         "https://i.pinimg.com/originals/b7/a1/60/b7a160e3112a794e2ccd498bd812e799.png",
+         "https://i.pinimg.com/originals/c0/18/6f/c0186f592ef3e4cbeef1376b9c056624.jpg"
+      ],
+      "vid": [
+         "https://media.tenor.com/qV4JQMdhKYAAAAA1/anton-anton-ivanov.webp",
+         "https://media.tenor.com/dSirVsyB2oAAAAAM/zenless-zone-zero-anton-ivanov.gif"
+      ],
+      "user": null,
+      "status": "Libre",
+      "votes": 0
+   },
+   {
+      "id": "1060",
+      "name": "Soukaku",
+      "gender": "Mujer",
+      "value": "10800",
+      "source": "Zenless Zone Zero",
+      "img": [
+         "https://i.pinimg.com/originals/37/2f/b1/372fb1f1b2b25f89cf26a012b3243e5f.jpg",
+         "https://i.pinimg.com/originals/0c/55/64/0c5564d144e2a284e7fb87a0f1ce78f4.png",
+         "https://i.pinimg.com/originals/71/96/78/719678e882cba75666721f1b965c14f3.jpg"
+      ],
+      "vid": [
+         "https://media.tenor.com/Fhl8uuZS-W8AAAAM/%D1%81%D0%BE%D0%BA%D0%B0%D0%BA%D1%83-soukaku.gif",
+         "https://media.tenor.com/i3FCGtVH8zsAAAAM/zenless-zone-zero.gif"
+      ],
+      "user": null,
+      "status": "Libre",
+      "votes": 0
+   },
+   {
+      "id": "1061",
+      "name": "Hoshimi Miyabi",
+      "gender": "Mujer",
+      "value": "14500",
+      "source": "Zenless Zone Zero",
+      "img": [
+         "https://i.pinimg.com/originals/34/c7/e0/34c7e02ed918dd0d2b3a00e1d6da1acf.jpg",
+         "https://i.pinimg.com/originals/2e/1e/2f/2e1e2f842bc592dfa230cf9550bda3c6.jpg",
+         "https://i.pinimg.com/originals/a1/69/ae/a169ae16efede8b6e5a128bcbaff7082.jpg"
+      ],
+      "vid": [
+         "https://i.pinimg.com/originals/2e/73/f0/2e73f01b56604c4dbf0090ba1cd1c9a2.gif",
+         "https://i.pinimg.com/originals/e7/6d/5f/e76d5f0c0c20b1e38781bc7bb306c6fd.gif"
+      ],
+      "user": null,
+      "status": "Libre",
+      "votes": 0
+   },
+   {
+      "id": "1062",
+      "name": "Tsukishiro Yanagi",
+      "gender": "Mujer",
+      "value": "13500",
+      "source": "Zenless Zone Zero",
+      "img": [
+         "https://i.pinimg.com/originals/da/c9/7e/dac97e24d638db0b07559f0ea85cabb7.jpg",
+         "https://i.pinimg.com/originals/0f/82/a5/0f82a5e18e41f51805cd56c2e44217e6.jpg",
+         "https://i.pinimg.com/originals/37/b5/36/37b536adb7670c0e6017893a46e93ad4.jpg"
+      ],
+      "vid": [
+         "https://media.tenor.com/E9vz2P8-EZcAAAA1/zzz-zenless-zone-zero.webp",
+         "https://media.tenor.com/UoiWjF50VMkAAAA1/zzz-zenless-zone-zero.webp"
+      ],
+      "user": null,
+      "status": "Libre",
+      "votes": 0
+   },
+   {
+      "id": "1063",
+      "name": "Asaba Harumasa",
+      "gender": "Hombre",
+      "value": "12000",
+      "source": "Zenless Zone Zero",
+      "img": [
+         "https://i.pinimg.com/originals/03/56/f4/0356f4e84b9602dd16b0590812b4b5d2.jpg",
+         "https://i.pinimg.com/originals/6d/58/2e/6d582e5d7503d22502a219a5a7e8d85a.jpg",
+         "https://i.pinimg.com/originals/18/bb/4a/18bb4abab84152d52970e426ce907b5a.jpg"
+      ],
+      "vid": [
+         "https://media.tenor.com/o_gB-wtmNPsAAAAM/asaba-harumasa-harumasa.gif",
+         "https://media.tenor.com/XSBAXeXqirAAAAAM/asaba-harumasa-harumasa.gif"
+      ],
+      "user": null,
+      "status": "Libre",
+      "votes": 0
+   },
+   {
+      "id": "1064",
+      "name": "Caesar King",
+      "gender": "Mujer",
+      "value": "14200",
+      "source": "Zenless Zone Zero",
+      "img": [
+         "https://i.pinimg.com/originals/84/09/f6/8409f6c1542f8e1969b7b620bfa28ac7.webp",
+         "https://i.pinimg.com/originals/63/89/60/638960e0b2afffaaf8d0d04d63fad139.jpg",
+         "https://i.pinimg.com/originals/ba/2a/40/ba2a402fd48ff85b3c804e3e6700ded8.jpg"
+      ],
+      "vid": [
+         "https://i.pinimg.com/originals/f0/1d/29/f01d29d0326f5621cfaf834937888ab3.gif",
+         "https://media.tenor.com/QbVKOYEj09MAAAA1/caesar-zzz-caesar-king.webp"
+      ],
+      "user": null,
+      "status": "Libre",
+      "votes": 0
+   },
+   {
+      "id": "1065",
+      "name": "Burnice White",
+      "gender": "Mujer",
+      "value": "13900",
+      "source": "Zenless Zone Zero",
+      "img": [
+         "https://i.pinimg.com/originals/7b/74/e8/7b74e89c7ca10523c781f1e0430e314f.png",
+         "https://i.pinimg.com/originals/04/7c/1c/047c1c1365c5031fd9be1bc0d6b84dc4.jpg",
+         "https://i.pinimg.com/originals/76/c1/dc/76c1dc8e47125ff9c45145d121a38336.jpg"
+      ],
+      "vid": [
+         "https://media.tenor.com/LV4arj-pksMAAAA1/burnice-burnice-animation.webp",
+         "https://i.pinimg.com/originals/5e/75/2d/5e752d9b4d7d95604b146b20c316d22f.gif"
+      ],
+      "user": null,
+      "status": "Libre",
+      "votes": 0
+   },
+   {
+      "id": "1066",
+      "name": "Luciana de Montefio (Lucy)",
+      "gender": "Mujer",
+      "value": "11000",
+      "source": "Zenless Zone Zero",
+      "img": [
+         "https://i.pinimg.com/originals/e9/aa/e1/e9aae1c7636316e17aa9eacd8b3a1e45.jpg",
+         "https://i.pinimg.com/originals/d1/0a/24/d10a249295bcae0023a2abcc3325e917.jpg",
+         "https://i.pinimg.com/originals/27/e6/2d/27e62d8cf229327fe1d7afa2e496c0db.jpg"
+      ],
+      "vid": [
+         "https://media.tenor.com/Rm-a6hPTTRIAAAA1/lucy-lucy-zzz.webp",
+         "https://media.tenor.com/hSbFUGna92cAAAAM/lucy-zzz-montefio.gif"
+      ],
+      "user": null,
+      "status": "Libre",
+      "votes": 0
+   },
+   {
+      "id": "1067",
+      "name": "Piper Wheel",
+      "gender": "Mujer",
+      "value": "10800",
+      "source": "Zenless Zone Zero",
+      "img": [
+         "https://i.pinimg.com/originals/cf/b3/f0/cfb3f0e0c7bc0cfcf7f77fd1ce1edf8f.jpg",
+         "https://i.pinimg.com/originals/48/96/27/489627d624311c2bce91704afc651ce7.jpg",
+         "https://i.pinimg.com/originals/91/06/4e/91064e501482a01a71ffe1408b47a99d.jpg"
+      ],
+      "vid": [
+         "https://media.tenor.com/bCW39lUpNVcAAAAM/piper-wheel.gif",
+         "https://media.tenor.com/fcHcslLIP_gAAAAM/piper-wheel.gif"
+      ],
+      "user": null,
+      "status": "Libre",
+      "votes": 0
+   },
+   {
+      "id": "1068",
+      "name": "Lighter",
+      "gender": "Hombre",
+      "value": "12500",
+      "source": "Zenless Zone Zero",
+      "img": [
+         "https://i.pinimg.com/originals/a3/27/16/a32716024579c7b99f672e3f2dded94c.jpg",
+         "https://i.pinimg.com/originals/4c/26/20/4c2620677a2a15e156c8644fe5476502.jpg",
+         "https://i.pinimg.com/originals/41/94/51/419451399e053470509984f2f012d3fa.jpg"
+      ],
+      "vid": [
+         "https://media.tenor.com/hHHGvtM4R84AAAAM/lighter-zzz-lighter-lorenz.gif",
+         "https://media.tenor.com/_e36pFfHBHAAAAAM/lighter-zzz.gif"
+      ],
+      "user": null,
+      "status": "Libre",
+      "votes": 0
+   },
+   {
+      "id": "1069",
+      "name": "Pulchra Fellini",
+      "gender": "Mujer",
+      "value": "11000",
+      "source": "Zenless Zone Zero",
+      "img": [
+         "https://i.pinimg.com/originals/b5/0c/b1/b50cb1ecbadb7a94b83043ba59efe478.webp",
+         "https://i.pinimg.com/originals/b9/3f/a4/b93fa44d97de5d934fbfc87bd8dff859.jpg",
+         "https://i.pinimg.com/originals/7a/c8/82/7ac882cc0ab7bff724ae659222da17eb.jpg"
+      ],
+      "vid": [
+         "https://media.tenor.com/lm6EQoz6Dh4AAAA1/pulchra-pulchra-zzz.webp",
+         "https://media.tenor.com/eigyZTLuimgAAAAM/pulchra-zzz-zenless-zone-zero.gif"
+      ],
+      "user": null,
+      "status": "Libre",
+      "votes": 0
+   },
+   {
+      "id": "1070",
+      "name": "Belle (Phaethon)",
+      "gender": "Mujer",
+      "value": "12000",
+      "source": "Zenless Zone Zero",
+      "img": [
+         "https://i.pinimg.com/originals/4d/4c/c7/4d4cc791ce599b6baf603b635621882d.png",
+         "https://i.pinimg.com/originals/77/91/09/77910955ff9b924a9446ad61c196c398.jpg",
+         "https://i.pinimg.com/originals/30/fe/0b/30fe0bf2aaacde0c15602ac78efde159.png"
+      ],
+      "vid": [
+         "https://media.tenor.com/70XBeW0ZY14AAAAM/belle-zzz.gif",
+         "https://media.tenor.com/ahn-mNcMlmEAAAAM/belle-zzz.gif"
+      ],
+      "user": null,
+      "status": "Libre",
+      "votes": 0
+   },
+   {
+      "id": "1071",
+      "name": "Wise (Phaethon)",
+      "gender": "Hombre",
+      "value": "11800",
+      "source": "Zenless Zone Zero",
+      "img": [
+         "https://i.pinimg.com/originals/d0/80/61/d08061cfaf3b0bab2224da42ef063a33.jpg",
+         "https://i.pinimg.com/originals/d8/50/f8/d850f801414a6e3e6567596b1e1c3b45.jpg",
+         "https://i.pinimg.com/originals/9f/cc/ad/9fccaddf489652b83816f52cc71e51e9.jpg"
+      ],
+      "vid": [
+         "https://media.tenor.com/LoWTi9u6yw4AAAA1/wise-wise-zzz.webp",
+         "https://media.tenor.com/nYm21HQU26UAAAAM/wise-zenless.gif"
+      ],
+      "user": null,
+      "status": "Libre",
+      "votes": 0
+   },
+   {
+      "id": "1072",
+      "name": "Evelyn Chevalier",
+      "gender": "Mujer",
+      "value": "9500",
+      "source": "Zenless Zone Zero",
+      "img": [
+         "https://i.pinimg.com/originals/1c/dc/9b/1cdc9b8ec51cc48fb68b14e77561ecba.png",
+         "https://i.pinimg.com/originals/cd/db/61/cddb6131967e9f7ec142af539b118d2f.jpg",
+         "https://i.pinimg.com/originals/e0/13/7d/e0137d5b481b1b3958b20d849fabe82e.jpg"
+      ],
+      "vid": [
+         "https://media.tenor.com/eODvO_8zuVYAAAAM/zenless-zone-zero-zzz.gif",
+         "https://media.tenor.com/xLdnwMEey44AAAA1/zenless-zone-zero-zzz.webp"
+      ],
+      "user": null,
+      "status": "Libre",
+      "votes": 0
+   },
+   {
+      "id": "1073",
+      "name": "Trigger",
+      "gender": "Mujer",
+      "value": "9800",
+      "source": "Zenless Zone Zero",
+      "img": [
+         "https://i.pinimg.com/originals/e0/ba/74/e0ba747f541deaf766279a88ee2f2b39.jpg",
+         "https://i.pinimg.com/originals/0c/26/be/0c26be3aea5dfc6a88ced6c74ce051a1.jpg"
+      ],
+      "vid": [
+         "https://media.tenor.com/f3n0ouYqRMsAAAAM/zenless-zone-zero-zzz.gif",
+         "https://media.tenor.com/u60TXTkz_00AAAAM/trigger-trigger-zzz.gif"
+      ],
+      "user": null,
+      "status": "Libre",
+      "votes": 0
+   },
+   {
+      "id": "1074",
+      "name": "Seed",
+      "gender": "Hombre",
+      "value": "9000",
+      "source": "Zenless Zone Zero",
+      "img": [
+         "https://i.pinimg.com/originals/0b/b2/df/0bb2df0c79d2132a4d7936b0029003f8.jpg",
+         "https://i.pinimg.com/originals/12/9f/34/129f34fc5614fb253668c1de8efde6d9.jpg",
+         "https://i.pinimg.com/originals/ff/36/fa/ff36fa5fbbd72aadea3a6c2b59b24151.jpg"
+      ],
+      "vid": [
+         "https://media.tenor.com/PhQ-81b8OSQAAAAM/seed-seed-zenless.gif",
+         "https://media.tenor.com/Fn0G3rclHHwAAAAM/zenless-zone-zero-zzz.gif"
+      ],
+      "user": null,
+      "status": "Libre",
+      "votes": 0
+   },
+   {
+      "id": "1075",
+      "name": "Astra Yao",
+      "gender": "Mujer",
+      "value": "9200",
+      "source": "Zenless Zone Zero",
+      "img": [
+         "https://i.pinimg.com/originals/7a/2e/c2/7a2ec21aa4b26cebaf935244ef859120.jpg",
+         "https://i.pinimg.com/originals/78/66/e9/7866e9a6047c47a02dff346e8d601458.webp",
+         "https://i.pinimg.com/originals/1d/77/3a/1d773ad2319ab66c1a4d3ab5d3437753.jpg"
+      ],
+      "vid": [
+         "https://i.pinimg.com/originals/dd/98/30/dd98302a5370deccedd0d576d25cd8c6.gif",
+         "https://media.tenor.com/AjDfgOXnLr0AAAA1/zenless-zone-zero-astra-yao.webp"
+      ],
+      "user": null,
+      "status": "Libre",
+      "votes": 0
+   },
+   {
+      "id": "1076",
+      "name": "Alice Thymefield",
+      "gender": "Mujer",
+      "value": "8800",
+      "source": "Zenless Zone Zero",
+      "img": [
+         "https://i.pinimg.com/originals/65/e4/1d/65e41d234e64c04503814eb513afb416.jpg",
+         "https://i.pinimg.com/originals/69/6b/96/696b96ce8b03fb7ce9615749c5f6afea.jpg",
+         "https://i.pinimg.com/originals/c1/c0/6d/c1c06d800f585a112d570254e848fc2e.jpg"
+      ],
+      "vid": [
+         "https://media.tenor.com/Jkc_xT664ooAAAAM/zenless-zone-zero-zzz.gif",
+         "https://media.tenor.com/XILLrsclFd4AAAAM/alice-thymefield-alice.gif"
+      ],
+      "user": null,
+      "status": "Libre",
+      "votes": 0
+   },
+   {
+      "id": "1077",
+      "name": "Yidhari",
+      "gender": "Mujer",
+      "value": "9500",
+      "source": "Zenless Zone Zero",
+      "img": [
+         "https://i.pinimg.com/originals/1a/e5/2e/1ae52ef07fed4067f4eb3e492a9a0516.jpg",
+         "https://i.pinimg.com/originals/f7/c2/f1/f7c2f14b1970b63c85d4f285f955ed7b.jpg",
+         "https://i.pinimg.com/originals/b0/c7/65/b0c7652a83bbb57a77061e2429376e86.png"
+      ],
+      "vid": [
+         "https://media.tenor.com/tb3WGHk-as0AAAA1/yidhari-zenless-zone-zero.webp",
+         "https://media.tenor.com/aEPty287DBEAAAA1/yidhari-yidhari-murphy.webp"
+      ],
+      "user": null,
+      "status": "Libre",
+      "votes": 0
+   },
+   {
+      "id": "1078",
+      "name": "Sunna",
+      "gender": "Mujer",
+      "value": "8900",
+      "source": "Zenless Zone Zero",
+      "img": [
+         "https://i.pinimg.com/originals/56/11/15/5611159725c98bec770e1e8e5e0aa92d.jpg",
+         "https://i.pinimg.com/originals/fd/e0/41/fde041e53187f48a8c81bcf0dd4e56a2.png",
+         "https://i.pinimg.com/originals/05/f9/a6/05f9a6bf8c96214eba8576515b6971ae.png"
+      ],
+      "vid": [
+         "https://media.tenor.com/IFTF8R4ud3wAAAA1/chinatsu-chinatsu-zzz.webp",
+         "https://media.tenor.com/tEbBOa8YbBIAAAA1/aod-angels-of-delusion.webp"
+      ],
+      "user": null,
+      "status": "Libre",
+      "votes": 0
+   },
+   {
+      "id": "1079",
+      "name": "Ju Fufu",
+      "gender": "Mujer",
+      "value": "8800",
+      "source": "Zenless Zone Zero",
+      "img": [
+         "https://i.pinimg.com/originals/83/f8/2c/83f82c60c23f938ff2fbd1c5d8ab480e.jpg",
+         "https://i.pinimg.com/originals/57/fe/7e/57fe7ef7620781949c45386e432b46bd.png",
+         "https://i.pinimg.com/originals/c1/82/75/c18275a4f7d46c3a242e80109939b013.webp"
+      ],
+      "vid": [
+         "https://i.pinimg.com/originals/2b/f8/6b/2bf86be7544ebb82a36881532852acda.gif",
+         "https://media.tenor.com/tpCKGJJi6ZkAAAAM/zzz-ju-fufu.gif"
+      ],
+      "user": null,
+      "status": "Libre",
+      "votes": 0
+   },
+   {
+      "id": "1080",
+      "name": "Pan Yinhu",
+      "gender": "Hombre",
+      "value": "8500",
+      "source": "Zenless Zone Zero",
+      "img": [
+         "https://i.pinimg.com/originals/02/93/da/0293da057480ceef4f2c20a637f9ff78.jpg",
+         "https://i.pinimg.com/originals/04/cd/45/04cd45e58ec15674787ddea7aac052c7.jpg",
+         "https://i.pinimg.com/originals/44/1b/b3/441bb3e7e36d640ead0f28c81715d738.png"
+      ],
+      "vid": [
+         "https://media.tenor.com/-XfrcPthVT8AAAA1/pan-yinhu-zenless-zone-zero.webp",
+         "https://media.tenor.com/UB4dXEnLENcAAAAM/pan-yinhu-zenless-zone-zero.gif"
+      ],
+      "user": null,
+      "status": "Libre",
+      "votes": 0
+   },
+   {
+      "id": "1081",
+      "name": "Ye Shunguang",
+      "gender": "Mujer",
+      "value": "8500",
+      "source": "Zenless Zone Zero",
+      "img": [
+         "https://i.pinimg.com/originals/57/60/80/576080f6c5a4a69a7fc80cd8cd66a83a.jpg",
+         "https://i.pinimg.com/originals/23/65/4e/23654ee3a0a6fc078395e210b132dc72.jpg",
+         "https://i.pinimg.com/originals/43/d1/0c/43d10c67c559f8f6ddfe08220f1155f4.jpg"
+      ],
+      "vid": [
+         "https://media.tenor.com/r3quvuFxpqEAAAAM/shunguang-ye-shunguang.gif",
+         "https://media.tenor.com/-B6QJfAUmCEAAAA1/wife-ye-shunguang.webp"
+      ],
+      "user": null,
+      "status": "Libre",
+      "votes": 0
+   },
+   {
+      "id": "1082",
+      "name": "Yixuan",
+      "gender": "Mujer",
+      "value": "8500",
+      "source": "Zenless Zone Zero",
+      "img": [
+         "https://i.pinimg.com/originals/ff/fc/f3/fffcf322b9cb72bb85a8bdce53f22801.png",
+         "https://i.pinimg.com/originals/e4/31/68/e431688d2fa64f7acce7574f6b2c6965.png",
+         "https://i.pinimg.com/originals/d7/e0/29/d7e0296eeb62a6cc7ff0bb37fd736a00.jpg"
+      ],
+      "vid": [
+         "https://media.tenor.com/twt39h8XI_wAAAA1/yixuan-zzz.webp",
+         "https://media.tenor.com/Vf9-Vayu-tsAAAAM/yixuan-zzz.gif"
+      ],
+      "user": null,
+      "status": "Libre",
+      "votes": 0
+   },
+   {
+      "id": "1083",
+      "name": "Zhao",
+      "gender": "Hombre",
+      "value": "8000",
+      "source": "Zenless Zone Zero",
+      "img": [
+         "https://i.pinimg.com/originals/06/73/ff/0673ffa9d5fd70593a749dee591dd04c.jpg",
+         "https://i.pinimg.com/originals/16/24/97/162497cc1f92973580a82ebbdda66215.jpg",
+         "https://i.pinimg.com/originals/3e/3e/7c/3e3e7ca1ef3e8895b61956ead3f63e24.jpg"
+      ],
+      "vid": [
+         "https://media.tenor.com/Abdz3gcEQm0AAAAM/zhao-zzz.gif",
+         "https://media.tenor.com/7lKtwtIc300AAAAM/zzz-zenless-zone-zero.gif"
+      ],
+      "user": null,
+      "status": "Libre",
+      "votes": 0
+   },
+   {
+      "id": "1084",
+      "name": "Vivian Banshee",
+      "gender": "Mujer",
+      "value": "9000",
+      "source": "Zenless Zone Zero",
+      "img": [
+         "https://i.pinimg.com/originals/51/69/bd/5169bd181356ff966222e951394fff2d.png",
+         "https://i.pinimg.com/originals/9d/3c/85/9d3c85b1b7db31f82764b36c9fc855fe.png",
+         "https://i.pinimg.com/originals/f3/65/7d/f3657d156e5a646ca117846df7b19c2a.png"
+      ],
+      "vid": [
+         "https://media.tenor.com/zNdnSTDPSkkAAAAM/vivian-vivian-zzz.gif",
+         "https://media.tenor.com/H256Rpa4XYwAAAAM/vivan.gif"
+      ],
+      "user": null,
+      "status": "Libre",
+      "votes": 0
+   },
+   {
+      "id": "1085",
+      "name": "Hugo Vlad",
+      "gender": "Hombre",
+      "value": "8500",
+      "source": "Zenless Zone Zero",
+      "img": [
+         "https://i.pinimg.com/originals/dc/57/97/dc5797eeaebcf2687c248448dc6d113d.jpg",
+         "https://i.pinimg.com/originals/47/6a/41/476a41600de4899798b4bc5712b07d3d.jpg",
+         "https://i.pinimg.com/originals/6a/e4/40/6ae4402613ff9dfbea581969e71c420d.png"
+      ],
+      "vid": [
+         "https://media.tenor.com/MyuDnRp28c4AAAAM/hugo-vlad-zzz-hugo-vlad.gif",
+         "https://media.tenor.com/lTeqFkSOPFoAAAA1/hugo-vlad-hugo-zzz.webp"
+      ],
+      "user": null,
+      "status": "Libre",
+      "votes": 0
+   },
+   {
+      "id": "1086",
+      "name": "Komano Manato",
+      "gender": "Hombre",
+      "value": "8500",
+      "source": "Zenless Zone Zero",
+      "img": [
+         "https://i.pinimg.com/originals/4d/47/0a/4d470a9c46847cca21df449d80d51d15.jpg",
+         "https://i.pinimg.com/originals/fe/af/2f/feaf2f7a814bf52d439e86799fdf70e4.jpg",
+         "https://i.pinimg.com/originals/f2/79/41/f27941671d1a7daf29a00f8271e372d2.jpg"
+      ],
+      "vid": [
+         "https://media.tenor.com/64sNcFcrYFMAAAA1/komano-manato-zzz.webp"
+      ],
+      "user": null,
+      "status": "Libre",
+      "votes": 0
+   },
+   {
+      "id": "1087",
+      "name": "Ukinami Yuzuha",
+      "gender": "Mujer",
+      "value": "8800",
+      "source": "Zenless Zone Zero",
+      "img": [
+         "https://i.pinimg.com/originals/48/35/34/48353401fc5c4f8f35ede44ab3ea43f1.jpg",
+         "https://i.pinimg.com/originals/31/05/d6/3105d60bf883c463413bf27cc7215859.jpg",
+         "https://i.pinimg.com/originals/4e/a7/2c/4ea72c50466ce8da760a6d702b8e1cf4.png"
+      ],
+      "vid": [
+         "https://media.tenor.com/YBJk-8l38eoAAAAM/ukinami-yuzuha-classic.gif",
+         "https://media.tenor.com/s1uEVhJS0fcAAAAM/zenless-zone-zero-zzz.gif"
+      ],
+      "user": null,
+      "status": "Libre",
+      "votes": 0
+   },
+   {
+      "id": "1088",
+      "name": "Banyue",
+      "gender": "Mujer",
+      "value": "8600",
+      "source": "Zenless Zone Zero",
+      "img": [
+         "https://i.pinimg.com/originals/61/d8/06/61d806316fbba251634eb563d4e9703e.jpg",
+         "https://i.pinimg.com/originals/1f/e4/13/1fe413b8bca1293eec79b9826a88a06a.png",
+         "https://i.pinimg.com/originals/75/47/e8/7547e886a0ef0adb17d1041324ef854c.jpg"
+      ],
+      "vid": [
+         "https://media.tenor.com/YliySeWsr9gAAAAM/banyue-zenlesszonezero.gif",
+         "https://media.tenor.com/kz04qHl5h1wAAAA1/banyue-zzz.webp"
+      ],
+      "user": null,
+      "status": "Libre",
+      "votes": 0
+   },
+   {
+      "id": "1089",
+      "name": "Aria",
+      "gender": "Mujer",
+      "value": "8700",
+      "source": "Zenless Zone Zero",
+      "img": [
+         "https://i.pinimg.com/originals/ba/90/d5/ba90d546e96814988a45fb0874a0fc38.jpg",
+         "https://i.pinimg.com/originals/4d/77/16/4d7716237d1b83d4b8710086b037e844.jpg",
+         "https://i.pinimg.com/originals/cb/0b/e8/cb0be8e522c638a422f4027e8565cc1d.jpg"
+      ],
+      "vid": [
+         "https://media.tenor.com/O0UBT2uKa8sAAAA1/aria-yutane.webp",
+         "https://media.tenor.com/yd5pMgHWYJcAAAAM/zzz-aria.gif"
+      ],
+      "user": null,
+      "status": "Libre",
+      "votes": 0
+   },
+   {
+      "id": "1090",
+      "name": "Dialyn",
+      "gender": "Mujer",
+      "value": "8600",
+      "source": "Zenless Zone Zero",
+      "img": [
+         "https://i.pinimg.com/originals/f6/93/ba/f693ba8365f7759ea43382a136a692f6.jpg",
+         "https://i.pinimg.com/originals/de/d1/fa/ded1fa237f917da09949a054b50cb870.png",
+         "https://i.pinimg.com/originals/8b/7c/f1/8b7cf17169eab3bb25d6727c2b2a43c0.jpg"
+      ],
+      "vid": [
+         "https://media.tenor.com/3qwROWt8cS4AAAAM/zzz-zenless-zone-zero.gif"
+      ],
+      "user": null,
+      "status": "Libre",
+      "votes": 0
+   }, 
+   {
+      "id": "1091",
+      "name": "Aeos",
+      "gender": "Mujer",
+      "value": "15000",
+      "source": "Super Dragon Ball Heroes",
+      "img": [
+         "https://i.pinimg.com/originals/b7/d9/2e/b7d92e84700c31d04e865166ba336fd0.jpg",
+         "https://i.pinimg.com/originals/13/26/b1/1326b16df4f46d32a47772471bd4f014.jpg",
+         "https://i.pinimg.com/originals/f7/6c/d3/f76cd3326828b68c8854e45fa8edd515.jpg"
+      ],
+      "vid": [
+         "https://media.tenor.com/q2UTRDF4pfUAAAAM/int-aeos-aeos.gif",
+         "https://media.tenor.com/YMoDRSjCHxsAAAAM/int-aeos-aeos.gif"
+      ],
+      "user": null,
+      "status": "Libre",
+      "votes": 0
+   },
+   {
+      "id": "1092",
+      "name": "Hearts",
+      "gender": "Hombre",
+      "value": "14500",
+      "source": "Super Dragon Ball Heroes",
+      "img": [
+         "https://i.pinimg.com/originals/fb/d9/ab/fbd9ab873f1a577fb77df24bd0222863.jpg",
+         "https://i.pinimg.com/originals/5a/fa/c8/5afac830bac5b6d49ed6be107f035f9c.jpg",
+         "https://i.pinimg.com/originals/7e/ee/2e/7eee2e3c3a374f8f5bf45b2b6947048d.jpg"
+      ],
+      "vid": [
+         "https://media.tenor.com/rzqi-O2zIEMAAAAM/hearts-villian.gif",
+         "https://media.tenor.com/lUcY4KeZ-9AAAAAM/hearts-super-dragonballheroes.gif"
+      ],
+      "user": null,
+      "status": "Libre",
+      "votes": 0
+   },
+   {
+      "id": "1093",
+      "name": "Cumber",
+      "gender": "Hombre",
+      "value": "13800",
+      "source": "Super Dragon Ball Heroes",
+      "img": [
+         "https://i.pinimg.com/originals/ca/46/7e/ca467e3281d2d4397777007b5b3ce427.jpg",
+         "https://i.pinimg.com/originals/21/df/25/21df25e3dbd244ed5db854315a3ea881.jpg",
+         "https://i.pinimg.com/originals/6e/a5/d1/6ea5d11dece8ec326b7704deaed098dd.jpg"
+      ],
+      "vid": [
+         "https://media.tenor.com/0QlIkOF4Ns4AAAAM/cumber-kumba.gif",
+         "https://media.tenor.com/Ro0HlFRc8zYAAAAM/cumber-kanba.gif"
+      ],
+      "user": null,
+      "status": "Libre",
+      "votes": 0
+   },
+   {
+      "id": "1094",
+      "name": "Fu",
+      "gender": "Hombre",
+      "value": "14000",
+      "source": "Super Dragon Ball Heroes",
+      "img": [
+         "https://i.pinimg.com/originals/dd/11/ff/dd11ff76a296c95346ced63d72ca87e2.jpg",
+         "https://i.pinimg.com/originals/93/8b/80/938b801bc0e4377c8a6e12065003d1dc.jpg",
+         "https://i.pinimg.com/originals/d0/c7/04/d0c704f88016fc51d1cb221e087b2531.jpg"
+      ],
+      "vid": [
+         "https://media.tenor.com/PmTf8AquXzYAAAAM/fu-internet-troll.gif",
+         "https://i.pinimg.com/originals/c2/d6/db/c2d6db4d2f5b2a7dfc07feae1db9f83d.gif"
+      ],
+      "user": null,
+      "status": "Libre",
+      "votes": 0
+   },
+   {
+      "id": "1095",
+      "name": "Mechikabura",
+      "gender": "Hombre",
+      "value": "14800",
+      "source": "Super Dragon Ball Heroes",
+      "img": [
+         "https://i.pinimg.com/originals/dd/4b/2c/dd4b2cba7e878337cd611d4c163e1dce.jpg",
+         "https://i.pinimg.com/originals/9b/cd/b8/9bcdb81bb681013530eb694fa6052e10.jpg",
+         "https://i.pinimg.com/originals/eb/bf/2c/ebbf2c134d47f2b9d919c4b9326d26e7.jpg"
+      ],
+      "vid": [],
+      "user": null,
+      "status": "Libre",
+      "votes": 0
+   },
+   {
+      "id": "1096",
+      "name": "Demigra",
+      "gender": "Hombre",
+      "value": "13500",
+      "source": "Super Dragon Ball Heroes",
+      "img": [
+         "https://i.pinimg.com/originals/0d/e7/92/0de792b9edd384e65756d448c9d91833.jpg",
+         "https://i.pinimg.com/originals/90/ba/a7/90baa71e4cc33f5851742944c445d515.jpg",
+         "https://i.pinimg.com/originals/ce/7a/5b/ce7a5b88e17de319972ac4924bd8be3a.jpg"
+      ],
+      "vid": [
+         "https://media.tenor.com/uvvl4QJm-k4AAAAM/majin-demigra.gif",
+         "https://media.tenor.com/P1RS4fOKF84AAAAM/demigra-dragon-ball-heroes-demigra.gif"
+      ],
+      "user": null,
+      "status": "Libre",
+      "votes": 0
+   },
+   {
+      "id": "1097",
+      "name": "Chronoa",
+      "gender": "Mujer",
+      "value": "12500",
+      "source": "Super Dragon Ball Heroes",
+      "img": [
+         "https://i.pinimg.com/originals/cb/fa/8f/cbfa8f71704a0e91213ff40e9c122670.jpg",
+         "https://i.pinimg.com/originals/2d/67/f4/2d67f4067b7fcf68ae36409ecdffd9a5.png",
+         "https://i.pinimg.com/originals/48/ad/06/48ad0686ab69cd15bcc7008a537effe5.jpg"
+      ],
+      "vid": [
+         "https://media.tenor.com/SVurtZzSm0wAAAAM/chronoa-supreme-kai-of-time.gif",
+         "https://media.tenor.com/CvYfxps4Ke4AAAAM/dragon-ball-xenoverse.gif"
+      ],
+      "user": null,
+      "status": "Libre",
+      "votes": 0
+   },
+   {
+      "id": "1098",
+      "name": "Robelu",
+      "gender": "Mujer",
+      "value": "11500",
+      "source": "Super Dragon Ball Heroes",
+      "img": [
+         "https://i.pinimg.com/originals/91/24/f5/9124f52040bfa80325e010fa4c4d9bdd.jpg",
+         "https://i.pinimg.com/originals/f7/74/b1/f774b1d63193854d236a51b57d718ec1.jpg",
+         "https://i.pinimg.com/originals/64/c2/45/64c2456c9de90267403a428dd636d065.jpg"
+      ],
+      "vid": [],
+      "user": null,
+      "status": "Libre",
+      "votes": 0
+   },
+   {
+      "id": "1099",
+      "name": "Putine",
+      "gender": "Mujer",
+      "value": "11200",
+      "source": "Super Dragon Ball Heroes",
+      "img": [
+         "https://i.pinimg.com/originals/9a/15/91/9a1591c5c5fefb072c808d8dd4674c85.jpg",
+         "https://i.pinimg.com/originals/6d/7d/82/6d7d8274374edce03b553a76e16cbd81.jpg",
+         "https://i.pinimg.com/originals/4b/6d/f0/4b6df07fa62f62925d1f11be5116e991.jpg"
+      ],
+      "vid": [],
+      "user": null,
+      "status": "Libre",
+      "votes": 0
+   },
+   {
+      "id": "1100",
+      "name": "Lagss",
+      "gender": "Mujer",
+      "value": "11000",
+      "source": "Super Dragon Ball Heroes",
+      "img": [
+         "https://i.pinimg.com/originals/28/13/6f/28136febc864cade411ad41dd55aee3a.jpg",
+         "https://i.pinimg.com/originals/56/df/27/56df27adf14b87f83884376999cbdcc2.jpg",
+         "https://i.pinimg.com/originals/a5/14/ea/a514ea47571b48f0025f1564efca14da.jpg"
+      ],
+      "vid": [],
+      "user": null,
+      "status": "Libre",
+      "votes": 0
+   },
+   {
+      "id": "1101",
+      "name": "Goku (Xeno)",
+      "gender": "Hombre",
+      "value": "14200",
+      "source": "Super Dragon Ball Heroes",
+      "img": [
+         "https://i.pinimg.com/originals/7c/d3/ac/7cd3ac9dda7d903f9fad4670b3549c98.jpg",
+         "https://i.pinimg.com/originals/60/39/2c/60392c84cc510e9720062d651a503b33.png",
+         "https://i.pinimg.com/originals/b8/8a/51/b88a51ccca334c12c4c30bd34067be7f.jpg"
+      ],
+      "vid": [
+         "https://i.pinimg.com/originals/e6/47/10/e6471044d8c123866b0bb100fabe4cf4.gif",
+         "https://i.pinimg.com/originals/6e/2d/31/6e2d31df910b69df252b8c4a1ce8aadb.gif"
+      ],
+      "user": null,
+      "status": "Libre",
+      "votes": 0
+   },
+   {
+      "id": "1102",
+      "name": "Vegeta (Xeno)",
+      "gender": "Hombre",
+      "value": "14100",
+      "source": "Super Dragon Ball Heroes",
+      "img": [
+         "https://i.pinimg.com/originals/18/16/20/18162044a918384dee5f4f7a61f757e4.jpg",
+         "https://i.pinimg.com/originals/b4/00/13/b400130f4ff23d57f7796fca39c3a0d2.jpg",
+         "https://i.pinimg.com/originals/87/48/39/87483922d0f0e9f9772c591ec776c8e9.jpg"
+      ],
+      "vid": [
+         "https://media.tenor.com/JSDyw02KAtMAAAAM/goku-vegeta.gif",
+         "https://media.tenor.com/AQPNHUxE3VkAAAAM/dragon-ball-anime.gif"
+      ],
+      "user": null,
+      "status": "Libre",
+      "votes": 0
+   },
+   {
+      "id": "1103",
+      "name": "Trunks (Xeno)",
+      "gender": "Hombre",
+      "value": "12800",
+      "source": "Super Dragon Ball Heroes",
+      "img": [
+         "https://i.pinimg.com/originals/f6/ea/64/f6ea64adf4e4a045c853e37267d70dc6.jpg",
+         "https://i.pinimg.com/originals/ce/49/2a/ce492aaea3dbe8bd77e3bd6f8596da12.jpg",
+         "https://i.pinimg.com/originals/ff/fa/c8/fffac86e9b5a77342dc297ef57fa868d.jpg"
+      ],
+      "vid": [
+         "https://i.pinimg.com/originals/82/fe/11/82fe1108b144449c5d1d53b1033aa8aa.gif",
+         "https://i.pinimg.com/originals/02/97/c0/0297c02caff0de92dedf4acd11131976.gif"
+      ],
+      "user": null,
+      "status": "Libre",
+      "votes": 0
+   },
+   {
+      "id": "1104",
+      "name": "Bardock (Xeno)",
+      "gender": "Hombre",
+      "value": "13000",
+      "source": "Super Dragon Ball Heroes",
+      "img": [
+         "https://i.pinimg.com/originals/21/3e/a1/213ea1a4b43fcbae8a453c8602fd211f.jpg",
+         "https://i.pinimg.com/originals/ad/a2/90/ada29046b95451e34413db2d581a0145.jpg",
+         "https://i.pinimg.com/originals/76/6d/74/766d749680a78517f600c2f96be69f77.jpg"
+      ],
+      "vid": [
+         "https://i.pinimg.com/originals/31/51/63/3151638286c9e15a72363c03d2ea5297.gif",
+         "https://i.pinimg.com/originals/aa/68/03/aa68032b45344e5e32bfec425f2ce686.gif"
+      ],
+      "user": null,
+      "status": "Libre",
+      "votes": 0
+   },
+   {
+      "id": "1105",
+      "name": "Gohan (Xeno)",
+      "gender": "Hombre",
+      "value": "12500",
+      "source": "Super Dragon Ball Heroes",
+      "img": [
+         "https://i.pinimg.com/originals/1c/de/17/1cde178746fde3664b89ade0f342b818.jpg",
+         "https://i.pinimg.com/originals/24/20/8e/24208e8632df5f7677b3701157d2cfe6.jpg",
+         "https://i.pinimg.com/originals/b1/60/08/b1600859494589041cddf3f90a1b5a90.jpg"
+      ],
+      "vid": [],
+      "user": null,
+      "status": "Libre",
+      "votes": 0
+   },
+   {
+      "id": "1106",
+      "name": "Goten (Xeno)",
+      "gender": "Hombre",
+      "value": "9500",
+      "source": "Super Dragon Ball Heroes",
+      "img": [
+         "https://i.pinimg.com/originals/1b/fd/75/1bfd752e53fb778b838192e7489ca74b.jpg",
+         "https://i.pinimg.com/originals/89/89/0f/89890f14b573996108e2f22256e7e273.jpg",
+         "https://i.pinimg.com/originals/87/58/ee/8758ee8ad1281adec4fcee1719457afe.jpg"
+      ],
+      "vid": [],
+      "user": null,
+      "status": "Libre",
+      "votes": 0
+   },
+   {
+      "id": "1107",
+      "name": "Pan (Xeno)",
+      "gender": "Mujer",
+      "value": "9200",
+      "source": "Super Dragon Ball Heroes",
+      "img": [
+         "https://i.pinimg.com/originals/c0/f6/b5/c0f6b52f8ae6f0cd71547e99ed6f48de.jpg",
+         "https://i.pinimg.com/originals/5d/a0/5e/5da05e7e2e1455202ec654296b55fe0f.jpg"
+      ],
+      "vid": [],
+      "user": null,
+      "status": "Libre",
+      "votes": 0
+   },
+   {
+      "id": "1108",
+      "name": "Vegito (Xeno)",
+      "gender": "Hombre",
+      "value": "15000",
+      "source": "Super Dragon Ball Heroes",
+      "img": [
+         "https://i.pinimg.com/originals/ed/57/04/ed5704745a700f89e1fb5e687bbbba49.jpg",
+         "https://i.pinimg.com/originals/66/6a/52/666a528e4af9043322094df36d1f4692.jpg",
+         "https://i.pinimg.com/originals/a8/33/8b/a8338bbb0caa9b334bcacd055a0dcc0d.jpg"
+      ],
+      "vid": [],
+      "user": null,
+      "status": "Libre",
+      "votes": 0
+   },
+   {
+      "id": "1109",
+      "name": "Gogeta (Xeno)",
+      "gender": "Hombre",
+      "value": "15000",
+      "source": "Super Dragon Ball Heroes",
+      "img": [
+         "https://i.pinimg.com/originals/3f/be/cb/3fbecbd9d7e1649f66c38c188401d39d.jpg",
+         "https://i.pinimg.com/originals/73/b1/bc/73b1bc4226c0669a8cb4435019439562.jpg"
+      ],
+      "vid": [],
+      "user": null,
+      "status": "Libre",
+      "votes": 0
+   },
+   {
+      "id": "1110",
+      "name": "Broly (Dark)",
+      "gender": "Hombre",
+      "value": "14500",
+      "source": "Super Dragon Ball Heroes",
+      "img": [
+         "https://i.pinimg.com/originals/80/f9/05/80f905c555161673c21b68c3c4127445.jpg",
+         "https://i.pinimg.com/originals/dc/3b/e3/dc3be3c2e98cb4bd1cc54cecb96be31c.jpg"
+      ],
+      "vid": [],
+      "user": null,
+      "status": "Libre",
+      "votes": 0
+   },
+   {
+      "id": "1111",
+      "name": "Cell X",
+      "gender": "Hombre",
+      "value": "13000",
+      "source": "Super Dragon Ball Heroes",
+      "img": [
+         "https://i.pinimg.com/originals/5a/89/44/5a8944187fd180cc9dec5f1d8d491c7c.webp",
+         "https://i.pinimg.com/originals/26/55/28/2655282143ee0034d1cc20996f804d84.jpg",
+         "https://i.pinimg.com/originals/8a/16/b7/8a16b76edba167a6a87b5211ef06242f.jpg"
+      ],
+      "vid": [
+         "https://media.tenor.com/8wwb1L6oph0AAAA1/xeno-cell-cell-x.webp"
+      ],
+      "user": null,
+      "status": "Libre",
+      "votes": 0
+   },
+   {
+      "id": "1112",
+      "name": "Janemba (Xeno)",
+      "gender": "Hombre",
+      "value": "12800",
+      "source": "Super Dragon Ball Heroes",
+      "img": [
+         "https://i.pinimg.com/originals/5c/e2/b4/5ce2b48ccb410cb5279f25f42bcf0bd0.webp"
+      ],
+      "vid": [],
+      "user": null,
+      "status": "Libre",
+      "votes": 0
+   },
+   {
+      "id": "1113",
+      "name": "Beat",
+      "gender": "Hombre",
+      "value": "11500",
+      "source": "Super Dragon Ball Heroes",
+      "img": [
+         "https://i.pinimg.com/originals/c5/7d/bd/c57dbd5f9ac768cfd445b4296ad1284e.jpg",
+         "https://i.pinimg.com/originals/93/99/44/939944521530def482c85b3cd5047958.jpg",
+         "https://i.pinimg.com/originals/0f/d7/62/0fd7621567853f1310dbc21e94c1c546.jpg"
+      ],
+      "vid": [
+         "https://i.pinimg.com/originals/0d/ef/9e/0def9e7ad732e7821e7994c34e7dbbae.gif",
+         "https://i.pinimg.com/originals/37/34/9e/37349e9395d8aa85a816b41729931b9e.gif"
+      ],
+      "user": null,
+      "status": "Libre",
+      "votes": 0
+   },
+   {
+      "id": "1114",
+      "name": "Note",
+      "gender": "Mujer",
+      "value": "11500",
+      "source": "Super Dragon Ball Heroes",
+      "img": [
+         "https://i.pinimg.com/originals/0c/90/25/0c902542c018d13376e28f506cbdee1d.jpg",
+         "https://i.pinimg.com/originals/c3/f6/8a/c3f68ac522132f7d786a54a4fadd6898.png",
+         "https://i.pinimg.com/originals/91/c3/f4/91c3f4336e86ca24f0bc08e5ed319c0e.jpg"
+      ],
+      "vid": [
+         "https://media.tenor.com/BgUlmts2zfYAAAAM/dragon-ball-heroes-note.gif",
+         "https://media.tenor.com/YltTRqBU7-4AAAAM/dragon-ball-heroes-xeno-pan.gif"
+      ],
+      "user": null,
+      "status": "Libre",
+      "votes": 0
+   },
+   {
+      "id": "1115",
+      "name": "Sealas",
+      "gender": "Hombre",
+      "value": "13200",
+      "source": "Super Dragon Ball Heroes",
+      "img": [
+         "https://i.pinimg.com/originals/1d/c8/7e/1dc87ed227ceb11da4d522c855bf2f61.jpg",
+         "https://i.pinimg.com/originals/93/b6/95/93b6955fca39e9d2ba99fd64ac01f686.jpg"
+      ],
+      "vid": [],
+      "user": null,
+      "status": "Libre",
+      "votes": 0
+   },
+   {
+      "id": "1116",
+      "name": "Ahms",
+      "gender": "Hombre",
+      "value": "11000",
+      "source": "Super Dragon Ball Heroes",
+      "img": [
+         "https://static.wikia.nocookie.net/dragonball/images/c/c0/Ahms_Tercera_Forma_Goku_Dokkan.png/revision/latest?cb=20190628112433&path-prefix=es",
+         "https://static.wikia.nocookie.net/dragonball/images/3/3b/Ahms_Segunda_Forma_Goku_Dokkan.png/revision/latest?cb=20190628112410&path-prefix=es",
+         "https://static.wikia.nocookie.net/dragonball/images/c/c0/Ahms_Tercera_Forma_Goku_Dokkan.png/revision/latest?cb=20190628112433&path-prefix=es"
+      ],
+      "vid": [],
+      "user": null,
+      "status": "Libre",
+      "votes": 0
+   },
+   {
+      "id": "1117",
+      "name": "Kamin",
+      "gender": "Mujer",
+      "value": "10500",
+      "source": "Super Dragon Ball Heroes",
+      "img": [
+         "https://i.pinimg.com/originals/1f/a3/1f/1fa31f6d8aa30ff370063842b868d155.jpg",
+         "https://i.pinimg.com/originals/70/87/11/708711eb23b2ac5cd508e4df1e9a2fbe.jpg",
+         "https://i.pinimg.com/originals/a9/64/ef/a964efd9f13686b61405d2865262ffa0.jpg"
+      ],
+      "vid": [
+         "https://media.tenor.com/-mEyqXGVS80AAAAM/kamin-universe6.gif"
+      ],
+      "user": null,
+      "status": "Libre",
+      "votes": 0
+   },
+   {
+      "id": "1118",
+      "name": "Oren",
+      "gender": "Hombre",
+      "value": "10500",
+      "source": "Super Dragon Ball Heroes",
+      "img": [
+         "https://i.pinimg.com/originals/d8/6e/e8/d86ee818387f983385173cc952a9980c.jpg"
+      ],
+      "vid": [],
+      "user": null,
+      "status": "Libre",
+      "votes": 0
+   },
+   {
+      "id": "1119",
+      "name": "Dr. W",
+      "gender": "Hombre",
+      "value": "9000",
+      "source": "Super Dragon Ball Heroes",
+      "img": [
+         "https://static.wikia.nocookie.net/dragonball/images/7/7a/DR_W_SDBH.png/revision/latest/scale-to-width-down/200?cb=20200518154519",
+         "https://static.wikia.nocookie.net/dragonball/images/9/95/DrWheeloHuman.png/revision/latest?cb=20200522061305"
+      ],
+      "vid": [],
+      "user": null,
+      "status": "Libre",
+      "votes": 0
+   },
+   {
+      "id": "1122",
+      "name": "Mira",
+      "gender": "Hombre",
+      "value": "12500",
+      "source": "Super Dragon Ball Heroes",
+      "img": [
+         "https://i.pinimg.com/originals/60/a8/a4/60a8a478c622404e207a95a5019f7be4.jpg",
+         "https://i.pinimg.com/originals/31/da/a7/31daa764d0c6fb2683b09156ab4c8d20.jpg",
+         "https://i.pinimg.com/originals/fe/70/52/fe70526e739afa09642587b9480c461e.png"
+      ],
+      "vid": [
+         "https://media.tenor.com/PVEvesh5ix0AAAAM/mira-ssj4.gif",
+         "https://media.tenor.com/tFBoOYnuCqEAAAAM/mira.gif"
+      ],
+      "user": null,
+      "status": "Libre",
+      "votes": 0
+   },
+   {
+      "id": "1123",
+      "name": "Salsa",
+      "gender": "Hombre",
+      "value": "10000",
+      "source": "Super Dragon Ball Heroes",
+      "img": [
+         "https://i.pinimg.com/originals/9f/9b/18/9f9b18ccbfd38c81bc5c22e8cba908f3.jpg",
+         "https://i.pinimg.com/originals/a2/31/6d/a2316d1fd2c29bc99c38b7096d30c049.jpg",
+         "https://i.pinimg.com/originals/5b/c2/f0/5bc2f0728a456234e34198503966b446.jpg"
+      ],
+      "vid": [
+         "https://media.tenor.com/O0CU6-pux6gAAAAM/dragon-ball-heroes-salsa.gif"
+      ],
+      "user": null,
+      "status": "Libre",
+      "votes": 0
+   },
+   {
+      "id": "1124",
+      "name": "Shrum",
+      "gender": "Hombre",
+      "value": "10000",
+      "source": "Super Dragon Ball Heroes",
+      "img": [
+         "https://i.pinimg.com/originals/1d/c8/7e/1dc87ed227ceb11da4d522c855bf2f61.jpg",
+         "https://i.pinimg.com/originals/a0/6d/e1/a06de1d6a2ec8a3f7412dc7fed526867.jpg",
+         "https://i.pinimg.com/originals/9a/6f/83/9a6f836db5004cbb9736f4815dd0aa4d.jpg"
+      ],
+      "vid": [],
+      "user": null,
+      "status": "Libre",
+      "votes": 0
+   },
+   {
+      "id": "1125",
+      "name": "Gohanks (Xeno)",
+      "gender": "Hombre",
+      "value": "11500",
+      "source": "Super Dragon Ball Heroes",
+      "img": [
+         "https://i.pinimg.com/originals/46/83/c8/4683c80c77c0dadb6493bddf1ad18a37.jpg",
+         "https://i.pinimg.com/originals/91/aa/5e/91aa5e2671f9bd5d8f3a90b5f6dbf9a6.jpg",
+         "https://i.pinimg.com/originals/e2/f0/73/e2f073708b00b55bebdd663b4b34de06.jpg"
+      ],
+      "vid": [
+         "https://i.pinimg.com/originals/ec/31/fe/ec31fedb5d54ed006de6b2346c93e28c.gif",
+         "https://i.pinimg.com/originals/a5/ee/53/a5ee53f9c65eba522254a4c2d7dd9f3b.gif"
+      ],
+      "user": null,
+      "status": "Libre",
+      "votes": 0
+   },
+   {
+      "id": "1126",
+      "name": "Vegeks (Xeno)",
+      "gender": "Hombre",
+      "value": "11800",
+      "source": "Super Dragon Ball Heroes",
+      "img": [
+         "https://i.pinimg.com/originals/6f/97/f7/6f97f75b274cd0b9d98cd2369302aa28.jpg",
+         "https://i.pinimg.com/originals/47/f3/3c/47f33cb3802df065ffb9e974a77c4cb3.png",
+         "https://i.pinimg.com/originals/45/53/a4/4553a4387536d6e74e02aa21656e937d.jpg"
+      ],
+      "vid": [],
+      "user": null,
+      "status": "Libre",
+      "votes": 0
+   },
+   {
+      "id": "1127",
+      "name": "Hatchiyack",
+      "gender": "Hombre",
+      "value": "11000",
+      "source": "Super Dragon Ball Heroes",
+      "img": [
+         "https://i.pinimg.com/originals/ce/c1/5c/cec15c3c8746e1674f995b2cee06d949.jpg",
+         "https://i.pinimg.com/originals/50/03/a7/5003a7b91a003b6bedaba61da06c5140.png",
+         "https://i.pinimg.com/originals/88/8c/20/888c20e4b7b87bc0e5a5bfbd77a5c932.png"
+      ],
+      "vid": [
+         "https://media.tenor.com/YHbEwJuqlxAAAAAM/hatchiyack-fight.gif"
+      ],
+      "user": null,
+      "status": "Libre",
+      "votes": 0
+   },
+   {
+      "id": "1128",
+      "name": "Vidro",
+      "gender": "Mujer",
+      "value": "9800",
+      "source": "Super Dragon Ball Heroes",
+      "img": [
+         "https://i.pinimg.com/originals/1f/27/1c/1f271c92224fc1ad04bbd29f153f015e.jpg",
+         "https://i.pinimg.com/originals/63/4d/59/634d59a2db0945939a52f00c56d92e06.jpg",
+         "https://i.pinimg.com/originals/01/60/63/0160639ace8ea49d1affe7b41abddd3a.jpg"
+      ],
+      "vid": [],
+      "user": null,
+      "status": "Libre",
+      "votes": 0
+   },
+   {
+      "id": "1129",
+      "name": "Chamel",
+      "gender": "Hombre",
+      "value": "10200",
+      "source": "Super Dragon Ball Heroes",
+      "img": [
+         "https://i.pinimg.com/originals/60/c0/e9/60c0e9a439939c2078b93d6157cefb0a.jpg",
+         "https://i.pinimg.com/originals/af/5a/2f/af5a2fb13abd805ba2ab465b9dea4508.jpg",
+         "https://i.pinimg.com/originals/42/f6/13/42f6136a2acdd5754579c8f0b77f38fd.jpg"
+      ],
+      "vid": [],
+      "user": null,
+      "status": "Libre",
+      "votes": 0
+   },
+   {
+      "id": "1130",
+      "name": "Forte",
+      "gender": "Mujer",
+      "value": "9500",
+      "source": "Super Dragon Ball Heroes",
+      "img": [
+         "https://i.pinimg.com/originals/3f/22/82/3f228271e474f5d2295303f33354b2c1.jpg",
+         "https://i.pinimg.com/originals/6a/74/b2/6a74b28260cb280c1902a9226b9f6d29.jpg"
+      ],
+      "vid": [],
+      "user": null,
+      "status": "Libre",
+      "votes": 0
+   },
+   {
+      "id": "1131",
+      "name": "Neko Majin Z",
+      "gender": "Hombre",
+      "value": "8800",
+      "source": "Super Dragon Ball Heroes",
+      "img": [
+         "https://i.pinimg.com/originals/38/e6/54/38e65441f76e6893653aafdc3f6acd6f.png",
+         "https://i.pinimg.com/originals/28/ca/62/28ca6296bf3a02762ee18201a66b7cb8.png",
+         "https://i.pinimg.com/originals/ca/48/e7/ca48e7ebd0695f9a162e1a064a98265c.png"
+      ],
+      "vid": [],
+      "user": null,
+      "status": "Libre",
+      "votes": 0
+   },
+   {
+      "id": "1132",
+      "name": "Kuriza",
+      "gender": "Hombre",
+      "value": "8500",
+      "source": "Super Dragon Ball Heroes",
+      "img": [
+         "https://i.pinimg.com/originals/16/71/ec/1671ec1c09e343338d0047d42ed3215c.jpg",
+         "https://i.pinimg.com/originals/a2/c5/de/a2c5de51fcea4d4f8ba83cec9fb3e7aa.jpg"
+      ],
+      "vid": [],
+      "user": null,
+      "status": "Libre",
+      "votes": 0
+   },
+   {
+      "id": "1133",
+      "name": "Super 17",
+      "gender": "Hombre",
+      "value": "11500",
+      "source": "Super Dragon Ball Heroes",
+      "img": [
+         "https://i.pinimg.com/originals/cb/31/06/cb31064971ece992ede53bed81bc8bd9.jpg",
+         "https://i.pinimg.com/originals/d5/9b/77/d59b77ec2ca679e046b1328cf74f7426.png",
+         "https://i.pinimg.com/originals/80/ba/83/80ba8357ea86bd276ee9cbde8630b8d0.jpg"
+      ],
+      "vid": [
+         "https://media.tenor.com/LUo1GjDZSYkAAAAM/super-17-dragon-ball.gif",
+         "https://media.tenor.com/LFVf8JPLmaIAAAAM/android17-dbz.gif"
+      ],
+      "user": null,
+      "status": "Libre",
+      "votes": 0
+   },
+   {
+      "id": "1134",
+      "name": "Baby",
+      "gender": "Hombre",
+      "value": "12000",
+      "source": "Super Dragon Ball Heroes",
+      "img": [
+         "https://i.pinimg.com/originals/99/ff/58/99ff5873339829553b5e3f17dd2a53d7.png",
+         "https://i.pinimg.com/originals/b5/c7/11/b5c711d1f8215016e38e327a6eb996e7.jpg",
+         "https://i.pinimg.com/originals/c8/d9/79/c8d979a4d7e6dd009faa81708c7ddc20.jpg"
+      ],
+      "vid": [],
+      "user": null,
+      "status": "Libre",
+      "votes": 0
+   },
+   {
+      "id": "1135",
+      "name": "Turles (Xeno)",
+      "gender": "Hombre",
+      "value": "12000",
+      "source": "Super Dragon Ball Heroes",
+      "img": [
+         "https://i.pinimg.com/originals/de/7a/c4/de7ac42a116e516bb830a48f5fd3e542.jpg",
+         "https://i.pinimg.com/originals/4c/f3/37/4cf337117c7b26974592c909230aac14.jpg",
+         "https://i.pinimg.com/originals/5d/02/cb/5d02cb7188bd2cf30beb0a948610e43b.jpg"
+      ],
+      "vid": [
+         "https://media.tenor.com/0uwNc_yPgeYAAAAM/turles-saiyan.gif"
+      ],
+      "user": null,
+      "status": "Libre",
+      "votes": 0
+   },
+   {
+      "id": "1136",
+      "name": "Bojack",
+      "gender": "Hombre",
+      "value": "10500",
+      "source": "Super Dragon Ball Heroes",
+      "img": [
+         "https://i.pinimg.com/originals/81/e8/f3/81e8f30c12c1b0b6d97c22bba1e1892c.jpg",
+         "https://i.pinimg.com/originals/b5/59/8a/b5598aa6399e0cab8940812984aea40d.jpg",
+         "https://i.pinimg.com/originals/ac/cb/8d/accb8da674bcb93b87682b1139ec7ada.jpg"
+      ],
+      "vid": [
+         "https://media.tenor.com/2H_wAEotL2UAAAAM/super-dragon-ball-heroes-dragon-ball.gif",
+         "https://media.tenor.com/1huyZ_MwAVcAAAAM/super-dragon-ball-heroes-dragon-ball.gif"
+      ],
+      "user": null,
+      "status": "Libre",
+      "votes": 0
+   },
+   {
+      "id": "1137",
+      "name": "Zangya",
+      "gender": "Mujer",
+      "value": "9500",
+      "source": "Super Dragon Ball Heroes",
+      "img": [
+         "https://i.pinimg.com/originals/1e/fd/e5/1efde54e9adef345034d6c17e4ac33bc.jpg",
+         "https://i.pinimg.com/originals/c7/2f/48/c72f4854e7e8afd846d1e92d12e59acb.jpg",
+         "https://i.pinimg.com/originals/55/2a/c7/552ac7bd6cec7ba2f29cfd51758a6c09.jpg"
+      ],
+      "vid": [
+         "https://media.tenor.com/KJv_-Y-KJTEAAAAM/dragon-ball.gif",
+         "https://media.tenor.com/eaTDILMIXIQAAAAM/dragon-ball-z-bojack.gif"
+      ],
+      "user": null,
+      "status": "Libre",
+      "votes": 0
+   },
+   {
+      "id": "1138",
+      "name": "Lord Slug (Xeno)",
+      "gender": "Hombre",
+      "value": "10800",
+      "source": "Super Dragon Ball Heroes",
+      "img": [
+         "https://i.pinimg.com/originals/75/16/d5/7516d5504c0018704f44a908a50db9b4.webp",
+         "https://i.pinimg.com/originals/c1/0e/db/c10edb26c3f8422722ad7337cbc907d2.jpg"
+      ],
+      "vid": [
+         "https://media.tenor.com/V6oCamYuH68AAAAM/lord-slug-slug.gif",
+         "https://media.tenor.com/BAaEZBMFVtkAAAA1/dragon-ball-z-movie-lord-slug.webp"
+      ],
+      "user": null,
+      "status": "Libre",
+      "votes": 0
+   },
+   {
+      "id": "1139",
+      "name": "Basaku",
+      "gender": "Hombre",
+      "value": "9000",
+      "source": "Super Dragon Ball Heroes",
+      "img": [
+         "https://i.pinimg.com/originals/8b/4a/50/8b4a503ed0d8bcf4794892e9ccef73b6.jpg",
+         "https://i.pinimg.com/originals/f1/c3/3f/f1c33f05a22e4bb4fb079e0be1729a60.jpg"
+      ],
+      "vid": [],
+      "user": null,
+      "status": "Libre",
+      "votes": 0
+   },
+   {
+      "id": "1140",
+      "name": "Viola",
+      "gender": "Mujer",
+      "value": "9000",
+      "source": "Super Dragon Ball Heroes",
+      "img": [
+         "https://i.pinimg.com/originals/e7/b2/42/e7b2428ee6f618f78cda4fc1eced21ce.jpg",
+         "https://i.pinimg.com/originals/75/f0/cc/75f0cc786ff20c70a274846c3f554d49.png",
+         "https://i.pinimg.com/originals/79/9f/bd/799fbd4a647d71fd3464b4f6ab0fff32.jpg"
+      ],
+      "vid": [],
+      "user": null,
+      "status": "Libre",
+      "votes": 0
+   }, 
+   {
+      "id": "1141",
+      "name": "Masachika Kuze",
+      "gender": "Hombre",
+      "value": "11800",
+      "source": "Tokidoki Bosotto Russia-go de Dereru Tonari no Alya-san",
+      "img": [
+         "https://i.pinimg.com/originals/5b/dd/31/5bdd319f4baf3057a90ff1214261f97e.jpg",
+         "https://i.pinimg.com/originals/c3/46/a3/c346a3be8d51af15a57edf8b82da9c7b.jpg",
+         "https://i.pinimg.com/originals/88/87/7a/88877ad8ded427f1fb02b3614bc15bb6.jpg"
+      ],
+      "vid": [
+         "https://media.tenor.com/714U8vXrJyEAAAAM/alya.gif",
+         "https://i.pinimg.com/originals/8b/29/d2/8b29d2ae1eb8350b21f856d5958561ac.gif"
+      ],
+      "user": null,
+      "status": "Libre",
+      "votes": 0
+   },
+   {
+      "id": "1142",
+      "name": "Chisaki Sarashina",
+      "gender": "Mujer",
+      "value": "9500",
+      "source": "Tokidoki Bosotto Russia-go de Dereru Tonari no Alya-san",
+      "img": [
+         "https://i.pinimg.com/originals/5a/8d/8c/5a8d8ce41fa56ffab4b5e59780d2e6e1.jpg",
+         "https://i.pinimg.com/originals/15/16/87/151687c6285e5225729c81065194ca16.jpg",
+         "https://i.pinimg.com/originals/85/06/98/850698897fc64ff90b8a895fca4473fd.jpg"
+      ],
+      "vid": [
+         "https://media.tenor.com/9i6-4aFoxyoAAAAM/roshidere-chisaki.gif",
+         "https://media.tenor.com/BQV0tsFj_9kAAAAM/roshidere-chisaki-sarashina.gif"
+      ],
+      "user": null,
+      "status": "Libre",
+      "votes": 0
+   },
+   {
+      "id": "1143",
+      "name": "Nonoa Miyamae",
+      "gender": "Mujer",
+      "value": "9200",
+      "source": "Tokidoki Bosotto Russia-go de Dereru Tonari no Alya-san",
+      "img": [
+         "https://i.pinimg.com/originals/2f/69/8f/2f698f4f1d9905722973abaafd6bda98.jpg",
+         "https://i.pinimg.com/originals/96/75/8a/96758a79b85b041fb501c28bddd634f7.jpg",
+         "https://i.pinimg.com/originals/a2/cc/68/a2cc680793bc02fb33168d450c8966e7.jpg"
+      ],
+      "vid": [
+         "https://media.tenor.com/FePnCN4ZuRMAAAAM/%E8%89%BE%E8%8E%89%E5%90%8C%E5%AD%B8-alya-sometimes-hides-her-feelings-in-russian.gif",
+         "https://media.tenor.com/Y9mAEIcjy5kAAAAM/absolute-cinema-cinema.gif"
+      ],
+      "user": null,
+      "status": "Libre",
+      "votes": 0
+   },
+   {
+      "id": "1144",
+      "name": "Sayaka Taniyama",
+      "gender": "Mujer",
+      "value": "8900",
+      "source": "Tokidoki Bosotto Russia-go de Dereru Tonari no Alya-san",
+      "img": [
+         "https://i.pinimg.com/originals/5a/aa/85/5aaa857e7a2613f8498762d88f599ff0.jpg",
+         "https://i.pinimg.com/originals/ef/90/d4/ef90d410dac60d47b316949cc466d685.jpg",
+         "https://i.pinimg.com/originals/b0/17/e5/b017e5e475a300f33e6ae62f8a4dc0a8.jpg"
+      ],
+      "vid": [
+         "https://media.tenor.com/O22-vNRps9cAAAAM/sayaka-taniyama-roshidere.gif",
+         "https://media.tenor.com/LVClRZDylcEAAAAM/sayaka-taniyama-roshidere.gif"
+      ],
+      "user": null,
+      "status": "Libre",
+      "votes": 0
+   },
+   {
+      "id": "1145",
+      "name": "Touya Kenzaki",
+      "gender": "Hombre",
+      "value": "8500",
+      "source": "Tokidoki Bosotto Russia-go de Dereru Tonari no Alya-san",
+      "img": [
+         "https://i.pinimg.com/originals/ed/a8/4f/eda84fbd6d01356018347b93eb1317d9.jpg",
+         "https://i.pinimg.com/originals/76/ed/ba/76edba5375c5917c49469be73938032b.jpg",
+         "https://i.pinimg.com/originals/19/f4/1f/19f41f50f9a9acc7e5d65d986c38e5de.jpg"
+      ],
+      "vid": [
+         "https://media.tenor.com/AEvCm6j4HRsAAAAM/alya-sometimes-hides-her-feelings-in-russian-touya-kenzaki.gif",
+         "https://media.tenor.com/S_-F1EttG6oAAAAM/chisaki-sarashina-touya-kenzaki.gif"
+      ],
+      "user": null,
+      "status": "Libre",
+      "votes": 0
+   },
+   {
+      "id": "1146",
+      "name": "Takeshi Maruyama",
+      "gender": "Hombre",
+      "value": "6500",
+      "source": "Tokidoki Bosotto Russia-go de Dereru Tonari no Alya-san",
+      "img": [
+         "https://i.pinimg.com/originals/0d/90/79/0d907982679dbb32fd578b936c79f28d.png",
+         "https://i.pinimg.com/originals/42/7e/85/427e850848f3de51db40336bf6b32924.png",
+         "https://i.pinimg.com/originals/1c/85/51/1c8551ee67c9b6ce22fb5e6e031e5229.png"
+      ],
+      "vid": [],
+      "user": null,
+      "status": "Libre",
+      "votes": 0
+   },
+   {
+      "id": "1147",
+      "name": "Hikaru Kiyomiya",
+      "gender": "Hombre",
+      "value": "6200",
+      "source": "Tokidoki Bosotto Russia-go de Dereru Tonari no Alya-san",
+      "img": [
+         "https://i.pinimg.com/originals/e8/b6/85/e8b6851391ebcdcf7f0819fac1484184.jpg",
+         "https://i.pinimg.com/originals/7c/07/67/7c0767ae176df76dfda0d53273fcc29a.jpg"
+      ],
+      "vid": [],
+      "user": null,
+      "status": "Libre",
+      "votes": 0
+   },
+   {
+      "id": "1148",
+      "name": "Yumi Kuze",
+      "gender": "Mujer",
+      "value": "5500",
+      "source": "Tokidoki Bosotto Russia-go de Dereru Tonari no Alya-san",
+      "img": [
+         "https://otakotaku.com/asset/img/character/2024/09/yumi-suou-66dd544287d0ep.jpg
+      ],
+      "vid": [],
+      "user": null,
+      "status": "Libre",
+      "votes": 0
+   },
+   {
+      "id": "1149",
+      "name": "Gensei Suou",
+      "gender": "Hombre",
+      "value": "4500",
+      "source": "Tokidoki Bosotto Russia-go de Dereru Tonari no Alya-san",
+      "img": [
+         "https://static.wikia.nocookie.net/roshidere/images/a/a5/Gensei_Suou_Light_Novel.png/revision/latest?cb=20240829154515",
+         "https://static.wikia.nocookie.net/roshidere/images/4/4d/Gensei_Suou_Anime.png/revision/latest?cb=20240814150809"
+      ],
+      "vid": [],
+      "user": null,
+      "status": "Libre",
+      "votes": 0
+   },
+   {
+      "id": "1150",
+      "name": "Kyoutarou Kuze",
+      "gender": "Hombre",
+      "value": "4500",
+      "source": "Tokidoki Bosotto Russia-go de Dereru Tonari no Alya-san",
+      "img": [
+         "https://static.wikia.nocookie.net/roshidere/images/6/6a/Kyoutarou_Kuze_Light_Novel.png/revision/latest?cb=20240808080437",
+         "https://static.wikia.nocookie.net/roshidere/images/e/e6/Kyoutarou_Kuze_Anime.png/revision/latest?cb=20240808175823"
+      ],
+      "vid": [],
+      "user": null,
+      "status": "Libre",
+      "votes": 0
+
+   }, 
+   {
+      "id": "1153",
+      "name": "Kafka Hibino",
+      "gender": "Hombre",
+      "value": "13500",
+      "source": "Kaiju No. 8",
+      "img": [
+         "https://i.pinimg.com/originals/b1/c3/0c/b1c30c8d8819c6ada90522170f3babb8.jpg",
+         "https://i.pinimg.com/originals/ef/cb/93/efcb9355e5d6b3790ff5cbab2bc9c757.jpg",
+         "https://i.pinimg.com/originals/4f/64/f2/4f64f21e3ab7fdaddddbd69a1884b277.jpg"
+      ],
+      "vid": [
+         "https://i.pinimg.com/originals/0d/83/1e/0d831ef3068a2f0a9ff19a4281576436.gif",
+         "https://i.pinimg.com/originals/a2/e0/0f/a2e00f172577cc931c796def03325870.gif"
+      ],
+      "user": null,
+      "status": "Libre",
+      "votes": 0
+   },
+   {
+      "id": "1154",
+      "name": "Mina Ashiro",
+      "gender": "Mujer",
+      "value": "14200",
+      "source": "Kaiju No. 8",
+      "img": [
+         "https://i.pinimg.com/originals/75/f8/c8/75f8c8d8756848c2617e50e2b5b53ec6.png",
+         "https://i.pinimg.com/originals/4c/c0/03/4cc0033c0bad44e2f3d51d0af0fc3f3b.png",
+         "https://i.pinimg.com/originals/4f/1d/0f/4f1d0ff5b0e7ff1ff61444b3b0dd580a.jpg"
+      ],
+      "vid": [
+         "https://i.pinimg.com/originals/7a/c5/1a/7ac51aecbfe0fb22c1b62010e7edc207.gif",
+         "https://i.pinimg.com/originals/99/d1/30/99d13043fb2ac814a8d858a3e9067597.gif"
+      ],
+      "user": null,
+      "status": "Libre",
+      "votes": 0
+   },
+   {
+      "id": "1155",
+      "name": "Kikoru Shinomiya",
+      "gender": "Mujer",
+      "value": "13800",
+      "source": "Kaiju No. 8",
+      "img": [
+         "https://i.pinimg.com/originals/81/98/2a/81982a7ee6b82179123368e4d09e3d1e.jpg",
+         "https://i.pinimg.com/originals/37/2b/b5/372bb5a385e77c267169aae763d98cab.jpg",
+         "https://i.pinimg.com/originals/6f/a5/ba/6fa5bac2ea1e61b62e13c794e0eb8d7f.jpg"
+      ],
+      "vid": [
+         "https://media.tenor.com/Y_fioQdRH4YAAAAM/kikoru-unleash.gif",
+         "https://i.pinimg.com/originals/9a/1f/cc/9a1fcc32abd6d9524bfbd9b82df8feaa.gif"
+      ],
+      "user": null,
+      "status": "Libre",
+      "votes": 0
+   },
+   {
+      "id": "1156",
+      "name": "Reno Ichikawa",
+      "gender": "Hombre",
+      "value": "12000",
+      "source": "Kaiju No. 8",
+      "img": [
+         "https://i.pinimg.com/originals/31/37/b6/3137b6b4eeec40b0aded487215763952.png",
+         "https://i.pinimg.com/originals/46/5c/0d/465c0d3e9d5ca9550fee89f2f2923704.png",
+         "https://i.pinimg.com/originals/46/12/01/46120192603fa62187e5a5ad77dbb96e.jpg"
+      ],
+      "vid": [
+         "https://media.tenor.com/-3zlM0M9z64AAAAM/kaiju-no-8-kaiju-8-gou.gif",
+         "https://media.tenor.com/ZPqnK265QTUAAAAM/kaiju-no-8-reno-ichikawa.gif"
+      ],
+      "user": null,
+      "status": "Libre",
+      "votes": 0
+   },
+   {
+      "id": "1157",
+      "name": "Soshiro Hoshina",
+      "gender": "Hombre",
+      "value": "12800",
+      "source": "Kaiju No. 8",
+      "img": [
+         "https://i.pinimg.com/originals/e4/4a/4b/e44a4bdef4be749b905f7171ee2794a9.jpg",
+         "https://i.pinimg.com/originals/54/73/86/547386a5f04963b93fab15a7874f2580.png",
+         "https://i.pinimg.com/originals/16/a5/3a/16a53a268d48bb39b3409eb7b71a8ea0.jpg"
+      ],
+      "vid": [
+         "https://i.pinimg.com/originals/b5/87/c8/b587c84d678d81b1d894d06a21198533.gif",
+         "https://i.pinimg.com/originals/ba/83/be/ba83be7bc316b479e0d6a1d79c533c19.gif"
+      ],
+      "user": null,
+      "status": "Libre",
+      "votes": 0
+   },
+   {
+      "id": "1158",
+      "name": "Gen Narumi",
+      "gender": "Hombre",
+      "value": "13500",
+      "source": "Kaiju No. 8",
+      "img": [
+         "https://i.pinimg.com/originals/92/0d/5b/920d5bd13de7999e7542ea222b3d5c4c.jpg",
+         "https://i.pinimg.com/originals/d2/3b/74/d23b746c3ec5e091000511f2af564ec3.png",
+         "https://i.pinimg.com/originals/47/8a/75/478a753234be9ee40e1b494d157e0ac5.jpg"
+      ],
+      "vid": [
+         "https://i.pinimg.com/originals/92/0d/5b/920d5bd13de7999e7542ea222b3d5c4c.jpg",
+         "https://media.tenor.com/oKJaJhnZiE4AAAA1/narumi-unleash.webp"
+      ],
+      "user": null,
+      "status": "Libre",
+      "votes": 0
+   },
+   {
+      "id": "1159",
+      "name": "Konomi Okonogi",
+      "gender": "Mujer",
+      "value": "10500",
+      "source": "Kaiju No. 8",
+      "img": [
+         "https://i.pinimg.com/originals/1f/5c/48/1f5c48e1ce8bbb586bd8bd04bcb2f96a.jpg",
+         "https://i.pinimg.com/originals/80/69/73/8069732554d8ce5de99f281e72c977e7.jpg",
+         "https://i.pinimg.com/originals/4b/fd/39/4bfd3924c33f68b12086fe45b06dcc43.png"
+      ],
+      "vid": [
+         "https://media.tenor.com/yYCVqoC_eLYAAAAM/okonogi-konomi.gif",
+         "https://media.tenor.com/A1maSsFwvsgAAAAM/kaiju-no-8-anime.gif"
+      ],
+      "user": null,
+      "status": "Libre",
+      "votes": 0
+   },
+   {
+      "id": "1160",
+      "name": "Iharu Furuhashi",
+      "gender": "Hombre",
+      "value": "9500",
+      "source": "Kaiju No. 8",
+      "img": [
+         "https://i.pinimg.com/originals/7a/cf/65/7acf65ed6598b1878c60fbc86545c513.jpg",
+         "https://i.pinimg.com/originals/f3/3e/41/f33e419cc27b15c2068dbdee7fc3b989.jpg",
+         "https://i.pinimg.com/originals/4b/87/db/4b87db1d52e104747fd29768163cb08b.jpg"
+      ],
+      "vid": [
+         "https://media.tenor.com/NcxP0ikA4SIAAAAM/reno-iharu.gif",
+         "https://media.tenor.com/QkR_WC4wLHQAAAAM/iharu-furuhashi-reno-ichikawa.gif"
+      ],
+      "user": null,
+      "status": "Libre",
+      "votes": 0
+   },
+   {
+      "id": "1161",
+      "name": "Haruichi Izumo",
+      "gender": "Hombre",
+      "value": "9200",
+      "source": "Kaiju No. 8",
+      "img": [
+         "https://i.pinimg.com/originals/84/45/c9/8445c938f4f8447401b916a50a0f8eb1.jpg",
+         "https://i.pinimg.com/originals/c0/49/6c/c0496c7345f8bc2e03c8a82789c3215d.jpg",
+         "https://i.pinimg.com/originals/e5/56/aa/e556aa9d13ed7b294381c32e9d8d7f4f.jpg"
+      ],
+      "vid": [],
+      "user": null,
+      "status": "Libre",
+      "votes": 0
+   },
+   {
+      "id": "1162",
+      "name": "Aoi Kaguragi",
+      "gender": "Hombre",
+      "value": "8800",
+      "source": "Kaiju No. 8",
+      "img": [
+         "https://i.pinimg.com/originals/32/26/8e/32268e93236f7074d58d9c714d083449.jpg",
+         "https://i.pinimg.com/originals/60/ef/31/60ef318460ff730389e326b4902496ea.jpg",
+         "https://i.pinimg.com/originals/df/fa/70/dffa70684db2a82d6c600666cd98fe99.png"
+      ],
+      "vid": [],
+      "user": null,
+      "status": "Libre",
+      "votes": 0
+   },
+   {
+      "id": "1163",
+      "name": "Eiji Hasegawa",
+      "gender": "Hombre",
+      "value": "9000",
+      "source": "Kaiju No. 8",
+      "img": [
+         "https://i.pinimg.com/originals/c1/cd/97/c1cd9778a6f28b6e1840850e401422c6.png",
+         "https://i.pinimg.com/originals/6a/4e/f9/6a4ef9b23257ed63bf0a6342d6a8cee6.png",
+         "https://i.pinimg.com/originals/5a/9f/bc/5a9fbc6a697665fcd60df40b9b439dff.png"
+      ],
+      "vid": [],
+      "user": null,
+      "status": "Libre",
+      "votes": 0
+   },
+   {
+      "id": "1164",
+      "name": "Akari Minase",
+      "gender": "Mujer",
+      "value": "8500",
+      "source": "Kaiju No. 8",
+      "img": [
+         "https://i.pinimg.com/originals/72/6e/35/726e35211cbe20b9cf1b3b7d9528e0b1.jpg",
+         "https://i.pinimg.com/originals/ea/60/90/ea6090b11369dfc221dc0a5b89909907.png",
+         "https://i.pinimg.com/originals/39/4c/56/394c56b3af157d7e003a0e1997479ccd.png"
+      ],
+      "vid": [],
+      "user": null,
+      "status": "Libre",
+      "votes": 0
+   },
+   {
+      "id": "1165",
+      "name": "Isao Shinomiya",
+      "gender": "Hombre",
+      "value": "11000",
+      "source": "Kaiju No. 8",
+      "img": [
+         "https://i.pinimg.com/originals/f1/ee/d9/f1eed973e99996c4470e64e81e658c72.jpg",
+         "https://i.pinimg.com/originals/99/37/08/993708827aa642bd434d20fcafec5689.png",
+         "https://i.pinimg.com/originals/ab/d3/d3/abd3d3e2077edc19d2319ac59a2df2e7.jpg"
+      ],
+      "vid": [
+         "https://media.tenor.com/vyFRHRtoaBQAAAAM/kaiju-no8-kaiju-no8-anime.gif",
+         "https://media.tenor.com/Ut6XsUMV880AAAAM/kaiju-no-8-kafka.gif"
+      ],
+      "user": null,
+      "status": "Libre",
+      "votes": 0
+   },
+   {
+      "id": "1166",
+      "name": "Kaiju No. 9",
+      "gender": "Hombre",
+      "value": "13000",
+      "source": "Kaiju No. 8",
+      "img": [
+         "https://i.pinimg.com/originals/16/40/8c/16408c18c1910079f7a2ea640e7e0074.jpg",
+         "https://i.pinimg.com/originals/95/2e/c7/952ec7b73977985ef63d1f0ef1aab526.jpg",
+         "https://i.pinimg.com/originals/6a/e3/4a/6ae34af66ca47c04dbcb79cca40065a3.jpg"
+      ],
+      "vid": [
+         "https://media.tenor.com/nOCGcikOCecAAAAM/kaijuno9-split.gif",
+         "https://media.tenor.com/OU-KKIONtvYAAAAM/bad-guy-enemy.gif"
+      ],
+      "user": null,
+      "status": "Libre",
+      "votes": 0
+   },
+   {
+      "id": "1167",
+      "name": "Kaiju No. 10",
+      "gender": "Hombre",
+      "value": "11500",
+      "source": "Kaiju No. 8",
+      "img": [
+         "https://i.pinimg.com/originals/97/bc/0c/97bc0ce75605fb48b647cab059ed7d08.jpg",
+         "https://i.pinimg.com/originals/a5/fd/c8/a5fdc8534b2eede2c97c5fe79aeb85dd.jpg",
+         "https://i.pinimg.com/originals/e1/3a/d8/e13ad80726906685f297d5f380325ea2.jpg"
+      ],
+      "vid": [
+         "https://media.tenor.com/_FW5vlcv7X8AAAAM/kaiju-no-8-kaiju-no-10.gif",
+         "https://media.tenor.com/1cmzo3lcvbIAAAAM/kaiju-no-10.gif"
+      ],
+      "user": null,
+      "status": "Libre",
+      "votes": 0
+   },
+   {
+      "id": "1168",
+      "name": "Kaiju No. 15",
+      "gender": "Mujer",
+      "value": "11200",
+      "source": "Kaiju No. 8",
+      "img": [
+         "https://i.pinimg.com/736x/71/45/1e/71451e98f673ee4b30057b8731f501d9.jpg",
+         "https://i.pinimg.com/736x/22/2c/56/222c565dc3eb402c69359df8dbd98242.jpg",
+         "https://i.pinimg.com/originals/1b/2a/b1/1b2ab1e1d1523244c19fa16c3122bbac.png"
+      ],
+      "vid": [
+         "https://media.tenor.com/CmqdYmBlRowAAAAM/kaiju-no.gif",
+         "https://media.tenor.com/emYWtUybgsAAAAA1/kaiju-no.webp"
+      ],
+      "user": null,
+      "status": "Libre",
+      "votes": 0
+   },
+   {
+      "id": "1169",
+      "name": "Rin Shinonome",
+      "gender": "Mujer",
+      "value": "8900",
+      "source": "Kaiju No. 8",
+      "img": [
+         "https://i.pinimg.com/originals/38/ed/72/38ed7219b77ca0ae33fec0ac490bd4c1.jpg",
+         "https://i.pinimg.com/originals/3a/06/f5/3a06f501cf76b539bfea4bd1caf9b294.jpg",
+         "https://i.pinimg.com/originals/49/f9/05/49f905f030e37d55ba1e233a5ddca37c.jpg"
+      ],
+      "vid": [],
+      "user": null,
+      "status": "Libre",
+      "votes": 0
+   },
+   {
+      "id": "1170",
+      "name": "Hakua Igarashi",
+      "gender": "Mujer",
+      "value": "8700",
+      "source": "Kaiju No. 8",
+      "img": [
+         "https://i.pinimg.com/736x/29/14/76/29147683bf30887fd8f037fbd2a4569c.jpg",
+         "https://i.pinimg.com/736x/65/c0/cc/65c0ccd41464815d9bbc6b6c9bbd14ec.jpg",
+         "https://i.pinimg.com/736x/e3/44/d3/e344d37d98c9d2589159c2ffe43a56f0.jpg"
+      ],
+      "vid": [],
+      "user": null,
+      "status": "Libre",
+      "votes": 0
+   },
+   {
+      "id": "1171",
+      "name": "Jura Igarashi",
+      "gender": "Mujer",
+      "value": "9200",
+      "source": "Kaiju No. 8",
+      "img": [
+         "https://i.pinimg.com/originals/7b/af/c4/7bafc462bc61873787e5906197f7b184.jpg",
+         "https://i.pinimg.com/originals/58/14/10/5814102278d18f02d6822c0bb0bc27b3.jpg"
+      ],
+      "vid": [],
+      "user": null,
+      "status": "Libre",
+      "votes": 0
+   },
+   {
+      "id": "1172",
+      "name": "Tae Nakanoshima",
+      "gender": "Mujer",
+      "value": "8600",
+      "source": "Kaiju No. 8",
+      "img": [
+         "https://i.pinimg.com/originals/6b/26/de/6b26de8025f708935c5d36e79b58b7c5.jpg",
+         "https://i.pinimg.com/originals/b8/9d/41/b89d41187d459a1549e7246c2d90816e.png",
+         "https://i.pinimg.com/originals/da/4e/79/da4e795f5fc9445ec417f567bf46e019.jpg"
+      ],
+      "vid": [],
+      "user": null,
+      "status": "Libre",
+      "votes": 0
+   },
+   {
+      "id": "1173",
+      "name": "Keiji Itami",
+      "gender": "Hombre",
+      "value": "8500",
+      "source": "Kaiju No. 8",
+      "img": [
+         "https://i.pinimg.com/736x/33/47/df/3347df53f7c3d3a21db4ee17619c6bf8.jpg",
+         "https://i.pinimg.com/1200x/b2/b0/ab/b2b0abc6dd86e2e7beac8f024706c2b3.jpg",
+         "https://i.pinimg.com/736x/82/39/55/8239550868d6fbad4a161e9f15c536de.jpg"
+      ],
+      "vid": [],
+      "user": null,
+      "status": "Libre",
+      "votes": 0
+   },
+   {
+      "id": "1174",
+      "name": "Sagan Shinomiya",
+      "gender": "Mujer",
+      "value": "9800",
+      "source": "Kaiju No. 8",
+      "img": [
+         "https://i.pinimg.com/736x/1e/1c/2e/1e1c2e7dbb99cc0685595bc311c7c671.jpg"
+      ],
+      "vid": [],
+      "user": null,
+      "status": "Libre",
+      "votes": 0
+   },
+   {
+      "id": "1175",
+      "name": "Kaiju No. 6",
+      "gender": "Hombre",
+      "value": "12500",
+      "source": "Kaiju No. 8",
+      "img": [
+         "https://i.pinimg.com/originals/e7/10/53/e71053fb5f51b6db9205ae71ae064a1f.jpg",
+         "https://i.pinimg.com/originals/01/df/41/01df41fc01e42dd03eeb843debaf6a36.jpg"
+      ],
+      "vid": [],
+      "user": null,
+      "status": "Libre",
+      "votes": 0
+   },
+   {
+      "id": "1176",
+      "name": "Kaiju No. 2",
+      "gender": "Hombre",
+      "value": "11000",
+      "source": "Kaiju No. 8",
+      "img": [
+         "https://i.pinimg.com/originals/18/2c/2f/182c2fc6f5e8b649b7d33cbb711fc631.jpg",
+         "https://i.pinimg.com/originals/da/f2/e6/daf2e65fa5bbee5ee5fc96f7c00f63fc.jpg"
+      ],
+      "vid": [],
+      "user": null,
+      "status": "Libre",
+      "votes": 0
+   },
+   {
+      "id": "1177",
+      "name": "Ichitaka Mitsuike",
+      "gender": "Hombre",
+      "value": "5000",
+      "source": "Kaiju No. 8",
+      "img": [
+         "https://static.wikia.nocookie.net/kaijuu-8-gou/images/6/6b/Ichitaka_Mitsuike_anime.png/revision/latest?cb=20240723134144"
+      ],
+      "vid": [],
+      "user": null,
+      "status": "Libre",
+      "votes": 0
+   },
+   {
+      "id": "1178",
+      "name": "Masahide Tokuda",
+      "gender": "Hombre",
+      "value": "4500",
+      "source": "Kaiju No. 8",
+      "img": [
+         "https://static.wikia.nocookie.net/kaijuu-8-gou/images/6/64/Masahide_Tokuda_anime.png/revision/latest/scale-to-width/360?cb=20240723124302",
+         "https://i.pinimg.com/736x/6d/f3/44/6df34456b7d68e3bce7188361b863c1c.jpg"
+      ],
+      "vid": [],
+      "user": null,
+      "status": "Libre",
+      "votes": 0
+   },
+   {
+      "id": "1179",
+      "name": "Mizoguchi",
+      "gender": "Hombre",
+      "value": "4200",
+      "source": "Kaiju No. 8",
+      "img": [
+         "https://static.wikia.nocookie.net/kaijuu-8-gou/images/e/e9/Mizoguchi.png/revision/latest?cb=20240724131236",
+         "https://static.wikia.nocookie.net/kaijuu-8-gou/images/7/75/Mizoguchi_anime.png/revision/latest?cb=20240723130637"
+      ],
+      "vid": [],
+      "user": null,
+      "status": "Libre",
+      "votes": 0
+   },
+   {
+      "id": "1180",
+      "name": "Sebasu",
+      "gender": "Hombre",
+      "value": "6000",
+      "source": "Kaiju No. 8",
+      "img": [
+         "https://static.wikia.nocookie.net/kaijuu-8-gou/images/2/22/Sebasu.PNG/revision/latest/scale-to-width/360?cb=20210625110038",
+         "https://static.wikia.nocookie.net/kaijuu-8-gou/images/1/12/Sebasu_anime.png/revision/latest/scale-to-width/360?cb=20240723123658"
+      ],
+      "vid": [],
+      "user": null,
+      "status": "Libre",
+      "votes": 0
+   }, 
+   {
+      "id": "1181",
+      "name": "Kinich",
+      "gender": "Hombre",
+      "value": "13500",
+      "source": "Genshin Impact",
+      "img": [
+         "https://i.pinimg.com/1200x/93/93/0b/93930b09e9c59a8b1f6733d0ce264183.jpg",
+         "https://i.pinimg.com/736x/42/49/75/424975f464986596ea6668a77dffd090.jpg",
+         "https://i.pinimg.com/736x/07/28/0c/07280cf0d8b3dba8a08b56798c3c3894.jpg"
+      ],
+      "vid": [
+         "https://i.pinimg.com/originals/f9/85/7a/f9857a04e7fc725e24abb87c53a108c8.gif",
+         "https://i.pinimg.com/originals/a7/17/e8/a717e85871adf4636220020336eb3206.gif"
+      ],
+      "user": null,
+      "status": "Libre",
+      "votes": 0
+   },
+   {
+      "id": "1182",
+      "name": "Durin",
+      "gender": "Hombre",
+      "value": "13000",
+      "source": "Genshin Impact",
+      "img": [
+         "https://i.pinimg.com/736x/d9/08/d0/d908d0f95844a5f21abddddb86a546cc.jpg",
+         "https://i.pinimg.com/736x/4e/b4/d4/4eb4d4831d5fa8ca89ff59ea08f3030d.jpg",
+         "https://i.pinimg.com/736x/f1/93/5e/f1935e7ddb3a949b0ff7829b880467f7.jpg"
       ],
       "vid": [],
       "user": null,
