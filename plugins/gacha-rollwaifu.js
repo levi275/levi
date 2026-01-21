@@ -1,62 +1,71 @@
-import { promises as fs } from 'fs';
-import { loadHarem, saveHarem, userKey, charKey, addOrUpdateClaim, findClaim } from '../lib/gacha-group.js';
+import { promises as fs } from 'fs'
+import { loadHarem, saveHarem, userKey, charKey, addOrUpdateClaim, findClaim } from '../lib/gacha-group.js'
 
-const charactersFilePath = './src/database/characters.json';
-export const cooldowns = {};
+const charactersFilePath = './src/database/characters.json'
+export const cooldowns = {}
 
-global.activeRolls = global.activeRolls || {};
+global.activeRolls = global.activeRolls || {}
 
 async function loadCharacters() {
 try {
-const data = await fs.readFile(charactersFilePath, 'utf-8');
-return JSON.parse(data);
+const data = await fs.readFile(charactersFilePath, 'utf-8')
+return JSON.parse(data)
 } catch (error) {
-throw new Error('❀ No se pudo cargar el archivo characters.json.');
+throw new Error('❀ No se pudo cargar el archivo characters.json.')
 }
 }
 
 function formatUrl(url) {
-if (!url) return url;
+if (!url) return url
+url = url.trim()
+
 if (url.includes('github.com') && url.includes('/blob/')) {
-return url.replace('github.com', 'raw.githubusercontent.com').replace('/blob/', '/');
+url = url.replace('github.com', 'raw.githubusercontent.com').replace('/blob/', '/')
 }
-return url.trim();
+
+if (url.includes('github.com') && url.includes('?raw=true')) {
+url = url.replace('github.com', 'raw.githubusercontent.com').replace('?raw=true', '')
+}
+
+if (url.includes('raw.github.com')) {
+url = url.replace('raw.github.com', 'raw.githubusercontent.com')
+}
+
+return url
 }
 
 let handler = async (m, { conn }) => {
-const userId = m.sender;
-const groupId = m.chat;
-const now = Date.now();
-
-const key = `${groupId}:${userId}`;
+const userId = m.sender
+const groupId = m.chat
+const now = Date.now()
+const key = `${groupId}:${userId}`
 
 if (cooldowns[key] && now < cooldowns[key]) {
-const remainingTime = Math.ceil((cooldowns[key] - now) / 1000);
-const minutes = Math.floor(remainingTime / 60);
-const seconds = remainingTime % 60;
-return await conn.reply(m.chat, `( ⸝⸝･̆⤚･̆⸝⸝) ¡Debes esperar *${minutes} minutos y ${seconds} segundos* para volver a usar *#rollwaifu* en este grupo.`, m);
+const remainingTime = Math.ceil((cooldowns[key] - now) / 1000)
+const minutes = Math.floor(remainingTime / 60)
+const seconds = remainingTime % 60
+return await conn.reply(m.chat, `( ⸝⸝･̆⤚･̆⸝⸝) ¡Debes esperar *${minutes} minutos y ${seconds} segundos* para volver a usar *#rollwaifu* en este grupo.`, m)
 }
 
-cooldowns[key] = now + 15 * 60 * 1000;
+cooldowns[key] = now + 15 * 60 * 1000
 
 try {
-const characters = await loadCharacters();
-const randomCharacter = characters[Math.floor(Math.random() * characters.length)];
-let randomImage = randomCharacter.img[Math.floor(Math.random() * randomCharacter.img.length)];
+const characters = await loadCharacters()
+const randomCharacter = characters[Math.floor(Math.random() * characters.length)]
+let randomImage = randomCharacter.img[Math.floor(Math.random() * randomCharacter.img.length)]
 
-randomImage = formatUrl(randomImage);
+randomImage = formatUrl(randomImage)
 
-if (randomImage.includes('.webp')) {
-randomImage = `https://wsrv.nl/?url=${encodeURIComponent(randomImage)}&output=png`;
+if (randomImage.match(/\.webp($|\?)/i)) {
+randomImage = `https://wsrv.nl/?url=${encodeURIComponent(randomImage)}&output=png`
 }
 
-const harem = await loadHarem();
-const claimedInGroup = findClaim(harem, groupId, randomCharacter.id);
-
-const ownerName = claimedInGroup ? `@${claimedInGroup.userId.split('@')[0]}` : 'Nadie';
+const harem = await loadHarem()
+const claimedInGroup = findClaim(harem, groupId, randomCharacter.id)
+const ownerName = claimedInGroup ? `@${claimedInGroup.userId.split('@')[0]}` : 'Nadie'
 
 if (!claimedInGroup) {
-global.activeRolls[`${groupId}:${randomCharacter.id}`] = { user: userId, time: Date.now() };
+global.activeRolls[`${groupId}:${randomCharacter.id}`] = { user: userId, time: Date.now() }
 }
 
 const message = `
@@ -80,21 +89,27 @@ const message = `
 
 ┉͜┄͜─┈┉⃛┄─꒰֟፝͡ 🅸🅳: ${randomCharacter.id} ꒱─┄⃨┉┈─͡┄͡┉
 ㅤㅤㅤㅤㅤㅤ© ᑲ᥆𝗍 𝗀ɑᥴ꯭hɑ 𝗌𝗒sł꯭ᥱꭑ꒱
-`;
+`
 
-const mentions = claimedInGroup ? [claimedInGroup.userId] : [];
-await conn.sendFile(m.chat, randomImage, `${randomCharacter.name}.jpg`, message, m, { mentions });
+const mentions = claimedInGroup ? [claimedInGroup.userId] : []
+
+await conn.sendMessage(m.chat, {
+image: { url: randomImage },
+mimetype: "image/jpeg",
+caption: message,
+mentions
+}, { quoted: m })
 
 } catch (error) {
-delete cooldowns[key];
-console.error(error);
-await conn.reply(m.chat, `✘ Error al cargar el personaje: ${error.message}`, m);
+delete cooldowns[key]
+console.error(error)
+await conn.reply(m.chat, `✘ Error al cargar el personaje: ${error.message}`, m)
 }
-};
+}
 
-handler.help = ['rw', 'rollwaifu'];
-handler.tags = ['gacha'];
-handler.command = ['rw', 'rollwaifu'];
-handler.group = true;
+handler.help = ['rw', 'rollwaifu']
+handler.tags = ['gacha']
+handler.command = ['rw', 'rollwaifu']
+handler.group = true
 
-export default handler;
+export default handler
