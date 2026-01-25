@@ -1,64 +1,94 @@
+import db from '../lib/database.js'
+
 async function handler(m, { conn, args, usedPrefix, command, participants }) {
-  let who;
-  if (m.isGroup) {
-    who = m.mentionedJid[0] ? m.mentionedJid[0] : m.quoted ? m.quoted.sender : false;
-  } else {
-    who = m.chat;
-  }
+    let who
+    if (m.isGroup) {
+        who = m.mentionedJid[0]
+            ? m.mentionedJid[0]
+            : m.quoted
+            ? m.quoted.sender
+            : false
+    } else {
+        who = m.chat
+    }
 
-  if (!who) {
-    return m.reply(`${emoji} ᥱ𝗍і𝗊ᥙᥱ𝗍ᥲ ᥆ rᥱs⍴᥆ᥒძᥱ ᥲᥣ mᥱᥒsᥲȷᥱ ძᥱᥣ ᥙsᥙᥲrі᥆ ᥲᥣ 𝗊ᥙᥱ 𝗊ᥙіᥱrᥱs 𝗍rᥲᥒsFᥱrіr.`);
-  }
+    if (!who)
+        return m.reply(`${emoji} Etiqueta o responde al usuario al que quieres transferir.`)
 
-  let senderJid = m.sender;
-  if (m.sender.endsWith('@lid') && m.isGroup) {
-    const pInfo = participants.find(p => p.lid === m.sender);
-    if (pInfo && pInfo.id) senderJid = pInfo.id; 
-  }
+    // Resolver sender
+    let senderJid = m.sender
+    if (m.sender.endsWith('@lid') && m.isGroup) {
+        const p = participants.find(p => p.lid === m.sender)
+        if (p?.id) senderJid = p.id
+    }
 
-  let targetJid = who;
-  if (who.endsWith('@lid') && m.isGroup) {
-    const pInfo = participants.find(p => p.lid === who);
-    if (pInfo && pInfo.id) targetJid = pInfo.id; 
-  }
+    // Resolver target
+    let targetJid = who
+    if (who.endsWith('@lid') && m.isGroup) {
+        const p = participants.find(p => p.lid === who)
+        if (p?.id) targetJid = p.id
+    }
 
-  const amountText = args.find(arg => !arg.startsWith('@') && isNumber(arg));
-  if (!amountText) {
-    return m.reply(`(๑•̌ . •̑๑)ˀ̣ˀ̣  ძᥱᑲᥱs ᥱs⍴ᥱᥴі𝖿іᥴᥲr ᥣᥲ ᥴᥲᥒ𝗍іძᥲძ ძᥱ ${m.moneda} 𝗊ᥙᥱ 𝗊ᥙіᥱrᥱs transferir.\n> *ᥱȷᥱm⍴ᥣ᥆:* ${usedPrefix + command} 1000 @usuario`);
-  }
+    if (targetJid === senderJid)
+        return m.reply('❌ No puedes enviarte dinero a ti mismo.')
 
-  const count = Math.min(Number.MAX_SAFE_INTEGER, Math.max(1, parseInt(amountText)));
-  
-  const user = global.db.data.users[senderJid];
-  const type = 'coin';
-  const bankType = 'bank';
+    const amountText = args.find(a => !a.startsWith('@') && isNumber(a))
+    if (!amountText)
+        return m.reply(`❌ Debes especificar la cantidad.\nEj: ${usedPrefix + command} 1000 @usuario`)
 
-  if (user[bankType] < count) {
-    return m.reply(`⚠️ ᥒ᥆ 𝗍іᥱᥒᥱs sᥙ𝖿іᥴіᥱᥒ𝗍ᥱs ${m.moneda} ᥱᥒ ᥱᥣ ᑲᥲᥒᥴ᥆ ⍴ᥲrᥲ rᥱᥲᥣіzᥲr ᥣᥲ transferenciᥲ.`);
-  }
+    const count = Math.max(1, parseInt(amountText))
 
-  if (!(targetJid in global.db.data.users)) {
-    return m.reply(`❌ ᥱᥣ ᥙsᥙᥲrі᥆ ᥒ᥆ sᥱ ᥱᥒᥴᥙᥱᥒ𝗍rᥲ ᥱᥒ mі ᑲᥲsᥱ ძᥱ datos.`);
-  }
+    // Asegurar usuarios
+    if (!global.db.data.users[senderJid])
+        global.db.data.users[senderJid] = { coin: 0, bank: 0 }
 
-  if (targetJid === senderJid) {
-    return m.reply(`❌ ᥒ᥆ ⍴ᥙᥱძᥱs 𝗍rᥲᥒs𝖿ᥱrіr𝗍ᥱ ძіᥒᥱr᥆ ᥲ 𝗍і mіsm᥆.`);
-  }
+    if (!global.db.data.users[targetJid])
+        return m.reply('❌ El usuario no está en mi base de datos.')
 
-  user[bankType] -= count;
-  global.db.data.users[targetJid][type] += count;
+    let sender = global.db.data.users[senderJid]
+    let target = global.db.data.users[targetJid]
 
-  const mentionText = `@${who.split('@')[0]}`;
-  m.reply(`✅ ¡𝗍rᥲᥒsFᥱrᥱᥒᥴіᥲ ᥱ᥊і𝗍᥆sᥲ!\n\n› һᥲs ᥱᥒ᥎іᥲძ᥆ *${count.toLocaleString()} ${m.moneda}* ᥲ ${mentionText}.\n› 𝗍ᥱ 𝗊ᥙᥱძᥲᥒ *${user[bankType].toLocaleString()} ${m.moneda}* en el banco.`, null, { mentions: [who] });
+    sender.coin ??= 0
+    sender.bank ??= 0
+    target.coin ??= 0
+
+    let total = sender.coin + sender.bank
+    if (total < count)
+        return m.reply(`⚠️ No tienes suficiente dinero.\n💸 Billetera: ${sender.coin}\n🏦 Banco: ${sender.bank}`)
+
+    // 🔻 quitar primero billetera, luego banco
+    if (sender.coin >= count) {
+        sender.coin -= count
+    } else {
+        let resto = count - sender.coin
+        sender.coin = 0
+        sender.bank -= resto
+    }
+
+    // 🔺 sumar al receptor (billetera)
+    target.coin += count
+
+    m.reply(
+        `✅ *Transferencia exitosa*\n\n` +
+        `💸 Enviaste *${count.toLocaleString()} ${m.moneda}*\n` +
+        `👤 A: @${targetJid.split('@')[0]}\n\n` +
+        `📊 Tu saldo:\n` +
+        `• Billetera: ${sender.coin.toLocaleString()}\n` +
+        `• Banco: ${sender.bank.toLocaleString()}`,
+        null,
+        { mentions: [targetJid] }
+    )
 }
 
-handler.help = ['pay <cantidad> @usuario'];
-handler.tags = ['rpg'];
-handler.command = ['pay', 'transfer'];
-handler.group = true;
-handler.register = true;
-export default handler;
+handler.help = ['pay <cantidad> @usuario']
+handler.tags = ['rpg']
+handler.command = ['pay', 'transfer']
+handler.group = true
+handler.register = true
+
+export default handler
+
 function isNumber(x) {
-  if (typeof x === 'string') { x = x.trim(); }
-  return !isNaN(x) && x !== '';
+    if (typeof x === 'string') x = x.trim()
+    return !isNaN(x) && x !== ''
 }
