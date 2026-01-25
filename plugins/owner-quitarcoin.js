@@ -27,7 +27,7 @@ let handler = async (m, { conn, text }) => {
         user = global.db.data.users[who] = { coin: 0, bank: 0 }
     }
 
-    let txt = text.replace('@' + who.split`@`[0], '').trim()
+    let txt = text.replace('@' + who.split('@')[0], '').trim()
     let dmt
 
     if (txt.toLowerCase().includes('all') || txt.toLowerCase().includes('todo')) {
@@ -39,22 +39,20 @@ let handler = async (m, { conn, text }) => {
     }
 
     let total = (user.coin || 0) + (user.bank || 0)
-    if (total < dmt) {
+    if (total < dmt)
         return m.reply(`⚠️ No tiene suficiente dinero.\n💸 Billetera: ${user.coin}\n🏦 Banco: ${user.bank}`)
-    }
 
-    // 🔥 quitar primero de la billetera
-    let fromWallet = Math.min(user.coin, dmt)
-    user.coin -= fromWallet
-    dmt -= fromWallet
-
-    // 🔥 si falta, quitar del banco
-    if (dmt > 0) {
-        user.bank -= dmt
+    // 🔻 quitar primero de la billetera
+    if (user.coin >= dmt) {
+        user.coin -= dmt
+    } else {
+        let resto = dmt - user.coin
+        user.coin = 0
+        user.bank -= resto
     }
 
     m.reply(
-        `💸 *Dinero retirado*\n@${who.split('@')[0]} perdió dinero.`,
+        `💸 *Dinero quitado*\n» ${dmt}\n👤 @${who.split('@')[0]}`,
         null,
         { mentions: [who] }
     )
