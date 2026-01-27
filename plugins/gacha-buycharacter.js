@@ -66,7 +66,7 @@ m.reply(
 
 handler.help = ['comprarwaifu <número | nombre>']
 handler.tags = ['waifus']
-handler.command = ['comprarwaifu','buywaifu','buy']
+handler.command = ['comprarwaifu','buychar','buycharacter']
 handler.group = true
 handler.register = true
 
