@@ -1,31 +1,39 @@
 import fs from 'fs'
-import { loadVentas, saveVentas } from '../lib/gacha-group.js'
+import { loadVentas, saveVentas, getVentasInGroup, loadHarem, saveHarem, addOrUpdateClaim } from '../lib/gacha-group.js'
 
 const charPath = './src/database/characters.json'
 
-let handler = async (m, { args }) => {
-if (!args[0]) return m.reply('🌸 *Uso correcto:*\n`buywaifu <número>`')
+let handler = async (m, { conn, args }) => {
+if (!args[0]) return m.reply('✿ Usa: *#comprarwaifu <número | nombre>*')
 
 let ventas = await loadVentas()
 let personajes = JSON.parse(fs.readFileSync(charPath, 'utf-8'))
-let ventasGrupo = ventas.filter(v => v.groupId === m.chat)
 
-let index = Number(args[0]) - 1
-if (isNaN(index) || index < 0) return m.reply('❌ Número inválido.')
+const groupId = m.chat
+const ventasGrupo = getVentasInGroup(ventas, groupId)
 
-if (!ventasGrupo[index]) return m.reply('❌ Ese personaje no está en venta.')
+if (!ventasGrupo.length) return m.reply('✘ No hay waifus en venta en este grupo.')
 
-let venta = ventasGrupo[index]
+let venta
+let input = args.join(' ').trim()
 
-if (venta.vendedor === m.sender) return m.reply('😅 No puedes comprarte a ti mismo.')
+if (!isNaN(input)) {
+let index = Number(input) - 1
+if (!ventasGrupo[index]) return m.reply('✘ Número inválido.')
+venta = ventasGrupo[index]
+} else {
+venta = ventasGrupo.find(v => v.name.toLowerCase() === input.toLowerCase())
+if (!venta) return m.reply('✘ No se encontró ese personaje en venta en este grupo.')
+}
+
+if (venta.vendedor === m.sender) return m.reply('✘ No puedes comprarte a ti mismo.')
 
 let comprador = global.db.data.users[m.sender]
-if (!comprador) return m.reply('⚠️ No estás registrado en la base de datos.')
+if (!comprador) return m.reply('✘ No estás registrado.')
 
 let precio = Number(venta.precio) || 0
-if ((comprador.coin || 0) < precio) return m.reply(
-`💸 *Dinero insuficiente*\nNecesitas: *¥${precio.toLocaleString()} ${m.moneda}*`
-)
+if ((comprador.coin || 0) < precio)
+return m.reply(`✘ Dinero insuficiente.\nNecesitas *¥${precio.toLocaleString()} ${m.moneda}*`)
 
 let vendedor = global.db.data.users[venta.vendedor]
 if (!vendedor) global.db.data.users[venta.vendedor] = { coin: 0 }
@@ -33,23 +41,32 @@ if (!vendedor) global.db.data.users[venta.vendedor] = { coin: 0 }
 comprador.coin -= precio
 vendedor.coin = (vendedor.coin || 0) + precio
 
-ventas = ventas.filter(v => v !== venta)
+let harem = await loadHarem()
+addOrUpdateClaim(harem, groupId, m.sender, venta.id)
+await saveHarem(harem)
+
+ventas = ventas.filter(v => !(v.groupId === groupId && v.id === venta.id))
 await saveVentas(ventas)
+
 await global.db.write()
 
-m.reply(
-`✨ *COMPRA REALIZADA CON ÉXITO* ✨
+let personaje = personajes.find(p => p.id === venta.id)
+let valorOriginal = personaje?.value || 'Desconocido'
 
-🧾 Personaje: *${venta.name}*
-💰 Precio: *¥${precio.toLocaleString()} ${m.moneda}*
-👤 Vendedor: recibió su pago
-🎉 ¡Disfruta tu nuevo personaje!`
+m.reply(
+`◢✿ *COMPRA EXITOSA* ✿◤
+
+✧ Personaje: *${venta.name}*
+✧ Valor original: *${valorOriginal}*
+✧ Precio: *¥${precio.toLocaleString()} ${m.moneda}*
+
+✿ El personaje ahora forma parte de tu harem en este grupo.`
 )
 }
 
-handler.help = ['buywaifu <número>']
+handler.help = ['comprarwaifu <número | nombre>']
 handler.tags = ['waifus']
-handler.command = ['buywaifu','comprarwaifu','buy']
+handler.command = ['comprarwaifu','buywaifu','buy']
 handler.group = true
 handler.register = true
 
