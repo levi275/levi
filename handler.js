@@ -191,6 +191,18 @@ return false
 const isRAdmin = normalizeAdmin(userGroup) === 'superadmin'
 const isAdmin = isRAdmin || normalizeAdmin(userGroup) === 'admin'
 const isBotAdmin = normalizeAdmin(botGroup) === 'admin' || normalizeAdmin(botGroup) === 'superadmin'
+// --- INICIO LÓGICA MUTE OPTIMIZADA ---
+if (m.isGroup && user && user.muto && !isAdmin) {
+    // Si el usuario está silenciado y NO es admin
+    if (isBotAdmin) {
+        // Borramos el mensaje
+        await this.sendMessage(m.chat, { delete: m.key })
+    } else {
+        // Opcional: Si el bot no es admin, no puede borrar, pero evitamos que el bot procese el comando
+    }
+    return // IMPORTANTE: Esto detiene todo el código aquí. No da XP, no lee comandos, ahorra recursos.
+}
+// --- FIN LÓGICA MUTE OPTIMIZADA ---
 const senderNum = String(sender || '').split('@')[0];
 const isROwner = [...global.owner.map(([number]) => number), this.user.jid.split('@')[0]].includes(senderNum);
 const isOwner = isROwner || m.fromMe
