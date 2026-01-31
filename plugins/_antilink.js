@@ -21,7 +21,7 @@ export async function before(m, { conn, isAdmin, isBotAdmin, isOwner, isROwner, 
     let bot = global.db.data.settings[this.user.jid] || {};
     
     // Si eres admin, owner, o el bot mismo, ignoramos (inmunidad)
-    if (isAdmin || isOwner || m.fromMe || isROwner) return;
+    if (isAdmin || m.fromMe) return;
 
     // Verificar si el antilink está activo en este chat
     if (!chat.antiLink) return;
