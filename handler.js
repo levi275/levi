@@ -335,11 +335,23 @@ try {
 if (m) {
 let utente = global.db.data.users[sender]
 if (utente && utente.muto == true) {
-let bang = m.key.id
-let cancellazzione = m.key.participant
-try {
-await this.sendMessage(m.chat, { delete: { remoteJid: m.chat, fromMe: false, id: bang, participant: cancellazzione } })
-} catch (e) { }
+    try {
+        await this.sendMessage(m.chat, { delete: m.key })
+    } catch (e) {
+        try {
+            let participantForDelete = m.key.participant || m.participant || m.sender;
+            await this.sendMessage(m.chat, { 
+                delete: { 
+                    remoteJid: m.chat, 
+                    fromMe: false, 
+                    id: m.key.id, 
+                    participant: participantForDelete 
+                } 
+            });
+        } catch (e2) {
+            console.error('Fallo al eliminar mensaje de usuario mutado:', e2);
+        }
+    }
 }
 if (sender && (user = global.db.data.users[sender])) {
 user.exp += m.exp
