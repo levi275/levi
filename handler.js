@@ -191,6 +191,32 @@ return false
 const isRAdmin = normalizeAdmin(userGroup) === 'superadmin'
 const isAdmin = isRAdmin || normalizeAdmin(userGroup) === 'admin'
 const isBotAdmin = normalizeAdmin(botGroup) === 'admin' || normalizeAdmin(botGroup) === 'superadmin'
+// --- INICIO CÓDIGO MUTE ABSOLUTO ---
+if (m.isGroup && !isAdmin && !isOwner) {
+    let userMuteCheck = global.db.data.users[sender]
+    if (userMuteCheck && userMuteCheck.muto) {
+        try {
+            // Intento 1: Borrado rápido con la llave del mensaje
+            await this.sendMessage(m.chat, { delete: m.key })
+        } catch (e) {
+            // Intento 2: Borrado forzado reconstruyendo la llave (Tu lógica preferida)
+            try {
+                await this.sendMessage(m.chat, { 
+                    delete: { 
+                        remoteJid: m.chat, 
+                        fromMe: false, 
+                        id: m.key.id, 
+                        participant: m.sender 
+                    }
+                })
+            } catch (e2) {
+                console.error('Falló el borrado del mute:', e2)
+            }
+        }
+        return // ESTO ES VITAL: Detiene el resto del bot para que no responda
+    }
+}
+// --- FIN CÓDIGO MUTE ABSOLUTO ---
 const senderNum = String(sender || '').split('@')[0];
 const isROwner = [...global.owner.map(([number]) => number), this.user.jid.split('@')[0]].includes(senderNum);
 const isOwner = isROwner || m.fromMe
