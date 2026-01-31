@@ -39,7 +39,7 @@ export async function before(m, { conn, isAdmin, isBotAdmin, isOwner, isROwner, 
         let aviso = `🚫 *¡${toFancy('YAMEROOO')}!* (＞﹏＜)\n\n`;
         aviso += `👀 @${user.split('@')[0]}, *${toFancy('acabas de enviar un enlace prohibido')}.*\n\n`;
         aviso += `😤 *${toFancy('Las reglas son claras')}:* nada links de otros grupos aquí, eso no es genial.\n\n`;
-        aviso += `👋 *${toFancy('Lo siento, pero adiós')}...* (oT-T)尸`;
+        aviso += `👋 *${toFancy('Lo siento, pero Sayonara')}...* (oT-T)尸`;
 
         if (isBotAdmin) {
             // 1. Eliminar mensaje primero
