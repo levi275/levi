@@ -67,7 +67,7 @@ export async function before(m, { conn, isAdmin, isBotAdmin, isOwner, isROwner, 
             await conn.groupParticipantsUpdate(m.chat, [user], 'remove');
             
         } else {
-            return m.reply(`😓 *Ups...* El antilink está activo, pero necesito ser *Admin* para poder sacar a la gente que manda spam.`);
+            return m.reply(`😓 *Ups...* El antilink está activo, pero necesito ser *Admin* para poder sacar a la gente que manda links.`);
         }
         return !0;
     }
