@@ -55,7 +55,7 @@ export async function before(m, { conn, isAdmin, isBotAdmin, isOwner, isROwner, 
                     externalAdReply: {
                         title: `⚡ 𝗔𝗡𝗧𝗜𝗟𝗜𝗡𝗞 𝗔𝗖𝗧𝗜𝗩𝗢 ⚡`, // Título llamativo
                         body: '¡NO ENVIES LINKS AQUI!', // Cuerpo simple
-                        thumbnailUrl: 'https://i.postimg.cc/65p7spwB/image.jpg', // Foto Ruby
+                        thumbnailUrl: 'https://i.pinimg.com/736x/ac/12/6f/ac126f05f2040dd944a4a9d653f84206.jpg', // Foto Ruby
                         sourceUrl: 'https://i.pinimg.com/736x/ac/12/6f/ac126f05f2040dd944a4a9d653f84206.jpg', 
                         mediaType: 1,
                         renderLargerThumbnail: false // FALSE = Icono pequeño a la derecha
