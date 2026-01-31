@@ -191,18 +191,6 @@ return false
 const isRAdmin = normalizeAdmin(userGroup) === 'superadmin'
 const isAdmin = isRAdmin || normalizeAdmin(userGroup) === 'admin'
 const isBotAdmin = normalizeAdmin(botGroup) === 'admin' || normalizeAdmin(botGroup) === 'superadmin'
-// --- INICIO LÓGICA MUTE OPTIMIZADA ---
-if (m.isGroup && user && user.muto && !isAdmin) {
-    // Si el usuario está silenciado y NO es admin
-    if (isBotAdmin) {
-        // Borramos el mensaje
-        await this.sendMessage(m.chat, { delete: m.key })
-    } else {
-        // Opcional: Si el bot no es admin, no puede borrar, pero evitamos que el bot procese el comando
-    }
-    return // IMPORTANTE: Esto detiene todo el código aquí. No da XP, no lee comandos, ahorra recursos.
-}
-// --- FIN LÓGICA MUTE OPTIMIZADA ---
 const senderNum = String(sender || '').split('@')[0];
 const isROwner = [...global.owner.map(([number]) => number), this.user.jid.split('@')[0]].includes(senderNum);
 const isOwner = isROwner || m.fromMe
@@ -345,24 +333,37 @@ if (quequeIndex !== -1) this.msgqueque.splice(quequeIndex, 1)
 let user, stats = global.db?.data?.stats || {}
 try {
 if (m) {
+// Busca esto dentro de tu handler.js y reemplázalo:
 let utente = global.db.data.users[sender]
-if (utente && utente.muto == true) {
-    try {
-        await this.sendMessage(m.chat, { delete: m.key })
-    } catch (e) {
+if (utente && utente.muto && !m.isGroup && !isROwner) {
+    // Si está muteado y habla en privado con el bot (opcional)
+    return 
+}
+
+// Bloque de eliminación para Grupos
+if (m.isGroup && utente && utente.muto) {
+    // Si es admin, el mute no debería afectarle (seguridad extra)
+    if (isAdmin) {
+        utente.muto = false; // Auto-desmutear si se volvió admin
+    } else {
         try {
-            let participantForDelete = m.key.participant || m.participant || m.sender;
+            // Lógica de borrado robusta basada en tu ejemplo
+            // Intentamos borrar el mensaje usando la clave exacta del mensaje entrante
             await this.sendMessage(m.chat, { 
                 delete: { 
                     remoteJid: m.chat, 
                     fromMe: false, 
                     id: m.key.id, 
-                    participant: participantForDelete 
-                } 
+                    participant: m.key.participant 
+                }
             });
-        } catch (e2) {
-            console.error('Fallo al eliminar mensaje de usuario mutado:', e2);
+        } catch (e) {
+            console.error('Error al intentar borrar mensaje de usuario muteado:', e);
+            // Fallback: Intento simple
+            try { await this.sendMessage(m.chat, { delete: m.key }) } catch (e2) {}
         }
+        // No procesar más comandos si está muteado
+        return 
     }
 }
 if (sender && (user = global.db.data.users[sender])) {
