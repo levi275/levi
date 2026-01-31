@@ -12,7 +12,7 @@ let linkRegex1 = /whatsapp.com\/channel\/([0-9A-Za-z]{20,24})/i;
 
 export async function before(m, { conn, isAdmin, isBotAdmin, isOwner, isROwner, participants }) {
 if (!m.isGroup) return;
-if (isAdmin || m.fromMe) return;
+if (isAdmin || isOwner || m.fromMe || isROwner) return;
 
 let chat = global.db.data.chats[m.chat];
 
