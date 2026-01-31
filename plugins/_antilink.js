@@ -70,7 +70,7 @@ export async function before(m, { conn, isAdmin, isBotAdmin, isOwner, isROwner, 
                         thumbnailUrl: 'https://cdn-icons-png.flaticon.com/512/564/564619.png', // Icono de escudo rojo
                         sourceUrl: '', // Puedes poner tu canal aquí si quieres
                         mediaType: 1,
-                        renderLargerThumbnail: true
+                        renderLargerThumbnail: false
                     }
                 }
             }, { quoted: null }); // quoted null para que se vea más limpio, o pon 'm' para citar al fantasma
