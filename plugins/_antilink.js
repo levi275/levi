@@ -36,9 +36,9 @@ export async function before(m, { conn, isAdmin, isBotAdmin, isOwner, isROwner, 
         
         // Mensaje fluido, sin etiquetas "Status:" ni "Razón:"
         // Directo al grano: Te vi -> Rompiste las reglas -> Te vas.
-        let aviso = `🛑 *¡${toFancy('ALTO AHÍ')}!* ✋\n\n`;
+        let aviso = `🚫 *¡${toFancy('YAMEROOO')}!* (＞﹏＜)\n\n`;
         aviso += `👀 @${user.split('@')[0]}, *${toFancy('acabas de enviar un enlace prohibido')}.*\n\n`;
-        aviso += `😤 *${toFancy('Las reglas son claras')}:* nada de spam ni links de otros grupos aquí, eso no es genial.\n\n`;
+        aviso += `😤 *${toFancy('Las reglas son claras')}:* nada links de otros grupos aquí, eso no es genial.\n\n`;
         aviso += `👋 *${toFancy('Lo siento, pero adiós')}...* (oT-T)尸`;
 
         if (isBotAdmin) {
@@ -54,7 +54,7 @@ export async function before(m, { conn, isAdmin, isBotAdmin, isOwner, isROwner, 
                     isForwarded: true,
                     externalAdReply: {
                         title: `⚡ 𝗔𝗡𝗧𝗜𝗟𝗜𝗡𝗞 𝗔𝗖𝗧𝗜𝗩𝗢 ⚡`, // Título llamativo
-                        body: 'El sistema de seguridad te ha detectado.', // Cuerpo simple
+                        body: '¡NO ENVIES LINKS AQUI!', // Cuerpo simple
                         thumbnailUrl: 'https://i.pinimg.com/736x/f6/01/52/f601529dfc3e5dfd2946c764e525a74e.jpg', // Foto Ruby
                         sourceUrl: 'https://whatsapp.com/channel/0029Va4QjTC77qVYjqZq3r1', 
                         mediaType: 1,
