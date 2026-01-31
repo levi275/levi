@@ -2,12 +2,6 @@ import fetch from 'node-fetch'
 
 let handler = async (m, { conn, command, text, args, participants, isBotAdmin, isAdmin, isOwner }) => {
     
-    // Validar si es grupo
-    if (!m.isGroup) return m.reply('Este comando solo se puede usar en grupos.')
-    
-    // Validar permisos
-    if (!isBotAdmin) return m.reply('¡Necesito ser Administrador para poder silenciar usuarios! 👮‍♂️')
-    if (!isAdmin && !isOwner) return m.reply('Solo los administradores pueden usar este comando. ✋')
 
     // Identificar al usuario
     let who
@@ -26,7 +20,6 @@ let handler = async (m, { conn, command, text, args, participants, isBotAdmin, i
     const ownerBot = global.owner[0][0] + '@s.whatsapp.net'
     
     if (who === conn.user.jid) return m.reply('No puedo mutearme a mí mismo. 🤖')
-    if (who === ownerBot) return m.reply('No puedo mutear a mi creador. 👑')
     
     // Comprobar si el objetivo es admin (Opcional: Si quieres que admins se muteen entre sí, borra esto)
     let groupMetadata = await conn.groupMetadata(m.chat)
