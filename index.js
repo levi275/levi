@@ -57,7 +57,6 @@ cfonts.say(randomBanner, {
     gradient: randomGradient(),
     transition: true
 })
-
 cfonts.say('Ruby Hoshino Bot', { font: 'chrome', align: 'center', gradient: ['#ff4fcb', '#ff77ff'], transition: true, env: 'node' })
 cfonts.say('Developed By: Dioneibi-rip', { font: 'console', align: 'center', colors: ['blueBright'] })
 console.log(chalk.magentaBright('═════════════════════════════════════════════════════════════════════'))
