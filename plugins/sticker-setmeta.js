@@ -1,80 +1,93 @@
-// ⁱ𝔇ĕ𝐬†𝓻⊙γ𒆜 -  >> https://github.com/The-King-Destroy
+// ⁱ𝔇ĕ𝐬†𝓻⊙γ𒆜 - Mejorado por tu Asistente de IA
+// >> https://github.com/The-King-Destroy
 
 let handler = async (m, { text, usedPrefix, command }) => {
     const userId = m.sender;
+    const user = global.db.data.users[userId] || {};
+
+    // Emojis y decoración Otaku/Aesthetic
+    const icons = {
+        success: '✧⁠*⁠。',
+        error: '(⁠ ⁠･ั⁠﹏⁠･ั⁠)',
+        alert: '!!',
+        write: '✎⁠',
+        trash: '🗑️'
+    };
 
     if (command === 'setmeta') {
-        const packParts = text.split(/[\u2022|]/).map(part => part.trim());
-        if (packParts.length < 2) {
-            return m.reply(`${emoji} Por favor, escribe el pack y el autor que deseas usar por defecto para tus stickers.\n> Ejemplo: *${usedPrefix + command} RubyBot-MD • By Dioneibi*`);
+        // Si no hay texto, mostramos instrucciones claras y bonitas
+        if (!text) {
+            return m.reply(`
+╭━━━〔 *STICKER METADATA* 〕━━━⬣
+┃ ${icons.alert} *Instrucciones:*
+┃ Configura tu marca personal en los stickers.
+┃
+┃ ${icons.write} *Modos de uso:*
+┃ ❶ *Pack y Autor:*
+┃ ➜ ${usedPrefix}setmeta PackName • AuthorName
+┃
+┃ ❷ *Solo Pack:*
+┃ ➜ ${usedPrefix}setmeta SoloElPack
+┃
+┃ ❸ *Solo Autor:*
+┃ ➜ ${usedPrefix}setmeta • SoloElAutor
+╰━━━━━━━━━━━━━━━━━━━━━━⬣
+`.trim());
         }
 
-        const packText1 = packParts[0];
-        const packText2 = packParts[1];
+        // Expresión regular para dividir por "•" o "|"
+        let [packInput, authorInput] = text.split(/[\u2022|]/).map(v => v ? v.trim() : '');
 
-        if (!global.db.data.users[userId]) {
-            global.db.data.users[userId] = {};
+        // Lógica de "Merge" (Mezcla inteligente)
+        // Si el usuario pone "• Autor", packInput será "" (vacío).
+        // Si packInput está vacío, mantenemos el que ya tenía antes, o usamos uno por defecto.
+        let newPack = packInput || user.text1 || 'Sticker';
+        let newAuthor = authorInput || user.text2 || '';
+
+        // Caso especial: Si el usuario NO usó separador (solo texto), asumimos que es el Pack
+        // pero si ya tenía autor, lo conservamos.
+        if (!text.includes('•') && !text.includes('|')) {
+             newPack = text.trim();
+             newAuthor = user.text2 || ''; // Conservar autor previo si existe
         }
 
-        const packstickers = global.db.data.users[userId];
-
-        if (packstickers.text1 || packstickers.text2) {
-            return m.reply(`${emoji2} Ya tienes un pack de stickers establecida.\n> Usa el comando *${usedPrefix}delmeta* para eliminarla antes de establecer una nueva.`);
-        }
-
-        packstickers.text1 = packText1;
-        packstickers.text2 = packText2;
+        // Guardamos en la base de datos
+        if (!global.db.data.users[userId]) global.db.data.users[userId] = {};
+        global.db.data.users[userId].text1 = newPack;
+        global.db.data.users[userId].text2 = newAuthor;
 
         await global.db.write();
 
-        return m.reply(`${emoji4} Se actualizo el pack y autor por defecto para tus stickers.`);
+        return m.reply(`
+╭━━━〔 *CONFIGURADO* 〕━━━⬣
+┃ ${icons.success} ¡Sugoi! Tus datos se han guardado.
+┃
+┃ 📦 *Pack:* 「 ${newPack} 」
+┃ 👤 *Autor:* 「 ${newAuthor} 」
+╰━━━━━━━━━━━━━━━━━━━━⬣
+`.trim());
     }
 
     if (command === 'delmeta') {
-        if (!global.db.data.users[userId] || (!global.db.data.users[userId].text1 && !global.db.data.users[userId].text2)) {
-            return m.reply(`${emoji3} Este usuario no a establecido un pack de stickers.`);
+        // Verificamos si tiene datos
+        if (!user.text1 && !user.text2) {
+            return m.reply(`${icons.error} Etto... No tienes ninguna configuración guardada para borrar.`);
         }
 
-        const packstickers = global.db.data.users[userId];
-        delete packstickers.text1;
-        delete packstickers.text2;
+        // Borramos
+        delete global.db.data.users[userId].text1;
+        delete global.db.data.users[userId].text2;
 
         await global.db.write();
 
-        return m.reply(`${emoji} Se restablecio el pack y autor por defecto para tus stickers.`);
+        return m.reply(`${icons.trash} *Sayonara!* Se han eliminado tus datos de sticker por defecto.`);
     }
 };
 
-handler.help = ['setmeta', 'delmeta']
-handler.tags = ['tools']
-handler.command = ['setmeta', 'delmeta']
-handler.register = true
-handler.group = true
+handler.help = ['setmeta', 'delmeta'];
+handler.tags = ['tools'];
+handler.command = ['setmeta', 'delmeta'];
+handler.register = true;
+// handler.group = true // Opcional: si quieres que funcione en privado, comenta esto.
 
 export default handler;
-
-/*const handler = async (m, { text, usedPrefix, command }) => {
-try {
-const metaParts = text.split(/\s/).map(part => part.trim())
-if (metaParts.length < 2) {
-return m.reply(`🚀 Escribe el pack y el autor que deseas usar por defecto para tus stickers\n> Ejemplo: *${usedPrefix + command} Star Author*`)
-}
-const packName = metaParts[0]
-const authorName = metaParts[1]
-if (!global.db.data.users[m.sender]) {
-global.db.data.users[m.sender] = {}
-}
-const { packstickers, packstickers2 } = global.db.data.users[m.sender]
-packstickers = packName
-packstickers2 = authorName
-await global.db.write()
-return m.reply(`✨ ¡Tus metadatos de stickers han sido actualizados con éxito! Pack: ${packName} | Autor: ${authorName}`)
-} catch (e) {
-await m.reply(`🚨 Ocurrió un problema al actualizar los ajustes: ${e}`)
-}}
-
-handler.help = ['setmeta']
-handler.tags = ['tools']
-handler.command = ['setmeta']
-
-export default handler*/
