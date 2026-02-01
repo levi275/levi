@@ -6,9 +6,9 @@ import { webp2png } from '../lib/webp2mp4.js'
 let handler=async(m,{conn,args})=>{
 let stiker=false
 let userId=m.sender
-let packstickers=global.db.data.users[userId]||{}
-let texto1=packstickers.text1||global.packsticker
-let texto2=packstickers.text2||global.packsticker2
+let packstickers = global.db.data.users[userId] || {}
+let texto1 = (packstickers.text1 !== undefined) ? packstickers.text1 : global.packsticker
+let texto2 = (packstickers.text2 !== undefined) ? packstickers.text2 : global.packsticker2
 
 async function safeDownload(q){
 return await Promise.race([
