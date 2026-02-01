@@ -117,7 +117,7 @@ const rl = readline.createInterface({ input: process.stdin, output: process.stdo
 const question = (texto) => new Promise((resolver) => rl.question(texto, resolver))
 let opcion
 if (methodCodeQR) { opcion = '1' }
-if (!methodCodeQR && !methodCode && !fs.existsSync(`./${Rubysessions}/creds.json`)) {
+if (!methodCodeQR && !methodCode && !existsSync(`./${Rubysessions}/creds.json`)) {
 do {
 opcion = await question(colores('⌨ Seleccione una opción:\n') + opcionQR('1. Con código QR\n') + opcionTexto('2. Con código de texto de 8 dígitos\n--> '))
 if (!/^[1-2]$/.test(opcion)) { console.log(chalk.bold.redBright(`✦ No se permiten numeros que no sean 1 o 2, tampoco letras o símbolos especiales.`)) }
@@ -140,7 +140,7 @@ defaultQueryTimeoutMs: undefined,
 version,
 }
 global.conn = makeWASocket(connectionOptions);
-if (!fs.existsSync(`./${Rubysessions}/creds.json`)) {
+if (!existsSync(`./${Rubysessions}/creds.json`)) {
 if (opcion === '2' || methodCode) {
 opcion = '2'
 if (!conn.authState.creds.registered) {
