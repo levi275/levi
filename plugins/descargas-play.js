@@ -70,8 +70,8 @@ const handler = async (m, { conn, text, command }) => {
     await conn.reply(m.chat, infoMessage, m, {
       contextInfo: {
         externalAdReply: {
-          title: "Bot descarga", // Pon aquí tu variable botname
-          body: "Versión optimizada", // Pon aquí tu variable dev
+          title: botname,
+          body: dev, // Pon aquí tu variable dev
           mediaType: 1,
           thumbnail: thumbBuffer, 
           renderLargerThumbnail: true,
