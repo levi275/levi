@@ -1,5 +1,7 @@
 import { ytmp3, ytmp4 } from "../lib/youtubedl.js"
 import yts from "yt-search"
+import fs from "fs"
+import { exec } from "child_process"
 
 const youtubeRegexID = /(?:youtu\.be\/|youtube\.com\/(?:watch\?v=|embed\/))([a-zA-Z0-9_-]{11})/
 
@@ -11,37 +13,40 @@ const handler = async (m, { conn, text, command }) => {
 
     await conn.sendMessage(m.chat, { react: { text: "⏳", key: m.key }})
 
-    // 1. BÚSQUEDA OPTIMIZADA
+    // ==========================================
+    // 1. BÚSQUEDA OPTIMIZADA (Una sola vez)
+    // ==========================================
     let searchResult = null
     const match = text.match(youtubeRegexID)
 
     if (match) {
-        // Si es un link, buscamos directo por ID (más rápido)
-        const videoId = match[1]
+        // Búsqueda rápida por ID
         try {
-            searchResult = await yts({ videoId: videoId })
+            searchResult = await yts({ videoId: match[1] })
         } catch {
-            // Fallback si falla la búsqueda por ID
+            // Fallback
             const s = await yts(text)
             searchResult = s.all[0]
         }
     } else {
-        // Si es texto, buscamos normal
+        // Búsqueda por texto
         const s = await yts(text)
         searchResult = s.all.find(v => v.type === 'video') || s.all[0]
     }
 
     if (!searchResult) {
       await conn.sendMessage(m.chat, { react: { text: "❌", key: m.key }})
-      return m.reply("⚠︎ No encontré resultados, intenta con otro nombre o link.")
+      return m.reply("⚠︎ No encontré resultados.")
     }
 
-    // Extraer datos una sola vez
+    // Extraemos datos para reusarlos
     const { title, thumbnail, timestamp, views, ago, url, author } = searchResult
     const vistas = formatViews(views)
     const canal = author?.name || "Desconocido"
 
-    // 2. ENVIAR INFORMACIÓN
+    // ==========================================
+    // 2. ENVIAR FICHA TÉCNICA
+    // ==========================================
     const infoMessage = `
 ㅤ۫ ㅤ  🦭 ୧  ˚ \`𝒅𝒆𝒔𝒄𝒂𝒓𝒈𝒂 𝒆𝒏 𝒄𝒂𝒎𝒊𝒏𝒐\` !  ୨ 𖹭  ִֶָ  
 
@@ -56,19 +61,17 @@ const handler = async (m, { conn, text, command }) => {
 > 𐙚 🪵 ｡ Preparando tu descarga... ˙𐙚
     `.trim()
 
-    // Descarga de miniatura (Buffer)
+    // Descargar miniatura (Buffer)
     let thumbBuffer = null
     try {
         thumbBuffer = (await conn.getFile(thumbnail))?.data
-    } catch (e) { 
-        console.log("Error descargando thumbnail, usando URL") 
-    }
+    } catch (e) { console.log("Error thumb") }
 
     await conn.reply(m.chat, infoMessage, m, {
       contextInfo: {
         externalAdReply: {
-          title: "Bot Name", // Cambia esto por tu variable botname
-          body: "Descargas", // Cambia esto por tu variable dev
+          title: "Bot descarga", // Pon aquí tu variable botname
+          body: "Versión optimizada", // Pon aquí tu variable dev
           mediaType: 1,
           thumbnail: thumbBuffer, 
           renderLargerThumbnail: true,
@@ -78,17 +81,15 @@ const handler = async (m, { conn, text, command }) => {
       }
     })
 
-    // 3. DESCARGA REAL (Usando el título ya obtenido para ahorrar tiempo)
-    
-    // --> MODO AUDIO
+    // ==========================================
+    // 3. DESCARGA Y PROCESAMIENTO
+    // ==========================================
+
+    // ---> AUDIO (Rápido, link directo suele funcionar bien para audio)
     if (["play", "yta", "ytmp3", "playaudio"].includes(command)) {
       try {
-        // PASAMOS 'title' AQUÍ PARA EVITAR LA SEGUNDA BÚSQUEDA
-        const r = await ytmp3(url, title) 
-        
-        if (!r?.status || !r?.download?.url) {
-            throw new Error("Link no generado")
-        }
+        const r = await ytmp3(url, title) // Usamos el título ya buscado
+        if (!r?.download?.url) throw new Error("Link caído")
 
         await conn.sendMessage(m.chat, {
             audio: { url: r.download.url },
@@ -98,43 +99,57 @@ const handler = async (m, { conn, text, command }) => {
         }, { quoted: m })
 
         await conn.sendMessage(m.chat, { react: { text: "✅", key: m.key }})
-
       } catch (e) {
         console.error(e)
         await conn.sendMessage(m.chat, { react: { text: "❌", key: m.key }})
-        return conn.reply(m.chat, "✦ No se pudo descargar el audio. Intenta de nuevo.", m)
+        m.reply("Error al descargar audio.")
       }
     }
 
-    // --> MODO VIDEO
+    // ---> VIDEO (Optimizado con FFmpeg rápido)
     else if (["play2", "ytv", "ytmp4", "mp4"].includes(command)) {
       try {
-        // PASAMOS 'title' AQUÍ PARA EVITAR LA SEGUNDA BÚSQUEDA
-        const r = await ytmp4(url, title)
+        const r = await ytmp4(url, title) // Usamos el título ya buscado
+        if (!r?.download?.url) throw new Error("Link caído")
 
-        if (!r?.status || !r?.download?.url) {
-             throw new Error("Link no generado")
-        }
+        const videoUrl = r.download.url
+        const fileName = `${Date.now()}.mp4`
+
+        // TRUCO DE VELOCIDAD:
+        // Usamos -c:v copy (no recodifica video) y -c:a aac (asegura audio compatible)
+        // Esto arregla el video "dañado" en segundos en lugar de minutos.
+        await new Promise((resolve, reject) => {
+            // Descarga directa con ffmpeg es más segura para headers dañados
+            exec(`ffmpeg -i "${videoUrl}" -c:v copy -c:a aac -movflags +faststart ${fileName}`, (err) => {
+                if (err) reject(err)
+                else resolve()
+            })
+        })
+
+        // Verificamos que se creó el archivo
+        if (!fs.existsSync(fileName)) throw new Error("Error en FFmpeg")
 
         await conn.sendMessage(m.chat, {
-            video: { url: r.download.url },
-            fileName: `${r.metadata.title}.mp4`,
+            video: fs.readFileSync(fileName),
+            fileName: `${title}.mp4`,
             caption: `${title}`,
             mimetype: "video/mp4"
         }, { quoted: m })
 
+        // Limpieza
+        fs.unlinkSync(fileName)
         await conn.sendMessage(m.chat, { react: { text: "✅", key: m.key }})
 
       } catch (e) {
         console.error(e)
         await conn.sendMessage(m.chat, { react: { text: "❌", key: m.key }})
-        return conn.reply(m.chat, "✦ No se pudo descargar el video. Intenta de nuevo.", m)
+        return conn.reply(m.chat, "✦ No se pudo procesar el video. Intenta más tarde.", m)
       }
     }
 
   } catch (error) {
-    await conn.sendMessage(m.chat, { react: { text: "❌", key: m.key }})
     console.error(error)
+    await conn.sendMessage(m.chat, { react: { text: "❌", key: m.key }})
     return m.reply(`⚠︎ Error inesperado.`)
   }
 }
