@@ -1,41 +1,60 @@
-process.env['NODE_TLS_REJECT_UNAUTHORIZED'] = '1'
+process.env['NODE_TLS_REJECT_UNAUTHORIZED'] = '0'
 import './settings.js'
-import { setupMaster, fork } from 'cluster'
-import { watchFile, unwatchFile, readdirSync, statSync, unlinkSync, existsSync, mkdirSync, readFileSync, rmSync, watch } from 'fs'
-import cfonts from 'cfonts'
 import { createRequire } from 'module'
 import { fileURLToPath, pathToFileURL } from 'url'
 import { platform } from 'process'
+import { watchFile, unwatchFile, readdirSync, statSync, unlinkSync, existsSync, mkdirSync, readFileSync, rmSync, watch } from 'fs'
 import * as ws from 'ws'
+import cfonts from 'cfonts'
+import path, { join, dirname } from 'path'
 import yargs from 'yargs'
 import { spawn } from 'child_process'
 import lodash from 'lodash'
-import { RubyJadiBot } from './plugins/jadibot-serbot.js'
 import chalk from 'chalk'
 import syntaxerror from 'syntax-error'
 import { tmpdir } from 'os'
 import { format } from 'util'
 import boxen from 'boxen'
 import pino from 'pino'
-import path, { join, dirname } from 'path'
 import { Boom } from '@hapi/boom'
 import { makeWASocket, protoType, serialize } from './lib/simple.js'
 import { Low, JSONFile } from 'lowdb'
-import { mongoDB, mongoDBV2 } from './lib/mongoDB.js'
+import { mongoDB, mongoDBV2 } from './lib/mongoDB.js' // Asegúrate de tener este archivo en lib
 import store from './lib/store.js'
+import NodeCache from 'node-cache'
+import readline, { createInterface } from 'readline'
+import { RubyJadiBot } from './plugins/jadibot-serbot.js'
+import { EventEmitter } from 'events'
+
+// --- OPTIMIZACIÓN 1: Aumentar listeners para 40 bots ---
+EventEmitter.defaultMaxListeners = 100 
+
 const { proto } = (await import('@whiskeysockets/baileys')).default
+const { DisconnectReason, useMultiFileAuthState, MessageRetryMap, fetchLatestBaileysVersion, makeCacheableSignalKeyStore, jidNormalizedUser } = await import('@whiskeysockets/baileys')
 import pkg from 'google-libphonenumber'
 const { PhoneNumberUtil } = pkg
 const phoneUtil = PhoneNumberUtil.getInstance()
-const { DisconnectReason, useMultiFileAuthState, MessageRetryMap, fetchLatestBaileysVersion, makeCacheableSignalKeyStore, jidNormalizedUser } = await import('@whiskeysockets/baileys')
-import readline, { createInterface } from 'readline'
-import NodeCache from 'node-cache'
 const { CONNECTING } = ws
 const { chain } = lodash
-const PORT = process.env.PORT || process.env.SERVER_PORT || 3000
-let { say } = cfonts
-console.log(chalk.red(`
+global.__filename = function filename(pathURL = import.meta.url, rmPrefix = platform !== 'win32') { return rmPrefix ? /file:\/\/\//.test(pathURL) ? fileURLToPath(pathURL) : pathURL : pathToFileURL(pathURL).toString(); };
+global.__dirname = function dirname(pathURL) { return path.dirname(global.__filename(pathURL, true)) };
+global.__require = function require(dir = import.meta.url) { return createRequire(dir) }
+global.timestamp = {start: new Date}
+const __dirname = global.__dirname(import.meta.url)
+global.opts = new Object(yargs(process.argv.slice(2)).exitProcess(false).parse())
+global.__bannerShown = false
+global.prefix = new RegExp('^[#/!.]')
 
+// --- OPTIMIZACIÓN 2: Selección Inteligente de Base de Datos ---
+// Si el usuario pone una URL en config, usa Mongo. Si no, usa JSON local (Seguro para bots públicos).
+global.db = new Low(
+  /https?:\/\//.test(opts['db'] || '') ? 
+  new mongoDB(opts['db']) : 
+  new JSONFile('./src/database/database.json')
+)
+
+global.DATABASE = global.db
+const bannerASCII = chalk.bold.hex('#FF0080')(`
 ⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⢀⣠⣤⣾⣿⡿⠿⠟⣿⣶⣶⣶⣤⣤⣀⣀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀
 ⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⣰⡿⠟⣛⣉⣧⣶⠟⢋⣿⣿⣿⣿⣿⣿⣿⣿⣿⣷⣦⣄⡀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀
 ⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⢀⣼⣿⠔⣛⣉⡙⢻⣇⠸⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⡟⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀
@@ -73,224 +92,299 @@ console.log(chalk.red(`
 ⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠉⠘⣿⣿⣿⣿⣿⣿⣿⣿⡿⢻⣿⣯⣿⣿⣿⣿⣿⡿⠟⠋⠁⠀⠀⠀⣠⣴⣿⣶⣾⣿⣿⣿⣿⣿⣿⣿⣿⣿⠁⠀⠀⠀⠀⠀⠀⠀
 ⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⣧⣿⣿⣿⣿⣿⣿⣿⣧⣾⣿⣿⣿⣿⣿⡿⠛⠉⠀⠀⠀⠀⣠⣴⣿⣿⡿⠿⠿⠯⢹⣿⣿⣿⣿⣿⣿⣿⡟⠀⠀⠀⠀⠀⠀⠀⠀
 ⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⢸⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⡿⠋⠁⠀⠀⠀⠀⣀⣴⣾⣿⣿⣿⡟⠀⠀⠀⠀⠀⠻⣿⣿⣿⣿⡿⠟⠁⠀⠀⠀
-`))
-cfonts.say('Ruby Hoshino Bot', { font: 'chrome', align: 'center', gradient: ['#ff4fcb', '#ff77ff'], transition: true, env: 'node' })
-cfonts.say('Developed By: Dioneibi-rip', { font: 'console', align: 'center', colors: ['blueBright'] })
-console.log(chalk.magentaBright('═════════════════════════════════════════════════════════════════════'))
-console.log(chalk.whiteBright('            🚀 Bienvenido al núcleo de la Bot Ruby Hoshino 🚀'))
-console.log(chalk.whiteBright('     Prepara tu sesión... Ruby no puede esperar para servirte querido usuario ✨'))
-console.log(chalk.magentaBright('═════════════════════════════════════════════════════════════════════\n'))
-protoType()
-serialize()
-global.__filename = function filename(pathURL = import.meta.url, rmPrefix = platform !== 'win32') { return rmPrefix ? /file:\/\/\//.test(pathURL) ? fileURLToPath(pathURL) : pathURL : pathToFileURL(pathURL).toString(); };
-global.__dirname = function dirname(pathURL) { return path.dirname(global.__filename(pathURL, true)) };
-global.__require = function require(dir = import.meta.url) { return createRequire(dir) }
-global.API = (name, path = '/', query = {}, apikeyqueryname) => (name in global.APIs ? global.APIs[name] : name) + path + (query || apikeyqueryname ? '?' + new URLSearchParams(Object.entries({...query, ...(apikeyqueryname ? {[apikeyqueryname]: global.APIKeys[name in global.APIs ? global.APIs[name] : name]} : {})})) : '');
-global.timestamp = {start: new Date}
-const __dirname = global.__dirname(import.meta.url)
-global.opts = new Object(yargs(process.argv.slice(2)).exitProcess(false).parse())
-global.prefix = new RegExp('^[#/!.]')
-global.db = new Low(/https?:\/\//.test(opts['db'] || '') ? new cloudDBAdapter(opts['db']) : new JSONFile('./src/database/database.json'))
-global.DATABASE = global.db
+`)
+const showBanner = () => {
+    if (global.__bannerShown) return
+    global.__bannerShown = true
+    console.clear()
+    console.log(bannerASCII)
+    console.log(chalk.bold.hex('#FF66C4')('—🍦ܶ߭ຼ ᪲  ۪  ︵ “Cada comienzo es una nueva oportunidad. Gracias por elegirme, daré lo mejor de mí para ayudarte.” ︵ ࣪'))
+    cfonts.say('Ruby hoshino Bot', { font: 'chrome', align: 'center', gradient: ['#ff4fcb', '#ff77ff'], transition: true, env: 'node' })
+    console.log(boxen(chalk.bold.hex('#9900ff')('୨୧ㅤ۫ Proyecto iniciado con Exito. .ᐟ'), { padding: 1, margin: 1, borderStyle: 'double', borderColor: 'magenta', float: 'center' }))
+}
+showBanner()
 global.loadDatabase = async function loadDatabase() {
-if (global.db.READ) { return new Promise((resolve) => setInterval(async function() { if (!global.db.READ) { clearInterval(this); resolve(global.db.data == null ? global.loadDatabase() : global.db.data); } }, 1 * 1000)) }
-if (global.db.data !== null) return
-global.db.READ = true
-await global.db.read().catch(console.error)
-global.db.READ = null
-global.db.data = { users: {}, chats: {}, stats: {}, msgs: {}, sticker: {}, settings: {}, ...(global.db.data || {}), }
-global.db.chain = chain(global.db.data)
+    if (global.db.READ) { return new Promise((resolve) => setInterval(async function() { if (!global.db.READ) { clearInterval(this); resolve(global.db.data == null ? global.loadDatabase() : global.db.data); } }, 1 * 1000)) }
+    if (global.db.data !== null) return
+    global.db.READ = true
+    await global.db.read().catch(console.error)
+    global.db.READ = null
+    global.db.data = { users: {}, chats: {}, stats: {}, msgs: {}, sticker: {}, settings: {}, ...(global.db.data || {}), }
+    global.db.chain = chain(global.db.data)
 }
 loadDatabase()
-const {state, saveState, saveCreds} = await useMultiFileAuthState(global.Rubysessions)
+protoType()
+serialize()
+const { state, saveState, saveCreds } = await useMultiFileAuthState(global.Rubysessions)
 const msgRetryCounterMap = (MessageRetryMap) => { };
 const msgRetryCounterCache = new NodeCache()
-const {version} = await fetchLatestBaileysVersion();
+const { version } = await fetchLatestBaileysVersion();
 let phoneNumber = global.botNumber
 const methodCodeQR = process.argv.includes("qr")
 const methodCode = !!phoneNumber || process.argv.includes("code")
 const MethodMobile = process.argv.includes("mobile")
-const colores = chalk.bgMagenta.white
-const opcionQR = chalk.bold.green
-const opcionTexto = chalk.bold.cyan
 const rl = readline.createInterface({ input: process.stdin, output: process.stdout })
-const question = (texto) => new Promise((resolver) => rl.question(texto, resolver))
+const question = (texto) => { rl.clearLine(rl.input, 0); return new Promise((resolver) => { rl.question(texto, (respuesta) => { rl.clearLine(rl.input, 0); resolver(respuesta.trim()) }) }) }
 let opcion
+
 if (methodCodeQR) { opcion = '1' }
 if (!methodCodeQR && !methodCode && !existsSync(`./${Rubysessions}/creds.json`)) {
-do {
-opcion = await question(colores('⌨ Seleccione una opción:\n') + opcionQR('1. Con código QR\n') + opcionTexto('2. Con código de texto de 8 dígitos\n--> '))
-if (!/^[1-2]$/.test(opcion)) { console.log(chalk.bold.redBright(`✦ No se permiten numeros que no sean 1 o 2, tampoco letras o símbolos especiales.`)) }
-} while (opcion !== '1' && opcion !== '2' || fs.existsSync(`./${Rubysessions}/creds.json`))
+    const lineM = '━'.repeat(45)
+    do {
+        showBanner() 
+        opcion = await question(chalk.bold.magentaBright(`
+╭━━${lineM}━━╮
+┃ ${chalk.bold.cyanBright('╔════❖•ೋ° ¡HOLA USUARIO! °ೋ•❖════╗')}
+┃ ${chalk.bold.cyanBright('║')}    ${chalk.bold.greenBright('SELECCIONA TU MÉTODO DE CONEXIÓN')}
+┃ ${chalk.bold.cyanBright('╚════❖•ೋ° ❀ RUBY-Bot ❀ °ೋ•❖════╝')}
+┃                                                                
+┃ ${chalk.bold.yellow('🔸 OPCIÓN 1:')} ${chalk.white('Escanear Código QR')} 
+┃ ${chalk.bold.yellow('🔸 OPCIÓN 2:')} ${chalk.white('Código de 8 Dígitos (Pairing)')}
+┃
+┃ ${chalk.italic.gray('Escribe el número de la opción y presiona Enter')}
+╰━━${lineM}━━╯
+${chalk.bold.magentaBright('➜ ')}`))
+
+        if (!/^[1-2]$/.test(opcion)) { 
+
+            console.log(chalk.red.bold(`❌ OPCIÓN INVÁLIDA. POR FAVOR ELIJA 1 O 2.`)); 
+
+            await new Promise(resolve => setTimeout(resolve, 1500)); 
+
+        }
+
+    } while (opcion !== '1' && opcion !== '2' || existsSync(`./${Rubysessions}/creds.json`))
+
 }
-console.info = () => {}
-console.debug = () => {}
 const connectionOptions = {
-logger: pino({ level: 'silent' }),
-printQRInTerminal: opcion == '1' ? true : methodCodeQR ? true : false,
-mobile: MethodMobile,
-browser: opcion == '1' ? [`${nameqr}`, 'Edge', '20.0.04'] : methodCodeQR ? [`${nameqr}`, 'Edge', '20.0.04'] : ['Ubuntu', 'Edge', '110.0.1587.56'],
-auth: { creds: state.creds, keys: makeCacheableSignalKeyStore(state.keys, pino({ level: "fatal" }).child({ level: "fatal" })), },
-markOnlineOnConnect: true,
-generateHighQualityLinkPreview: true,
-getMessage: async (clave) => { let jid = jidNormalizedUser(clave.remoteJid); let msg = await store.loadMessage(jid, clave.id); return msg?.message || "" },
-msgRetryCounterCache,
-msgRetryCounterMap,
-defaultQueryTimeoutMs: undefined,
-version,
+    logger: pino({ level: 'silent' }), // Silent evita logs excesivos que causan lag
+    printQRInTerminal: opcion == '1' ? true : methodCodeQR ? true : false,
+    mobile: MethodMobile,
+    browser: opcion == '1' ? ['RubyBot', 'Edge', '20.0.04'] : methodCodeQR ? ['RubyBot', 'Edge', '20.0.04'] : ['Ubuntu', 'Edge', '110.0.1587.56'],
+    auth: { creds: state.creds, keys: makeCacheableSignalKeyStore(state.keys, pino({ level: "fatal" }).child({ level: "fatal" })), },
+    markOnlineOnConnect: true,
+    generateHighQualityLinkPreview: true,
+    getMessage: async (clave) => { let jid = jidNormalizedUser(clave.remoteJid); let msg = await store.loadMessage(jid, clave.id); return msg?.message || "" },
+    msgRetryCounterCache,
+    msgRetryCounterMap,
+    defaultQueryTimeoutMs: undefined,
+    version,
 }
 global.conn = makeWASocket(connectionOptions);
 if (!existsSync(`./${Rubysessions}/creds.json`)) {
-if (opcion === '2' || methodCode) {
-opcion = '2'
-if (!conn.authState.creds.registered) {
-let addNumber
-if (!!phoneNumber) { addNumber = phoneNumber.replace(/[^0-9]/g, '') } else {
-do { phoneNumber = await question(chalk.bgBlack(chalk.bold.greenBright(`✦ Por favor, Ingrese el número de WhatsApp.\n${chalk.bold.yellowBright(`✏  Ejemplo: 57321×××××××`)}\n${chalk.bold.magentaBright('---> ')}`))); phoneNumber = phoneNumber.replace(/\D/g,''); if (!phoneNumber.startsWith('+')) { phoneNumber = `+${phoneNumber}` } } while (!await isValidPhoneNumber(phoneNumber))
-rl.close()
-addNumber = phoneNumber.replace(/\D/g, '')
-setTimeout(async () => { let codeBot = await conn.requestPairingCode(addNumber); codeBot = codeBot?.match(/.{1,4}/g)?.join("-") || codeBot; console.log(chalk.bold.white(chalk.bgMagenta(`✧ CÓDIGO DE VINCULACIÓN ✧`)), chalk.bold.white(chalk.white(codeBot))) }, 3000)
-}}}
+    if (opcion === '2' || methodCode) {
+        opcion = '2'
+        if (!conn.authState.creds.registered) {
+            let addNumber
+            if (!!phoneNumber) { addNumber = phoneNumber.replace(/[^0-9]/g, '') } else {
+                do { 
+                    phoneNumber = await question(chalk.bold.hex('#A020F0')(`\n📞 INGRESE SU NÚMERO DE WHATSAPP\n${chalk.white('Ejemplo: 5219999999999')}\n${chalk.yellow('➜ ')}`)); 
+                    phoneNumber = phoneNumber.replace(/\D/g, ''); 
+                    if (!phoneNumber.startsWith('+')) { phoneNumber = `+${phoneNumber}` } 
+                } while (!await isValidPhoneNumber(phoneNumber))
+                rl.close()
+                addNumber = phoneNumber.replace(/\D/g, '')
+                setTimeout(async () => { 
+                    let codeBot = await conn.requestPairingCode(addNumber); 
+                    codeBot = codeBot?.match(/.{1,4}/g)?.join("-") || codeBot; 
+                    console.log(boxen(chalk.bold.white(' Codigo : ') + chalk.bold.bgMagenta(` ${codeBot} `), { borderStyle: 'round', borderColor: 'magenta', padding: 1, margin: 1, title: '👾 VINCULACION', titleAlignment: 'center' })) 
+                }, 3000)
+            }
+        }
+    }
 }
 conn.isInit = false;
 conn.well = false;
-if (!opts['test']) {
-if (global.db) setInterval(async () => { if (global.db.data) await global.db.write(); if (opts['autocleartmp'] && (global.support || {}).find) (tmp = [os.tmpdir(), 'tmp', `${jadi}`], tmp.forEach((filename) => cp.spawn('find', [filename, '-amin', '3', '-type', 'f', '-delete']))); }, 30 * 1000);
-}
 async function connectionUpdate(update) {
-const {connection, lastDisconnect, isNewLogin} = update;
-global.stopped = connection;
-if (isNewLogin) conn.isInit = true;
-const code = lastDisconnect?.error?.output?.statusCode || lastDisconnect?.error?.output?.payload?.statusCode;
-if (code && code !== DisconnectReason.loggedOut && conn?.ws.socket == null) { await global.reloadHandler(true).catch(console.error); global.timestamp.connect = new Date; }
-if (global.db.data == null) loadDatabase();
-if (update.qr != 0 && update.qr != undefined || methodCodeQR) { if (opcion == '1' || methodCodeQR) { console.log(chalk.bold.yellow(`\n❐ ESCANEA EL CÓDIGO QR EXPIRA EN 45 SEGUNDOS`)) } }
-if (connection == 'open') { console.log(chalk.bold.green('\n❀ Ruby-Bot Conectada con éxito ❀')) }
-let reason = new Boom(lastDisconnect?.error)?.output?.statusCode
-if (connection === 'close') {
-if (reason === DisconnectReason.badSession) { console.log(chalk.bold.cyanBright(`\n⚠︎ SIN CONEXIÓN, BORRE LA CARPETA ${global.Rubysessions} Y ESCANEA EL CÓDIGO QR ⚠︎`)) }
-else if (reason === DisconnectReason.connectionClosed) { console.log(chalk.bold.magentaBright(`\n╭┄┄┄┄┄┄┄┄┄┄┄┄┄┄ • • • ┄┄┄┄┄┄┄┄┄┄┄┄┄┄ ☹\n┆ ⚠︎ CONEXION CERRADA, RECONECTANDO....\n╰┄┄┄┄┄┄┄┄┄┄┄┄┄┄ • • • ┄┄┄┄┄┄┄┄┄┄┄┄┄┄ ☹`)); await global.reloadHandler(true).catch(console.error) }
-else if (reason === DisconnectReason.connectionLost) { console.log(chalk.bold.blueBright(`\n╭┄┄┄┄┄┄┄┄┄┄┄┄┄┄ • • • ┄┄┄┄┄┄┄┄┄┄┄┄┄┄ ☂\n┆ ⚠︎ CONEXIÓN PERDIDA CON EL SERVIDOR, RECONECTANDO....\n╰┄┄┄┄┄┄┄┄┄┄┄┄┄┄ • • • ┄┄┄┄┄┄┄┄┄┄┄┄┄┄ ☂`)); await global.reloadHandler(true).catch(console.error) }
-else if (reason === DisconnectReason.connectionReplaced) { console.log(chalk.bold.yellowBright(`\n╭┄┄┄┄┄┄┄┄┄┄┄┄┄┄ • • • ┄┄┄┄┄┄┄┄┄┄┄┄┄┄ ✗\n┆ ⚠︎ CONEXIÓN REEMPLAZADA, SE HA ABIERTO OTRA NUEVA SESION, POR FAVOR, CIERRA LA SESIÓN ACTUAL PRIMERO.\n╰┄┄┄┄┄┄┄┄┄┄┄┄┄┄ • • • ┄┄┄┄┄┄┄┄┄┄┄┄┄┄ ✗`)) }
-else if (reason === DisconnectReason.loggedOut) { console.log(chalk.bold.redBright(`\n⚠︎ SIN CONEXIÓN, BORRE LA CARPETA ${global.Rubysessions} Y ESCANEA EL CÓDIGO QR ⚠︎`)); await global.reloadHandler(true).catch(console.error) }
-else if (reason === DisconnectReason.restartRequired) { console.log(chalk.bold.cyanBright(`\n╭┄┄┄┄┄┄┄┄┄┄┄┄┄┄ • • • ┄┄┄┄┄┄┄┄┄┄┄┄┄┄ ✓\n┆ ✧ CONECTANDO AL SERVIDOR...\n╰┄┄┄┄┄┄┄┄┄┄┄┄┄┄ • • • ┄┄┄┄┄┄┄┄┄┄┄┄┄┄ ✓`)); await global.reloadHandler(true).catch(console.error) }
-else if (reason === DisconnectReason.timedOut) { console.log(chalk.bold.yellowBright(`\n╭┄┄┄┄┄┄┄┄┄┄┄┄┄┄ • • • ┄┄┄┄┄┄┄┄┄┄┄┄┄┄ ▸\n┆ ⧖ TIEMPO DE CONEXIÓN AGOTADO, RECONECTANDO....\n╰┄┄┄┄┄┄┄┄┄┄┄┄┄┄ • • • ┄┄┄┄┄┄┄┄┄┄┄┄┄┄ ▸`)); await global.reloadHandler(true).catch(console.error) }
-else { console.log(chalk.bold.redBright(`\n⚠︎！ RAZON DE DESCONEXIÓN DESCONOCIDA: ${reason || 'No encontrado'} >> ${connection || 'No encontrado'}`)) }
-}}
+    const { connection, lastDisconnect, isNewLogin, qr } = update
+    global.stopped = connection
+    if (isNewLogin) conn.isInit = true
+    const code = lastDisconnect?.error?.output?.statusCode || lastDisconnect?.error?.output?.payload?.statusCode
+    if (code && code !== DisconnectReason.loggedOut && conn?.ws.socket == null) {
+        await global.reloadHandler(true).catch(console.error)
+        global.timestamp.connect = new Date()
+    }
+    if (global.db.data == null) loadDatabase()
+    if ((qr && opcion === '1') || methodCodeQR) {
+        console.log(boxen(chalk.hex('#FF66C4')('—🍦ܶ߭ຼ ᪲  ۪  ︵ Escanea el codigo QR aqui ︵ ࣪'), { padding: 1, borderStyle: 'classic', borderColor: 'magenta' }))
+    }
+    if (connection === 'open') {
+        console.log('\n')
+        console.log(boxen(chalk.bold.hex('#00FF00')('୭ৎ֮֮ BOT CONECTADO CORRECTAMENTE 🪼 ׄ'), { padding: 1, borderStyle: 'double', borderColor: 'green', title: '✅ 𝖤𝖷𝖨𝖳𝖮', titleAlignment: 'center' }))
+        console.log('\n')
+    }
+    if (connection === 'close') {
+        const reason = new Boom(lastDisconnect?.error)?.output?.statusCode
+        const show = (color, text, icon) => console.log(boxen(color(text), { padding: 1, borderStyle: 'round', borderColor: 'red', title: icon, titleAlignment: 'center' }))
+        switch (reason) {
+            case DisconnectReason.badSession: show(chalk.red, `⚠️ SESION CORRUPTA, BORRE LA CARPETA ${global.Rubysessions}`, '❌ 𝖤𝖱𝖱𝖮𝖱'); await global.reloadHandler(true).catch(console.error); break
+            case DisconnectReason.connectionClosed: show(chalk.yellow, '🔌 CONEXION CERRADA, RECONECTANDO...', '🔁'); await global.reloadHandler(true).catch(console.error); break
+            case DisconnectReason.connectionLost: show(chalk.blue, '📡 SEÑAL PERDIDA DEL SERVIDOR...', '⚠️'); await global.reloadHandler(true).catch(console.error); break
+            case DisconnectReason.connectionReplaced: show(chalk.magenta, '💻 SESION ABIERTA EN OTRA PARTE', '🚫'); break
+            case DisconnectReason.loggedOut: show(chalk.red, `👋 SESION CERRADA BORRE LA CARPETA ${global.Rubysessions}`, '🚪'); await global.reloadHandler(true).catch(console.error); break
+            case DisconnectReason.restartRequired: show(chalk.cyan, '🔄 REINICIO NECESARIO...', '♻️'); await global.reloadHandler(true).catch(console.error); break
+            case DisconnectReason.timedOut: show(chalk.yellow, '⏳ TIEMPO AGOTADO...', '⏱️'); await global.reloadHandler(true).catch(console.error); break
+            default: show(chalk.red, `❓ 𝖤𝗋𝗋𝗈𝗋 𝖽𝖾𝗌𝖼𝗈𝗇𝗈𝖼𝗂𝖽𝗈: ${reason}`, '💀'); break
+        }
+    }
+}
 process.on('uncaughtException', console.error)
 let isInit = true;
 let handler = await import('./handler.js')
 global.reloadHandler = async function(restatConn) {
-try { const Handler = await import(`./handler.js?update=${Date.now()}`).catch(console.error); if (Object.keys(Handler || {}).length) handler = Handler } catch (e) { console.error(e); }
-if (restatConn) {
-const oldChats = global.conn.chats
-try { global.conn.ws.close() } catch { }
-conn.ev.removeAllListeners()
-global.conn = makeWASocket(connectionOptions, {chats: oldChats})
-isInit = true
-}
-if (!isInit) { conn.ev.off('messages.upsert', conn.handler); conn.ev.off('connection.update', conn.connectionUpdate); conn.ev.off('creds.update', conn.credsUpdate); }
-conn.handler = handler.handler.bind(global.conn)
-conn.connectionUpdate = connectionUpdate.bind(global.conn)
-conn.credsUpdate = saveCreds.bind(global.conn, true)
-conn.ev.on('messages.upsert', conn.handler)
-conn.ev.on('connection.update', conn.connectionUpdate)
-conn.ev.on('creds.update', conn.credsUpdate)
-isInit = false
-return true
+    try { const Handler = await import(`./handler.js?update=${Date.now()}`).catch(console.error); if (Object.keys(Handler || {}).length) handler = Handler } catch (e) { console.error(e); }
+    if (restatConn) {
+        const oldChats = global.conn.chats
+        try { global.conn.ws.close() } catch { }
+        conn.ev.removeAllListeners()
+        global.conn = makeWASocket(connectionOptions, { chats: oldChats })
+        isInit = true
+    }
+    if (!isInit) { conn.ev.off('messages.upsert', conn.handler); conn.ev.off('connection.update', conn.connectionUpdate); conn.ev.off('creds.update', conn.credsUpdate); }
+    conn.handler = handler.handler.bind(global.conn)
+    conn.connectionUpdate = connectionUpdate.bind(global.conn)
+    conn.credsUpdate = saveCreds.bind(global.conn, true)
+    conn.ev.on('messages.upsert', conn.handler)
+    conn.ev.on('connection.update', conn.connectionUpdate)
+    conn.ev.on('creds.update', conn.credsUpdate)
+    isInit = false
+    return true
 };
 global.rutaJadiBot = join(__dirname, './RubyJadiBots')
-if (global.RubyJadibts) {
-if (!existsSync(global.rutaJadiBot)) { mkdirSync(global.rutaJadiBot, { recursive: true }); console.log(chalk.bold.cyan(`La carpeta: ${jadi} se creó correctamente.`)) } else { console.log(chalk.bold.cyan(`La carpeta: ${jadi} ya está creada.`)) }
-const readRutaJadiBot = readdirSync(rutaJadiBot)
-if (readRutaJadiBot.length > 0) {
-const creds = 'creds.json'
-for (const gjbts of readRutaJadiBot) {
-const botPath = join(rutaJadiBot, gjbts)
-const readBotPath = readdirSync(botPath)
-if (readBotPath.includes(creds)) { RubyJadiBot({pathRubyJadiBot: botPath, m: null, conn, args: '', usedPrefix: '/', command: 'serbot'}) }
-}}}
+
+// --- OPTIMIZACIÓN 3: INICIO ESCALONADO DE SUB-BOTS ---
+// Esto es VITAL para que los 40 bots no congelen el servidor al inicio.
+if (global.RubyJadibts || true) { 
+    if (!existsSync(global.rutaJadiBot)) { 
+        mkdirSync(global.rutaJadiBot, { recursive: true }); 
+        console.log(chalk.bold.cyan(`✅ Carpeta de sub-Bots creada`)) 
+    } else { 
+        console.log(chalk.bold.cyan(`✨ Cargando sub-Bots...`)) 
+    }
+    const readRutaJadiBot = readdirSync(global.rutaJadiBot)
+    if (readRutaJadiBot.length > 0) {
+        const creds = 'creds.json'
+        for (const gjbts of readRutaJadiBot) {
+            const botPath = join(global.rutaJadiBot, gjbts)
+            const readBotPath = readdirSync(botPath)
+            if (readBotPath.includes(creds)) { 
+                try {
+                    RubyJadiBot({ pathRubyJadiBot: botPath, m: null, conn, args: '', usedPrefix: '/', command: 'serbot' }) 
+                    // PAUSA DE 2.5 SEGUNDOS: Evita que el CPU suba al 100%
+                    await new Promise(resolve => setTimeout(resolve, 2500)); 
+                } catch(e) { 
+                    console.log(chalk.red('Error cargando subbot:'), e) 
+                }
+            }
+        }
+    }
+}
+
 const pluginFolder = global.__dirname(join(__dirname, './plugins/index'))
 const pluginFilter = (filename) => /\.js$/.test(filename)
 global.plugins = {}
 async function filesInit() {
-for (const filename of readdirSync(pluginFolder).filter(pluginFilter)) {
-try { const file = global.__filename(join(pluginFolder, filename)); const module = await import(file); global.plugins[filename] = module.default || module } catch (e) { conn.logger.error(e); delete global.plugins[filename] }
-}}
+    for (const filename of readdirSync(pluginFolder).filter(pluginFilter)) {
+        try { const file = global.__filename(join(pluginFolder, filename)); const module = await import(file); global.plugins[filename] = module.default || module } catch (e) { conn.logger.error(e); delete global.plugins[filename] }
+    }
+}
 filesInit().then((_) => Object.keys(global.plugins)).catch(console.error);
 global.reload = async (_ev, filename) => {
-if (pluginFilter(filename)) {
-const dir = global.__filename(join(pluginFolder, filename), true);
-if (filename in global.plugins) {
-if (existsSync(dir)) conn.logger.info(` updated plugin - '${filename}'`)
-else { conn.logger.warn(`deleted plugin - '${filename}'`); return delete global.plugins[filename] }
-} else conn.logger.info(`new plugin - '${filename}'`);
-const err = syntaxerror(readFileSync(dir), filename, { sourceType: 'module', allowAwaitOutsideFunction: true, });
-if (err) conn.logger.error(`syntax error while loading '${filename}'\n${format(err)}`)
-else {
-try { const module = (await import(`${global.__filename(dir)}?update=${Date.now()}`)); global.plugins[filename] = module.default || module; } catch (e) { conn.logger.error(`error require plugin '${filename}\n${format(e)}'`) } finally { global.plugins = Object.fromEntries(Object.entries(global.plugins).sort(([a], [b]) => a.localeCompare(b))) }
-}}}
+    if (pluginFilter(filename)) {
+        const dir = global.__filename(join(pluginFolder, filename), true);
+        if (filename in global.plugins) {
+            if (existsSync(dir)) conn.logger.info(`✨ Plugin actualizado: '${filename}'`)
+            else { conn.logger.warn(`🗑️ Plugin eliminado: '${filename}'`); return delete global.plugins[filename] }
+        } else conn.logger.info(`✨ Nuevo plugin: '${filename}'`);
+        const err = syntaxerror(readFileSync(dir), filename, { sourceType: 'module', allowAwaitOutsideFunction: true, });
+        if (err) conn.logger.error(`❌ Error sintaxis: '${filename}'\n${format(err)}`)
+        else {
+            try { const module = (await import(`${global.__filename(dir)}?update=${Date.now()}`)); global.plugins[filename] = module.default || module; } catch (e) { conn.logger.error(`❌ Error sintaxis: '${filename}\n${format(e)}'`) } finally { global.plugins = Object.fromEntries(Object.entries(global.plugins).sort(([a], [b]) => a.localeCompare(b))) }
+        }
+    }
+}
 Object.freeze(global.reload)
 watch(pluginFolder, global.reload)
 await global.reloadHandler()
-async function _quickTest() {
-const test = await Promise.all([spawn('ffmpeg'), spawn('ffprobe'), spawn('ffmpeg', ['-hide_banner', '-loglevel', 'error', '-filter_complex', 'color', '-frames:v', '1', '-f', 'webp', '-']), spawn('convert'), spawn('magick'), spawn('gm'), spawn('find', ['--version'])].map((p) => { return Promise.race([new Promise((resolve) => { p.on('close', (code) => { resolve(code !== 127); }); }), new Promise((resolve) => { p.on('error', (_) => resolve(false)); })]); }));
-const [ffmpeg, ffprobe, ffmpegWebp, convert, magick, gm, find] = test;
-const s = global.support = {ffmpeg, ffprobe, ffmpegWebp, convert, magick, gm, find};
-Object.freeze(global.support);
-}
-function clearTmp() {
-const tmpDir = join(__dirname, 'tmp')
-if (!existsSync(tmpDir)) return;
-const filenames = readdirSync(tmpDir)
-filenames.forEach(file => { try { const filePath = join(tmpDir, file); unlinkSync(filePath) } catch (e) {}})
-}
-function purgeRubySession() {
-try {
-let directorio = readdirSync(`./${Rubysessions}`)
-let filesFolderPreKeys = directorio.filter(file => { return file.startsWith('pre-key-') })
-filesFolderPreKeys.forEach(files => { try { unlinkSync(`./${Rubysessions}/${files}`) } catch (e) {} })
-} catch (e) {}
-}
-function purgeRubySessionSB() {
-try {
-const listaDirectorios = readdirSync(`./${jadi}/`);
-let SBprekey = [];
-listaDirectorios.forEach(directorio => {
-if (statSync(`./${jadi}/${directorio}`).isDirectory()) {
-const DSBPreKeys = readdirSync(`./${jadi}/${directorio}`).filter(fileInDir => { return fileInDir.startsWith('pre-key-') })
-SBprekey = [...SBprekey, ...DSBPreKeys];
-DSBPreKeys.forEach(fileInDir => { if (fileInDir !== 'creds.json') { try { unlinkSync(`./${jadi}/${directorio}/${fileInDir}`) } catch (e) {} } })
-}})
-if (SBprekey.length === 0) {} else { console.log(chalk.bold.cyanBright(`\n╭» ❍ ${jadi} ❍\n│→ ARCHIVOS NO ESENCIALES ELIMINADOS\n╰― ― ― ― ― ― ― ― ― ― ― ― ― ― ― ― ― ― ― ⌫ ♻︎︎`)) }
-} catch (err) { console.log(chalk.bold.red(`\n╭» ❍ ${jadi} ❍\n│→ OCURRIÓ UN ERROR\n╰― ― ― ― ― ― ― ― ― ― ― ― ― ― ― ― ― ― ― ⌫ ♻\n` + err)) }
-}
-function purgeOldFiles() {
-const directories = [`./${Rubysessions}/`, `./${jadi}/`]
-directories.forEach(dir => {
-if (!existsSync(dir)) return;
-const files = readdirSync(dir);
-files.forEach(file => {
-if (file !== 'creds.json') {
-try { const filePath = join(dir, file); unlinkSync(filePath); console.log(chalk.bold.green(`Archivo eliminado: ${file}`)); } catch (err) { console.log(chalk.bold.red(`Error al eliminar ${file}: ${err}`)); }
-}
-})
-})
-}
-setInterval(async () => {
-if (stopped === 'close' || !conn || !conn.user) return
-await clearTmp()
-await purgeRubySession()
-await purgeRubySessionSB()
-purgeOldFiles()
-console.log(chalk.bold.cyanBright(`\n╭» ❍ MANTENIMIENTO ❍\n│→ CACHÉ, SESIONES Y ARCHIVOS TMP LIMPIADOS\n╰― ― ― ― ― ― ― ― ― ― ― ― ― ― ― ― ― ― ― ⌫ ♻`))
-}, 1000 * 60 * 10)
-_quickTest().then(() => conn.logger.info(chalk.bold(`✦  H E C H O\n`.trim()))).catch(console.error)
 async function isValidPhoneNumber(number) {
-try {
-number = number.replace(/\s+/g, '')
-if (number.startsWith('+521')) { number = number.replace('+521', '+52'); } else if (number.startsWith('+52') && number[4] === '1') { number = number.replace('+52 1', '+52'); }
-const parsedNumber = phoneUtil.parseAndKeepRawInput(number)
-return phoneUtil.isValidNumber(parsedNumber)
-} catch (error) { return false }
+    try {
+        number = number.replace(/\s+/g, '')
+        if (number.startsWith('+521')) { number = number.replace('+521', '+52'); } else if (number.startsWith('+52') && number[4] === '1') { number = number.replace('+52 1', '+52'); }
+        const parsedNumber = phoneUtil.parseAndKeepRawInput(number)
+        return phoneUtil.isValidNumber(parsedNumber)
+    } catch (error) { return false }
 }
+
+/* =========================================================================
+   FUNCIONES DE LIMPIEZA AUTOMÁTICA
+   ========================================================================= */
+function clearTmp() {
+    const tmpDirectories = [tmpdir(), join(__dirname, './tmp')];
+    tmpDirectories.forEach(dir => {
+        if (!existsSync(dir)) return;
+        readdirSync(dir).forEach(file => {
+            const filePath = join(dir, file);
+            try {
+                const stats = statSync(filePath);
+                if (stats.isFile() && (Date.now() - stats.mtimeMs > 3 * 60 * 1000)) {
+                    unlinkSync(filePath);
+                }
+            } catch (e) { }
+        });
+    });
+}
+
+function purgeSession() {
+    try {
+        const sessionDir = `./${global.Rubysessions}`;
+        if (!existsSync(sessionDir)) return;
+        
+        const files = readdirSync(sessionDir);
+        files.forEach(file => {
+            const filePath = join(sessionDir, file);
+            try {
+                const stats = statSync(filePath);
+                if (file.startsWith('pre-key-') && (Date.now() - stats.mtimeMs > 3600000)) { 
+                    unlinkSync(filePath);
+                } 
+                else if (file.startsWith('app-state-sync-') && (Date.now() - stats.mtimeMs > 600000)) { 
+                     unlinkSync(filePath);
+                }
+            } catch (e) { }
+        });
+    } catch (e) { console.log("Error en purga de sesión principal:", e); }
+}
+
+function purgeSessionSB() {
+    try {
+        const jadiDir = `./${global.rutaJadiBot}`; 
+        if (!existsSync(jadiDir)) return;
+
+        const listaDirectorios = readdirSync(jadiDir);
+        listaDirectorios.forEach(directorio => {
+            const subBotPath = join(jadiDir, directorio);
+            if (statSync(subBotPath).isDirectory()) {
+                const files = readdirSync(subBotPath);
+                files.forEach(file => {
+                    const filePath = join(subBotPath, file);
+                    try {
+                        const stats = statSync(filePath);
+                        if (file.startsWith('pre-key-') && (Date.now() - stats.mtimeMs > 3600000)) {
+                            unlinkSync(filePath);
+                        }
+                    } catch (e) { }
+                });
+            }
+        });
+    } catch (e) { console.log("Error en purga de Sub-Bots:", e); }
+}
+
+setInterval(async () => {
+    await clearTmp()
+}, 1000 * 60 * 2) 
+
+setInterval(async () => {
+   await purgeSession()
+   await purgeSessionSB()
+   console.log(chalk.cyanBright(`\n🧹 LIMPIEZA AUTOMÁTICA COMPLETADA: TMP, PRE-KEYS Y SESIONES\n`))
+}, 1000 * 60 * 60)
