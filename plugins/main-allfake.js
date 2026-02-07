@@ -5,6 +5,10 @@ import axios from 'axios'
 import moment from 'moment-timezone'
 const { generateWAMessageFromContent, prepareWAMessageMedia, proto } = pkg
 
+Array.prototype.getRandom = function () {
+return this[Math.floor(Math.random() * this.length)]
+}
+
 var handler = m => m
 
 handler.all = async function (m) {
@@ -79,31 +83,24 @@ participant: "0@s.whatsapp.net"
 }
 
 global.creador = 'Wa.me/18294868853'
-global.ofcbot = conn.user?.jid ? conn.user.jid.split('@')[0] : 'Bot'
+global.ofcbot = conn.user?.jid?.split('@')[0] || 'Bot'
 global.asistencia = 'Wa.me/18294868853'
+
 global.namechannel = '⏤͟͞ू⃪፝͜⁞⟡『 𝐓͢ᴇ𝙖፝ᴍ⃨ 𝘾𝒉꯭𝐚𝑛𝑛𝒆𝑙: 𝑹ᴜ⃜ɓ𝑦-𝑯ᴏ𝒔𝑯𝙞꯭𝑛𝒐 』࿐⟡'
 global.namechannel2 = '⟡『 𝐓𝐞𝐚𝐦 𝐂𝐡𝐚𝐧𝐧𝐞𝐥: 𝑹𝒖𝒃𝒚-𝑯𝒐𝒔𝒉𝒊𝒏𝒐 』⟡'
 global.namegrupo = '⏤͟͞ू⃪ 𝑹𝒖𝒃𝒚-𝑯𝒐𝒔𝒉𝒊𝒏𝒐-𝐵ot ⌬⃝𓆩⚘𓆪 𝐎𝐟𝐟𝐢cial'
 global.namecomu = '⏤͟͞ू⃪ 𝑹𝒖𝒃𝒚-𝑯𝒐𝒔𝑯𝒊𝒏𝒐 ✦⃝𖤐 𝑪𝒐𝒎𝒎𝒖𝒏𝒊𝒕𝒚'
+
 global.listo = '❀ *Aquí tienes ฅ^•ﻌ•^ฅ*'
 
 global.fotoperfil = await conn.profilePictureUrl(m.sender,'image').catch(_=>'https://files.catbox.moe/xr2m6u.jpg')
 
-global.canalIdM = ["120363335626706839@newsletter","120363335626706839@newsletter"]
-global.canalNombreM = [
-"⏤͟͞ू⃪፝͜⁞⟡『 𝐓͢ᴇ𝙖፝ᴍ⃨ 𝘾𝒉꯭𝐚𝑛𝑛𝒆𝑙: 𝑹ᴜ⃜ɓ𝑦-𝑯ᴏ𝒔𝑯𝙞꯭𝑛𝒐 』࿐⟡",
-"⟡『 𝐓𝐞𝐚𝐦 𝐂𝐡𝐚𝐧𝐧𝐞𝐥: 𝑹𝒖𝒃𝒚-𝑯𝒐𝒔𝒉𝒊𝒏𝒐 』⟡"
-]
-
-global.channelRD = await getRandomChannel()
-
-global.d = new Date(new Date + 3600000)
-global.locale = 'es'
-global.dia = d.toLocaleDateString(locale,{weekday:'long'})
-global.fecha = d.toLocaleDateString('es',{day:'numeric',month:'numeric',year:'numeric'})
-global.mes = d.toLocaleDateString('es',{month:'long'})
-global.año = d.toLocaleDateString('es',{year:'numeric'})
-global.tiempo = d.toLocaleString('en-US',{hour:'numeric',minute:'numeric',second:'numeric',hour12:true})
+global.emoji = '🍨'
+global.emoji2 = '🍭'
+global.emoji3 = '🌺'
+global.emoji4 = '💗'
+global.emoji5 = '🍡'
+global.emojis = [emoji, emoji2, emoji3, emoji4].getRandom()
 
 global.packsticker = `${m.pushName || 'Anónimo'}`
 global.packsticker2 = `𝚁𝚄𝙱𝚈 𝙱𝙾𝚃 𝙼𝙳 ˃ 𖥦 ˂`
@@ -111,10 +108,3 @@ global.packsticker2 = `𝚁𝚄𝙱𝚈 𝙱𝙾𝚃 𝙼𝙳 ˃ 𖥦 ˂`
 }
 
 export default handler
-
-async function getRandomChannel() {
-let randomIndex = Math.floor(Math.random()*canalIdM.length)
-let id = canalIdM[randomIndex]
-let name = canalNombreM[randomIndex]
-return { id, name }
-}
