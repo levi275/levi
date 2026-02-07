@@ -1,52 +1,7 @@
 import { ytmp3, ytmp4 } from "../lib/youtubedl.js"
 import yts from "yt-search"
-import axios from 'axios'
-import fs from 'fs'
-import path from 'path'
-import { spawn } from 'child_process'
-import { tmpdir } from 'os'
 
 const youtubeRegexID = /(?:youtu\.be\/|youtube\.com\/(?:watch\?v=|embed\/))([a-zA-Z0-9_-]{11})/
-
-// Función para procesar video con FFmpeg (Igual que en tu comando de GIFs pero adaptado para video con audio)
-function reprocesarVideo(videoBuffer) {
-    return new Promise((resolve, reject) => {
-        const tempInput = path.join(tmpdir(), `${Date.now()}_in.mp4`)
-        const tempOutput = path.join(tmpdir(), `${Date.now()}_out.mp4`)
-        
-        fs.writeFileSync(tempInput, videoBuffer)
-
-        // Argumentos clave para WhatsApp: libx264, aac, yuv420p
-        const ffmpeg = spawn('ffmpeg', [
-            '-y', 
-            '-i', tempInput, 
-            '-c:v', 'libx264', 
-            '-c:a', 'aac',       // Asegura que el audio sea compatible
-            '-b:a', '128k',      // Bitrate de audio decente
-            '-pix_fmt', 'yuv420p', 
-            '-vf', 'scale=trunc(iw/2)*2:trunc(ih/2)*2', // Asegura dimensiones pares
-            '-movflags', '+faststart', 
-            tempOutput
-        ])
-
-        ffmpeg.on('close', code => {
-            fs.unlinkSync(tempInput) // Borrar entrada
-            if (code === 0) {
-                const resultBuffer = fs.readFileSync(tempOutput)
-                fs.unlinkSync(tempOutput) // Borrar salida temporal
-                resolve(resultBuffer)
-            } else {
-                reject(new Error(`FFmpeg falló con código ${code}`))
-            }
-        })
-
-        ffmpeg.on('error', err => {
-            try { fs.unlinkSync(tempInput) } catch(e) {}
-            try { fs.unlinkSync(tempOutput) } catch(e) {}
-            reject(err)
-        })
-    })
-}
 
 const handler = async (m, { conn, text, command }) => {
   try {
@@ -56,24 +11,37 @@ const handler = async (m, { conn, text, command }) => {
 
     await conn.sendMessage(m.chat, { react: { text: "⏳", key: m.key }})
 
-    let videoIdToFind = text.match(youtubeRegexID)
-    let ytplay2 = await yts(videoIdToFind ? "https://youtu.be/" + videoIdToFind[1] : text)
+    // 1. BÚSQUEDA OPTIMIZADA
+    let searchResult = null
+    const match = text.match(youtubeRegexID)
 
-    if (videoIdToFind) {
-      const videoId = videoIdToFind[1]
-      ytplay2 = ytplay2.all.find(item => item.videoId === videoId) || ytplay2.videos.find(item => item.videoId === videoId)
+    if (match) {
+        // Si es un link, buscamos directo por ID (más rápido)
+        const videoId = match[1]
+        try {
+            searchResult = await yts({ videoId: videoId })
+        } catch {
+            // Fallback si falla la búsqueda por ID
+            const s = await yts(text)
+            searchResult = s.all[0]
+        }
+    } else {
+        // Si es texto, buscamos normal
+        const s = await yts(text)
+        searchResult = s.all.find(v => v.type === 'video') || s.all[0]
     }
 
-    ytplay2 = ytplay2?.all?.[0] || ytplay2?.videos?.[0] || ytplay2
-    if (!ytplay2) {
+    if (!searchResult) {
       await conn.sendMessage(m.chat, { react: { text: "❌", key: m.key }})
       return m.reply("⚠︎ No encontré resultados, intenta con otro nombre o link.")
     }
 
-    let { title, thumbnail, timestamp, views, ago, url, author } = ytplay2
+    // Extraer datos una sola vez
+    const { title, thumbnail, timestamp, views, ago, url, author } = searchResult
     const vistas = formatViews(views)
     const canal = author?.name || "Desconocido"
 
+    // 2. ENVIAR INFORMACIÓN
     const infoMessage = `
 ㅤ۫ ㅤ  🦭 ୧  ˚ \`𝒅𝒆𝒔𝒄𝒂𝒓𝒈𝒂 𝒆𝒏 𝒄𝒂𝒎𝒊𝒏𝒐\` !  ୨ 𖹭  ִֶָ  
 
@@ -88,14 +56,21 @@ const handler = async (m, { conn, text, command }) => {
 > 𐙚 🪵 ｡ Preparando tu descarga... ˙𐙚
     `.trim()
 
-    const thumb = (await conn.getFile(thumbnail))?.data
+    // Descarga de miniatura (Buffer)
+    let thumbBuffer = null
+    try {
+        thumbBuffer = (await conn.getFile(thumbnail))?.data
+    } catch (e) { 
+        console.log("Error descargando thumbnail, usando URL") 
+    }
+
     await conn.reply(m.chat, infoMessage, m, {
       contextInfo: {
         externalAdReply: {
           title: "Bot Name", // Cambia esto por tu variable botname
-          body: "YouTube Downloader", // Cambia esto por tu variable dev
+          body: "Descargas", // Cambia esto por tu variable dev
           mediaType: 1,
-          thumbnail: thumb,
+          thumbnail: thumbBuffer, 
           renderLargerThumbnail: true,
           mediaUrl: url,
           sourceUrl: url
@@ -103,80 +78,64 @@ const handler = async (m, { conn, text, command }) => {
       }
     })
 
-    // --- SECCIÓN DE AUDIO ---
+    // 3. DESCARGA REAL (Usando el título ya obtenido para ahorrar tiempo)
+    
+    // --> MODO AUDIO
     if (["play", "yta", "ytmp3", "playaudio"].includes(command)) {
-      let audioData = null
       try {
-        const r = await ytmp3(url)
-        if (r?.status && r?.download?.url) {
-          audioData = { link: r.download.url, title: r.metadata?.title }
+        // PASAMOS 'title' AQUÍ PARA EVITAR LA SEGUNDA BÚSQUEDA
+        const r = await ytmp3(url, title) 
+        
+        if (!r?.status || !r?.download?.url) {
+            throw new Error("Link no generado")
         }
+
+        await conn.sendMessage(m.chat, {
+            audio: { url: r.download.url },
+            fileName: `${r.metadata.title}.mp3`,
+            mimetype: "audio/mpeg",
+            ptt: false
+        }, { quoted: m })
+
+        await conn.sendMessage(m.chat, { react: { text: "✅", key: m.key }})
+
       } catch (e) {
         console.error(e)
-      }
-
-      if (!audioData) {
         await conn.sendMessage(m.chat, { react: { text: "❌", key: m.key }})
-        return conn.reply(m.chat, "✦ No se pudo descargar el audio. Intenta más tarde.", m)
+        return conn.reply(m.chat, "✦ No se pudo descargar el audio. Intenta de nuevo.", m)
       }
-
-      // Descargamos el audio como buffer para asegurar envío
-      const audioBufferRes = await axios.get(audioData.link, { responseType: 'arraybuffer' })
-      
-      await conn.sendMessage(m.chat, {
-        audio: audioBufferRes.data,
-        fileName: `${audioData.title || "music"}.mp3`,
-        mimetype: "audio/mpeg",
-        ptt: false
-      }, { quoted: m })
-
-      await conn.sendMessage(m.chat, { react: { text: "✅", key: m.key }})
     }
 
-    // --- SECCIÓN DE VIDEO ---
+    // --> MODO VIDEO
     else if (["play2", "ytv", "ytmp4", "mp4"].includes(command)) {
-      let videoData = null
       try {
-        const r = await ytmp4(url)
-        if (r?.status && r?.download?.url) {
-          videoData = { link: r.download.url, title: r.metadata?.title }
+        // PASAMOS 'title' AQUÍ PARA EVITAR LA SEGUNDA BÚSQUEDA
+        const r = await ytmp4(url, title)
+
+        if (!r?.status || !r?.download?.url) {
+             throw new Error("Link no generado")
         }
+
+        await conn.sendMessage(m.chat, {
+            video: { url: r.download.url },
+            fileName: `${r.metadata.title}.mp4`,
+            caption: `${title}`,
+            mimetype: "video/mp4"
+        }, { quoted: m })
+
+        await conn.sendMessage(m.chat, { react: { text: "✅", key: m.key }})
+
       } catch (e) {
         console.error(e)
-      }
-
-      if (!videoData) {
         await conn.sendMessage(m.chat, { react: { text: "❌", key: m.key }})
-        return conn.reply(m.chat, "✦ No se pudo descargar el video. Intenta más tarde.", m)
+        return conn.reply(m.chat, "✦ No se pudo descargar el video. Intenta de nuevo.", m)
       }
-
-      // 1. Descargamos el video crudo
-      const videoResponse = await axios.get(videoData.link, { responseType: 'arraybuffer' })
-      
-      // 2. Procesamos con FFMPEG (Esto soluciona lo borroso/fallo)
-      let finalBuffer
-      try {
-          finalBuffer = await reprocesarVideo(videoResponse.data)
-      } catch (err) {
-          console.error("Error al procesar video, enviando crudo:", err)
-          finalBuffer = videoResponse.data // Fallback si ffmpeg falla
-      }
-
-      // 3. Enviamos el buffer procesado
-      await conn.sendMessage(m.chat, {
-        video: finalBuffer,
-        fileName: `${videoData.title || "video"}.mp4`,
-        caption: `${title}`,
-        mimetype: "video/mp4"
-      }, { quoted: m })
-
-      await conn.sendMessage(m.chat, { react: { text: "✅", key: m.key }})
     }
 
   } catch (error) {
     await conn.sendMessage(m.chat, { react: { text: "❌", key: m.key }})
     console.error(error)
-    return m.reply(`⚠︎ Error inesperado. Por favor, reporta este problema.`)
+    return m.reply(`⚠︎ Error inesperado.`)
   }
 }
 
