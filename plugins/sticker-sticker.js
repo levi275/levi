@@ -1,14 +1,11 @@
 import { sticker } from '../lib/sticker.js'
-import uploadFile from '../lib/uploadFile.js'
-import uploadImage from '../lib/uploadImage.js'
-import { webp2png } from '../lib/webp2mp4.js'
 
 let handler = async (m, { conn, args }) => {
-let stiker = null
+let stiker
 let userId = m.sender
-let packstickers = global.db.data.users[userId] || {}
-let texto1 = packstickers.text1 ?? global.packsticker
-let texto2 = packstickers.text2 ?? global.packsticker2
+let data = global.db.data.users[userId] || {}
+let texto1 = data.text1 ?? global.packsticker
+let texto2 = data.text2 ?? global.packsticker2
 
 let q = m.quoted ? m.quoted : m
 let mime = q.mimetype || q.mediaType || ''
@@ -16,15 +13,15 @@ let txt = args.join(' ')
 
 try {
 
-if (/webp|image|video/.test(mime)) {
+if (/image|video|webp/.test(mime)) {
 
 if (/video/.test(mime) && q.seconds > 15)
 return conn.reply(m.chat,'❌ El video no puede durar más de *15 segundos*',m)
 
-let buffer = await downloadMedia(q, conn)
-if (!buffer) throw new Error('No se pudo descargar el archivo')
-
 await m.react('🧃')
+
+let buffer = await downloadMedia(q, conn)
+if (!buffer) throw 'No se pudo descargar el archivo'
 
 let marca = txt
 ? txt.split(/[\u2022|]/).map(v => v.trim())
@@ -45,19 +42,33 @@ m
 )
 }
 
-if (!stiker) throw new Error('No se pudo generar el sticker')
+if (!stiker) throw 'No se pudo generar el sticker'
 
 await conn.sendMessage(
 m.chat,
 { sticker: stiker },
-{ quoted: m }
+{
+quoted: m,
+contextInfo: {
+forwardingScore: 2022,
+isForwarded: true,
+externalAdReply: {
+title: 'ϟϟ(๑⚈ ․̫ ⚈๑)ᵖⁱᵏᵃ ᵖⁱᵏᵃ',
+body: '¡aquí tienes tu sticker!',
+thumbnail: icons,
+sourceUrl: redes,
+mediaType: 1,
+renderLargerThumbnail: true
+}
+}
+}
 )
 
 await m.react('🧃')
 
 } catch (e) {
 await m.react('✖️')
-await conn.reply(m.chat,'⚠ Error: ' + e.message,m)
+await conn.reply(m.chat,'⚠ Error: ' + e.toString(),m)
 }
 }
 
