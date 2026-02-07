@@ -7,10 +7,7 @@ handler.all = async function (m) {
     const sendBn = async (url) => {
         await this.sendPresenceUpdate('recording', m.chat)
         await this.sendFile(m.chat, url, 'voice.mp3', null, m, true, { type: 'audioMessage', ptt: true })
-    }
-
-    global.db.data.users[m.sender].money += 50
-    global.db.data.users[m.sender].exp += 50  
+    } 
 
 
     if (/^A Bueno master|Bueno master|Bueno Máster|🫂$/i.test(m.text) && chat.audios) {  
