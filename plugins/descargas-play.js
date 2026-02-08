@@ -2,6 +2,7 @@ import { ytmp3, ytmp4 } from "../lib/youtubedl.js"
 import yts from "yt-search"
 import fs from "fs"
 import { exec } from "child_process"
+import { join } from "path"
 const youtubeRegexID = /(?:youtu\.be\/|youtube\.com\/(?:watch\?v=|embed\/))([a-zA-Z0-9_-]{11})/
 const handler = async (m, { conn, text, command }) => {
 try {
@@ -81,9 +82,11 @@ try {
 const r = await ytmp4(url, title)
 if (!r?.download?.url) throw new Error("Link caído")
 const videoUrl = r.download.url
-const fileName = `${Date.now()}.mp4`
+const tmpDir = join(process.cwd(), 'tmp')
+if (!fs.existsSync(tmpDir)) fs.mkdirSync(tmpDir)
+const fileName = join(tmpDir, `${Date.now()}.mp4`)
 await new Promise((resolve, reject) => {
-exec(`ffmpeg -i "${videoUrl}" -c:v copy -c:a aac -movflags +faststart ${fileName}`, (err) => {
+exec(`ffmpeg -i "${videoUrl}" -c:v copy -c:a aac -movflags +faststart "${fileName}"`, (err) => {
 if (err) reject(err)
 else resolve()
 })
