@@ -1,244 +1,239 @@
 <div align="center">
-  <img src="https://files.catbox.moe/91q106.jpg" alt="Banner Ruby Hoshino Bot" width="full">
+  <img src="https://files.catbox.moe/91q106.jpg" alt="Banner Ruby Hoshino Bot" width="100%" style="border-radius: 10px;">
 </div>
 
 <div align="center">
   <br>
-  <img src="https://readme-typing-svg.demolab.com?font=Fira+Code&pause=1000&color=E91E63&lines=BIENVENIDO+AL+REPOSITORIO;RUBY+HOSHINO+BOT;GRACIAS+POR+VISITAR+EL+REPOSITORIO;CREADO+CON+%E2%9D%A4%EF%B8%8F+POR+DIONEIBI;%C2%A1LA+BOT+MAS+LINDA;%F0%9F%92%96" alt="Typing SVG">
+  <img src="https://readme-typing-svg.demolab.com?font=Fira+Code&pause=1000&color=F48FB1&width=435&lines=BIENVENIDO+AL+REPOSITORIO;RUBY+HOSHINO+BOT+MD;CREADO+CON+%E2%9D%A4%EF%B8%8F+POR+DIONEIBI;%C2%A1LA+IDOL+MAS+LINDA!;%F0%9F%92%96" alt="Typing SVG">
   <br><br>
-  
+
   <p align="center">
-    <a href="https://github.com/Dioneibi-rip/Ruby-Hoshino-Bot"><img src="https://img.shields.io/github/stars/Dioneibi-rip/Ruby-Hoshino-Bot?style=for-the-badge&logo=github&color=FF69B4" alt="GitHub stars"></a>
-    <a href="https://github.com/Dioneibi-rip/Ruby-Hoshino-Bot/network/members"><img src="https://img.shields.io/github/forks/Dioneibi-rip/Ruby-Hoshino-Bot?style=for-the-badge&logo=github&color=DA70D6" alt="GitHub forks"></a>
-    <img src="https://img.shields.io/github/license/Dioneibi-rip/Ruby-Hoshino-Bot?style=for-the-badge&color=87CEEB" alt="License">
+    <a href="https://github.com/Dioneibi-rip/Ruby-Hoshino-Bot"><img src="https://img.shields.io/github/stars/Dioneibi-rip/Ruby-Hoshino-Bot?style=for-the-badge&logo=github&color=FF4081" alt="GitHub stars"></a>
+    <a href="https://github.com/Dioneibi-rip/Ruby-Hoshino-Bot/network/members"><img src="https://img.shields.io/github/forks/Dioneibi-rip/Ruby-Hoshino-Bot?style=for-the-badge&logo=github&color=9C27B0" alt="GitHub forks"></a>
+    <img src="https://img.shields.io/github/license/Dioneibi-rip/Ruby-Hoshino-Bot?style=for-the-badge&color=29B6F6" alt="License">
     <a href="https://api.whatsapp.com/send/?phone=18294868853&text=Hola,+vengo+de+GitHub+y+necesito+soporte+con+Ruby+Bot&type=phone_number&app_absent=0"><img src="https://img.shields.io/badge/WhatsApp-Soporte-25D366?style=for-the-badge&logo=whatsapp&logoColor=white" alt="Support WhatsApp"></a>
   </p>
 
-  <img src="https://files.catbox.moe/atnv7f.gif" alt="Ruby Hoshino Bot Preview" width="350"/>
+  <img src="https://files.catbox.moe/atnv7f.gif" alt="Ruby Hoshino Bot Preview" width="350" style="border-radius: 15px; box-shadow: 0px 0px 20px rgba(255, 105, 180, 0.5);"/>
 </div>
 
----
-
+<div align="center">
+  <img src="https://i.imgur.com/8H972e6.png" alt="separator" width="100%">
+</div>
 
 > [!WARNING]
-> **AVISO IMPORTANTE**  
-> Este bot no está hecho por `WhatsApp Inc.` Así que el mal uso del bot podría resultar en la `prohibición` de tu cuenta de `WhatsApp`. (Aunque tu cuenta de WhatsApp solo puede ser desbloqueada una vez).
-> No soy responsable de la prohibición de tu cuenta.
-> Úsalo bajo tu propio riesgo teniendo en cuenta esta advertencia.
+> #### ⚠️ AVISO IMPORTANTE DE SEGURIDAD
+> Este bot **NO** está afiliado con `WhatsApp Inc.`. El uso indebido (spam, mensajes masivos) podría resultar en la **suspensión** de tu número.
+> * Úsalo bajo tu propio riesgo y responsabilidad.
+> * Recomendamos no usar tu número personal principal para pruebas intensivas.
 
+<div align="center">
+<br>
 
-> **`Ruby Hoshino - Bot`** Es una versión **personalizada del trabajo original de [Yuki Wa Bot](https://github.com/The-King-Destroy/YukiBot-MD)**, Modificado por **[Dioneibi-rip](https://github.com/Dioneibi-rip)**.  
- ¡Úsalo con responsabilidad y diviértete! 💖
+> **`✨ Ruby Hoshino - Bot`** es una versión super personalizada y mejorada del proyecto original [Yuki Wa Bot](https://github.com/The-King-Destroy/YukiBot-MD), modificado con amor por **[Dioneibi-rip](https://github.com/Dioneibi-rip)**.
+</div>
 
------
+<div align="center">
+  <img src="https://i.imgur.com/8H972e6.png" alt="separator" width="100%">
+</div>
 
-### <img src="https://i.pinimg.com/originals/19/80/6e/19806e91932e6054965fc83b85241270.gif" alt="Prueba La Bot Aqui" width="42" height="42"> ¡Prueba el Bot en Acción!
+### <img src="https://i.pinimg.com/originals/19/80/6e/19806e91932e6054965fc83b85241270.gif" alt="Prueba La Bot Aqui" width="45" height="45"> ¡Únete a la Comunidad!
 
-> ¿Quieres ver la magia de Ruby antes de instalar? ¡Únete a la comunidad y pruébalo! 💖
-
-[**Únete al Grupo Oficial**](https://chat.whatsapp.com/K2CPrOTksiA36SW6k41yuR)
-
------
-
-## 🩵 **`INSTALACIÓN`**
-
-
-### 📥 NECESITAS INSTALAR UNAS DE ESTAS HERRAMIENTAS
-
+> ¿Quieres ver la magia de Ruby antes de instalar? ¡Entra a nuestro grupo oficial! 💖
 
 <p align="center">
-  <a href="https://www.mediafire.com/file/llugt4zgj7g3n3u/com.termux_1020.apk/file"><img src="https://img.shields.io/badge/Descargar-Termux-26C6DA?style=for-the-badge&logo=android" alt="Download Termux"></a>
-  <a href="https://www.mediafire.com/file/bp2l6cci2p30hjv/Cloud+Shell_1.apk/file"><img src="https://img.shields.io/badge/Descargar-Cloud%20Shell-FF7043?style=for-the-badge&logo=google-cloud" alt="Download Cloud Shell"></a>
+ <a href="https://chat.whatsapp.com/K2CPrOTksiA36SW6k41yuR"><img src="https://img.shields.io/badge/UNIRSE%20AL%20GRUPO-FF69B4?style=for-the-badge&logo=whatsapp&logoColor=white"></a>
+</p>
+
+<div align="center">
+  <img src="https://i.imgur.com/8H972e6.png" alt="separator" width="100%">
+</div>
+
+## 🎀 **`GUÍA DE INSTALACIÓN`**
+
+### 📥 1. REQUISITOS PREVIOS
+
+Si vas a instalar en Android, descarga primero estas aplicaciones:
+
+<p align="center">
+  <a href="https://www.mediafire.com/file/llugt4zgj7g3n3u/com.termux_1020.apk/file"><img src="https://img.shields.io/badge/Descargar-Termux-26C6DA?style=for-the-badge&logo=android&logoColor=black" alt="Download Termux"></a>
+  <a href="https://www.mediafire.com/file/bp2l6cci2p30hjv/Cloud+Shell_1.apk/file"><img src="https://img.shields.io/badge/Descargar-Cloud%20Shell-FF7043?style=for-the-badge&logo=google-cloud&logoColor=white" alt="Download Cloud Shell"></a>
 </p>
 
 ---
 
-> 🚩 ESCRIBE LOS SIGUIENTES COMANDOS UNO POR UNO: 
+## <img src="https://media.tenor.com/On7KVX2S6pAAAAAj/animated-star.gif" width="30"> Opción A: Termux (Android)
 
-## <img src="https://i.giphy.com/media/nWGRHBnAl5Kmc/giphy.gif" alt="Instalacion" width="40" height="40"> Instalación en [termux](https://f-droid.org/repo/com.termux_118.apk)
-
-> ⚠️ **Nota Importante:** La bot no es 100% compatible con Termux y puede presentar fallos o no funcionar correctamente en algunos dispositivos. Se recomienda el uso de Cloud Shell o despliegue en la nube para una mejor experiencia.
+> ⚠️ **Nota:** Termux puede presentar inestabilidad en algunos dispositivos. Si falla, intenta Cloud Shell.
 
 <details>
-<summary><b>🪼 PASOS DE INSTALACION</b></summary>
+<summary><b>🍭 CLIC AQUÍ PARA VER COMANDOS DE TERMUX</b></summary>
+<br>
 
+1️⃣ **Configurar almacenamiento:**
 ```bash
 termux-setup-storage
-````
+
+```
+
+*(Acepta los permisos que aparezcan en pantalla)*
+
+2️⃣ **Instalar dependencias:**
 
 ```bash
 pkg update && pkg upgrade && pkg install -y git nodejs ffmpeg imagemagick yarn
+
 ```
 
+3️⃣ **Clonar el repositorio:**
+
 ```bash
-git clone https://github.com/Dioneibi-rip/Ruby-Hoshino-Bot && cd Ruby-Hoshino-Bot
+git clone [https://github.com/Dioneibi-rip/Ruby-Hoshino-Bot](https://github.com/Dioneibi-rip/Ruby-Hoshino-Bot) && cd Ruby-Hoshino-Bot
+
 ```
+
+4️⃣ **Instalar módulos:**
 
 ```bash
 yarn install
+
 ```
+
+5️⃣ **Iniciar Ruby Bot:**
 
 ```bash
 npm start
+
 ```
 
-> Cuando el sistema te pregunte: `(Y/I/N/O/D/Z) [default=N]`, escribe **"y"** y presiona **ENTER**.
+> 💡 Cuando pregunte: `(Y/I/N/O/D/Z) [default=N]`, escribe **"y"** y presiona **ENTER**.
 
 </details>
 
 ---
 
-## <img src="https://files.catbox.moe/rs536w.gif" alt="Instalacion" width="40" height="40"> Instalación en [Cloud Shell](https://www.mediafire.com/file/bp2l6cci2p30hjv/Cloud+Shell_1.apk/file)
+## <img src="https://www.google.com/url?sa=E&source=gmail&q=https://media.tenor.com/On7KVX2S6pAAAAAj/animated-star.gif" width="30"> Opción B: Cloud Shell (Web/App)
 
 <details>
-  <summary><b>🚀 VER PASOS PARA CLOUD SHELL</b></summary>
+<summary><b>🚀 CLIC AQUÍ PARA VER COMANDOS DE CLOUD SHELL</b></summary>
+
+
+
 
 ```bash
-git clone https://github.com/Dioneibi-rip/Ruby-Hoshino-Bot && cd Ruby-Hoshino-Bot
+git clone [https://github.com/Dioneibi-rip/Ruby-Hoshino-Bot](https://github.com/Dioneibi-rip/Ruby-Hoshino-Bot) && cd Ruby-Hoshino-Bot
+
 ```
 
 ```bash
 yarn install && npm install
+
 ```
 
 ```bash
 npm start
+
 ```
 
-> ✔️ Asegúrate de que tu Cloud Shell tenga Node.js instalado.
 </details>
 
 ---
 
-### 💖 **`ACTIVAR SI SE DETUVO (TERMUX)`**
+### 🛠️ **`HERRAMIENTAS ÚTILES`**
+
+| Acción | Comando / Descripción |
+| --- | --- |
+| **🆘 Reactivar (Termux)** | `cd && cd Ruby-Hoshino-Bot && npm start` |
+| **🔄 Nuevo QR** | `cd Ruby-Hoshino-Bot && rm -rf RubySessions && npm start` |
+| **🐝 Modo 24/7 (PC/VPS)** | `npm i -g pm2 && pm2 start index.js && pm2 save` |
+| **🆙 Actualizar Bot** | `wget -O - https://raw.githubusercontent.com/Dioneibi-rip/Ruby-Hoshino-Bot/master/update.sh |
+
+<div align="center">
+<img src="https://www.google.com/url?sa=E&source=gmail&q=https://i.imgur.com/8H972e6.png" alt="separator" width="100%">
+</div>
+
+### 🍉 **`HOSTING RECOMENDADO: AKIRAX`**
+
+> ¿Buscas estabilidad 24/7 sin complicaciones? Usa nuestro partner oficial.
+
+<div align="center">
+<a href="https://home.akirax.net">
+<img src="https://raw.githubusercontent.com/The-King-Destroy/Adiciones/main/Contenido/1748713078525.jpeg" height="150px" style="border-radius: 15px; border: 2px solid #FF69B4;">
+</a>
+</div>
 
 <details>
-<summary><b>✨ VER COMANDOS</b></summary>
+<summary><b>🍡 VER ENLACES DE AKIRAX</b></summary>
 
-```bash
-cd && cd Ruby-Hoshino-Bot && npm start
-```
-
-</details>
-
----
-
-### 🔑 **`OBTENER UN NUEVO CÓDIGO`**
-
-<details>
-<summary><b>🔄 VER COMANDOS</b></summary>
-
-```bash
-cd Ruby-Hoshino-Bot
-```
-
-```bash
-rm -rf RubySessions
-```
-
-```bash
-npm start
-```
+* 🖥️ **Dashboard:** [Click Aquí](https://home.akirax.net)
+* ⚙️ **Panel de Control:** [Click Aquí](https://console.akirax.net)
+* 🟢 **Canal WhatsApp:** [Unirse](https://whatsapp.com/channel/0029VbBCchVDJ6H6prNYfz2z)
+* 💬 **Soporte:** [Grupo Oficial](https://chat.whatsapp.com/JxSZTFJN9J20TnsH7KsKTA)
 
 </details>
 
----
+<div align="center">
+<img src="https://www.google.com/url?sa=E&source=gmail&q=https://i.imgur.com/8H972e6.png" alt="separator" width="100%">
+</div>
 
-🪻 **`Ruby 24/7 (TERMUX)`**
+## ☁️ **`DEPLOY AUTOMÁTICO EN LA NUBE`**
 
-<details>
-<summary><b>🐝 VER COMANDOS</b></summary>
+<div align="center">
 
-```bash
-termux-wake-lock && npm i -g pm2 && pm2 start index.js && pm2 save && pm2 logs 
-```
+| Heroku | Replit | Render |
+| --- | --- | --- |
+| [](https://heroku.com/deploy?template=https://github.com/Dioneibi-rip/Ruby-Hoshino-Bot) | [](https://repl.it/github/Dioneibi-rip/Ruby-Hoshino-Bot) | [](https://dashboard.render.com/blueprint/new?repo=https%3A%2F%2Fgithub.com%2FDioneibi-rip%2FRuby-Hoshino-Bot) |
 
-</details>
-
-
-🩷 **`ACTUALIZACION A LA BOT (TERMUX) `**
-> Comandos para actualizar a Ruby-Bot de forma automática
-
-<details>
-<summary><b>🫛 VER COMANDOS</b></summary>
-
-```bash
-grep -q 'bash\|wget' <(dpkg -l) || apt install -y bash wget && wget -O - https://raw.githubusercontent.com/Dioneibi-rip/Ruby-Hoshino-Bot/master/update.sh | bash
-```
-
-</details>
+</div>
 
 ---
 
-### **`USA A RUBY COMPLETAMENTE 24/7 EN AKIRAX HOST 🍉︎`**
+## 🌟 **`CARACTERÍSTICAS BRILLANTES`**
 
-<a
-href="https://home.akirax.net"><img src="https://raw.githubusercontent.com/The-King-Destroy/Adiciones/main/Contenido/1748713078525.jpeg" height="125px"></a>
-
-<details>
- <summary><b> 🍡 VER AKIRAX</b></summary>
-
-* Dashboard : [`Dash`](https://home.akirax.net)
-* Panel : [`Panel`](https://console.akirax.net)
-* Canal de WhatsApp : [`Aqui`](https://whatsapp.com/channel/0029VbBCchVDJ6H6prNYfz2z)
-* Grupo Oficial : [`Aquí`](https://chat.whatsapp.com/JxSZTFJN9J20TnsH7KsKTA)
-
-</details>
+| Icono | Función | Descripción | Estado |
+| --- | --- | --- | --- |
+| 🎵 | **Multimedia** | Descarga música y videos (YT, Spotify, TikTok). | ✅ |
+| 🎨 | **Stickers** | Crea stickers, stickers animados y memes. | ✅ |
+| 🛡️ | **Moderación** | Anti-links, Anti-spam, Bienvenidas automáticas. | ✅ |
+| 🎮 | **RPG & Juegos** | Sistema de economía, PPT, Tic-Tac-Toe y más. | ✅ |
+| 🤖 | **ChatBot AI** | Respuestas inteligentes tipo SimSimi y GPT. | ✅ |
+| 🔎 | **Buscador** | Google, Wikipedia, Letras de canciones. | ✅ |
 
 ---
 
-## ☁️ **`MÉTODOS DE DESPLIEGUE EN LA NUBE`**
-
-#### 💜 **ACTIVAR EN HEROKU**
-
-[![Deploy on Heroku](https://img.shields.io/badge/DEPLOY%20EN%20HEROKU-6762A6?style=for-the-badge\&logo=heroku\&logoColor=white)](https://heroku.com/deploy?template=https://github.com/Dioneibi-rip/Ruby-Hoshino-Bot)
-
-#### 💙 **ACTIVAR EN REPLIT**
-
-[![Run on Replit](https://img.shields.io/badge/ACTIVAR%20EN%20REPLIT-0D101E?style=for-the-badge\&logo=replit\&logoColor=white)](https://repl.it/github/Dioneibi-rip/Ruby-Hoshino-Bot)
-
-#### 💚 **ACTIVAR EN RENDER**
-
-[![Deploy on Render](https://img.shields.io/badge/ACTIVAR%20EN%20RENDER-0468FF?style=for-the-badge\&logo=render\&logoColor=white)](https://dashboard.render.com/blueprint/new?repo=https%3A%2F%2Fgithub.com%2FDioneibi-rip%2FRuby-Hoshino-Bot)
-
----
-
-## <img src="https://i.pinimg.com/originals/73/69/6e/73696e022df7cd5cb3d999c6875361dd.gif" alt="Características" width="42" height="42"> Características Brillantes
-
-| Característica                 | Descripción                                                | Estado |
-| :----------------------------- | :--------------------------------------------------------- | :----: |
-| 🎵 **Descargas Multimedia**    | Descarga música y videos de múltiples plataformas.         |    ✅   |
-| 🎨 **Fábrica de Stickers**     | Crea stickers de imágenes, videos o GIFs, con o sin fondo. |    ✅   |
-| 🛡️ **Guardián de Grupos**     | Anti-enlaces, anti-spam, bienvenidas y más.                |    ✅   |
-| 🎮 **Zona de Juegos**          | Diviértete con P-P-T, Tic-Tac-Toe y un sistema RPG.        |    ✅   |
-| 🤖 **Inteligencia Artificial** | Interactúa con chatbots como Simsimi y un contestador IA.  |    ✅   |
-| 🔍 **Búsquedas al Instante**   | Busca en Google, Wikipedia y más sin salir de WhatsApp.    |    ✅   |
-
----
-
-## 💬 **`COMUNIDAD Y CANALES OFICIALES`**
-
-¿Tienes dudas o quieres estar al día con las novedades? ¡Únete a nuestros canales oficiales! 💫
+## 💬 **`CONTACTO Y SOPORTE`**
 
 <p align="center">
-  <a href="https://whatsapp.com/channel/0029VakLbM76mYPPFL0IFI3P">
-    <img src="https://img.shields.io/badge/Canal%20Oficial-25D366?style=for-the-badge&logo=whatsapp&logoColor=white" alt="Canal Oficial">
-  </a>
-  <a href="https://api.whatsapp.com/send/?phone=18294868853&text=Hola,+vengo+de+GitHub+y+necesito+soporte+con+Ruby+Bot&type=phone_number&app_absent=0">
-    <img src="https://img.shields.io/badge/Contacto%20de%20Soporte-FF5722?style=for-the-badge&logo=whatsapp&logoColor=white" alt="Support Contact">
-  </a>
+<a href="https://whatsapp.com/channel/0029VakLbM76mYPPFL0IFI3P">
+<img src="https://img.shields.io/badge/Canal%20Oficial-25D366?style=for-the-badge&logo=whatsapp&logoColor=white" alt="Canal Oficial">
+</a>
+<a href="https://api.whatsapp.com/send/?phone=18294868853&text=Hola,+vengo+de+GitHub+y+necesito+soporte+con+Ruby+Bot&type=phone_number&app_absent=0">
+<img src="https://www.google.com/search?q=https://img.shields.io/badge/Soporte%2520Directo-FF5722%3Fstyle%3Dfor-the-badge%26logo%3Dwhatsapp%26logoColor%3Dwhite" alt="Support Contact">
+</a>
 </p>
 
----
+### `🍋‍🟩 DESARROLLADORES`
 
-### `🍋‍🟩 𝘿𝙀𝙎𝘼𝙍𝙍𝙊𝙇𝙇𝘼𝘿𝙊𝙍𝙀𝙎`
+<div align="center">
 <a href="https://github.com/Dioneibi-rip/Ruby-Hoshino-Bot/graphs/contributors">
-<img src="https://contrib.rocks/image?repo=Dioneibi-rip/Ruby-Hoshino-Bot" /> 
+<img src="https://contrib.rocks/image?repo=Dioneibi-rip/Ruby-Hoshino-Bot" />
+</a>
+</div>
+
+### `🪷 CREADOR OFICIAL`
+
+<div align="center">
+<a href="https://github.com/Dioneibi-rip">
+<img src="https://github.com/Dioneibi-rip.png" width="130" height="130" style="border-radius: 50%; border: 3px solid #FF69B4;" alt="David"/>
 </a>
 
-### `🪷 𝘾𝙍𝙀𝘼𝘿𝙊𝙍 𝙊𝙁𝙄𝘾𝙄𝘼𝙇`
-<a
-href="https://github.com/Dioneibi-rip"><img src="https://github.com/Dioneibi-rip.png" width="130" height="130" alt="David"/></a>
 
 
-**`¡GRACIAS POR PREFERIRNOS!` 🫧**
+
+
+<b>Dioneibi-rip</b>
+</div>
+
+<div align="center">
+<img src="https://www.google.com/search?q=https://readme-typing-svg.demolab.com%3Ffont%3DFira%2BCode%26pause%3D1000%26color%3DE91E63%26center%3Dtrue%26vCenter%3Dtrue%26width%3D435%26lines%3DGRACIAS%2BPOR%2BPREFERIRNOS%3BRUBY%2BHOSHINO%2BBOT%3BHASTA%2BLA%2BPROXIMA!%2B%25F0%259F%2591%258B" alt="Footer Typing SVG">
+</div>
