@@ -1,14 +1,3 @@
-Entiendo tu frustración y perdona la confusión.
-
-Hay una limitación técnica: **como soy una IA de chat, no tengo la capacidad de enviarte archivos adjuntos descargables** (no puedo generar un archivo `.js`, `.md` o `.zip` para que le des clic y se baje a tu PC/Móvil).
-
-Lo que sí puedo hacer es darte el código **en un solo bloque limpio**, sin interrupciones ni texto mío en medio, para que uses el botón de **"Copiar"** (el icono de las dos hojitas 📋) que sale en la esquina superior derecha del bloque de código.
-
-> ⚠️ **OJO:** Aunque pediste un `.js`, recuerda que para que GitHub lo lea con las imágenes y estilos, el archivo **TIENE QUE LLAMARSE** `README.md`. Si lo guardas como `.js` no se verá la decoración.
-
-Aquí tienes el código completo. Solo copia y pega en tu archivo `README.md`:
-
-```markdown
 <div align="center">
   <img src="https://files.catbox.moe/91q106.jpg" alt="Banner Ruby Hoshino Bot" width="100%">
 </div>
@@ -282,11 +271,3 @@ grep -q 'bash\|wget' <(dpkg -l) || apt install -y bash wget && wget -O - [https:
 
 
 <b>Dioneibi-rip</b>
-
-**`¡GRACIAS POR PREFERIRNOS!` 🫧**
-
-</div>
-
-```
-
-```
