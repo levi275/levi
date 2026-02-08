@@ -105,23 +105,11 @@ const roles = {
 }
 
 let handler = m => m
-
-handler.before = async function (m, { conn }) {
+handler.roles = async function (m, { conn }) {
   let user = db.data.users[m.sender]
-
-  if (!user) return true
-
-  let level = user.level ?? 0
-
-  let role = (
-    Object.entries(roles)
-      .sort((a, b) => b[1] - a[1])
-      .find(([, minLevel]) => level >= minLevel)
-    || Object.entries(roles)[0]
-  )[0]
-
+  let level = user.level || 0
+  let role = (Object.entries(roles).sort((a, b) => b[1] - a[1]).find(([, minLevel]) => level >= minLevel) || Object.entries(roles)[0])[0]
   user.role = role
-  return true
+  return !0
 }
-
 export default handler
