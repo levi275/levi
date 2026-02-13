@@ -157,10 +157,10 @@ ${chalk.bold.magentaBright('➜ ')}`))
 
 }
 const connectionOptions = {
-    logger: pino({ level: 'silent' }), // Silent evita logs excesivos que causan lag
+    logger: pino({ level: 'silent' }), 
     printQRInTerminal: opcion == '1' ? true : methodCodeQR ? true : false,
     mobile: MethodMobile,
-    browser: opcion == '1' ? ['RubyBot', 'Edge', '20.0.04'] : methodCodeQR ? ['RubyBot', 'Edge', '20.0.04'] : ['Ubuntu', 'Edge', '110.0.1587.56'],
+    browser: ['Ubuntu', 'Chrome', '20.0.04'],
     auth: { creds: state.creds, keys: makeCacheableSignalKeyStore(state.keys, pino({ level: "fatal" }).child({ level: "fatal" })), },
     markOnlineOnConnect: true,
     generateHighQualityLinkPreview: true,
