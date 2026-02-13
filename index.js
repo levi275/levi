@@ -233,7 +233,6 @@ conn.ev.on('creds.update', conn.credsUpdate)
 isInit = false
 return true
 };
-// Activar listeners inmediatos
 conn.ev.on('connection.update', connectionUpdate)
 conn.ev.on('creds.update', saveCreds)
 global.rutaJadiBot = join(__dirname, './RubyJadiBots')
