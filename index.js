@@ -151,9 +151,12 @@ msgRetryCounterCache,
 msgRetryCounterMap,
 defaultQueryTimeoutMs: undefined,
 version,
+syncFullHistory: false,
+connectTimeoutMs: 60000,
+keepAliveIntervalMs: 30000,
+retryRequestDelayMs: 2000
 }
 global.conn = makeWASocket(connectionOptions);
-
 conn.isInit = false;
 conn.well = false;
 if (!existsSync(`./${Rubysessions}/creds.json`)) {
