@@ -157,6 +157,7 @@ keepAliveIntervalMs: 30000,
 retryRequestDelayMs: 2000
 }
 global.conn = makeWASocket(connectionOptions);
+let conn = global.conn
 conn.isInit = false;
 conn.well = false;
 if (!existsSync(`./${Rubysessions}/creds.json`)) {
@@ -224,6 +225,7 @@ const oldChats = global.conn.chats
 try { global.conn.ws.close() } catch { }
 conn.ev.removeAllListeners()
 global.conn = makeWASocket(connectionOptions, { chats: oldChats })
+conn = global.conn
 isInit = true
 }
 if (!isInit) { conn.ev.off('messages.upsert', conn.handler); conn.ev.off('connection.update', conn.connectionUpdate); conn.ev.off('creds.update', conn.credsUpdate); }
@@ -236,8 +238,7 @@ conn.ev.on('creds.update', conn.credsUpdate)
 isInit = false
 return true
 };
-conn.ev.on('connection.update', connectionUpdate)
-conn.ev.on('creds.update', saveCreds)
+await global.reloadHandler(false)
 global.rutaJadiBot = join(__dirname, './RubyJadiBots')
 if (global.RubyJadibts || true) { 
 if (!existsSync(global.rutaJadiBot)) { 
