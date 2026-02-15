@@ -1,13 +1,11 @@
-import fs from 'fs'
 import { loadVentas, saveVentas, getVentasInGroup, loadHarem, saveHarem, addOrUpdateClaim } from '../lib/gacha-group.js'
-
-const charPath = './src/database/characters.json'
+import { loadCharacters, findCharacterById } from '../lib/gacha-characters.js'
 
 let handler = async (m, { conn, args }) => {
 if (!args[0]) return m.reply('✿ Usa: *#comprarwaifu <número | nombre>*')
 
 let ventas = await loadVentas()
-let personajes = JSON.parse(fs.readFileSync(charPath, 'utf-8'))
+let personajes = await loadCharacters()
 
 const groupId = m.chat
 const ventasGrupo = getVentasInGroup(ventas, groupId)
@@ -36,9 +34,9 @@ if ((comprador.coin || 0) < precio)
 return m.reply(`✘ Dinero insuficiente.\nNecesitas *¥${precio.toLocaleString()} ${m.moneda}*`)
 
 let vendedor = global.db.data.users[venta.vendedor]
-if (!vendedor) global.db.data.users[venta.vendedor] = { coin: 0 }
+if (!vendedor) vendedor = global.db.data.users[venta.vendedor] = { coin: 0 }
 
-comprador.coin -= precio
+comprador.coin = (comprador.coin || 0) - precio
 vendedor.coin = (vendedor.coin || 0) + precio
 
 let harem = await loadHarem()
@@ -50,7 +48,7 @@ await saveVentas(ventas)
 
 await global.db.write()
 
-let personaje = personajes.find(p => p.id === venta.id)
+let personaje = findCharacterById(personajes, venta.id)
 let valorOriginal = personaje?.value || 'Desconocido'
 
 m.reply(

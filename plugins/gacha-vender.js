@@ -1,19 +1,17 @@
-import { promises as fs } from 'fs';
 import {
   loadVentas,
   saveVentas,
-  addOrUpdateVenta
+  addOrUpdateVenta,
+  loadHarem,
+  findClaimByUserAndChar
 } from '../lib/gacha-group.js';
-
-const charactersFile = './src/database/characters.json';
-
-async function loadCharacters() {
-  const data = await fs.readFile(charactersFile, 'utf-8');
-  return JSON.parse(data);
-}
-async function saveCharacters(characters) {
-  await fs.writeFile(charactersFile, JSON.stringify(characters, null, 2), 'utf-8');
-}
+import {
+  loadCharacters,
+  saveCharacters,
+  findCharacterById,
+  findCharacterByName,
+  extractCharacterIdFromText
+} from '../lib/gacha-characters.js';
 
 let handler = async (m, { args, conn, participants }) => {
   let userId = m.sender;
@@ -29,11 +27,10 @@ let handler = async (m, { args, conn, participants }) => {
   let precio = null;
 
   if (m.quoted?.text) {
-    const idMatch = m.quoted.text.match(/🆔.*?\*(\d+)\*/i);
-    if (!idMatch) return m.reply('✧ No se pudo encontrar el ID del personaje citado.');
-    const id = idMatch[1].trim();
+    const id = extractCharacterIdFromText(m.quoted.text);
+    if (!id) return m.reply('✧ No se pudo encontrar el ID del personaje citado.');
     const characters = await loadCharacters();
-    personaje = characters.find(c => c.id === id);
+    personaje = findCharacterById(characters, id);
     precio = parseInt(args[0]);
   } else {
     const precioDetectado = args.find(a => !isNaN(a));
@@ -48,22 +45,22 @@ let handler = async (m, { args, conn, participants }) => {
 
     const nombre = args.filter(a => a !== precioDetectado).join(' ').toLowerCase();
     const characters = await loadCharacters();
-    personaje = characters.find(c => c.name.toLowerCase() === nombre);
+    personaje = findCharacterByName(characters, nombre);
 
     if (!personaje) return m.reply(`✧ Personaje *"${nombre}"* no encontrado.`);
   }
 
   // Validación: el usuario debe poseer el personaje en este grupo
   // Comprobamos en harem.json si existe un claim en este grupo por user
-  const haremRaw = await fs.readFile('./src/database/harem.json', 'utf-8').then(r => JSON.parse(r)).catch(() => []);
-  const claim = haremRaw.find(e => e.groupId === groupId && e.characterId === personaje.id && e.userId === userId);
+  const haremRaw = await loadHarem();
+  const claim = findClaimByUserAndChar(haremRaw, groupId, userId, personaje.id);
   if (!claim) return m.reply('✧ Esta waifu no te pertenece en este grupo.');
 
   const ventas = await loadVentas();
 
   // marcar en characters solo como meta-info (no afecta la pertenencia por grupo)
   const chars = await loadCharacters();
-  const i = chars.findIndex(x => x.id === personaje.id);
+  const i = chars.findIndex(x => String(x.id).trim() === String(personaje.id).trim());
   if (i === -1) return m.reply('✧ Error inesperado: personaje no encontrado en la base de datos.');
 
   chars[i].enVenta = true;

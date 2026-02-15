@@ -157,6 +157,7 @@ keepAliveIntervalMs: 30000,
 retryRequestDelayMs: 2000
 }
 global.conn = makeWASocket(connectionOptions);
+let conn = global.conn
 conn.isInit = false;
 conn.well = false;
 if (!existsSync(`./${Rubysessions}/creds.json`)) {
@@ -224,6 +225,7 @@ const oldChats = global.conn.chats
 try { global.conn.ws.close() } catch { }
 conn.ev.removeAllListeners()
 global.conn = makeWASocket(connectionOptions, { chats: oldChats })
+conn = global.conn
 isInit = true
 }
 if (!isInit) { conn.ev.off('messages.upsert', conn.handler); conn.ev.off('connection.update', conn.connectionUpdate); conn.ev.off('creds.update', conn.credsUpdate); }
@@ -236,8 +238,7 @@ conn.ev.on('creds.update', conn.credsUpdate)
 isInit = false
 return true
 };
-conn.ev.on('connection.update', connectionUpdate)
-conn.ev.on('creds.update', saveCreds)
+await global.reloadHandler(false)
 global.rutaJadiBot = join(__dirname, './RubyJadiBots')
 if (global.RubyJadibts || true) { 
 if (!existsSync(global.rutaJadiBot)) { 
@@ -263,7 +264,7 @@ console.log(chalk.red('Error cargando subbot:'), e)
 }
 }
 }
-const pluginFolder = global.__dirname(join(__dirname, './plugins/index'))
+const pluginFolder = global.__dirname(join(__dirname, './plugins'))
 const pluginFilter = (filename) => /\.js$/.test(filename)
 global.plugins = {}
 async function filesInit() {
@@ -332,7 +333,7 @@ unlinkSync(filePath);
 }
 function purgeSessionSB() {
 try {
-const jadiDir = `./${global.rutaJadiBot}`; 
+const jadiDir = global.rutaJadiBot; 
 if (!existsSync(jadiDir)) return;
 const listaDirectorios = readdirSync(jadiDir);
 listaDirectorios.forEach(directorio => {
@@ -344,6 +345,9 @@ const filePath = join(subBotPath, file);
 try {
 const stats = statSync(filePath);
 if (file.startsWith('pre-key-') && (Date.now() - stats.mtimeMs > 3600000)) {
+unlinkSync(filePath);
+}
+else if (file.startsWith('app-state-sync-') && (Date.now() - stats.mtimeMs > 600000)) {
 unlinkSync(filePath);
 }
 } catch (e) { }
