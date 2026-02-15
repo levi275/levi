@@ -38,6 +38,10 @@ let handler = async (m, { conn }) => {
 > ✦ Reclama un cofre diario lleno de recursos.
 ൃ⵿꤬ᩚ̸̷͠ᩘ🪷̷̸ᩚ⃨⢾ ֺ ֢ ᮫  ─ *#weekly • #semanal*
 > ✦ Reclama tu regalo semanal.
+ൃ⵿꤬ᩚ̸̷͠ᩘ🪙̷̸ᩚ⃨⢾ ֺ ֢ ᮫  ─ *#interes • #bankinterest*
+> ✦ Cobra intereses diarios por ahorrar en el banco.
+ൃ⵿꤬ᩚ̸̷͠ᩘ👑̷̸ᩚ⃨⢾ ֺ ֢ ᮫  ─ *#premiumbonus • #bonopremium*
+> ✦ Bonus exclusivo para usuarios premium cada 12h.
 ൃ⵿꤬ᩚ̸̷͠ᩘ🥡̷̸ᩚ⃨⢾ ֺ ֢ ᮫  ─ *#monthly • #mensual*
 > ✦ Reclama tu recompensa mensual.
 ൃ⵿꤬ᩚ̸̷͠ᩘ🍒̷̸ᩚ⃨⢾ ֺ ֢ ᮫  ─ *#steal • #robar • #rob*
