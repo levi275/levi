@@ -64,7 +64,7 @@ const punchGifs=[
 'https://media.tenor.com/EdV_frZ4e_QAAAAM/anime-naruto.gif',
 'https://media.tenor.com/-dH4rQr2QQQAAAAM/pjsk-pjsk-anime.gif',
 'https://media.tenor.com/o8RbiF5-9dYAAAAM/killua-hxh.gif',
-'https://media.tenor.com/SQQ4VD6igHIAAAAM/yuji-itadori-yuji.gif'
+'https://media.tenor.com/SQQ4VD6igHIAAAAM/yuji-itadori-yuji.gif
 ]
 
 const randomGif=punchGifs[Math.floor(Math.random()*punchGifs.length)]

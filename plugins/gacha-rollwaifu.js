@@ -1,9 +1,19 @@
-import { loadHarem, findClaim } from '../lib/gacha-group.js'
-import { loadCharacters, normalizeCharacterId } from '../lib/gacha-characters.js'
+import { promises as fs } from 'fs'
+import { loadHarem, saveHarem, userKey, charKey, addOrUpdateClaim, findClaim } from '../lib/gacha-group.js'
 
+const charactersFilePath = './src/database/characters.json'
 export const cooldowns = {}
 
 global.activeRolls = global.activeRolls || {}
+
+async function loadCharacters() {
+try {
+const data = await fs.readFile(charactersFilePath, 'utf-8')
+return JSON.parse(data)
+} catch (error) {
+throw new Error('❀ No se pudo cargar el archivo characters.json.')
+}
+}
 
 function formatUrl(url) {
 if (!url) return url
@@ -29,9 +39,6 @@ const userId = m.sender
 const groupId = m.chat
 const now = Date.now()
 const key = `${groupId}:${userId}`
-for (const [rollKey, rollData] of Object.entries(global.activeRolls)) {
-if (!rollData?.time || now - rollData.time > 3 * 60 * 1000) delete global.activeRolls[rollKey]
-}
 
 if (cooldowns[key] && now < cooldowns[key]) {
 const remainingTime = Math.ceil((cooldowns[key] - now) / 1000)
@@ -44,12 +51,8 @@ cooldowns[key] = now + 15 * 60 * 1000
 
 try {
 const characters = await loadCharacters()
-if (!characters.length) throw new Error('❀ No hay personajes disponibles para el gacha.')
 const randomCharacter = characters[Math.floor(Math.random() * characters.length)]
-randomCharacter.id = normalizeCharacterId(randomCharacter.id)
-const imageList = Array.isArray(randomCharacter.img) ? randomCharacter.img : []
-let randomImage = imageList[Math.floor(Math.random() * imageList.length)]
-if (!randomImage) throw new Error(`❀ El personaje ${randomCharacter.name} no tiene imágenes válidas.`)
+let randomImage = randomCharacter.img[Math.floor(Math.random() * randomCharacter.img.length)]
 
 randomImage = formatUrl(randomImage)
 

@@ -1,10 +1,25 @@
+import { promises as fs } from 'fs';
 import { getUserClaims, loadHarem } from '../lib/gacha-group.js';
-import { loadCharacters, findCharacterById } from '../lib/gacha-characters.js';
+
+const charactersFilePath = './src/database/characters.json';
+
+async function loadCharacters() {
+  try {
+    const data = await fs.readFile(charactersFilePath, 'utf-8');
+    return JSON.parse(data);
+  } catch (error) {
+    throw new Error('No se pudo cargar el archivo characters.json.');
+  }
+}
+
+async function loadHaremFile() {
+  return await loadHarem();
+}
 
 let handler = async (m, { conn, args, participants }) => {
   try {
     const characters = await loadCharacters();
-    const harem = await loadHarem();
+    const harem = await loadHaremFile();
     let rawUserId;
 
     if (m.quoted && m.quoted.sender) {
@@ -52,7 +67,7 @@ let handler = async (m, { conn, args, participants }) => {
 
     for (let i = startIndex; i < endIndex; i++) {
       const charId = userClaims[i].characterId;
-      const character = findCharacterById(characters, charId);
+      const character = characters.find(c => c.id === charId);
       const name = character ? character.name : `ID:${charId}`;
       const value = character ? (character.value || '0') : '0';
       message += `» *${name}* (*${value}*)\n`;
