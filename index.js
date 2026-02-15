@@ -264,7 +264,14 @@ console.log(chalk.red('Error cargando subbot:'), e)
 }
 }
 }
-const pluginFolder = global.__dirname(join(__dirname, './plugins'))
+const pluginCandidates = [
+join(__dirname, './plugins/index'),
+join(__dirname, './plugins')
+]
+const pluginFolder = pluginCandidates
+.filter((dir) => existsSync(dir) && statSync(dir).isDirectory())
+.map((dir) => ({ dir, count: readdirSync(dir).filter((filename) => /\.js$/i.test(filename)).length }))
+.sort((a, b) => b.count - a.count)[0]?.dir || global.__dirname(join(__dirname, './plugins'))
 const pluginFilter = (filename) => /\.js$/.test(filename)
 global.plugins = {}
 async function filesInit() {
