@@ -1,16 +1,5 @@
-import { promises as fs } from 'fs';
-import { loadHarem } from '../lib/gacha-group.js';
-
-const charactersFilePath = './src/database/characters.json';
-
-async function loadCharacters() {
-  try {
-    const data = await fs.readFile(charactersFilePath, 'utf-8');
-    return JSON.parse(data);
-  } catch (error) {
-    throw new Error('No se pudo cargar el archivo characters.json.');
-  }
-}
+import { loadHarem, findClaim } from '../lib/gacha-group.js';
+import { loadCharacters, findCharacterByName } from '../lib/gacha-characters.js';
 
 let handler = async (m, { conn, args }) => {
   if (args.length === 0) {
@@ -23,7 +12,7 @@ let handler = async (m, { conn, args }) => {
 
   try {
     const characters = await loadCharacters();
-    const character = characters.find(c => c.name.toLowerCase() === characterName);
+    const character = findCharacterByName(characters, characterName);
 
     if (!character) {
       await conn.reply(m.chat, `No se encontró el personaje *${characterName}*.`, m);
@@ -31,7 +20,7 @@ let handler = async (m, { conn, args }) => {
     }
 
     const harem = await loadHarem();
-    const claim = harem.find(e => e.groupId === groupId && e.characterId === character.id);
+    const claim = findClaim(harem, groupId, character.id);
 
     const statusMessage = claim
       ? `Reclamado por @${claim.userId.split('@')[0]}`

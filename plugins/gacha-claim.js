@@ -2,23 +2,16 @@ import { promises as fs } from 'fs';
 import {
   loadHarem,
   saveHarem,
-  charKey,
   addOrUpdateClaim,
-  findClaim,
-  removeClaim
+  findClaim
 } from '../lib/gacha-group.js';
+import {
+  loadCharacters,
+  findCharacterById,
+  extractCharacterIdFromText
+} from '../lib/gacha-characters.js';
 
-const charactersFilePath = './src/database/characters.json';
 export const cooldowns = {}; // clave: `${groupId}:${userId}`
-
-async function loadCharacters() {
-  const data = await fs.readFile(charactersFilePath, 'utf-8');
-  return JSON.parse(data);
-}
-
-async function saveCharacters(characters) {
-  await fs.writeFile(charactersFilePath, JSON.stringify(characters, null, 2), 'utf-8');
-}
 
 async function loadClaimMessages() {
   try {
@@ -54,11 +47,10 @@ let handler = async (m, { conn }) => {
 
   try {
     const characters = await loadCharacters();
-    const match = m.quoted.text.match(/🅸🅳:\s*(\d+)/);
-    if (!match) return conn.reply(m.chat, '⚠️ No se detectó el ID del personaje en el mensaje citado.', m);
+    const id = extractCharacterIdFromText(m.quoted.text);
+    if (!id) return conn.reply(m.chat, '⚠️ No se detectó el ID del personaje en el mensaje citado.', m);
 
-    const id = match[1].trim();
-    const character = characters.find(c => c.id === id);
+    const character = findCharacterById(characters, id);
 
     if (!character) return conn.reply(m.chat, '🚫 Personaje no encontrado.', m);
 

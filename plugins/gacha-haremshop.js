@@ -1,10 +1,8 @@
-import fs from 'fs';
 import {
   loadVentas,
   getVentasInGroup
 } from '../lib/gacha-group.js';
-
-const charPath = './src/database/characters.json';
+import { loadCharacters, findCharacterById, findCharacterByName } from '../lib/gacha-characters.js';
 
 function formatoFecha(fechaMs) {
   try {
@@ -20,7 +18,7 @@ let handler = async (m, { conn, args }) => {
 
   try {
     ventas = await loadVentas();
-    personajes = JSON.parse(fs.readFileSync(charPath, 'utf-8'));
+    personajes = await loadCharacters();
     if (!Array.isArray(ventas) || !Array.isArray(personajes)) throw new Error('Error en la estructura de los archivos.');
   } catch (e) {
     return m.reply(`✘ Error al leer los datos.\n*Detalles:* ${e.message}`);
@@ -49,7 +47,7 @@ let handler = async (m, { conn, args }) => {
     try {
       let { name, precio, vendedor, fecha, id } = waifusPagina[i];
 
-      const p = personajes.find(p => p.id === id || p.name.toLowerCase() === name.toLowerCase());
+      const p = findCharacterById(personajes, id) || findCharacterByName(personajes, name);
       const valorOriginal = p?.value || 'Desconocido';
       const idPersonaje = p?.id || id || 'Desconocido';
 
