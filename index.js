@@ -264,14 +264,7 @@ console.log(chalk.red('Error cargando subbot:'), e)
 }
 }
 }
-const pluginCandidates = [
-join(__dirname, './plugins/index'),
-join(__dirname, './plugins')
-]
-const pluginFolder = pluginCandidates
-.filter((dir) => existsSync(dir) && statSync(dir).isDirectory())
-.map((dir) => ({ dir, count: readdirSync(dir).filter((filename) => /\.js$/i.test(filename)).length }))
-.sort((a, b) => b.count - a.count)[0]?.dir || global.__dirname(join(__dirname, './plugins'))
+const pluginFolder = global.__dirname(join(__dirname, './plugins/index'))
 const pluginFilter = (filename) => /\.js$/.test(filename)
 global.plugins = {}
 async function filesInit() {
@@ -340,7 +333,7 @@ unlinkSync(filePath);
 }
 function purgeSessionSB() {
 try {
-const jadiDir = global.rutaJadiBot; 
+const jadiDir = `./${global.rutaJadiBot}`; 
 if (!existsSync(jadiDir)) return;
 const listaDirectorios = readdirSync(jadiDir);
 listaDirectorios.forEach(directorio => {
@@ -352,9 +345,6 @@ const filePath = join(subBotPath, file);
 try {
 const stats = statSync(filePath);
 if (file.startsWith('pre-key-') && (Date.now() - stats.mtimeMs > 3600000)) {
-unlinkSync(filePath);
-}
-else if (file.startsWith('app-state-sync-') && (Date.now() - stats.mtimeMs > 600000)) {
 unlinkSync(filePath);
 }
 } catch (e) { }
