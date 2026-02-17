@@ -50,11 +50,11 @@ sender = m.isGroup ? (m.key?.participant ? m.key.participant : m.sender) : m.key
 const groupMetadata = m.isGroup ? (this.chats?.[m.chat]?.metadata || await this.groupMetadata(m.chat).catch(_ => null) || {}) : {}
 const rawParticipants = m.isGroup ? (groupMetadata.participants || []) : []
 const participants = (rawParticipants || []).map(p => {
-let jid = typeof p === 'string' ? p : (p.id || p.jid || p.participant || p?.[0] || null)
-if (jid && !/@/.test(jid)) {
-if (/^\d+$/.test(jid)) jid = jid + '@s.whatsapp.net'
-}
-let lid = p?.lid ?? (jid ? jid.split('@')[0] + '@lid' : undefined)
+let jid = typeof p === 'string' ? p : (p.jid || p.id || p.participant || p?.[0] || null)
+if (jid && !/@/.test(jid) && /^\d+$/.test(jid)) jid = jid + '@s.whatsapp.net'
+let lid = p?.lid || (typeof p === 'string' && p.endsWith('@lid') ? p : null)
+if (!lid && typeof p?.id === 'string' && p.id.endsWith('@lid')) lid = p.id
+if (!lid && typeof p?.jid === 'string' && p.jid.endsWith('@lid')) lid = p.jid
 let admin = false
 if (p) {
 if (typeof p.admin === 'string') {
@@ -71,32 +71,25 @@ if (p.role === 'creator') admin = 'superadmin'
 else if (p.role === 'admin') admin = 'admin'
 }
 }
-return { id: jid, jid: jid, lid, admin }
+return { id: jid, jid, lid, admin }
 })
+const normalizeToJid = (rawJid) => {
+if (!rawJid || typeof rawJid !== 'string') return rawJid
+if (!rawJid.endsWith('@lid')) return rawJid
+const pInfo = participants.find(p => p?.lid === rawJid)
+return (pInfo && pInfo.id) ? pInfo.id : rawJid
+}
 if (m.isGroup) {
-if (sender && sender.endsWith('@lid')) {
-const pInfo = participants.find(p => p.lid === sender)
-if (pInfo && pInfo.id) {
-sender = pInfo.id
-if (m.key) m.key.participant = pInfo.id
-try { m.sender = pInfo.id } catch (e) { }
+sender = normalizeToJid(sender)
+if (m.key?.participant) m.key.participant = sender
+try { m.sender = sender } catch (e) { }
+if (m.quoted?.sender) {
+const quotedSender = normalizeToJid(m.quoted.sender)
+if (m.quoted.key?.participant) m.quoted.key.participant = quotedSender
+try { m.quoted.sender = quotedSender } catch (e) { }
 }
-}
-if (m.quoted && m.quoted.sender && m.quoted.sender.endsWith('@lid')) {
-const pInfo = participants.find(p => p.lid === m.quoted.sender)
-if (pInfo && pInfo.id) {
-if (m.quoted.key) m.quoted.key.participant = pInfo.id
-try { m.quoted.sender = pInfo.id } catch (e) { }
-}
-}
-if (m.mentionedJid && m.mentionedJid.length > 0) {
-const normalizedMentions = m.mentionedJid.map(jid => {
-if (jid && jid.endsWith('@lid')) {
-const pInfo = participants.find(p => p.lid === jid)
-return (pInfo && pInfo.id) ? pInfo.id : jid
-}
-return jid
-})
+if (Array.isArray(m.mentionedJid) && m.mentionedJid.length > 0) {
+const normalizedMentions = m.mentionedJid.map(jid => normalizeToJid(jid))
 try { m.mentionedJid = normalizedMentions } catch (e) { }
 }
 }
@@ -192,8 +185,8 @@ const isRAdmin = normalizeAdmin(userGroup) === 'superadmin'
 const isAdmin = isRAdmin || normalizeAdmin(userGroup) === 'admin'
 const isBotAdmin = normalizeAdmin(botGroup) === 'admin' || normalizeAdmin(botGroup) === 'superadmin'
 const senderNum = String(sender || '').split('@')[0];
-const isROwner = global.owner.map(([number]) => number).includes(senderNum);
-const isOwner = isROwner
+const isROwner = [...global.owner.map(([number]) => number), this.user.jid.split('@')[0]].includes(senderNum);
+const isOwner = isROwner || m.fromMe
 const isMods = isOwner || global.mods.map(v => v.replace(/[^0-9]/g, '')).includes(senderNum)
 const isPrems = isROwner || global.prems.map(v => v.replace(/[^0-9]/g, '')).includes(senderNum) || _user?.premium == true
 const moneda = global.db.data.settings[this.user.jid]?.moneda || 'Coins'
