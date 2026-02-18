@@ -152,7 +152,7 @@ if (qr && mcode) {
 
     const formattedCode = rawCode.match(/.{1,4}/g)?.join("-") || rawCode
     const mediaMessage = await prepareWAMessageMedia({
-        image: { url: "https://files.catbox.moe/7xbyyf.jpg" }
+        image: { url: "https://files.catbox.moe/rt1yfo.jpeg" }
     }, { upload: conn.waUploadToServer })
 
     const interactivePayload = generateWAMessageFromContent(m.chat, {
