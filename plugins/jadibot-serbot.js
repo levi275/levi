@@ -11,7 +11,15 @@ Contenido adaptado por:
 - elrebelde21 >> https://github.com/elrebelde21
 */
 
-const { useMultiFileAuthState, DisconnectReason, makeCacheableSignalKeyStore, fetchLatestBaileysVersion} = (await import("@whiskeysockets/baileys"));
+const {
+useMultiFileAuthState,
+DisconnectReason,
+makeCacheableSignalKeyStore,
+fetchLatestBaileysVersion,
+prepareWAMessageMedia,
+generateWAMessageFromContent,
+proto,
+} = (await import("@whiskeysockets/baileys"));
 import qrcode from "qrcode"
 import NodeCache from "node-cache"
 import fs from "fs"
@@ -142,29 +150,45 @@ return
 if (qr && mcode) {
     const rawCode = await sock.requestPairingCode(m.sender.split`@`[0], "RUBYCHAN");
 
-    const interactiveButtons = [{
-        name: "cta_copy",
-        buttonParamsJson: JSON.stringify({
-            display_text: "Copiar Código",
-            id: "copy-jadibot-code",
-            copy_code: rawCode
-        })
-    }];
+    const formattedCode = rawCode.match(/.{1,4}/g)?.join("-") || rawCode
+    const mediaMessage = await prepareWAMessageMedia({
+        image: { url: "https://files.catbox.moe/7xbyyf.jpg" }
+    }, { upload: conn.waUploadToServer })
 
-    const interactiveMessage = {
-        image: { url: "https://files.catbox.moe/7xbyyf.jpg" },
-        caption: `*✨ ¡Tu código de vinculación está listo! ✨*\n\nUsa el siguiente código para conectarte como Sub-Bot:\n\n*Código:* ${rawCode.match(/.{1,4}/g)?.join("-")}\n\n> Haz clic en el botón de abajo para copiarlo fácilmente.`,
-        title: "Código de Vinculación",
-        footer: "Este código expirará en 45 segundos.",
-        interactiveButtons
-    };
+    const interactivePayload = generateWAMessageFromContent(m.chat, {
+        viewOnceMessage: {
+            message: {
+                interactiveMessage: proto.Message.InteractiveMessage.fromObject({
+                    body: proto.Message.InteractiveMessage.Body.create({
+                        text: `*✨ ¡Tu código de vinculación está listo! ✨*\n\nUsa el siguiente código para conectarte como Sub-Bot:\n\n*Código:* ${formattedCode}\n\n> Haz clic en el botón de abajo para copiarlo fácilmente.`
+                    }),
+                    footer: proto.Message.InteractiveMessage.Footer.create({
+                        text: "Este código expirará en 45 segundos."
+                    }),
+                    header: proto.Message.InteractiveMessage.Header.create({
+                        hasMediaAttachment: true,
+                        imageMessage: mediaMessage.imageMessage
+                    }),
+                    nativeFlowMessage: proto.Message.InteractiveMessage.NativeFlowMessage.fromObject({
+                        buttons: [{
+                            name: "cta_copy",
+                            buttonParamsJson: JSON.stringify({
+                                display_text: "Copiar Código",
+                                copy_code: rawCode
+                            })
+                        }]
+                    })
+                })
+            }
+        }
+    }, { quoted: m })
 
-    const sentMsg = await conn.sendMessage(m.chat, interactiveMessage, { quoted: m });
+    await conn.relayMessage(m.chat, interactivePayload.message, { messageId: interactivePayload.key.id })
     console.log(`Código de vinculación enviado: ${rawCode}`);
 
-    if (sentMsg && sentMsg.key) {
+    if (interactivePayload?.key) {
         setTimeout(() => {
-            conn.sendMessage(m.chat, { delete: sentMsg.key });
+            conn.sendMessage(m.chat, { delete: interactivePayload.key });
         }, 45000);
     }
     return;
