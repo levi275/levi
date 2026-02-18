@@ -99,6 +99,7 @@ exec(comb.toString("utf-8"), async (err, stdout, stderr) => {
 const drmer = Buffer.from(drm1 + drm2, `base64`)
 
 let { version, isLatest } = await fetchLatestBaileysVersion()
+const subSocketCfg = global.baileysSocketConfig || {}
 const msgRetry = (MessageRetryMap) => { }
 const msgRetryCache = new NodeCache()
 const { state, saveState, saveCreds } = await useMultiFileAuthState(pathRubyJadiBot)
@@ -111,7 +112,13 @@ msgRetry,
 msgRetryCache,
 browser: mcode ? ['Ubuntu', 'Chrome', '110.0.5585.95'] : ['Ruby Hoshino (Sub Bot)', 'Chrome','2.0.0'],
 version: version,
-generateHighQualityLinkPreview: true
+generateHighQualityLinkPreview: true,
+defaultQueryTimeoutMs: subSocketCfg.defaultQueryTimeoutMs ?? 30000,
+connectTimeoutMs: subSocketCfg.connectTimeoutMs ?? 45000,
+keepAliveIntervalMs: subSocketCfg.keepAliveIntervalMs ?? 20000,
+retryRequestDelayMs: subSocketCfg.retryRequestDelayMs ?? 1500,
+markOnlineOnConnect: false,
+syncFullHistory: false
 };
 
 let sock = makeWASocket(connectionOptions)
