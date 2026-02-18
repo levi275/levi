@@ -324,9 +324,6 @@ const stats = statSync(filePath);
 if (file.startsWith('pre-key-') && (Date.now() - stats.mtimeMs > 3600000)) { 
 unlinkSync(filePath);
 } 
-else if (file.startsWith('app-state-sync-') && (Date.now() - stats.mtimeMs > 600000)) { 
-unlinkSync(filePath);
-}
 } catch (e) { }
 });
 } catch (e) { console.log("Error en purga de sesión principal:", e); }

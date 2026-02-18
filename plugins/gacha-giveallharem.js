@@ -17,19 +17,17 @@ async function saveCharacters(characters) {
 }
 
 let handler = async (m, { conn, participants }) => {
-  let senderJid = m.sender;
-  if (m.sender.endsWith('@lid') && m.isGroup) {
-    const pInfo = participants.find(p => p.lid === m.sender);
-    if (pInfo && pInfo.id) senderJid = pInfo.id;
-  }
+  const normalizeToJid = (rawJid) => {
+    if (!rawJid || typeof rawJid !== 'string') return rawJid;
+    if (!rawJid.endsWith('@lid')) return rawJid;
+    const pInfo = participants.find(p => p?.lid === rawJid);
+    return pInfo?.id || rawJid;
+  };
 
-  let mentionedJid = m.mentionedJid?.[0];
-  if (mentionedJid && mentionedJid.endsWith('@lid') && m.isGroup) {
-    const pInfo = participants.find(p => p.lid === mentionedJid);
-    if (pInfo && pInfo.id) mentionedJid = pInfo.id;
-  }
+  let senderJid = normalizeToJid(m.sender);
+  let mentionedJid = normalizeToJid(m.mentionedJid?.[0] || m.quoted?.sender);
 
-  if (!mentionedJid) return m.reply('✿ Debes mencionar a alguien para regalarle todas tus waifus en este grupo.');
+  if (!mentionedJid) return m.reply('✿ Debes mencionar o responder a un mensaje del usuario para regalarle todas tus waifus en este grupo.');
   if (mentionedJid === senderJid) return m.reply('✿ No puedes regalarte tus propias waifus.');
 
   const groupId = m.chat;
@@ -66,11 +64,14 @@ let handler = async (m, { conn, participants }) => {
 };
 
 handler.before = async function (m, { conn, participants }) {
-  let senderJid = m.sender;
-  if (m.sender.endsWith('@lid') && m.isGroup) {
-    const pInfo = participants.find(p => p.lid === m.sender);
-    if (pInfo && pInfo.id) senderJid = pInfo.id;
-  }
+  const normalizeToJid = (rawJid) => {
+    if (!rawJid || typeof rawJid !== 'string') return rawJid;
+    if (!rawJid.endsWith('@lid')) return rawJid;
+    const pInfo = participants.find(p => p?.lid === rawJid);
+    return pInfo?.id || rawJid;
+  };
+
+  let senderJid = normalizeToJid(m.sender);
 
   const key = `${m.chat}:${senderJid}`;
   const data = confirmaciones.get(key);
@@ -99,7 +100,7 @@ handler.before = async function (m, { conn, participants }) {
   }
 };
 
-handler.help = ['giveallharem @user'];
+handler.help = ['giveallharem @user', 'giveallharem (respondiendo mensaje)'];
 handler.tags = ['gacha'];
 handler.command = ['giveallharem', 'regalarharem'];
 handler.group = true;

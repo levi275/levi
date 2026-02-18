@@ -11,16 +11,16 @@ let handler = async (m, { conn, args, participants }) => {
       rawUserId = m.quoted.sender;
     } else if (m.mentionedJid && m.mentionedJid[0]) {
       rawUserId = m.mentionedJid[0];
-    } else if (args[0] && args[0].startsWith('@')) {
+    } else if (args[0] && /^@?\d{5,20}$/.test(args[0])) {
       rawUserId = args[0].replace('@', '') + '@s.whatsapp.net';
     } else {
       rawUserId = m.sender;
     }
 
     let userId = rawUserId;
-    if (rawUserId.endsWith('@lid') && m.isGroup) {
-      const pInfo = participants.find(p => p.lid === rawUserId);
-      if (pInfo && pInfo.id) userId = pInfo.id;
+    if (m.isGroup && rawUserId && rawUserId.endsWith('@lid')) {
+      const pInfo = participants.find(p => p?.lid === rawUserId);
+      if (pInfo?.id) userId = pInfo.id;
     }
 
     const groupId = m.chat;
