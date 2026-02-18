@@ -138,6 +138,7 @@ await new Promise(resolve => setTimeout(resolve, 1500));
 }
 } while (opcion !== '1' && opcion !== '2' || existsSync(`./${Rubysessions}/creds.json`))
 }
+const socketCfg = global.baileysSocketConfig || {}
 const connectionOptions = {
 logger: pino({ level: 'silent' }), 
 printQRInTerminal: opcion == '1' ? true : methodCodeQR ? true : false,
@@ -149,12 +150,12 @@ generateHighQualityLinkPreview: true,
 getMessage: async (clave) => { let jid = jidNormalizedUser(clave.remoteJid); let msg = await store.loadMessage(jid, clave.id); return msg?.message || "" },
 msgRetryCounterCache,
 msgRetryCounterMap,
-defaultQueryTimeoutMs: undefined,
+defaultQueryTimeoutMs: socketCfg.defaultQueryTimeoutMs ?? 30000,
 version,
 syncFullHistory: false,
-connectTimeoutMs: 60000,
-keepAliveIntervalMs: 30000,
-retryRequestDelayMs: 2000
+connectTimeoutMs: socketCfg.connectTimeoutMs ?? 45000,
+keepAliveIntervalMs: socketCfg.keepAliveIntervalMs ?? 20000,
+retryRequestDelayMs: socketCfg.retryRequestDelayMs ?? 1500
 }
 global.conn = makeWASocket(connectionOptions);
 let conn = global.conn
@@ -324,9 +325,6 @@ const stats = statSync(filePath);
 if (file.startsWith('pre-key-') && (Date.now() - stats.mtimeMs > 3600000)) { 
 unlinkSync(filePath);
 } 
-else if (file.startsWith('app-state-sync-') && (Date.now() - stats.mtimeMs > 600000)) { 
-unlinkSync(filePath);
-}
 } catch (e) { }
 });
 } catch (e) { console.log("Error en purga de sesión principal:", e); }

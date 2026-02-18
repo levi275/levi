@@ -27,31 +27,52 @@ async function saveCharacters(characters) {
 }
 
 let handler = async (m, { conn, args, participants }) => {
-  let userId = m.sender;
-  if (m.sender.endsWith('@lid') && m.isGroup) {
-    const pInfo = participants.find(p => p.lid === m.sender);
-    if (pInfo && pInfo.id) userId = pInfo.id;
-  }
+  const normalizeToJid = (rawJid) => {
+    if (!rawJid || typeof rawJid !== 'string') return rawJid;
+    if (!rawJid.endsWith('@lid')) return rawJid;
+    const pInfo = participants.find(p => p?.lid === rawJid);
+    return pInfo?.id || rawJid;
+  };
 
+  let userId = normalizeToJid(m.sender);
   const groupId = m.chat;
 
-  if (args.length < 2) {
-    await conn.reply(m.chat, 'Debes especificar el nombre del personaje y mencionar a quien quieras regalarlo. Ej: #regalar Aika Sano @user', m);
+  if (args.length < 1) {
+    await conn.reply(m.chat, 'Debes especificar el nombre del personaje. Ej: #regalar Aika Sano @user o responde a un mensaje: #regalar Aika Sano', m);
     return;
   }
 
-  const characterName = args.slice(0, -1).join(' ').toLowerCase().trim();
-  let rawWho = m.mentionedJid?.[0];
+  let rawWho = m.mentionedJid?.[0] || m.quoted?.sender;
+  let characterArgs = [...args];
+
+  if (m.mentionedJid?.[0] && characterArgs.length > 0) {
+    const lastArg = characterArgs[characterArgs.length - 1] || '';
+    if (/^@?\d{5,20}$/.test(lastArg)) characterArgs.pop();
+  }
+
+  if (!rawWho && characterArgs.length > 1) {
+    const maybeTarget = characterArgs[characterArgs.length - 1];
+    if (/^@?\d{5,20}$/.test(maybeTarget)) {
+      rawWho = `${maybeTarget.replace('@', '')}@s.whatsapp.net`;
+      characterArgs.pop();
+    }
+  }
+
+  const characterName = characterArgs.join(' ').toLowerCase().trim();
+  if (!characterName) {
+    await conn.reply(m.chat, 'Debes indicar el nombre del personaje a regalar.', m);
+    return;
+  }
 
   if (!rawWho) {
-    await conn.reply(m.chat, 'Debes mencionar a un usuario válido.', m);
+    await conn.reply(m.chat, 'Debes mencionar o responder a un mensaje del usuario al que quieres regalarle el personaje.', m);
     return;
   }
 
-  let who = rawWho;
-  if (rawWho.endsWith('@lid') && m.isGroup) {
-    const pInfo = participants.find(p => p.lid === rawWho);
-    if (pInfo && pInfo.id) who = pInfo.id;
+  let who = normalizeToJid(rawWho);
+  if (!who || who === userId) {
+    await conn.reply(m.chat, 'Debes elegir un usuario válido y distinto de ti para regalar.', m);
+    return;
   }
 
   try {
@@ -63,7 +84,6 @@ let handler = async (m, { conn, args, participants }) => {
       return;
     }
 
-    // verificar propiedad en este grupo
     const harem = await loadHarem();
     const claim = harem.find(c => c.groupId === groupId && c.characterId === character.id && c.userId === userId);
     if (!claim) {
@@ -71,7 +91,6 @@ let handler = async (m, { conn, args, participants }) => {
       return;
     }
 
-    // transferir claim
     removeClaim(harem, groupId, userId, character.id);
     addOrUpdateClaim(harem, groupId, who, character.id);
     await saveHarem(harem);
@@ -82,7 +101,7 @@ let handler = async (m, { conn, args, participants }) => {
   }
 };
 
-handler.help = ['regalar <nombre del personaje> @usuario'];
+handler.help = ['regalar <nombre del personaje> @usuario', 'regalar <nombre del personaje> (respondiendo mensaje)'];
 handler.tags = ['anime'];
 handler.command = ['regalar', 'givewaifu', 'givechar'];
 handler.group = true;
