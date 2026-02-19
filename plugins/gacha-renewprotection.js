@@ -1,91 +1,110 @@
-import { loadHarem, saveHarem } from '../lib/gacha-group.js';
-import { loadCharacters, findCharacterById } from '../lib/gacha-characters.js';
+import { loadHarem, saveHarem } from '../lib/gacha-group.js'
+import { loadCharacters } from '../lib/gacha-characters.js'
+import {
+  PROTECTION_DURATIONS,
+  calculateProtectionCost,
+  formatProtectionDate,
+  isProtectionActive
+} from '../lib/gacha-protection.js'
 
-function calculatePrice(userCoin) {
-  if (userCoin < 5000) return 500;
-  if (userCoin < 25000) return 1500;
-  if (userCoin < 100000) return 4000;
-  if (userCoin < 500000) return 12000;
-  return 25000;
-}
-
-const durations = {
-  '3d': 3 * 24 * 60 * 60 * 1000,
-  '7d': 7 * 24 * 60 * 60 * 1000,
-  '15d': 15 * 24 * 60 * 60 * 1000,
-  '30d': 30 * 24 * 60 * 60 * 1000
-};
+const ALL_PATTERN = /^(all|todos|todo)$/i
 
 let handler = async (m, { conn, args }) => {
-  const userId = m.sender;
-  const groupId = m.chat;
-  const user = global.db.data.users[userId];
+  const userId = m.sender
+  const groupId = m.chat
+  const user = global.db.data.users[userId]
+  const moneda = m.moneda || 'Coins'
 
-  if (!user) return conn.reply(m.chat, `✘ Usuario no registrado.`, m);
+  if (!user) return conn.reply(m.chat, '✘ Usuario no registrado.', m)
 
   if (args.length < 2) {
-    return conn.reply(m.chat, `🔄 *Uso: #renovarproteccion <duración> <personaje|all>*`, m);
+    return conn.reply(m.chat,
+      `◢✿ *RENOVAR PROTECCIÓN* ✿◤\n\n` +
+      `✧ Uso: *#renovarproteccion <duración> <personaje|all>*\n` +
+      `✧ Duraciones: *3d | 7d | 15d | 30d*`, m)
   }
 
-  const duration = args[0].toLowerCase();
-  const target = args.slice(1).join(' ').toLowerCase();
-  const isAll = /all|todos/.test(target);
+  const duration = String(args[0] || '').toLowerCase()
+  const target = args.slice(1).join(' ').trim().toLowerCase()
+  const durationData = PROTECTION_DURATIONS[duration]
 
-  if (!durations[duration]) {
-    return conn.reply(m.chat, `✘ Duración no válida.`, m);
+  if (!durationData) {
+    return conn.reply(m.chat, '✘ Duración no válida. Usa: *3d, 7d, 15d o 30d*.', m)
   }
 
   try {
-    const harem = await loadHarem();
-    const characters = await loadCharacters();
-    const userChars = harem.filter(c => c.groupId === groupId && c.userId === userId);
+    const [harem, characters] = await Promise.all([loadHarem(), loadCharacters()])
+    const characterMap = new Map(characters.map(c => [String(c.id), c]))
 
-    let toRenew = [];
-    if (isAll) {
-      toRenew = userChars.filter(c => c.protection?.protected);
-    } else {
-      toRenew = userChars.filter(c => {
-        const char = findCharacterById(characters, c.characterId);
-        return char && char.name.toLowerCase().includes(target) && c.protection?.protected;
-      });
+    const userChars = harem.filter(c => c.groupId === groupId && c.userId === userId)
+    if (!userChars.length) return conn.reply(m.chat, '✘ No tienes personajes en este grupo.', m)
+
+    const byAll = ALL_PATTERN.test(target)
+    const selected = byAll
+      ? userChars
+      : userChars.filter(c => {
+        const char = characterMap.get(String(c.characterId))
+        return char?.name?.toLowerCase().includes(target)
+      })
+
+    if (!selected.length) return conn.reply(m.chat, '✘ No encontré ese personaje en tu harem.', m)
+
+    const renewable = selected.filter(isProtectionActive)
+    if (!renewable.length) {
+      return conn.reply(m.chat,
+        '✘ Los personajes elegidos no tienen protección activa para renovar.\nUsa *#comprarproteccion* primero.', m)
     }
 
-    if (toRenew.length === 0) {
-      return conn.reply(m.chat, `✘ Ese personaje no tiene protección activa.`, m);
+    const totalCost = calculateProtectionCost({
+      userCoin: user.coin || 0,
+      duration,
+      quantity: renewable.length
+    })
+
+    if ((user.coin || 0) < totalCost) {
+      return conn.reply(m.chat,
+        `◢✿ *SALDO INSUFICIENTE* ✿◤\n\n` +
+        `✧ Renovación: *¥${totalCost.toLocaleString()} ${moneda}*\n` +
+        `✧ Saldo: *¥${(user.coin || 0).toLocaleString()} ${moneda}*`, m)
     }
 
-    const price = calculatePrice(user.coin);
-    const totalCost = price * toRenew.length;
-    const newExpiry = Date.now() + durations[duration];
+    const now = Date.now()
+    let maxExpiry = 0
 
-    if (user.coin < totalCost) {
-      return conn.reply(m.chat, `💰 Dinero insuficiente para renovar.`, m);
+    for (const char of renewable) {
+      const currentExpiry = Number(char?.protection?.expiresAt || 0)
+      const baseTime = currentExpiry > now ? currentExpiry : now
+      const newExpiry = baseTime + durationData.ms
+      char.protection = {
+        ...char.protection,
+        protected: true,
+        expiresAt: newExpiry,
+        duration,
+        renewedAt: now
+      }
+      if (newExpiry > maxExpiry) maxExpiry = newExpiry
     }
 
-    toRenew.forEach(char => {
-      char.protection.expiresAt = newExpiry;
-      char.protection.duration = duration;
-    });
+    user.coin -= totalCost
+    await saveHarem(harem)
 
-    user.coin -= totalCost;
-    await saveHarem(harem);
-
-    conn.reply(m.chat,
-      `✅ *PROTECCIÓN RENOVADA*\n\n` +
-      `📦 Personajes: *${toRenew.length}*\n` +
-      `💰 Costo: *¥${totalCost.toLocaleString()} ${m.moneda}*\n` +
-      `📅 Nuevo vencimiento: ${new Date(newExpiry).toLocaleDateString()}`, m);
-
+    return conn.reply(m.chat,
+      `◢✿ *PROTECCIÓN RENOVADA* ✿◤\n\n` +
+      `✧ Renovados: *${renewable.length} personaje(s)*\n` +
+      `✧ Extensión: *${durationData.label}*\n` +
+      `✧ Vencimiento más lejano: *${formatProtectionDate(maxExpiry)}*\n` +
+      `✧ Costo: *¥${totalCost.toLocaleString()} ${moneda}*\n` +
+      `✧ Cartera: *¥${(user.coin || 0).toLocaleString()} ${moneda}*`, m)
   } catch (error) {
-    console.error(error);
-    conn.reply(m.chat, `✘ Error: ${error.message}`, m);
+    console.error(error)
+    return conn.reply(m.chat, `✘ Error al renovar protección: ${error.message}`, m)
   }
-};
+}
 
-handler.help = ['renovarproteccion <duración> <personaje|all>'];
-handler.tags = ['gacha'];
-handler.command = ['renovarproteccion', 'renewprotection', 'extenderproteccion'];
-handler.group = true;
-handler.register = true;
+handler.help = ['renovarproteccion <duración> <personaje|all>']
+handler.tags = ['gacha', 'economia']
+handler.command = ['renovarproteccion', 'renewprotection', 'extenderproteccion']
+handler.group = true
+handler.register = true
 
-export default handler;
+export default handler
