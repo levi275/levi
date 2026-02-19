@@ -1,108 +1,111 @@
-import { loadHarem, saveHarem } from '../lib/gacha-group.js';
-import { loadCharacters, findCharacterById } from '../lib/gacha-characters.js';
+import { loadHarem, saveHarem } from '../lib/gacha-group.js'
+import { loadCharacters } from '../lib/gacha-characters.js'
+import {
+  PROTECTION_DURATIONS,
+  calculateProtectionCost,
+  isProtectionActive,
+  formatProtectionDate
+} from '../lib/gacha-protection.js'
 
-function calculatePrice(userCoin) {
-  if (userCoin < 5000) return 500;
-  if (userCoin < 25000) return 1500;
-  if (userCoin < 100000) return 4000;
-  if (userCoin < 500000) return 12000;
-  return 25000;
-}
+const ALL_PATTERN = /^(all|todos|todo)$/i
 
-const durations = {
-  '3d': 3 * 24 * 60 * 60 * 1000,
-  '7d': 7 * 24 * 60 * 60 * 1000,
-  '15d': 15 * 24 * 60 * 60 * 1000,
-  '30d': 30 * 24 * 60 * 60 * 1000
-};
+let handler = async (m, { conn, args }) => {
+  const userId = m.sender
+  const groupId = m.chat
+  const user = global.db.data.users[userId]
+  const moneda = m.moneda || 'Coins'
 
-let handler = async (m, { conn, args, text }) => {
-  const userId = m.sender;
-  const groupId = m.chat;
-  const user = global.db.data.users[userId];
-
-  if (!user) return conn.reply(m.chat, `✘ Usuario no registrado.`, m);
+  if (!user) return conn.reply(m.chat, '✘ Usuario no registrado.', m)
 
   if (args.length < 2) {
     return conn.reply(m.chat,
-      `🔒 *Uso: #comprarproteccion <duración> <personaje|all>*\n\n` +
-      `⏱️ *Duraciones:* 3d | 7d | 15d | 30d\n` +
-      `👤 *Ejemplos:*\n` +
-      `  #comprarproteccion 7d all\n` +
-      `  #comprarproteccion 15d Miku`, m);
+      `◢✿ *PROTECCIÓN DE HAREM* ✿◤\n\n` +
+      `✧ Uso: *#comprarproteccion <duración> <personaje|all>*\n` +
+      `✧ Duraciones: *3d | 7d | 15d | 30d*\n\n` +
+      `✦ Ejemplos:\n` +
+      `- #comprarproteccion 7d all\n` +
+      `- #comprarproteccion 15d miku`, m)
   }
 
-  const duration = args[0].toLowerCase();
-  const target = args.slice(1).join(' ').toLowerCase();
-  const isAll = /all|todos|todo/.test(target);
+  const duration = String(args[0] || '').toLowerCase()
+  const target = args.slice(1).join(' ').trim().toLowerCase()
+  const durationData = PROTECTION_DURATIONS[duration]
 
-  if (!durations[duration]) {
-    return conn.reply(m.chat, `✘ Duración no válida. Usa: 3d, 7d, 15d o 30d`, m);
+  if (!durationData) {
+    return conn.reply(m.chat, '✘ Duración no válida. Usa: *3d, 7d, 15d o 30d*.', m)
   }
 
   try {
-    const harem = await loadHarem();
-    const characters = await loadCharacters();
-    const userChars = harem.filter(c => c.groupId === groupId && c.userId === userId);
+    const [harem, characters] = await Promise.all([loadHarem(), loadCharacters()])
+    const characterMap = new Map(characters.map(c => [String(c.id), c]))
+    const userChars = harem.filter(c => c.groupId === groupId && c.userId === userId)
 
-    if (userChars.length === 0) {
-      return conn.reply(m.chat, `✘ No tienes personajes en este grupo.`, m);
-    }
+    if (!userChars.length) return conn.reply(m.chat, '✘ No tienes personajes en este grupo.', m)
 
-    let toProtect = [];
-    if (isAll) {
-      toProtect = userChars;
-    } else {
-      toProtect = userChars.filter(c => {
-        const char = findCharacterById(characters, c.characterId);
-        return char && char.name.toLowerCase().includes(target);
-      });
-    }
+    const byAll = ALL_PATTERN.test(target)
+    let selected = byAll
+      ? userChars
+      : userChars.filter(c => {
+        const char = characterMap.get(String(c.characterId))
+        return char?.name?.toLowerCase().includes(target)
+      })
 
-    if (toProtect.length === 0) {
-      return conn.reply(m.chat, `✘ No encontré ese personaje.`, m);
-    }
+    if (!selected.length) return conn.reply(m.chat, '✘ No encontré ese personaje en tu harem.', m)
 
-    const price = calculatePrice(user.coin);
-    const totalCost = price * toProtect.length;
-    const expiresAt = Date.now() + durations[duration];
+    const alreadyProtected = selected.filter(isProtectionActive)
+    selected = selected.filter(c => !isProtectionActive(c))
 
-    if (user.coin < totalCost) {
+    if (!selected.length) {
       return conn.reply(m.chat,
-        `💰 *Dinero insuficiente*\n\n` +
-        `Necesitas: *¥${totalCost.toLocaleString()} ${m.moneda}*\n` +
-        `Tienes: *¥${user.coin.toLocaleString()} ${m.moneda}*`, m);
+        `✘ Todos los personajes seleccionados ya tienen protección activa.\n` +
+        `Usa *#renovarproteccion* para extenderla.`, m)
     }
 
-    toProtect.forEach(char => {
+    const totalCost = calculateProtectionCost({
+      userCoin: user.coin || 0,
+      duration,
+      quantity: selected.length
+    })
+
+    if ((user.coin || 0) < totalCost) {
+      return conn.reply(m.chat,
+        `◢✿ *SALDO INSUFICIENTE* ✿◤\n\n` +
+        `✧ Necesitas: *¥${totalCost.toLocaleString()} ${moneda}*\n` +
+        `✧ Tienes: *¥${(user.coin || 0).toLocaleString()} ${moneda}*`, m)
+    }
+
+    const expiresAt = Date.now() + durationData.ms
+    for (const char of selected) {
       char.protection = {
         protected: true,
-        expiresAt: expiresAt,
-        duration: duration
-      };
-    });
+        expiresAt,
+        duration,
+        purchasedAt: Date.now()
+      }
+    }
 
-    user.coin -= totalCost;
-    await saveHarem(harem);
+    user.coin -= totalCost
+    await saveHarem(harem)
 
-    conn.reply(m.chat,
-      `✅ *PROTECCIÓN COMPRADA*\n\n` +
-      `📦 Personajes: *${toProtect.length}*\n` +
-      `💰 Costo: *¥${totalCost.toLocaleString()} ${m.moneda}*\n` +
-      `⏰ Duración: *${duration}*\n` +
-      `📅 Expira: ${new Date(expiresAt).toLocaleDateString()}\n\n` +
-      `💸 Cartera: *¥${user.coin.toLocaleString()} ${m.moneda}*`, m);
-
+    return conn.reply(m.chat,
+      `◢✿ *PROTECCIÓN ACTIVADA* ✿◤\n\n` +
+      `✧ Protegidos: *${selected.length} personaje(s)*\n` +
+      `✧ Duración: *${durationData.label}*\n` +
+      `✧ Expira: *${formatProtectionDate(expiresAt)}*\n` +
+      `✧ Costo: *¥${totalCost.toLocaleString()} ${moneda}*\n` +
+      `✧ Cartera: *¥${(user.coin || 0).toLocaleString()} ${moneda}*` +
+      `${alreadyProtected.length ? `\n\n⚠️ Ya protegidos (sin cobro): *${alreadyProtected.length}*` : ''}`,
+      m)
   } catch (error) {
-    console.error(error);
-    conn.reply(m.chat, `✘ Error: ${error.message}`, m);
+    console.error(error)
+    return conn.reply(m.chat, `✘ Error al comprar protección: ${error.message}`, m)
   }
-};
+}
 
-handler.help = ['comprarproteccion <duración> <personaje|all>'];
-handler.tags = ['gacha', 'economia'];
-handler.command = ['comprarproteccion', 'buyprotection', 'proteger'];
-handler.group = true;
-handler.register = true;
+handler.help = ['comprarproteccion <duración> <personaje|all>']
+handler.tags = ['gacha', 'economia']
+handler.command = ['comprarproteccion', 'buyprotection', 'proteger']
+handler.group = true
+handler.register = true
 
-export default handler;
+export default handler
