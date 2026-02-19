@@ -137,8 +137,26 @@ if (!jid) return rawJid
 const info = participantIndex.get(jid)
 const participantResolved = (info && info.id) ? info.id : jid
 const users = global.db?.data?.users || {}
-const existing = getJidVariants(participantResolved).find(v => typeof users[v] === 'object')
-return existing || participantResolved
+const variants = getJidVariants(participantResolved).filter(v => typeof users[v] === 'object')
+if (!variants.length) return participantResolved
+const scoreUserRecord = (u = {}) => {
+const numericScore = ['coin', 'bank', 'exp', 'level', 'diamond', 'joincount'].reduce((sum, key) => {
+const value = Number(u?.[key])
+return sum + (Number.isFinite(value) ? Math.max(value, 0) : 0)
+}, 0)
+const flagsScore = (u?.registered ? 1000 : 0) + (u?.premium ? 1000 : 0) + ((u?.name && String(u.name).trim()) ? 100 : 0)
+return numericScore + flagsScore
+}
+let best = variants[0]
+let bestScore = scoreUserRecord(users[best])
+for (const v of variants.slice(1)) {
+const nextScore = scoreUserRecord(users[v])
+if (nextScore > bestScore) {
+best = v
+bestScore = nextScore
+}
+}
+return best
 }
 if (m.isGroup) {
 sender = normalizeToJid(sender)
