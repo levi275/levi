@@ -1,82 +1,141 @@
 import { loadHarem, saveHarem } from '../lib/gacha-group.js'
 import { loadCharacters, findCharacterById } from '../lib/gacha-characters.js'
+import { isProtectionActive } from '../lib/gacha-protection.js'
+
 let cooldowns = {}
-function isProtected(character) {
-if (!character.protection?.protected) return false
-if (Date.now() > character.protection.expiresAt) {
-character.protection.protected = false
-return false
+
+const CLAIM_GRACE_MS = 2 * 60 * 1000
+const FAIL_COOLDOWN_MS = 45 * 60 * 1000
+const SUCCESS_COOLDOWN_MS = 90 * 60 * 1000
+const ROB_ATTEMPT_COST = 700
+const ROB_FAIL_PENALTY = 1100
+const ROB_SUCCESS_FEE = 900
+
+function getStealChance(thiefOwnedCount, victimOwnedCount) {
+  let chance = 0.42
+  if (thiefOwnedCount < 3) chance += 0.08
+  if (thiefOwnedCount > victimOwnedCount) chance -= 0.07
+  if (victimOwnedCount >= 8) chance += 0.05
+  return Math.min(0.62, Math.max(0.25, chance))
 }
-return true
+
+function formatMs(ms) {
+  const totalSeconds = Math.ceil(ms / 1000)
+  const minutes = Math.floor(totalSeconds / 60)
+  const seconds = totalSeconds % 60
+  return `${minutes}m ${seconds}s`
 }
+
 let handler = async (m, { conn }) => {
-let thiefId = m.sender
-let who
-if (m.isGroup) {
-who = m.mentionedJid[0] ? m.mentionedJid[0] : m.quoted ? m.quoted.sender : false
-} else {
-who = m.chat
+  const userId = m.sender
+  const groupId = m.chat
+  const now = Date.now()
+  const moneda = m.moneda || 'Coins'
+
+  const cooldownKey = `${groupId}:${userId}`
+  if (cooldowns[cooldownKey] && now < cooldowns[cooldownKey]) {
+    const remaining = cooldowns[cooldownKey] - now
+    return conn.reply(m.chat, `⏳ Debes esperar *${formatMs(remaining)}* antes de volver a usar *#robwaifu*.`, m)
+  }
+
+  if (!m.mentionedJid || !m.mentionedJid.length) {
+    return conn.reply(m.chat, '✘ Menciona a un usuario: *#robwaifu @usuario*', m)
+  }
+
+  const victimJid = m.mentionedJid[0]
+  if (victimJid === userId) return conn.reply(m.chat, '✘ No puedes robarte a ti mismo.', m)
+
+  const thief = global.db.data.users[userId]
+  if (!thief) return conn.reply(m.chat, '✘ No estás registrado.', m)
+  if ((thief.coin || 0) < ROB_ATTEMPT_COST) {
+    return conn.reply(m.chat,
+      `✘ Necesitas al menos *¥${ROB_ATTEMPT_COST.toLocaleString()} ${moneda}* para intentar un robo.`, m)
+  }
+
+  try {
+    const [harem, characters] = await Promise.all([loadHarem(), loadCharacters()])
+    const victimName = await conn.getName(victimJid)
+
+    const victimChars = harem.filter(c => c.groupId === groupId && c.userId === victimJid)
+    const thiefChars = harem.filter(c => c.groupId === groupId && c.userId === userId)
+
+    if (!victimChars.length) return conn.reply(m.chat, `👤 *${victimName}* no tiene personajes para robar.`, m)
+
+    const eligibleChars = victimChars.filter(char => {
+      if (isProtectionActive(char)) return false
+      const lastClaimTime = Number(char.lastClaimTime || 0)
+      if (lastClaimTime > 0 && (now - lastClaimTime) < CLAIM_GRACE_MS) return false
+      return true
+    })
+
+    if (!eligibleChars.length) {
+      return conn.reply(m.chat,
+        `◢✿ *ROBO BLOQUEADO* ✿◤\n\n` +
+        `✧ Los personajes de *${victimName}* tienen protección activa o están en gracia anti-robo reciente.\n` +
+        `✧ Espera y vuelve a intentar más tarde.`, m)
+    }
+
+    thief.coin -= ROB_ATTEMPT_COST
+
+    const stealChance = getStealChance(thiefChars.length, victimChars.length)
+    const success = Math.random() < stealChance
+
+    if (!success) {
+      thief.coin = Math.max(0, (thief.coin || 0) - ROB_FAIL_PENALTY)
+      cooldowns[cooldownKey] = now + FAIL_COOLDOWN_MS
+      return conn.reply(m.chat,
+        `◢✿ *ROBO FALLIDO* ✿◤\n\n` +
+        `✧ *${victimName}* detectó el intento.\n` +
+        `✧ Costo del intento: *¥${ROB_ATTEMPT_COST.toLocaleString()} ${moneda}*\n` +
+        `✧ Penalización: *¥${ROB_FAIL_PENALTY.toLocaleString()} ${moneda}*\n` +
+        `✧ Probabilidad usada: *${Math.round(stealChance * 100)}%*\n` +
+        `✧ Próximo intento: *${Math.floor(FAIL_COOLDOWN_MS / 60000)} min*`, m)
+    }
+
+    const stolen = eligibleChars[Math.floor(Math.random() * eligibleChars.length)]
+    const charData = findCharacterById(characters, stolen.characterId)
+    const charName = charData?.name || `ID ${stolen.characterId}`
+
+    const victimIdx = harem.findIndex(c =>
+      c.groupId === groupId &&
+      c.userId === victimJid &&
+      c.characterId === stolen.characterId
+    )
+
+    if (victimIdx === -1) {
+      return conn.reply(m.chat, '✘ No se pudo completar el robo. Intenta de nuevo.', m)
+    }
+
+    harem[victimIdx].userId = userId
+    harem[victimIdx].lastClaimTime = now
+    harem[victimIdx].protection = {
+      protected: true,
+      expiresAt: now + CLAIM_GRACE_MS,
+      duration: 'grace'
+    }
+
+    thief.coin = Math.max(0, (thief.coin || 0) - ROB_SUCCESS_FEE)
+    cooldowns[cooldownKey] = now + SUCCESS_COOLDOWN_MS
+
+    await saveHarem(harem)
+
+    return conn.reply(m.chat,
+      `◢✿ *ROBO EXITOSO* ✿◤\n\n` +
+      `✧ Robaste a *${charName}* de *${victimName}*.\n` +
+      `✧ Costo del intento: *¥${ROB_ATTEMPT_COST.toLocaleString()} ${moneda}*\n` +
+      `✧ Tarifa de escape: *¥${ROB_SUCCESS_FEE.toLocaleString()} ${moneda}*\n` +
+      `✧ El personaje queda protegido por *${Math.floor(CLAIM_GRACE_MS / 60000)} minutos* (anti robo en cadena).\n` +
+      `✧ Próximo robo: *${Math.floor(SUCCESS_COOLDOWN_MS / 60000)} min*`, m)
+  } catch (error) {
+    console.error(error)
+    return conn.reply(m.chat, `✘ Error en robwaifu: ${error.message}`, m)
+  }
 }
-if (!who) return conn.reply(m.chat, '✘ Menciona a alguien o cita su mensaje.', m)
-try {
-const pp = await conn.groupMetadata(m.chat)
-if (thiefId.endsWith('@lid')) {
-const tUser = pp.participants.find(u => u.lid === thiefId)
-if (tUser) thiefId = tUser.id
-}
-if (who.endsWith('@lid')) {
-const vUser = pp.participants.find(u => u.lid === who)
-if (vUser) who = vUser.id
-}
-} catch (e) {}
-const groupId = m.chat
-const now = Date.now()
-const cooldownKey = `${groupId}:${thiefId}`
-if (cooldowns[cooldownKey] && now < cooldowns[cooldownKey]) {
-const remaining = cooldowns[cooldownKey] - now
-const minutes = Math.floor(remaining / 60000)
-return conn.reply(m.chat, `⏳ Ya intentaste robar. Espera *${minutes}m* más.`, m)
-}
-const victimName = await conn.getName(who)
-try {
-const harem = await loadHarem()
-const characters = await loadCharacters()
-const victimChars = harem.filter(c => c.groupId === groupId && c.userId === who)
-if (victimChars.length === 0) {
-return conn.reply(m.chat, `👤 *${victimName}* no tiene personajes.`, m)
-}
-const unprotected = victimChars.filter(c => !isProtected(c))
-if (unprotected.length === 0) {
-return conn.reply(m.chat, `🔒 Todos los personajes de *${victimName}* están protegidos!\n\n✘ No pudiste robar nada.`, m)
-}
-const success = Math.random() < 0.6
-if (!success) {
-const thief = global.db.data.users[thiefId]
-if (thief && thief.coin >= 500) {
-thief.coin -= 500
-}
-cooldowns[cooldownKey] = now + (30 * 60 * 1000)
-return conn.reply(m.chat, `🚫 *${victimName}* te atrapó intentando robar!\n\n💔 Perdiste *500 Coins*.`, m)
-}
-const randomIdx = Math.floor(Math.random() * unprotected.length)
-const stolen = unprotected[randomIdx]
-const charData = findCharacterById(characters, stolen.characterId)
-const charName = charData?.name || 'Desconocido'
-const victimIdx = harem.findIndex(c => c.groupId === groupId && c.userId === who && c.characterId === stolen.characterId)
-if (victimIdx !== -1) {
-harem[victimIdx].userId = thiefId
-await saveHarem(harem)
-cooldowns[cooldownKey] = now + (80 * 60 * 1000)
-conn.reply(m.chat, `🎭 *¡ROBO EXITOSO!*\n\n✅ Robaste a *${charName}* de *${victimName}*\n⏰ Próximo robo en 80 minutos.`, m)
-}
-} catch (error) {
-console.error(error)
-conn.reply(m.chat, `✘ Error: ${error.message}`, m)
-}
-}
+
 handler.help = ['robwaifu @usuario']
-handler.tags = ['gacha']
-handler.command = ['robwaifu', 'stealwaifu', 'rob']
+handler.tags = ['gacha', 'economia']
+handler.command = ['robwaifu', 'stealwaifu', 'robarwaifu']
 handler.group = true
 handler.register = true
+
 export default handler
