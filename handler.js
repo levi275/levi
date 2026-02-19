@@ -72,6 +72,27 @@ if (!jid) return null
 if (!jid.includes('@') && /^\d+$/.test(jid)) jid += '@s.whatsapp.net'
 return jid
 }
+const getJidVariants = (rawJid) => {
+const normalized = normalizeRawJid(rawJid)
+if (!normalized) return []
+const variants = new Set([normalized])
+if (this.decodeJid && typeof this.decodeJid === 'function') {
+try {
+const decoded = this.decodeJid(normalized)
+if (decoded) variants.add(decoded)
+} catch (e) { }
+}
+for (const jid of [...variants]) {
+if (!jid || typeof jid !== 'string') continue
+const [local, domain] = jid.split('@')
+if (!local || !domain) continue
+const baseLocal = local.split(':')[0]
+if (baseLocal && baseLocal !== local) variants.add(`${baseLocal}@${domain}`)
+if (domain === 's.whatsapp.net') variants.add(`${baseLocal}@lid`)
+if (domain === 'lid') variants.add(`${baseLocal}@s.whatsapp.net`)
+}
+return [...variants]
+}
 const normalizeAdmin = (p) => {
 if (!p) return false
 const a = p.admin ?? p.isAdmin ?? p.role ?? false
@@ -114,7 +135,10 @@ const normalizeToJid = (rawJid) => {
 const jid = normalizeRawJid(rawJid)
 if (!jid) return rawJid
 const info = participantIndex.get(jid)
-return (info && info.id) ? info.id : jid
+const participantResolved = (info && info.id) ? info.id : jid
+const users = global.db?.data?.users || {}
+const existing = getJidVariants(participantResolved).find(v => typeof users[v] === 'object')
+return existing || participantResolved
 }
 if (m.isGroup) {
 sender = normalizeToJid(sender)
