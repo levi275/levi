@@ -14,19 +14,23 @@ clearTimeout(this)
 resolve()
 }, ms))
 global.uptimeStart = Date.now();
+const STALE_MESSAGE_WINDOW_MS = 10 * 60 * 1000
+const GROUP_METADATA_CACHE_TTL_MS = 2 * 60 * 1000
+global.groupMetadataCache = global.groupMetadataCache || new Map()
 export async function handler(chatUpdate) {
 this.msgqueque = this.msgqueque || []
 this.uptime = this.uptime || Date.now()
 if (!chatUpdate) return
 let sender = null;
 try {
-let mObj = chatUpdate.messages[chatUpdate.messages.length - 1];
-if (!mObj) return;
-const messageTime = (mObj.messageTimestamp * 1000) || Date.now();
-const timeDiff = Date.now() - messageTime;
-if (timeDiff > 60000) return; 
+let mObj = chatUpdate.messages[chatUpdate.messages.length - 1]
+if (!mObj) return
+const rawTimestamp = typeof mObj.messageTimestamp === 'object' ? Number(mObj.messageTimestamp?.low || mObj.messageTimestamp) : Number(mObj.messageTimestamp)
+const messageTime = Number.isFinite(rawTimestamp) && rawTimestamp > 0 ? rawTimestamp * 1000 : Date.now()
+const timeDiff = Date.now() - messageTime
+if (timeDiff > STALE_MESSAGE_WINDOW_MS && !mObj?.message?.protocolMessage) return
 } catch (e) {
-console.error(e);
+console.error(e)
 }
 this.pushMessage(chatUpdate.messages).catch(console.error)
 let m = chatUpdate.messages[chatUpdate.messages.length - 1]
@@ -47,7 +51,19 @@ if (this?.user?.jid !== chat.primaryBot) return;
 }
 }
 sender = m.isGroup ? (m.key?.participant ? m.key.participant : m.sender) : m.key?.remoteJid;
-const groupMetadata = m.isGroup ? (this.chats?.[m.chat]?.metadata || await this.groupMetadata(m.chat).catch(_ => null) || {}) : {}
+let groupMetadata = {}
+if (m.isGroup) {
+const cached = global.groupMetadataCache.get(m.chat)
+if (cached && (Date.now() - cached.ts) < GROUP_METADATA_CACHE_TTL_MS) {
+groupMetadata = cached.data || {}
+} else {
+const freshMetadata = this.chats?.[m.chat]?.metadata || await this.groupMetadata(m.chat).catch(_ => null) || {}
+groupMetadata = freshMetadata
+if (freshMetadata && Object.keys(freshMetadata).length) {
+global.groupMetadataCache.set(m.chat, { data: freshMetadata, ts: Date.now() })
+}
+}
+}
 const rawParticipants = m.isGroup ? (groupMetadata.participants || []) : []
 const participants = (rawParticipants || []).map(p => {
 let jid = typeof p === 'string' ? p : (p.id || p.jid || p.participant || p?.[0] || null)
@@ -179,8 +195,6 @@ if (u.lid && target && (u.lid === target || u.lid === jidToFind)) return true
 return false
 })
 }
-const userGroup = (m.isGroup ? findParticipant(sender) : {}) || {}
-const botGroup = (m.isGroup ? findParticipant(this.user.jid) : {}) || {}
 const normalizeAdmin = (p) => {
 if (!p) return false
 const a = p.admin ?? p.isAdmin ?? p.role ?? false
@@ -188,6 +202,8 @@ if (a === true || a === 'admin') return 'admin'
 if (['creator', 'superadmin', 'owner'].includes(a) || p.isSuperAdmin || p.isCreator) return 'superadmin'
 return false
 }
+const userGroup = (m.isGroup ? findParticipant(sender) : {}) || {}
+const botGroup = (m.isGroup ? findParticipant(this.user.jid) : {}) || {}
 const isRAdmin = normalizeAdmin(userGroup) === 'superadmin'
 const isAdmin = isRAdmin || normalizeAdmin(userGroup) === 'admin'
 const isBotAdmin = normalizeAdmin(botGroup) === 'admin' || normalizeAdmin(botGroup) === 'superadmin'
