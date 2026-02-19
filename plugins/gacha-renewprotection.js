@@ -3,7 +3,8 @@ import { loadCharacters } from '../lib/gacha-characters.js'
 import {
   PROTECTION_DURATIONS,
   calculateProtectionCost,
-  formatProtectionDate
+  formatProtectionDate,
+  isProtectionActive
 } from '../lib/gacha-protection.js'
 
 const ALL_PATTERN = /^(all|todos|todo)$/i
@@ -48,7 +49,7 @@ let handler = async (m, { conn, args }) => {
 
     if (!selected.length) return conn.reply(m.chat, '✘ No encontré ese personaje en tu harem.', m)
 
-    const renewable = selected.filter(c => c.protection?.protected)
+    const renewable = selected.filter(isProtectionActive)
     if (!renewable.length) {
       return conn.reply(m.chat,
         '✘ Los personajes elegidos no tienen protección activa para renovar.\nUsa *#comprarproteccion* primero.', m)
