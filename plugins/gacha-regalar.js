@@ -4,7 +4,8 @@ import {
   saveHarem,
   addOrUpdateClaim,
   removeClaim,
-  getUserClaims
+  getUserClaims,
+  isSameUserId
 } from '../lib/gacha-group.js';
 
 const charactersFilePath = './src/database/characters.json';
@@ -85,7 +86,7 @@ let handler = async (m, { conn, args, participants }) => {
     }
 
     const harem = await loadHarem();
-    const claim = harem.find(c => c.groupId === groupId && c.characterId === character.id && c.userId === userId);
+    const claim = harem.find(c => c.groupId === groupId && c.characterId === character.id && isSameUserId(c.userId, userId));
     if (!claim) {
       await conn.reply(m.chat, `El personaje *${character.name}* no está reclamado por ti en este grupo.`, m);
       return;

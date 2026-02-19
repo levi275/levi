@@ -1,7 +1,8 @@
 import { promises as fs } from 'fs';
 import {
   loadHarem,
-  saveHarem
+  saveHarem,
+  isSameUserId
 } from '../lib/gacha-group.js';
 
 const charactersFilePath = './src/database/characters.json';
@@ -34,7 +35,7 @@ let handler = async (m, { conn, participants }) => {
 
   const characters = await loadCharacters();
   const harem = await loadHarem();
-  const myWaifus = harem.filter(c => c.groupId === groupId && c.userId === senderJid);
+  const myWaifus = harem.filter(c => c.groupId === groupId && isSameUserId(c.userId, senderJid));
 
   if (myWaifus.length === 0) return m.reply('✿ No tienes waifus para regalar en este grupo.');
 
@@ -84,7 +85,7 @@ handler.before = async function (m, { conn, participants }) {
     let regalados = 0;
 
     for (const char of harem.slice()) { // slice para evitar mutación en iteración
-      if (char.groupId === m.chat && data.waifus.includes(char.characterId) && char.userId === senderJid) {
+      if (char.groupId === m.chat && data.waifus.includes(char.characterId) && isSameUserId(char.userId, senderJid)) {
         char.userId = data.receptor;
         char.lastClaimTime = Date.now();
         regalados++;
