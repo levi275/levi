@@ -1,6 +1,26 @@
 import { getUserClaims, loadHarem } from '../lib/gacha-group.js';
 import { loadCharacters, findCharacterById } from '../lib/gacha-characters.js';
 
+function formatProtectionStatus(character) {
+  if (!character.protection || !character.protection.protected) {
+    return '';
+  }
+
+  if (Date.now() > character.protection.expiresAt) {
+    character.protection.protected = false;
+    return '';
+  }
+
+  const remaining = character.protection.expiresAt - Date.now();
+  const days = Math.floor(remaining / (1000 * 60 * 60 * 24));
+  const hours = Math.floor((remaining % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+
+  if (days > 0) {
+    return ` 🔒 ${days}d ${hours}h`;
+  }
+  return ` 🔒 ${hours}h`;
+}
+
 let handler = async (m, { conn, args, participants }) => {
   try {
     const characters = await loadCharacters();
@@ -25,7 +45,6 @@ let handler = async (m, { conn, args, participants }) => {
 
     const groupId = m.chat;
 
-    // obtenemos claims de este usuario solo en este grupo
     const userClaims = getUserClaims(harem, groupId, userId);
 
     if (userClaims.length === 0) {
@@ -55,7 +74,11 @@ let handler = async (m, { conn, args, participants }) => {
       const character = findCharacterById(characters, charId);
       const name = character ? character.name : `ID:${charId}`;
       const value = character ? (character.value || '0') : '0';
-      message += `» *${name}* (*${value}*)\n`;
+      
+      // Agregar estado de protección
+      const protectionStatus = formatProtectionStatus(userClaims[i]);
+      
+      message += `» *${name}* (*${value}*)${protectionStatus}\n`;
     }
 
     message += `\n> ⌦ _Página *${page}* de *${totalPages}*_`;
