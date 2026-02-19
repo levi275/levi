@@ -65,35 +65,56 @@ global.groupMetadataCache.set(m.chat, { data: freshMetadata, ts: Date.now() })
 }
 }
 const rawParticipants = m.isGroup ? (groupMetadata.participants || []) : []
+const normalizeRawJid = (value) => {
+if (!value) return null
+let jid = String(value).trim()
+if (!jid) return null
+if (!jid.includes('@') && /^\d+$/.test(jid)) jid += '@s.whatsapp.net'
+return jid
+}
+const normalizeAdmin = (p) => {
+if (!p) return false
+const a = p.admin ?? p.isAdmin ?? p.role ?? false
+if (a === true || a === 'admin') return 'admin'
+if (['creator', 'superadmin', 'owner'].includes(a) || p.isSuperAdmin || p.isCreator) return 'superadmin'
+return false
+}
 const participants = (rawParticipants || []).map(p => {
-let jid = typeof p === 'string' ? p : (p.jid || p.id || p.participant || p?.[0] || null)
-if (jid && !/@/.test(jid) && /^\d+$/.test(jid)) jid = jid + '@s.whatsapp.net'
-let lid = p?.lid || (typeof p === 'string' && p.endsWith('@lid') ? p : null)
-if (!lid && typeof p?.id === 'string' && p.id.endsWith('@lid')) lid = p.id
-if (!lid && typeof p?.jid === 'string' && p.jid.endsWith('@lid')) lid = p.jid
-let admin = false
-if (p) {
-if (typeof p.admin === 'string') {
-if (['creator', 'superadmin', 'owner'].includes(p.admin)) admin = 'superadmin'
-else if (p.admin === 'admin') admin = 'admin'
-} else if (p.admin === true) {
-admin = 'admin'
-} else if (p.isSuperAdmin || p.isCreator) {
-admin = 'superadmin'
-} else if (p.isAdmin) {
-admin = 'admin'
-} else if (p.role) {
-if (p.role === 'creator') admin = 'superadmin'
-else if (p.role === 'admin') admin = 'admin'
-}
-}
-return { id: jid, jid, lid, admin }
+const candidateJids = [
+typeof p === 'string' ? p : null,
+p?.id,
+p?.jid,
+p?.participant,
+Array.isArray(p) ? p[0] : null,
+].filter(Boolean)
+let jid = candidateJids.map(normalizeRawJid).find(j => j && !j.endsWith('@lid')) || null
+let lid = candidateJids.map(normalizeRawJid).find(j => j && j.endsWith('@lid')) || null
+if (!jid && lid && /^\d+@lid$/.test(lid)) jid = lid.replace(/@lid$/, '@s.whatsapp.net')
+return { id: jid, jid, lid, admin: normalizeAdmin(p), raw: p }
 })
+const participantIndex = m.isGroup ? participants.reduce((acc, p) => {
+if (!p) return acc
+const register = (k, v = p) => {
+if (!k || acc.has(k)) return
+acc.set(k, v)
+if (this.decodeJid && typeof this.decodeJid === 'function') {
+try {
+const decoded = this.decodeJid(k)
+if (decoded && !acc.has(decoded)) acc.set(decoded, v)
+} catch (e) { }
+}
+}
+register(p.id)
+register(p.jid)
+register(p.lid)
+if (p.id && p.id.endsWith('@s.whatsapp.net')) register(p.id.replace(/@s\.whatsapp\.net$/, '@lid'))
+return acc
+}, new Map()) : new Map()
 const normalizeToJid = (rawJid) => {
-if (!rawJid || typeof rawJid !== 'string') return rawJid
-if (!rawJid.endsWith('@lid')) return rawJid
-const pInfo = participants.find(p => p?.lid === rawJid)
-return (pInfo && pInfo.id) ? pInfo.id : rawJid
+const jid = normalizeRawJid(rawJid)
+if (!jid) return rawJid
+const info = participantIndex.get(jid)
+return (info && info.id) ? info.id : jid
 }
 if (m.isGroup) {
 sender = normalizeToJid(sender)
@@ -177,26 +198,12 @@ if (typeof m.text !== 'string') m.text = ''
 const _user = global.db.data.users[sender]
 const findParticipant = (jidToFind) => {
 if (!jidToFind) return undefined
-const target = (this.decodeJid && typeof this.decodeJid === 'function') ? this.decodeJid(jidToFind) : jidToFind
-return participants.find(u => {
-try {
-if (!u) return false
-if (u.jid && this.decodeJid && this.decodeJid(u.jid) === target) return true
-if (u.id && this.decodeJid && this.decodeJid(u.id) === target) return true
-if (u.lid && target && (u.lid === target || u.lid === jidToFind)) return true
-} catch (e) { }
-return false
-})
+const normalized = normalizeRawJid(jidToFind)
+if (!normalized) return undefined
+return participantIndex.get(normalized) || participantIndex.get(normalizeToJid(normalized))
 }
 const userGroup = (m.isGroup ? findParticipant(sender) : {}) || {}
 const botGroup = (m.isGroup ? findParticipant(this.user.jid) : {}) || {}
-const normalizeAdmin = (p) => {
-if (!p) return false
-const a = p.admin ?? p.isAdmin ?? p.role ?? false
-if (a === true || a === 'admin') return 'admin'
-if (['creator', 'superadmin', 'owner'].includes(a) || p.isSuperAdmin || p.isCreator) return 'superadmin'
-return false
-}
 const isRAdmin = normalizeAdmin(userGroup) === 'superadmin'
 const isAdmin = isRAdmin || normalizeAdmin(userGroup) === 'admin'
 const isBotAdmin = normalizeAdmin(botGroup) === 'admin' || normalizeAdmin(botGroup) === 'superadmin'
