@@ -72,6 +72,27 @@ if (!jid) return null
 if (!jid.includes('@') && /^\d+$/.test(jid)) jid += '@s.whatsapp.net'
 return jid
 }
+const getJidVariants = (rawJid) => {
+const normalized = normalizeRawJid(rawJid)
+if (!normalized) return []
+const variants = new Set([normalized])
+if (this.decodeJid && typeof this.decodeJid === 'function') {
+try {
+const decoded = this.decodeJid(normalized)
+if (decoded) variants.add(decoded)
+} catch (e) { }
+}
+for (const jid of [...variants]) {
+if (!jid || typeof jid !== 'string') continue
+const [local, domain] = jid.split('@')
+if (!local || !domain) continue
+const baseLocal = local.split(':')[0]
+if (baseLocal && baseLocal !== local) variants.add(`${baseLocal}@${domain}`)
+if (domain === 's.whatsapp.net') variants.add(`${baseLocal}@lid`)
+if (domain === 'lid') variants.add(`${baseLocal}@s.whatsapp.net`)
+}
+return [...variants]
+}
 const normalizeAdmin = (p) => {
 if (!p) return false
 const a = p.admin ?? p.isAdmin ?? p.role ?? false
@@ -114,7 +135,28 @@ const normalizeToJid = (rawJid) => {
 const jid = normalizeRawJid(rawJid)
 if (!jid) return rawJid
 const info = participantIndex.get(jid)
-return (info && info.id) ? info.id : jid
+const participantResolved = (info && info.id) ? info.id : jid
+const users = global.db?.data?.users || {}
+const variants = getJidVariants(participantResolved).filter(v => typeof users[v] === 'object')
+if (!variants.length) return participantResolved
+const scoreUserRecord = (u = {}) => {
+const numericScore = ['coin', 'bank', 'exp', 'level', 'diamond', 'joincount'].reduce((sum, key) => {
+const value = Number(u?.[key])
+return sum + (Number.isFinite(value) ? Math.max(value, 0) : 0)
+}, 0)
+const flagsScore = (u?.registered ? 1000 : 0) + (u?.premium ? 1000 : 0) + ((u?.name && String(u.name).trim()) ? 100 : 0)
+return numericScore + flagsScore
+}
+let best = variants[0]
+let bestScore = scoreUserRecord(users[best])
+for (const v of variants.slice(1)) {
+const nextScore = scoreUserRecord(users[v])
+if (nextScore > bestScore) {
+best = v
+bestScore = nextScore
+}
+}
+return best
 }
 if (m.isGroup) {
 sender = normalizeToJid(sender)
