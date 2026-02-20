@@ -155,5 +155,4 @@ handler.help = ['addwaifus <nombre> | reply'];
 handler.tags = ['waifus'];
 handler.command = ['addwaifus', 'addwaifu', 'givewaifus', 'giveallwaifus'];
 handler.group = false; // disponible en privado y grupos
-handler.rowner = true;
 export default handler;
