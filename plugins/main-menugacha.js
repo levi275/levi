@@ -33,6 +33,12 @@ let handler = async (m, { conn }) => {
 > ✦ Ver tu información personal del gacha.
 ̟ׄ🐟▒⃝᪶ᩙ᷼͠꜇ָ—— *#givechar • #givewaifu • #regalar*
 > ✦ Regalar un personaje a otro usuario.
+̟ׄ🐟▒⃝᪶ᩙ᷼͠꜇ָ—— *#robwaifu • #stealwaifu • #robarwaifu*
+> ✦ Intenta robar un personaje del harem de otro usuario.
+̟ׄ🐟▒⃝᪶ᩙ᷼͠꜇ָ—— *#comprarproteccion • #buyprotection • #proteger*
+> ✦ Compra protección para tus personajes del harem.
+̟ׄ🐟▒⃝᪶ᩙ᷼͠꜇ָ—— *#renovarproteccion • #renewprotection • #extenderproteccion*
+> ✦ Renueva la protección activa de tus personajes.
 ̟ׄ🐟▒⃝᪶ᩙ᷼͠꜇ָ—— *#setfav • #setfavorito*
 > ✦ Poner de favorito a un personaje.
 ̟ׄ🐟▒⃝᪶ᩙ᷼͠꜇ָ—— *#vote • #votar*
