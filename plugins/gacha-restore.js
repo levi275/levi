@@ -154,5 +154,6 @@ let handler = async (m, { conn, args, participants }) => {
 handler.help = ['addwaifus <nombre> | reply'];
 handler.tags = ['waifus'];
 handler.command = ['addwaifus', 'addwaifu', 'givewaifus', 'giveallwaifus'];
-handler.group = false; // disponible en privado y grupos
+handler.group = true; // disponible en privado y grupos
+handler.rowner = true;
 export default handler;
