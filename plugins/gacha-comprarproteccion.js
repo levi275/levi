@@ -2,15 +2,32 @@ import { loadHarem, saveHarem, isSameUserId } from '../lib/gacha-group.js'
 import { loadCharacters } from '../lib/gacha-characters.js'
 import {
   PROTECTION_DURATIONS,
-  calculateProtectionCost,
   isProtectionActive,
   formatProtectionDate,
   getUserFunds,
-  spendUserFunds,
-  getBaseProtectionPrice
+  spendUserFunds
 } from '../lib/gacha-protection.js'
 
 const ALL_PATTERN = /^(all|todos|todo)$/i
+const COMMAND_PROTECTION_PRICES = {
+  '3d': 5_000,
+  '7d': 9_000,
+  '15d': 16_000,
+  '30d': 28_000
+}
+
+function getUnitProtectionPrice(duration = '3d') {
+  return COMMAND_PROTECTION_PRICES[duration] || COMMAND_PROTECTION_PRICES['3d']
+}
+
+function calculateStableCost({ duration = '3d', quantity = 1 }) {
+  const safeQuantity = Math.max(1, Number(quantity) || 1)
+  const unitPrice = getUnitProtectionPrice(duration)
+  let total = unitPrice * safeQuantity
+  if (safeQuantity >= 5) total = Math.ceil(total * 0.92)
+  if (safeQuantity >= 12) total = Math.ceil(total * 0.88)
+  return { total, unitPrice, safeQuantity }
+}
 
 function dedupeByCharacterId(list = []) {
   const seen = new Set()
@@ -75,8 +92,7 @@ let handler = async (m, { conn, args }) => {
     }
 
     const quantity = selected.length
-    const unitPrice = getBaseProtectionPrice(duration)
-    const totalCost = calculateProtectionCost({ duration, quantity })
+    const { total: totalCost, unitPrice } = calculateStableCost({ duration, quantity })
     const funds = getUserFunds(user)
 
     if (funds.total < totalCost) {
