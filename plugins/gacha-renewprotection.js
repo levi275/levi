@@ -1,10 +1,12 @@
-import { loadHarem, saveHarem } from '../lib/gacha-group.js'
+import { loadHarem, saveHarem, isSameUserId } from '../lib/gacha-group.js'
 import { loadCharacters } from '../lib/gacha-characters.js'
 import {
   PROTECTION_DURATIONS,
   calculateProtectionCost,
   formatProtectionDate,
-  isProtectionActive
+  isProtectionActive,
+  getUserFunds,
+  spendUserFunds
 } from '../lib/gacha-protection.js'
 
 const ALL_PATTERN = /^(all|todos|todo)$/i
@@ -36,7 +38,7 @@ let handler = async (m, { conn, args }) => {
     const [harem, characters] = await Promise.all([loadHarem(), loadCharacters()])
     const characterMap = new Map(characters.map(c => [String(c.id), c]))
 
-    const userChars = harem.filter(c => c.groupId === groupId && c.userId === userId)
+    const userChars = harem.filter(c => c.groupId === groupId && isSameUserId(c.userId, userId))
     if (!userChars.length) return conn.reply(m.chat, '✘ No tienes personajes en este grupo.', m)
 
     const byAll = ALL_PATTERN.test(target)
@@ -55,17 +57,16 @@ let handler = async (m, { conn, args }) => {
         '✘ Los personajes elegidos no tienen protección activa para renovar.\nUsa *#comprarproteccion* primero.', m)
     }
 
-    const totalCost = calculateProtectionCost({
-      userCoin: user.coin || 0,
-      duration,
-      quantity: renewable.length
-    })
+    const totalCost = calculateProtectionCost({ duration, quantity: renewable.length })
+    const funds = getUserFunds(user)
 
-    if ((user.coin || 0) < totalCost) {
+    if (funds.total < totalCost) {
       return conn.reply(m.chat,
         `◢✿ *SALDO INSUFICIENTE* ✿◤\n\n` +
         `✧ Renovación: *¥${totalCost.toLocaleString()} ${moneda}*\n` +
-        `✧ Saldo: *¥${(user.coin || 0).toLocaleString()} ${moneda}*`, m)
+        `✧ Cartera: *¥${funds.coin.toLocaleString()} ${moneda}*\n` +
+        `✧ Banco: *¥${funds.bank.toLocaleString()} ${moneda}*\n` +
+        `✧ Total: *¥${funds.total.toLocaleString()} ${moneda}*`, m)
     }
 
     const now = Date.now()
@@ -85,7 +86,7 @@ let handler = async (m, { conn, args }) => {
       if (newExpiry > maxExpiry) maxExpiry = newExpiry
     }
 
-    user.coin -= totalCost
+    const paid = spendUserFunds(user, totalCost)
     await saveHarem(harem)
 
     return conn.reply(m.chat,
@@ -94,7 +95,9 @@ let handler = async (m, { conn, args }) => {
       `✧ Extensión: *${durationData.label}*\n` +
       `✧ Vencimiento más lejano: *${formatProtectionDate(maxExpiry)}*\n` +
       `✧ Costo: *¥${totalCost.toLocaleString()} ${moneda}*\n` +
-      `✧ Cartera: *¥${(user.coin || 0).toLocaleString()} ${moneda}*`, m)
+      `✧ Cobro: banco *¥${(paid?.fromBank || 0).toLocaleString()}* + cartera *¥${(paid?.fromCoin || 0).toLocaleString()}*\n` +
+      `✧ Cartera: *¥${(user.coin || 0).toLocaleString()} ${moneda}*\n` +
+      `✧ Banco: *¥${(user.bank || 0).toLocaleString()} ${moneda}*`, m)
   } catch (error) {
     console.error(error)
     return conn.reply(m.chat, `✘ Error al renovar protección: ${error.message}`, m)
