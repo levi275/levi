@@ -1,5 +1,6 @@
-import { loadVentas, saveVentas, getVentasInGroup, loadHarem, saveHarem, addOrUpdateClaim } from '../lib/gacha-group.js'
+import { loadVentas, saveVentas, getVentasInGroup, loadHarem, saveHarem, addOrUpdateClaim, isSameUserId } from '../lib/gacha-group.js'
 import { loadCharacters, findCharacterById } from '../lib/gacha-characters.js'
+import { resetProtectionOnTransfer } from '../lib/gacha-protection.js'
 
 let handler = async (m, { conn, args }) => {
 if (!args[0]) return m.reply('✿ Usa: *#comprarwaifu <número | nombre>*')
@@ -24,7 +25,7 @@ venta = ventasGrupo.find(v => v.name.toLowerCase() === input.toLowerCase())
 if (!venta) return m.reply('✘ No se encontró ese personaje en venta en este grupo.')
 }
 
-if (venta.vendedor === m.sender) return m.reply('✘ No puedes comprarte a ti mismo.')
+if (isSameUserId(venta.vendedor, m.sender)) return m.reply('✘ No puedes comprarte a ti mismo.')
 
 let comprador = global.db.data.users[m.sender]
 if (!comprador) return m.reply('✘ No estás registrado.')
@@ -40,7 +41,13 @@ comprador.coin = (comprador.coin || 0) - precio
 vendedor.coin = (vendedor.coin || 0) + precio
 
 let harem = await loadHarem()
+const existingClaim = harem.find(c => c.groupId === groupId && String(c.characterId) === String(venta.id))
+if (existingClaim) {
+existingClaim.userId = m.sender
+resetProtectionOnTransfer(existingClaim, { now: Date.now(), reason: 'market' })
+} else {
 addOrUpdateClaim(harem, groupId, m.sender, venta.id)
+}
 await saveHarem(harem)
 
 ventas = ventas.filter(v => !(v.groupId === groupId && v.id === venta.id))

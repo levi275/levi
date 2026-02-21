@@ -7,6 +7,7 @@ import {
   getUserClaims,
   isSameUserId
 } from '../lib/gacha-group.js';
+import { resetProtectionOnTransfer } from '../lib/gacha-protection.js';
 
 const charactersFilePath = './src/database/characters.json';
 
@@ -92,8 +93,13 @@ let handler = async (m, { conn, args, participants }) => {
       return;
     }
 
-    removeClaim(harem, groupId, userId, character.id);
-    addOrUpdateClaim(harem, groupId, who, character.id);
+    if (claim) {
+      claim.userId = who;
+      resetProtectionOnTransfer(claim, { now: Date.now(), reason: 'gift' });
+    } else {
+      removeClaim(harem, groupId, userId, character.id);
+      addOrUpdateClaim(harem, groupId, who, character.id);
+    }
     await saveHarem(harem);
 
     await conn.reply(m.chat, `✰ *${character.name}* ha sido regalado a @${who.split('@')[0]}!`, m, { mentions: [who] });
