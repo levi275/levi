@@ -4,7 +4,7 @@ const handler = async (m, { conn, isPrems }) => {
     return conn.reply(m.chat, '🔒 Este comando es exclusivo para usuarios premium.', m);
   }
 
-  const cooldown = 12 * 60 * 60 * 1000;
+  const cooldown = 8 * 60 * 60 * 1000;
   const now = Date.now();
 
   if (now - (user.lastpremiumbonus || 0) < cooldown) {
@@ -12,21 +12,23 @@ const handler = async (m, { conn, isPrems }) => {
     return conn.reply(m.chat, `👑 Ya reclamaste tu bonus premium.\n⏳ Vuelve en *${restante}*.`, m);
   }
 
-  const coinReward = randomInt(4000, 9000);
-  const expReward = randomInt(350, 900);
-  const diamondReward = randomInt(1, 3);
+  const coinReward = randomInt(45000, 90000);
+  const expReward = randomInt(4000, 8000);
+  const diamondReward = randomInt(10, 24);
 
   user.coin = (user.coin || 0) + coinReward;
   user.exp = (user.exp || 0) + expReward;
   user.diamond = (user.diamond || 0) + diamondReward;
+  user.diamonds = (user.diamonds || 0) + diamondReward;
   user.lastpremiumbonus = now;
 
   return conn.reply(
     m.chat,
     `👑 *Bonus Premium reclamado*\n\n` +
       `💸 ${m.moneda}: *+${coinReward.toLocaleString()}*\n` +
-      `✨ Exp: *+${expReward}*\n` +
-      `💎 Diamantes: *+${diamondReward}*`,
+      `✨ Exp: *+${expReward.toLocaleString()}*\n` +
+      `💎 Diamantes: *+${diamondReward}*\n` +
+      `🕒 Próximo bonus en: *8 horas*`,
     m,
   );
 };

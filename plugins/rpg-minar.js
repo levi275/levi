@@ -2,7 +2,7 @@ const handler = async (m, { conn }) => {
   const user = global.db.data.users[m.sender];
   if (!user) return;
 
-  const tiempoMinar = 12 * 60 * 1000;
+  const tiempoMinar = 10 * 60 * 1000;
   const now = Date.now();
 
   if (now - (user.lastmiming || 0) < tiempoMinar) {
@@ -10,9 +10,10 @@ const handler = async (m, { conn }) => {
     return conn.reply(m.chat, `⛏️ Aún te recuperas del último minado.\n⏳ Espera *${restante}*.`, m);
   }
 
-  const esEventoPositivo = Math.random() < 0.78;
+  const bonus = user.premium ? 1.45 : 1;
+  const esEventoPositivo = Math.random() < (user.premium ? 0.86 : 0.78);
   const evento = esEventoPositivo ? pickRandom(eventosBuenos) : pickRandom(eventosMalos);
-  const cambios = evento.cambios();
+  const cambios = evento.cambios(bonus);
 
   user.coin = Math.max(0, (user.coin || 0) + cambios.coin);
   user.iron = Math.max(0, (user.iron || 0) + cambios.iron);
@@ -21,8 +22,8 @@ const handler = async (m, { conn }) => {
   user.coal = Math.max(0, (user.coal || 0) + cambios.coal);
   user.stone = Math.max(0, (user.stone || 0) + cambios.stone);
   user.exp = (user.exp || 0) + cambios.exp;
-  user.health = Math.max(0, (user.health || 100) - 15);
-  user.pickaxedurability = Math.max(0, (user.pickaxedurability || 100) - 10);
+  user.health = Math.max(0, (user.health || 100) - 10);
+  user.pickaxedurability = Math.max(0, (user.pickaxedurability || 100) - 8);
   user.lastmiming = now;
 
   const resultado =
@@ -33,7 +34,8 @@ const handler = async (m, { conn }) => {
     `🔩 Hierro: ${formato(cambios.iron)}\n` +
     `🏅 Oro: ${formato(cambios.gold)}\n` +
     `🕋 Carbón: ${formato(cambios.coal)}\n` +
-    `🪨 Piedra: ${formato(cambios.stone)}`;
+    `🪨 Piedra: ${formato(cambios.stone)}\n` +
+    `👑 Multiplicador premium: x${bonus}`;
 
   await conn.sendFile(m.chat, 'https://files.catbox.moe/qfx5pn.jpg', 'minado.jpg', resultado, m);
   await m.react('⛏️');
@@ -48,18 +50,22 @@ handler.group = true;
 export default handler;
 
 const eventosBuenos = [
-  { texto: '✨ Encontraste una veta de minerales.', cambios: () => ({ exp: r(120, 230), coin: r(900, 2200), emerald: r(1, 3), iron: r(8, 20), gold: r(4, 10), coal: r(10, 25), stone: r(80, 200) }) },
-  { texto: '💰 Hallaste un cofre enterrado.', cambios: () => ({ exp: r(180, 300), coin: r(1600, 3200), emerald: r(1, 4), iron: r(10, 24), gold: r(5, 12), coal: r(12, 30), stone: r(100, 240) }) },
-  { texto: '💎 Cueva antigua descubierta.', cambios: () => ({ exp: r(220, 360), coin: r(2200, 4200), emerald: r(2, 5), iron: r(12, 28), gold: r(6, 14), coal: r(14, 36), stone: r(120, 280) }) },
+  { texto: '✨ Encontraste una veta de minerales.', cambios: (b) => ({ exp: n(600, 1200, b), coin: n(9000, 18000, b), emerald: n(4, 8, b), iron: n(35, 80, b), gold: n(20, 40, b), coal: n(35, 80, b), stone: n(250, 550, b) }) },
+  { texto: '💰 Hallaste un cofre enterrado.', cambios: (b) => ({ exp: n(900, 1500, b), coin: n(14000, 26000, b), emerald: n(6, 10, b), iron: n(45, 100, b), gold: n(25, 50, b), coal: n(40, 90, b), stone: n(300, 600, b) }) },
+  { texto: '💎 Cueva antigua descubierta.', cambios: (b) => ({ exp: n(1200, 1800, b), coin: n(20000, 32000, b), emerald: n(8, 14, b), iron: n(55, 110, b), gold: n(30, 60, b), coal: n(45, 100, b), stone: n(350, 700, b) }) },
 ];
 
 const eventosMalos = [
-  { texto: '💥 Pequeño derrumbe en la mina.', cambios: () => ({ exp: r(40, 90), coin: -r(300, 900), emerald: -r(0, 1), iron: -r(1, 4), gold: -r(0, 2), coal: -r(2, 6), stone: -r(10, 30) }) },
-  { texto: '🥵 Te perdiste buscando la salida.', cambios: () => ({ exp: r(30, 70), coin: -r(200, 700), emerald: 0, iron: r(0, 2), gold: 0, coal: r(1, 5), stone: r(5, 20) }) },
+  { texto: '💥 Pequeño derrumbe en la mina.', cambios: () => ({ exp: r(150, 320), coin: -r(2000, 5000), emerald: -r(0, 2), iron: -r(2, 8), gold: -r(1, 4), coal: -r(3, 10), stone: -r(20, 60) }) },
+  { texto: '🥵 Te perdiste buscando la salida.', cambios: () => ({ exp: r(120, 260), coin: -r(1600, 4200), emerald: 0, iron: r(0, 4), gold: 0, coal: r(2, 8), stone: r(15, 50) }) },
 ];
 
 function r(min, max) {
   return Math.floor(Math.random() * (max - min + 1)) + min;
+}
+
+function n(min, max, bonus) {
+  return Math.floor(r(min, max) * bonus);
 }
 
 function formato(num) {

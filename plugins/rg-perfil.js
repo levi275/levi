@@ -1,6 +1,7 @@
 import moment from 'moment-timezone'
 import PhoneNumber from 'awesome-phonenumber'
 import fetch from 'node-fetch'
+import { formatJobLine, ensureJobFields } from '../lib/rpg-jobs.js'
 
 let handler = async (m, { conn }) => {
   let userId
@@ -16,6 +17,8 @@ let handler = async (m, { conn }) => {
   if (!user) {
     return m.reply('⚠️ El usuario no existe en la base de datos.')
   }
+
+  ensureJobFields(user)
 
   try {
     let name
@@ -42,6 +45,7 @@ let handler = async (m, { conn }) => {
     let role = user.role || '✧ Sin rango'
     let coins = user.coin || 0
     let bankCoins = user.bank || 0
+    let jobLine = formatJobLine(user)
 
     let perfil = await conn.profilePictureUrl(userId, 'image')
       .catch(() => 'https://files.catbox.moe/xr2m6u.jpg')
@@ -64,6 +68,7 @@ let handler = async (m, { conn }) => {
 ⧉ 𖦹 𝖢𝗈𝗂𝗇𝗌 » ${coins.toLocaleString()} ${m.moneda}
 ⧉ 𖦹 𝖡𝖺𝗇𝗄 » ${bankCoins.toLocaleString()} ${m.moneda}
 ⧉ 𖦹 𝖯𝗋𝖾𝗆𝗂𝗎𝗆 » ${user.premium ? '✔ Activo' : '✘ Inactivo'}
+⧉ 𖦹 𝖳𝗋𝖺𝖻𝖺𝗃𝗈 » ${jobLine}
 ㅤㅤ⎯ ⎯ ⎯ ⎯ ⎯ ⎯ ⎯ ⎯ ⎯ ⎯  
 > ⋆｡°✩ 𝖯𝗋𝗈𝗉𝗂𝖾𝗍𝖺𝗋𝗂𝗈 ᴅᴇ ʟᴀ ʙᴏᴛ: ${dev} ⋆｡°✩
 `.trim()
