@@ -125,7 +125,8 @@ lastpago: 0, lastmining: 0, lastcodereg: 0, muto: false, premium: false,
 premiumTime: 0, registered: false, genre: '', birth: '', marry: '',
 description: '', packstickers: null, name: m.name || '', age: -1,
 regTime: -1, afk: -1, afkReason: '', role: 'Nuv', banned: false,
-useDocument: false, level: 0, bank: 0, warn: 0, crime: 0
+useDocument: false, level: 0, bank: 0, warn: 0, crime: 0,
+job: null, jobSince: 0, jobXp: 0
 };
 const chatDefault = {
 sAutoresponder: '', welcome: true, isBanned: false, autolevelup: false,

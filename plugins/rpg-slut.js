@@ -1,54 +1,102 @@
+import { ensureJobFields, getJobData, pickRandom } from '../lib/rpg-jobs.js';
+
 let cooldowns = {};
 
-const handler = async (m, { conn }) => {
-    const users = global.db.data.users;
-    const senderId = m.sender;
+const successByJob = {
+  albañil: [
+    '🧱 Llegaste marcado de cemento y eso prendió a tu cliente',
+    '🏗️ Te viste rudo de obra y te llovieron billetes',
+  ],
+  basurero: [
+    '🗑️ Te salió un cliente con fetiches raros y te pagó triple por uniforme de turno',
+    '♻️ Tu actitud callejera encantó y cerraste trato caro',
+  ],
+  chef: [
+    '👨‍🍳 Le cocinaste algo antes del acto y te dejó una mega propina',
+    '🍓 Te armaste una escena gourmet y cobraste premium',
+  ],
+  programador: [
+    '💻 Vendiste contenido exclusivo por suscripción y facturaste fuerte',
+    '📲 Le montaste un show virtual privado y te pagaron en caliente',
+  ],
+  repartidor: [
+    '🛵 Entrega express, servicio express: cliente satisfecho y propina alta',
+    '📦 Te pidieron “paquete completo” y cobrastes extra',
+  ],
+  comerciante: [
+    '🛍️ Negociaste tarifa VIP y cerraste una noche redonda',
+    '💬 Con puro verbo subiste precio y aun así te compraron todo',
+  ],
+};
 
-    if (typeof users[senderId].coin !== "number") users[senderId].coin = 0;
-    if (typeof users[senderId].bank !== "number") users[senderId].bank = 0;
+const failByJob = {
+  basurero: [
+    '🤢 Olías a basura al empezar con el acto porque no te bañaste después de la chamba y perdiste al cliente',
+    '🧼 Te dijeron que volvieras cuando te quitaras el olor del turno y te cancelaron',
+  ],
+  default: [
+    '💔 Se cayó el mood y te tocó pagar hotel y taxi',
+    '🚔 Te cayó redada y soltaste plata para salir rápido',
+    '📉 Cliente tóxico: no pagó y encima te dejó gastos',
+  ],
+};
 
-    const premiumBenefit = users[senderId].premium ? 1.30 : 1.0;
-    const cooldown = 5 * 60 * 1000;
+const handler = async (m, { conn, usedPrefix }) => {
+  const users = global.db.data.users;
+  const senderId = m.sender;
+  const user = users[senderId];
+  ensureJobFields(user);
 
-    if (cooldowns[senderId] && Date.now() - cooldowns[senderId] < cooldown) {
-        const remaining = segundosAHMS(Math.ceil((cooldowns[senderId] + cooldown - Date.now()) / 1000));
-        return m.reply(`🥵 Necesitas recuperar el aliento. Vuelve en *${remaining}*.`);
-    }
+  const job = getJobData(user);
+  if (!job) {
+    return conn.reply(m.chat, `💼 Primero consigue trabajo con *${usedPrefix}trabajo elegir <trabajo>*. Tu oficio afecta #slut.`, m);
+  }
 
-    const winChance = 0.70;
-    const didWin = Math.random() < winChance;
+  const cooldown = 5 * 60 * 1000;
+  const now = Date.now();
+  if (cooldowns[senderId] && now - cooldowns[senderId] < cooldown) {
+    const remaining = segundosAHMS(Math.ceil((cooldowns[senderId] + cooldown - now) / 1000));
+    return m.reply(`🥵 Necesitas recuperar el aliento. Vuelve en *${remaining}*.`);
+  }
 
-    let userIds = Object.keys(users).filter(u => u !== senderId && !users[u].banned);
-    let targetId = userIds.length > 0 ? userIds[Math.floor(Math.random() * userIds.length)] : senderId;
+  const userIds = Object.keys(users).filter(u => u !== senderId && !users[u].banned);
+  const targetId = userIds.length > 0 ? pickRandom(userIds) : senderId;
 
-    if (didWin) {
-        const amount = Math.floor((Math.random() * 10000 + 4000) * premiumBenefit);
-        users[senderId].coin += amount;
-        await m.react('🥵');
-        const phrase = pickRandom(frasesGanancia).replace('@usuario', `@${targetId.split('@')[0]}`);
-        await conn.sendMessage(m.chat, {
-            text: `${phrase} y ganaste *¥${amount.toLocaleString()} ${m.moneda}*.`,
-            contextInfo: { mentionedJid: [targetId] }
-        }, { quoted: m });
+  const prof = Math.min(0.08, (user.jobXp || 0) / 300000);
+  const winChance = Math.min(0.87, 0.64 + (user.premium ? 0.06 : 0) + prof);
+  const didWin = Math.random() < winChance;
 
-    } else {
-        const amount = Math.floor(Math.random() * 18000 + 8000);
-        let total = users[senderId].coin + users[senderId].bank;
-        let loss = Math.min(total, amount);
+  if (didWin) {
+    const amount = Math.floor((Math.random() * 26000 + 11000) * job.slutMultiplier * (user.premium ? 1.2 : 1));
+    user.coin = (user.coin || 0) + amount;
+    user.jobXp = (user.jobXp || 0) + Math.floor(amount * 0.07);
+    cooldowns[senderId] = now;
+    const phrase = pickRandom(successByJob[job.key] || successByJob.repartidor);
 
-        if (users[senderId].coin >= loss) {
-            users[senderId].coin -= loss;
-        } else {
-            let resto = loss - users[senderId].coin;
-            users[senderId].coin = 0;
-            users[senderId].bank = Math.max(0, users[senderId].bank - resto);
-        }
-        await m.react('💔');
-        const phrase = pickRandom(frasesPerdida);
-        await conn.reply(m.chat, `${phrase} y perdiste *¥${loss.toLocaleString()} ${m.moneda}*.`, m);
-    }
+    await conn.sendMessage(
+      m.chat,
+      {
+        text: `${job.emoji} *${job.name}*\n${phrase}.\n💸 Ganaste *¥${amount.toLocaleString()} ${m.moneda}* con @${targetId.split('@')[0]}.`,
+        contextInfo: { mentionedJid: [targetId] },
+      },
+      { quoted: m },
+    );
+    return;
+  }
 
-    cooldowns[senderId] = Date.now();
+  const amount = Math.floor((Math.random() * 11000 + 5000) * job.slutLossMultiplier);
+  const loss = Math.min((user.coin || 0) + (user.bank || 0), amount);
+
+  let rest = loss;
+  const fromCoin = Math.min(user.coin || 0, rest);
+  user.coin = Math.max(0, (user.coin || 0) - fromCoin);
+  rest -= fromCoin;
+  user.bank = Math.max(0, (user.bank || 0) - rest);
+
+  cooldowns[senderId] = now;
+  const failLines = failByJob[job.key] || failByJob.default;
+  const phrase = pickRandom(failLines);
+  return conn.reply(m.chat, `${job.emoji} *${job.name}*\n${phrase}.\n💸 Perdiste *¥${loss.toLocaleString()} ${m.moneda}*.`, m);
 };
 
 handler.help = ['slut'];
@@ -60,45 +108,7 @@ handler.register = true;
 export default handler;
 
 function segundosAHMS(segundos) {
-    let minutos = Math.floor(segundos / 60);
-    let segundosRestantes = segundos % 60;
-    return `${minutos}m ${segundosRestantes}s`;
+  let minutos = Math.floor(segundos / 60);
+  let segundosRestantes = segundos % 60;
+  return `${minutos}m ${segundosRestantes}s`;
 }
-
-function pickRandom(list) {
-    return list[Math.floor(Math.random() * list.length)];
-}
-
-const frasesGanancia = [
-    "🤤 Le hiciste el 'gawk gawk 3000' a @usuario sin piedad",
-    "🔥 Le diste una nalgada a @usuario que hasta gritó 'ay, papi'",
-    "😩 Le agarraste el paquete a @usuario y lo dejaste temblando",
-    "🤯 Usaste las dos manos y la boca a la vez con @usuario, quedó mudo",
-    "💀 Le rebotaste encima a @usuario tan fuerte que ahora duda de su existencia",
-    "🥵 Le hiciste un baile privado a @usuario en plena calle",
-    "😈 Te pusiste en 4 y @usuario no dudó ni un segundo",
-    "💦 Le lambiste el ombligo a @usuario sin que te lo pidiera",
-    "📸 Te grabaron haciendo cositas con @usuario y ahora tienes un OnlyFans exitoso",
-    "🤸‍♂️ Le hiciste el helicóptero con la cola a @usuario",
-    "🍆📦 Te hiciste pasar por delivery y le entregaste el 'paquete' a @usuario",
-    "🎤 Grabaste un ASMR lamiendo un micrófono para @usuario",
-    "🦶 Un cliente te pagó extra solo por olerte los pies",
-    "🤡 Hiciste un cosplay de Harley Quinn para @usuario y te llenó de dinero",
-    "🛀 Vendiste un frasco con el agua de tu baño a un simp de @usuario"
-];
-
-const frasesPerdida = [
-    "😭 Le mordiste la verga a un cliente sin querer y te demandó",
-    "🏥 Te resbalaste en el lubricante, caíste encima del cliente y tuviste que pagar el hospital",
-    "🤢 No te bañaste y el cliente te vomitó encima del asco",
-    "💔 Le hablaste de tu ex en medio del acto y te canceló el servicio",
-    "💸 El cliente se fue sin pagar y además se llevó tu celular",
-    "🚔 Te arrestaron en una redada y tuviste que pagar una fianza carísima",
-    "🤡 Te enamoraste del cliente y terminaste pagándole tú a él",
-    "🚑 Te quedaste atorado en una pose y tuvieron que llamar a los bomberos; la multa fue enorme",
-    "💥 Rompiste la cama del motel y te la cobraron al triple",
-    "📉 El cliente te pagó con NFTs de monos y su valor se fue a cero al instante",
-    "❤️‍🩹 Te dio una reacción alérgica al disfraz de látex",
-    "👨‍ tío El cliente resultó ser tu tío y te desheredó en ese mismo momento",
-    "😵 El cliente murió de un infarto en pleno acto y su familia te demandó por homicidio culposo"
-];

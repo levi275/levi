@@ -2,8 +2,8 @@ const handler = async (m, { conn }) => {
   const user = global.db.data.users[m.sender];
   const bank = Math.max(0, Number(user.bank) || 0);
 
-  if (bank < 1000) {
-    return conn.reply(m.chat, `🏦 Necesitas al menos *1,000 ${m.moneda}* en el banco para cobrar interés.`, m);
+  if (bank < 5000) {
+    return conn.reply(m.chat, `🏦 Necesitas al menos *5,000 ${m.moneda}* en el banco para cobrar interés.`, m);
   }
 
   const cooldown = 24 * 60 * 60 * 1000;
@@ -13,9 +13,9 @@ const handler = async (m, { conn }) => {
     return conn.reply(m.chat, `🏦 Ya cobraste interés hoy.\n⏳ Vuelve en *${restante}*.`, m);
   }
 
-  const rate = user.premium ? 0.035 : 0.02;
-  const cap = user.premium ? 25000 : 12000;
-  const interest = Math.min(cap, Math.max(150, Math.floor(bank * rate)));
+  const rate = user.premium ? 0.065 : 0.04;
+  const cap = user.premium ? 220000 : 110000;
+  const interest = Math.min(cap, Math.max(1200, Math.floor(bank * rate)));
 
   user.coin = (user.coin || 0) + interest;
   user.lastinterest = now;
