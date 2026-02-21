@@ -137,7 +137,7 @@ botPrimario: null, bannedBots: [], antiImg: false, nsfw: false
 };
 const settingsDefault = {
 self: false, restrict: true, jadibotmd: true, antiPrivate: false,
-moneda: 'Coins', autoread: false, status: 0
+moneda: 'Coins', autoread: false, status: 0, disabledCommands: []
 };
 let user = global.db.data.users[sender]
 if (typeof user !== 'object') {
@@ -177,6 +177,7 @@ if (typeof settings[key] === 'undefined') {
 settings[key] = settingsDefault[key];
 }
 }
+if (!Array.isArray(settings.disabledCommands)) settings.disabledCommands = []
 if (opts['nyimak']) return
 if (!m.fromMe && opts['self']) return
 if (opts['swonly'] && m.chat !== 'status@broadcast') return
@@ -267,6 +268,11 @@ typeof plugin.command === 'string' ? plugin.command === command : false
 global.comando = command
 if ((m.id && (m.id.startsWith('NJX-') || (m.id.startsWith('BAE5') && m.id.length === 16) || (m.id.startsWith('B24E') && m.id.length === 20)))) return
 if (!isAccept) continue
+const disabledCommands = global.db.data.settings[this.user.jid]?.disabledCommands || []
+if (!isROwner && !isOwner && disabledCommands.includes(command)) {
+this.reply(m.chat, `✘ El comando *${usedPrefix}${command}* está deshabilitado por mi owner.`, m)
+continue
+}
 m.plugin = name
 let chatData = global.db.data.chats[m.chat] || {};
 const isBotBannedInThisChat = chatData.bannedBots && chatData.bannedBots.includes(this.user.jid);
