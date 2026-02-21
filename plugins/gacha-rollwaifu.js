@@ -59,7 +59,7 @@ randomImage = `https://wsrv.nl/?url=${encodeURIComponent(randomImage)}&output=pn
 
 const harem = await loadHarem()
 const claimedInGroup = findClaim(harem, groupId, randomCharacter.id)
-const ownerName = claimedInGroup ? `@${claimedInGroup.userId.split('@')[0]}` : 'Nadie'
+const ownerName = claimedInGroup ? `${claimedInGroup.userId.split('@')[0]}` : 'Nadie'
 
 if (!claimedInGroup) {
 global.activeRolls[`${groupId}:${randomCharacter.id}`] = { user: userId, time: Date.now() }
@@ -88,13 +88,10 @@ const message = `
 ㅤㅤㅤㅤㅤㅤ© ᑲ᥆𝗍 𝗀ɑᥴ꯭hɑ 𝗌𝗒sł꯭ᥱꭑ꒱
 `
 
-const mentions = claimedInGroup ? [claimedInGroup.userId] : []
-
 await conn.sendMessage(m.chat, {
 image: { url: randomImage },
 mimetype: "image/jpeg",
-caption: message,
-mentions
+caption: message
 }, { quoted: m })
 
 } catch (error) {
