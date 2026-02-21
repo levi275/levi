@@ -4,6 +4,7 @@ import {
   saveHarem,
   isSameUserId
 } from '../lib/gacha-group.js';
+import { resetProtectionOnTransfer } from '../lib/gacha-protection.js';
 
 const charactersFilePath = './src/database/characters.json';
 const confirmaciones = new Map();
@@ -87,7 +88,7 @@ handler.before = async function (m, { conn, participants }) {
     for (const char of harem.slice()) { // slice para evitar mutación en iteración
       if (char.groupId === m.chat && data.waifus.includes(char.characterId) && isSameUserId(char.userId, senderJid)) {
         char.userId = data.receptor;
-        char.lastClaimTime = Date.now();
+        resetProtectionOnTransfer(char, { now: Date.now(), reason: 'giveallharem' });
         regalados++;
       }
     }
