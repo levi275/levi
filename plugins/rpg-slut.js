@@ -83,9 +83,6 @@ function pickRandom(list) {
   return list[Math.floor(list.length * Math.random())];
 }
 
-// ==========================================
-// ARRAYS DE FRASES - SLUT
-// ==========================================
 const frasesSlutGenericas = {
   success: [
     "Le agarraste la onda y lo dejaste temblando de placer",
