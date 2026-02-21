@@ -92,7 +92,7 @@ let handler = async (m, { conn }) => {
     const haremBefore = await loadHarem();
     const existingClaim = findClaim(haremBefore, groupId, id);
     if (existingClaim && existingClaim.userId !== userId) {
-      return conn.reply(m.chat, `❌ El personaje *${character.name}* ya fue reclamado por @${existingClaim.userId.split('@')[0]}.`, m, { mentions: [existingClaim.userId] });
+      return conn.reply(m.chat, `❌ El personaje *${character.name}* ya fue reclamado por ${existingClaim.userId.split('@')[0]}.`, m);
     }
 
     // Registrar claim en harem.json (por grupo)

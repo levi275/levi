@@ -1,11 +1,6 @@
 import { promises as fs } from 'fs';
-import {
-  loadHarem,
-  saveHarem,
-  loadVentas
-} from '../lib/gacha-group.js';
-
 const charactersFilePath = './src/database/characters.json';
+const groupVotesFilePath = './src/database/groupVotes.json';
 export let cooldowns = {}; // clave: `${groupId}:${userId}`
 export const voteCooldownTime = 1 * 60 * 60 * 1000; // 1 hora
 
@@ -25,6 +20,25 @@ async function saveCharacters(characters) {
     await fs.writeFile(charactersFilePath, JSON.stringify(characters, null, 2), 'utf-8');
   } catch (error) {
     throw new Error('No se pudo guardar el archivo characters.json.');
+  }
+}
+
+async function loadGroupVotes() {
+  try {
+    const data = await fs.readFile(groupVotesFilePath, 'utf-8');
+    const parsed = JSON.parse(data);
+    return parsed && typeof parsed === 'object' ? parsed : {};
+  } catch (error) {
+    if (error?.code === 'ENOENT') return {};
+    throw new Error('No se pudo cargar el archivo groupVotes.json.');
+  }
+}
+
+async function saveGroupVotes(groupVotes) {
+  try {
+    await fs.writeFile(groupVotesFilePath, JSON.stringify(groupVotes, null, 2), 'utf-8');
+  } catch (error) {
+    throw new Error('No se pudo guardar el archivo groupVotes.json.');
   }
 }
 
@@ -71,20 +85,37 @@ let handler = async (m, { conn, args }) => {
     }
 
     const incrementValue = Math.floor(Math.random() * 10) + 1;
-    character.value = String(Number(character.value || 0) + incrementValue);
+    const groupVotes = await loadGroupVotes();
+    const groupCharacterKey = `${groupId}:${character.id}`;
+
+    const baseValue = Number(character.value || 0);
+    const currentGroupData = groupVotes[groupCharacterKey] || {
+      groupId,
+      characterId: character.id,
+      valueBonus: 0,
+      votes: 0
+    };
+
+    currentGroupData.valueBonus += incrementValue;
+    currentGroupData.votes += 1;
+    currentGroupData.groupId = groupId;
+    currentGroupData.characterId = character.id;
+
+    groupVotes[groupCharacterKey] = currentGroupData;
+    await saveGroupVotes(groupVotes);
+
+    // mantenemos votes global para compatibilidad con comandos antiguos
     character.votes = (character.votes || 0) + 1;
     await saveCharacters(characters);
 
-    // Guardamos voto en harem (registro simple opcional)
-    const harem = await loadHarem();
-    const saleList = await loadVentas(); // no usado ahora, pero puede ser útil
-    // No guardamos ownership here; solo actualizamos cooldowns por grupo
+    // No guardamos ownership aquí; solo actualizamos cooldowns por grupo
     cooldowns[userKey] = Date.now();
 
     // bloqueamos el personaje en el grupo temporalmente para evitar votaciones demasiado seguidas
     characterVotes[charVoteKey] = Date.now() + voteCooldownTime;
 
-    await conn.reply(m.chat, `✰ Votaste por el personaje *${character.name}*\n› Nuevo valor: *${character.value}* (incrementado en *${incrementValue}*)\n› Total de votos: *${character.votes}*`, m);
+    const groupValue = baseValue + currentGroupData.valueBonus;
+    await conn.reply(m.chat, `✰ Votaste por el personaje *${character.name}*\n› Valor en este grupo: *${groupValue}* (incrementado en *${incrementValue}*)\n› Votos en este grupo: *${currentGroupData.votes}*`, m);
   } catch (e) {
     await conn.reply(m.chat, `✘ Error al procesar el voto: ${e.message}`, m);
   }
