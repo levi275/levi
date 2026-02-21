@@ -1,13 +1,43 @@
-import { loadHarem, saveHarem } from '../lib/gacha-group.js'
+import { loadHarem, saveHarem, isSameUserId } from '../lib/gacha-group.js'
 import { loadCharacters } from '../lib/gacha-characters.js'
 import {
   PROTECTION_DURATIONS,
-  calculateProtectionCost,
   isProtectionActive,
-  formatProtectionDate
+  formatProtectionDate,
+  getUserFunds,
+  spendUserFunds
 } from '../lib/gacha-protection.js'
 
 const ALL_PATTERN = /^(all|todos|todo)$/i
+const COMMAND_PROTECTION_PRICES = {
+  '3d': 5_000,
+  '7d': 9_000,
+  '15d': 16_000,
+  '30d': 28_000
+}
+
+function getUnitProtectionPrice(duration = '3d') {
+  return COMMAND_PROTECTION_PRICES[duration] || COMMAND_PROTECTION_PRICES['3d']
+}
+
+function calculateStableCost({ duration = '3d', quantity = 1 }) {
+  const safeQuantity = Math.max(1, Number(quantity) || 1)
+  const unitPrice = getUnitProtectionPrice(duration)
+  let total = unitPrice * safeQuantity
+  if (safeQuantity >= 5) total = Math.ceil(total * 0.92)
+  if (safeQuantity >= 12) total = Math.ceil(total * 0.88)
+  return { total, unitPrice, safeQuantity }
+}
+
+function dedupeByCharacterId(list = []) {
+  const seen = new Set()
+  return list.filter(item => {
+    const key = String(item?.characterId)
+    if (!key || seen.has(key)) return false
+    seen.add(key)
+    return true
+  })
+}
 
 let handler = async (m, { conn, args }) => {
   const userId = m.sender
@@ -38,17 +68,17 @@ let handler = async (m, { conn, args }) => {
   try {
     const [harem, characters] = await Promise.all([loadHarem(), loadCharacters()])
     const characterMap = new Map(characters.map(c => [String(c.id), c]))
-    const userChars = harem.filter(c => c.groupId === groupId && c.userId === userId)
+    const userChars = dedupeByCharacterId(harem.filter(c => c.groupId === groupId && isSameUserId(c.userId, userId)))
 
     if (!userChars.length) return conn.reply(m.chat, '✘ No tienes personajes en este grupo.', m)
 
     const byAll = ALL_PATTERN.test(target)
     let selected = byAll
       ? userChars
-      : userChars.filter(c => {
+      : dedupeByCharacterId(userChars.filter(c => {
         const char = characterMap.get(String(c.characterId))
         return char?.name?.toLowerCase().includes(target)
-      })
+      }))
 
     if (!selected.length) return conn.reply(m.chat, '✘ No encontré ese personaje en tu harem.', m)
 
@@ -61,17 +91,18 @@ let handler = async (m, { conn, args }) => {
         `Usa *#renovarproteccion* para extenderla.`, m)
     }
 
-    const totalCost = calculateProtectionCost({
-      userCoin: user.coin || 0,
-      duration,
-      quantity: selected.length
-    })
+    const quantity = selected.length
+    const { total: totalCost, unitPrice } = calculateStableCost({ duration, quantity })
+    const funds = getUserFunds(user)
 
-    if ((user.coin || 0) < totalCost) {
+    if (funds.total < totalCost) {
       return conn.reply(m.chat,
         `◢✿ *SALDO INSUFICIENTE* ✿◤\n\n` +
         `✧ Necesitas: *¥${totalCost.toLocaleString()} ${moneda}*\n` +
-        `✧ Tienes: *¥${(user.coin || 0).toLocaleString()} ${moneda}*`, m)
+        `✧ Cálculo: *${quantity}* x *¥${unitPrice.toLocaleString()}* (${duration})\n` +
+        `✧ Cartera: *¥${funds.coin.toLocaleString()} ${moneda}*\n` +
+        `✧ Banco: *¥${funds.bank.toLocaleString()} ${moneda}*\n` +
+        `✧ Total: *¥${funds.total.toLocaleString()} ${moneda}*`, m)
     }
 
     const expiresAt = Date.now() + durationData.ms
@@ -84,7 +115,7 @@ let handler = async (m, { conn, args }) => {
       }
     }
 
-    user.coin -= totalCost
+    const paid = spendUserFunds(user, totalCost)
     await saveHarem(harem)
 
     return conn.reply(m.chat,
@@ -93,7 +124,10 @@ let handler = async (m, { conn, args }) => {
       `✧ Duración: *${durationData.label}*\n` +
       `✧ Expira: *${formatProtectionDate(expiresAt)}*\n` +
       `✧ Costo: *¥${totalCost.toLocaleString()} ${moneda}*\n` +
-      `✧ Cartera: *¥${(user.coin || 0).toLocaleString()} ${moneda}*` +
+      `✧ Cálculo: *${quantity}* x *¥${unitPrice.toLocaleString()}* (${duration})\n` +
+      `✧ Cobro: banco *¥${(paid?.fromBank || 0).toLocaleString()}* + cartera *¥${(paid?.fromCoin || 0).toLocaleString()}*\n` +
+      `✧ Cartera: *¥${(user.coin || 0).toLocaleString()} ${moneda}*\n` +
+      `✧ Banco: *¥${(user.bank || 0).toLocaleString()} ${moneda}*` +
       `${alreadyProtected.length ? `\n\n⚠️ Ya protegidos (sin cobro): *${alreadyProtected.length}*` : ''}`,
       m)
   } catch (error) {
