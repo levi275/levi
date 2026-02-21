@@ -38,7 +38,7 @@ let crm3 = "SBpbmZvLWRvbmFyLmpz"
 let crm4 = "IF9hdXRvcmVzcG9uZGVyLmpzIGluZm8tYm90Lmpz"
 let drm1 = ""
 let drm2 = ""
-let rtx = "*\n\n✐ Cσɳҽxισɳ SυႦ-Bσƚ Mσԃҽ QR\n\n✰ Con otro celular o en la PC escanea este QR para convertirte en un *Sub-Bot* Temporal.\n\n\`1\` » Haga clic en los tres puntos en la esquina superior derecha\n\n\`2\` » Toque dispositivos vinculados\n\n\`3\` » Escanee este codigo QR para iniciar sesion con el bot\n\n✧ ¡Este código QR expira en 45 segundos!."
+let rtx = "*\n\n✐ Cσɳҽxισɳ SυႦ-Bσƚ Mσԃҽ QR\n\n✰ Con otro celular o en la PC escanea este QR para convertirte en un *Sub-Bot* Temporal.\n\n`1` » Haga clic en los tres puntos en la esquina superior derecha\n\n`2` » Toque dispositivos vinculados\n\n`3` » Escanee este codigo QR para iniciar sesion con el bot\n\n✧ ¡Este código QR expira en 45 segundos!."
 
 const __filename = fileURLToPath(import.meta.url)
 const __dirname = path.dirname(__filename)
@@ -84,7 +84,6 @@ handler.tags = ['serbot']
 handler.command = ['qr', 'code']
 export default handler 
 
-
 export async function RubyJadiBot(options) {
 let { pathRubyJadiBot, m, conn, args, usedPrefix, command } = options
 if (command === 'code') {
@@ -126,8 +125,8 @@ msgRetryCache,
 browser: mcode ? ['Ubuntu', 'Chrome', '110.0.5585.95'] : ['Ruby Hoshino (Sub Bot)', 'Chrome','2.0.0'],
 version: version,
 generateHighQualityLinkPreview: true,
-defaultQueryTimeoutMs: subSocketCfg.defaultQueryTimeoutMs ?? 30000,
-connectTimeoutMs: subSocketCfg.connectTimeoutMs ?? 45000,
+defaultQueryTimeoutMs: subSocketCfg.defaultQueryTimeoutMs ?? 45000,
+connectTimeoutMs: subSocketCfg.connectTimeoutMs ?? 60000,
 keepAliveIntervalMs: subSocketCfg.keepAliveIntervalMs ?? 20000,
 retryRequestDelayMs: subSocketCfg.retryRequestDelayMs ?? 1500,
 markOnlineOnConnect: false,
@@ -167,6 +166,40 @@ if (global.subBotRegistry instanceof Map) global.subBotRegistry.delete(subBotId)
 if (removeSession) {
 try { fs.rmSync(pathRubyJadiBot, { recursive: true, force: true }) } catch {}
 }
+}
+
+// Declaramos creloadHandler arriba para que scheduleReconnect pueda usarlo
+let handler = await import('../handler.js')
+let creloadHandler = async function (restatConn) {
+try {
+const Handler = await import(`../handler.js?update=${Date.now()}`).catch(console.error)
+if (Object.keys(Handler || {}).length) handler = Handler
+} catch (e) {
+console.error('⚠️ Nuevo error: ', e)
+}
+if (restatConn) {
+const oldChats = sock.chats
+removeSockFromPool(sock)
+try { sock.ws.close() } catch { }
+try { sock.ev.removeAllListeners() } catch {}
+sock = makeWASocket(connectionOptions, { chats: oldChats })
+sock.subBotId = subBotId
+isInit = true
+if (global.subBotRegistry instanceof Map) global.subBotRegistry.set(subBotId, { sock, reconnecting: true, ts: Date.now() })
+}
+if (!isInit) {
+sock.ev.off("messages.upsert", sock.handler)
+sock.ev.off("connection.update", sock.connectionUpdate)
+sock.ev.off('creds.update', sock.credsUpdate)
+}
+sock.handler = handler.handler.bind(sock)
+sock.connectionUpdate = connectionUpdate.bind(sock)
+sock.credsUpdate = saveCreds.bind(sock, true)
+sock.ev.on("messages.upsert", sock.handler)
+sock.ev.on("connection.update", sock.connectionUpdate)
+sock.ev.on("creds.update", sock.credsUpdate)
+isInit = false
+return true
 }
 
 async function connectionUpdate(update) {
@@ -241,54 +274,51 @@ if (!loaded) destroySock({ removeSession: false })
 }
 
 const reason = lastDisconnect?.error?.output?.statusCode || lastDisconnect?.error?.output?.payload?.statusCode
-const scheduleReconnect = async (closeReason) => {
-if (reconnectAttempts >= MAX_RECONNECT_ATTEMPTS) {
-console.log(chalk.bold.yellow(`⚠️ Sub-Bot +${subBotId} alcanzó el límite de reconexiones (${MAX_RECONNECT_ATTEMPTS}).`))
-return destroySock({ removeSession: false })
+
+// 🔥 CORRECCIÓN 1: scheduleReconnect ahora recibe una función para reconectar realmente
+const scheduleReconnect = async (closeReason, reconnectFn) => {
+  if (reconnectAttempts >= MAX_RECONNECT_ATTEMPTS) {
+    console.log(chalk.bold.yellow(`⚠️ Sub-Bot +${subBotId} alcanzó el límite de reconexiones (${MAX_RECONNECT_ATTEMPTS}).`))
+    return destroySock({ removeSession: false })
+  }
+  reconnectAttempts += 1
+  const waitMs = Math.min(30000, RECONNECT_BASE_DELAY_MS * (2 ** (reconnectAttempts - 1)))
+  await sleep(waitMs)
+  
+  try {
+    await reconnectFn()
+  } catch (e) {
+    console.error(`Error reconectando +${subBotId}:`, e)
+    // Si falla, lo vuelve a intentar
+    return scheduleReconnect(closeReason, reconnectFn)
+  }
 }
-reconnectAttempts += 1
-const waitMs = Math.min(30000, RECONNECT_BASE_DELAY_MS * (2 ** (reconnectAttempts - 1)))
-await sleep(waitMs)
-return scheduleReconnect(reason)
-}
+
+// 🔥 CORRECCIÓN 2: Lógica unificada para manejar el cierre de conexión y reiniciar el socket
 if (connection === 'close') {
-if (reason === 428) {
-console.log(chalk.bold.magentaBright(`\n╭┄┄┄┄┄┄┄┄┄┄┄┄┄┄ • • • ┄┄┄┄┄┄┄┄┄┄┄┄┄┄⟡\n┆ La conexión (+${path.basename(pathRubyJadiBot)}) fue cerrada inesperadamente. Intentando reconectar...\n╰┄┄┄┄┄┄┄┄┄┄┄┄┄┄ • • • ┄┄┄┄┄┄┄┄┄┄┄┄┄┄⟡`))
-return scheduleReconnect(reason)
+  const transient = [428, 408, 500, 515]
+  const fatal = [401, 403, 405]
+
+  if (fatal.includes(reason)) {
+    console.log(chalk.bold.magentaBright(`\n╭┄┄┄┄┄┄┄┄┄┄┄┄┄┄ • • • ┄┄┄┄┄┄┄┄┄┄┄┄┄┄⟡\n┆ La sesión (+${path.basename(pathRubyJadiBot)}) fue cerrada. Credenciales no válidas o desconectado. Razón: ${reason}\n╰┄┄┄┄┄┄┄┄┄┄┄┄┄┄ • • • ┄┄┄┄┄┄┄┄┄┄┄┄┄┄⟡`))
+    destroySock({ removeSession: true })
+    return
+  }
+
+  if (reason === 440) {
+    console.log(chalk.bold.magentaBright(`\n╭┄┄┄┄┄┄┄┄┄┄┄┄┄┄ • • • ┄┄┄┄┄┄┄┄┄┄┄┄┄┄⟡\n┆ La conexión (+${path.basename(pathRubyJadiBot)}) fue reemplazada por otra sesión activa.\n╰┄┄┄┄┄┄┄┄┄┄┄┄┄┄ • • • ┄┄┄┄┄┄┄┄┄┄┄┄┄┄⟡`))
+    destroySock({ removeSession: false })
+    return
+  }
+
+  console.log(chalk.bold.magentaBright(`\n╭┄┄┄┄┄┄┄┄┄┄┄┄┄┄ • • • ┄┄┄┄┄┄┄┄┄┄┄┄┄┄⟡\n┆ La conexión (+${path.basename(pathRubyJadiBot)}) se perdió. Razón: ${reason}. Intentando reconectar...\n╰┄┄┄┄┄┄┄┄┄┄┄┄┄┄ • • • ┄┄┄┄┄┄┄┄┄┄┄┄┄┄⟡`))
+  
+  // Llamamos a scheduleReconnect pasando la función que VERDADERAMENTE reconstruye el socket
+  return scheduleReconnect(reason, async () => {
+    await creloadHandler(true)
+  })
 }
-if (reason === 408) {
-console.log(chalk.bold.magentaBright(`\n╭┄┄┄┄┄┄┄┄┄┄┄┄┄┄ • • • ┄┄┄┄┄┄┄┄┄┄┄┄┄┄⟡\n┆ La conexión (+${path.basename(pathRubyJadiBot)}) se perdió o expiró. Razón: ${reason}. Intentando reconectar...\n╰┄┄┄┄┄┄┄┄┄┄┄┄┄┄ • • • ┄┄┄┄┄┄┄┄┄┄┄┄┄┄⟡`))
-return scheduleReconnect(reason)
-}
-if (reason === 440) {
-console.log(chalk.bold.magentaBright(`\n╭┄┄┄┄┄┄┄┄┄┄┄┄┄┄ • • • ┄┄┄┄┄┄┄┄┄┄┄┄┄┄⟡\n┆ La conexión (+${path.basename(pathRubyJadiBot)}) fue reemplazada por otra sesión activa.\n╰┄┄┄┄┄┄┄┄┄┄┄┄┄┄ • • • ┄┄┄┄┄┄┄┄┄┄┄┄┄┄⟡`))
-try {
-if (options.fromCommand) m?.chat ? await conn.sendMessage(`${path.basename(pathRubyJadiBot)}@s.whatsapp.net`, {text : '*HEMOS DETECTADO UNA NUEVA SESIÓN, BORRE LA NUEVA SESIÓN PARA CONTINUAR*\n\n> *SI HAY ALGÚN PROBLEMA VUELVA A CONECTARSE*' }, { quoted: m || null }) : ""
-} catch (error) {
-console.error(chalk.bold.yellow(`Error 440 no se pudo enviar mensaje a: +${path.basename(pathRubyJadiBot)}`))
-}}
-if (reason == 405 || reason == 401) {
-console.log(chalk.bold.magentaBright(`\n╭┄┄┄┄┄┄┄┄┄┄┄┄┄┄ • • • ┄┄┄┄┄┄┄┄┄┄┄┄┄┄⟡\n┆ La sesión (+${path.basename(pathRubyJadiBot)}) fue cerrada. Credenciales no válidas o dispositivo desconectado manualmente.\n╰┄┄┄┄┄┄┄┄┄┄┄┄┄┄ • • • ┄┄┄┄┄┄┄Doç┄┄┄┄┄┄⟡`))
-try {
-if (options.fromCommand) m?.chat ? await conn.sendMessage(`${path.basename(pathRubyJadiBot)}@s.whatsapp.net`, {text : '*SESIÓN PENDIENTE*\n\n> *INTENTÉ NUEVAMENTE VOLVER A SER SUB-BOT*' }, { quoted: m || null }) : ""
-} catch (error) {
-console.error(chalk.bold.yellow(`Error 405 no se pudo enviar mensaje a: +${path.basename(pathRubyJadiBot)}`))
-}
-destroySock({ removeSession: true })
-}
-if (reason === 500) {
-console.log(chalk.bold.magentaBright(`\n╭┄┄┄┄┄┄┄┄┄┄┄┄┄┄ • • • ┄┄┄┄┄┄┄┄┄┄┄┄┄┄⟡\n┆ Conexión perdida en la sesión (+${path.basename(pathRubyJadiBot)}). Borrando datos...\n╰┄┄┄┄┄┄┄┄┄┄┄┄┄┄ • • • ┄┄┄┄┄┄┄┄┄┄┄┄┄┄⟡`))
-if (options.fromCommand) m?.chat ? await conn.sendMessage(`${path.basename(pathRubyJadiBot)}@s.whatsapp.net`, {text : '*CONEXIÓN PÉRDIDA*\n\n> *INTENTÉ MANUALMENTE VOLVER A SER SUB-BOT*' }, { quoted: m || null }) : ""
-return scheduleReconnect(reason)
-}
-if (reason === 515) {
-console.log(chalk.bold.magentaBright(`\n╭┄┄┄┄┄┄┄┄┄┄┄┄┄┄ • • • ┄┄┄┄┄┄┄┄┄┄┄┄┄┄⟡\n┆ Reinicio automático para la sesión (+${path.basename(pathRubyJadiBot)}).\n╰┄┄┄┄┄┄┄┄┄┄┄┄┄┄ • • • ┄┄┄┄┄┄┄┄┄┄┄┄┄┄⟡`))
-return scheduleReconnect(reason)
-}
-if (reason === 403) {
-console.log(chalk.bold.magentaBright(`\n╭┄┄┄┄┄┄┄┄┄┄┄┄┄┄ • • • ┄┄┄┄┄┄┄┄┄┄┄┄┄┄⟡\n┆ Sesión cerrada o cuenta en soporte para la sesión (+${path.basename(pathRubyJadiBot)}).\n╰┄┄┄┄┄┄┄┄┄┄┄┄┄┄ • • • ┄┄┄┄┄┄┄┄┄┄┄┄┄┄⟡`))
-destroySock({ removeSession: true })
-}}
+
 if (global.db.data == null) loadDatabase()
 if (connection == `open`) {
 if (!global.db.data?.users) loadDatabase()
@@ -304,50 +334,19 @@ await joinChannels(sock)
 
 m?.chat ? await conn.sendMessage(m.chat, {text: args[0] ? `@${m.sender.split('@')[0]}, ya estás conectado, leyendo mensajes entrantes...` : `@${m.sender.split('@')[0]}, genial ya eres parte de nuestra familia de Sub-Bots.`, mentions: [m.sender]}, { quoted: m }) : ''
 
+// 🔥 CORRECCIÓN 3: Relajamos el monitor de salud para que no destruya sesiones que están intentando reconectar
 if (!healthInterval) {
-healthInterval = setInterval(async () => {
-if (!sock.user || sock?.ws?.socket?.readyState === ws.CLOSED) {
-destroySock({ removeSession: false })
-}
-}, 90000)
+  healthInterval = setInterval(async () => {
+    if (!sock.user || sock?.ws?.socket?.readyState === ws.CLOSED) {
+      if (reconnectAttempts >= MAX_RECONNECT_ATTEMPTS) {
+        destroySock({ removeSession: false })
+      }
+    }
+  }, 90000)
 }
 
 }}
 
-let handler = await import('../handler.js')
-let creloadHandler = async function (restatConn) {
-try {
-const Handler = await import(`../handler.js?update=${Date.now()}`).catch(console.error)
-if (Object.keys(Handler || {}).length) handler = Handler
-
-} catch (e) {
-console.error('⚠️ Nuevo error: ', e)
-}
-if (restatConn) {
-const oldChats = sock.chats
-removeSockFromPool(sock)
-try { sock.ws.close() } catch { }
-try { sock.ev.removeAllListeners() } catch {}
-sock = makeWASocket(connectionOptions, { chats: oldChats })
-sock.subBotId = subBotId
-isInit = true
-if (global.subBotRegistry instanceof Map) global.subBotRegistry.set(subBotId, { sock, reconnecting: true, ts: Date.now() })
-}
-if (!isInit) {
-sock.ev.off("messages.upsert", sock.handler)
-sock.ev.off("connection.update", sock.connectionUpdate)
-sock.ev.off('creds.update', sock.credsUpdate)
-}
-
-sock.handler = handler.handler.bind(sock)
-sock.connectionUpdate = connectionUpdate.bind(sock)
-sock.credsUpdate = saveCreds.bind(sock, true)
-sock.ev.on("messages.upsert", sock.handler)
-sock.ev.on("connection.update", sock.connectionUpdate)
-sock.ev.on("creds.update", sock.credsUpdate)
-isInit = false
-return true
-}
 creloadHandler(false)
 })
 }
