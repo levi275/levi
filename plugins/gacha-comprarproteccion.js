@@ -6,10 +6,21 @@ import {
   isProtectionActive,
   formatProtectionDate,
   getUserFunds,
-  spendUserFunds
+  spendUserFunds,
+  getBaseProtectionPrice
 } from '../lib/gacha-protection.js'
 
 const ALL_PATTERN = /^(all|todos|todo)$/i
+
+function dedupeByCharacterId(list = []) {
+  const seen = new Set()
+  return list.filter(item => {
+    const key = String(item?.characterId)
+    if (!key || seen.has(key)) return false
+    seen.add(key)
+    return true
+  })
+}
 
 let handler = async (m, { conn, args }) => {
   const userId = m.sender
@@ -40,17 +51,17 @@ let handler = async (m, { conn, args }) => {
   try {
     const [harem, characters] = await Promise.all([loadHarem(), loadCharacters()])
     const characterMap = new Map(characters.map(c => [String(c.id), c]))
-    const userChars = harem.filter(c => c.groupId === groupId && isSameUserId(c.userId, userId))
+    const userChars = dedupeByCharacterId(harem.filter(c => c.groupId === groupId && isSameUserId(c.userId, userId)))
 
     if (!userChars.length) return conn.reply(m.chat, '✘ No tienes personajes en este grupo.', m)
 
     const byAll = ALL_PATTERN.test(target)
     let selected = byAll
       ? userChars
-      : userChars.filter(c => {
+      : dedupeByCharacterId(userChars.filter(c => {
         const char = characterMap.get(String(c.characterId))
         return char?.name?.toLowerCase().includes(target)
-      })
+      }))
 
     if (!selected.length) return conn.reply(m.chat, '✘ No encontré ese personaje en tu harem.', m)
 
@@ -63,13 +74,16 @@ let handler = async (m, { conn, args }) => {
         `Usa *#renovarproteccion* para extenderla.`, m)
     }
 
-    const totalCost = calculateProtectionCost({ duration, quantity: selected.length })
+    const quantity = selected.length
+    const unitPrice = getBaseProtectionPrice(duration)
+    const totalCost = calculateProtectionCost({ duration, quantity })
     const funds = getUserFunds(user)
 
     if (funds.total < totalCost) {
       return conn.reply(m.chat,
         `◢✿ *SALDO INSUFICIENTE* ✿◤\n\n` +
         `✧ Necesitas: *¥${totalCost.toLocaleString()} ${moneda}*\n` +
+        `✧ Cálculo: *${quantity}* x *¥${unitPrice.toLocaleString()}* (${duration})\n` +
         `✧ Cartera: *¥${funds.coin.toLocaleString()} ${moneda}*\n` +
         `✧ Banco: *¥${funds.bank.toLocaleString()} ${moneda}*\n` +
         `✧ Total: *¥${funds.total.toLocaleString()} ${moneda}*`, m)
@@ -94,6 +108,7 @@ let handler = async (m, { conn, args }) => {
       `✧ Duración: *${durationData.label}*\n` +
       `✧ Expira: *${formatProtectionDate(expiresAt)}*\n` +
       `✧ Costo: *¥${totalCost.toLocaleString()} ${moneda}*\n` +
+      `✧ Cálculo: *${quantity}* x *¥${unitPrice.toLocaleString()}* (${duration})\n` +
       `✧ Cobro: banco *¥${(paid?.fromBank || 0).toLocaleString()}* + cartera *¥${(paid?.fromCoin || 0).toLocaleString()}*\n` +
       `✧ Cartera: *¥${(user.coin || 0).toLocaleString()} ${moneda}*\n` +
       `✧ Banco: *¥${(user.bank || 0).toLocaleString()} ${moneda}*` +
