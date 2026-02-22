@@ -23,28 +23,37 @@ let handler = async (m, { conn, usedPrefix }) => {
   let targetId = userIds.length > 0 ? userIds[Math.floor(Math.random() * userIds.length)] : senderId;
 
   let prof = Math.min(0.08, (user.jobXp || 0) / 300000);
-  let winChance = Math.min(0.87, 0.64 + (user.premium ? 0.06 : 0) + prof);
+  
+  // --- LÓGICA DE BOLSA DE TRABAJO EN SLUT ---
+  let slutBonus = 1; let slutLossResist = 1; let slutWinChance = 0;
+  if (job.key === 'chef') { slutBonus = 1.15; slutWinChance = 0.05; } // Excelente socialmente
+  if (job.key === 'repartidor') { slutBonus = 1.05; } // Balanceado
+  if (job.key === 'basurero') { slutBonus = 0.85; slutLossResist = 0.75; } // Menor ganancia, pero resistente a pérdidas
+  // ------------------------------------------
+
+  let winChance = Math.min(0.87, 0.64 + (user.premium ? 0.06 : 0) + prof + slutWinChance);
   let didWin = Math.random() < winChance;
   let useGeneric = Math.random() < 0.35; 
 
   cooldowns[senderId] = Date.now();
   let jobName = job.name.toUpperCase();
   let jobEmoji = job.emoji;
+  let mentionStr = '@' + targetId.split('@')[0];
 
   if (didWin) {
-    // Ganancias aumentadas (aprox 2200 a 5700)
-    let amount = Math.floor((Math.random() * 3500 + 2200) * job.slutMultiplier * (user.premium ? 1.2 : 1));
+    let baseAmount = Math.floor(Math.random() * 3500 + 2200);
+    let amount = Math.floor(baseAmount * job.slutMultiplier * (user.premium ? 1.2 : 1) * slutBonus);
     user.coin = (user.coin || 0) + amount;
 
     let phraseList = useGeneric ? frasesSlutGenericas.success : (frasesSlutPorTrabajo[job.key]?.success || frasesSlutGenericas.success);
-    let phrase = pickRandom(phraseList);
+    // REEMPLAZO MAGICO DE {user}
+    let phrase = pickRandom(phraseList).replace(/\{user\}/g, mentionStr);
 
-    let texto = `❪❨̶  ֶָ֢ ✻̸ ${phrase} con @${targetId.split('@')[0]}\n\nㅤㅤ    ֶָ֢ ✻̸ ➪ 𝐏𝐚𝐠𝐨: *${toNum(amount)}* ( *${amount}* ) ${m.moneda}\n\nㅤㅤ ⬫   ͜ ۬ ︵࣪᷼⏜݊᷼✿⃘𐇽۫ꥈ࣪࣪࣪࣪࣪࣪࣪࣪࣪۬۬۬࣪࣪࣪۬۬۬𝇈ٜ࣪࣪࣪࣪࣪۬۬࣪࣪࣪۬۬𑁍ٜ𐇽࣪࣪࣪࣪࣪۬۬࣪࣪࣪۬ 𝇈⃘۫ꥈ࣪࣪࣪࣪࣪࣪࣪࣪࣪۬۬۬࣪࣪࣪۬۬۬✿݊᷼⏜࣪᷼︵۬ ͜   ⬫`;
+    let texto = `❪❨̶  ֶָ֢ ✻̸ ${phrase}\n\nㅤㅤ    ֶָ֢ ✻̸ ➪ 𝐏𝐚𝐠𝐨: *${toNum(amount)}* ( *${amount}* ) ${m.moneda}\n\nㅤㅤ ⬫   ͜ ۬ ︵࣪᷼⏜݊᷼✿⃘𐇽۫ꥈ࣪࣪࣪࣪࣪࣪࣪࣪࣪۬۬۬࣪࣪࣪۬۬۬𝇈ٜ࣪࣪࣪࣪࣪۬۬࣪࣪࣪۬۬𑁍ٜ𐇽࣪࣪࣪࣪࣪۬۬࣪࣪࣪۬ 𝇈⃘۫ꥈ࣪࣪࣪࣪࣪࣪࣪࣪࣪۬۬۬࣪࣪࣪۬۬۬✿݊᷼⏜࣪᷼︵۬ ͜   ⬫`;
     return conn.sendMessage(m.chat, { text: texto, contextInfo: { mentionedJid: [targetId] } }, { quoted: m });
   }
 
-  // Pérdidas reducidas (aprox 300 a 1000)
-  let amountLoss = Math.floor((Math.random() * 700 + 300) * job.slutLossMultiplier);
+  let amountLoss = Math.floor((Math.random() * 700 + 300) * job.slutLossMultiplier * slutLossResist);
   let loss = Math.min((user.coin || 0) + (user.bank || 0), amountLoss);
   let rest = loss;
   let fromCoin = Math.min(user.coin || 0, rest);
@@ -53,9 +62,9 @@ let handler = async (m, { conn, usedPrefix }) => {
   user.bank = Math.max(0, (user.bank || 0) - rest);
 
   let phraseList = useGeneric ? frasesSlutGenericas.fail : (frasesSlutPorTrabajo[job.key]?.fail || frasesSlutGenericas.fail);
-  let phrase = pickRandom(phraseList);
+  let phrase = pickRandom(phraseList).replace(/\{user\}/g, mentionStr);
 
-  let textoLoss = `❪❨̶  ֶָ֢ ✻̸ ${phrase}, espantaste a @${targetId.split('@')[0]}\n\nㅤㅤ    ֶָ֢ ✻̸ ➪ 𝐏𝐞𝐫𝐝𝐢𝐬𝐭𝐞: *${toNum(loss)}* ( *${loss}* ) ${m.moneda}\n\nㅤㅤ ⬫   ͜ ۬ ︵࣪᷼⏜݊᷼✿⃘𐇽۫ꥈ࣪࣪࣪࣪࣪࣪࣪࣪࣪۬۬۬࣪࣪࣪۬۬۬𝇈ٜ࣪࣪࣪࣪࣪۬۬࣪࣪࣪۬۬𑁍ٜ𐇽࣪࣪࣪࣪࣪۬۬࣪࣪࣪۬ 𝇈⃘۫ꥈ࣪࣪࣪࣪࣪࣪࣪࣪࣪۬۬۬࣪࣪࣪۬۬۬✿݊᷼⏜࣪᷼︵۬ ͜  ⬫`;
+  let textoLoss = `❪❨̶  ֶָ֢ ✻̸ ${phrase}\n\nㅤㅤ    ֶָ֢ ✻̸ ➪ 𝐏𝐞𝐫𝐝𝐢𝐬𝐭𝐞: *${toNum(loss)}* ( *${loss}* ) ${m.moneda}\n\nㅤㅤ ⬫   ͜ ۬ ︵࣪᷼⏜݊᷼✿⃘𐇽۫ꥈ࣪࣪࣪࣪࣪࣪࣪࣪࣪۬۬۬࣪࣪࣪۬۬۬𝇈ٜ࣪࣪࣪࣪࣪۬۬࣪࣪࣪۬۬𑁍ٜ𐇽࣪࣪࣪࣪࣪۬۬࣪࣪࣪۬ 𝇈⃘۫ꥈ࣪࣪࣪࣪࣪࣪࣪࣪࣪۬۬۬࣪࣪࣪۬۬۬✿݊᷼⏜࣪᷼︵۬ ͜  ⬫`;
   return conn.sendMessage(m.chat, { text: textoLoss, contextInfo: { mentionedJid: [targetId] } }, { quoted: m });
 };
 
@@ -85,154 +94,129 @@ function pickRandom(list) {
 
 const frasesSlutGenericas = {
   success: [
-    "Le agarraste la onda y lo dejaste temblando de placer",
-    "Le diste una nalgada que gritó 'ay papi/mami' y te premió",
-    "Le hiciste el gawk gawk 3000 sin piedad y quedó mudo",
-    "Usaste las dos manos y la boca a la vez, el cliente facturó doble",
-    "Le rebotaste encima como lavadora en centrifugado",
-    "Le hiciste un baile sucio en plena calle y te llovieron billetes",
-    "Te pusiste en 4 y no dudaron en dejarte propina pesada",
-    "Le lambiste el ombligo sin que lo pidiera y le despertaste fetiches",
-    "Te dejaron amarrado a una silla, te gustó y cobraste extra",
-    "Te grabaron haciendo cosas raras, se hizo viral en OnlyFans",
-    "Hiciste un rapidín en el baño del antro y cobraste el cover",
-    "Le hiciste el helicóptero acrobático y le volaste la mente",
-    "Te disfrazaste de monja rebelde y vaciaste su cartera",
-    "Hiciste la mortal hacia atrás y caíste justo donde debías",
-    "Cobraste tarifa Premium por dejarte ahorcar poquito",
-    "Te metiste al jacuzzi juntos y el agua se puso a hervir de la pasión",
-    "Jugaste al doctor y le curaste todos los males a punta de placer",
-    "Tus gemidos despertaron a los vecinos pero te valió, cobraste doble",
-    "Le llenaste el cuerpo de aceite y se resbalaron hasta el éxito",
-    "Le cantaste al oído con voz ronca y cayó redondito/a a tus pies"
+    "Le agarraste la onda a {user} y lo dejaste temblando de placer.",
+    "Le diste una nalgada a {user} que gritó 'ay mami/papi' y te premió con dinero extra.",
+    "Le hiciste el gawk gawk 3000 sin piedad a {user}, quedó tan mudo que solo te depositó.",
+    "Usaste las dos manos y la boca a la vez, a {user} le voló la mente y facturaste doble.",
+    "Le rebotaste encima a {user} como lavadora en pleno centrifugado y te ganaste su respeto.",
+    "Le hiciste un baile privado súper sucio a {user} y literal te llovieron los billetes.",
+    "Te pusiste en 4 frente a {user} y no dudó en meterte propina pesada en el short.",
+    "Te disfrazaste de Furro a petición de {user} y aunque pasaste calor, cobraste tarifa premium.",
+    "Jugaste al doctor con {user}, le revisaste la próstata y te dio un bono de salud.",
+    "Amarraste a {user} a la cama, le dejaste ahí 3 horas y te pagó más por la 'experiencia límite'.",
+    "Te metiste al jacuzzi con {user}, se prendieron y el agua casi hierve de tanta pasión.",
+    "Tus gemidos despertaron a todo el edificio de {user}, pero a ti te valió porque cobraste el triple.",
+    "Le hiciste el salto del tigre desde el clóset a {user} y te pagó por el show acrobático.",
+    "Lloraste a media faena, a {user} le dio tanta culpa que te pagó la terapia y la hora completa."
   ],
   fail: [
-    "Le mordiste donde no debías sin querer, te demandaron y pagaste gastos médicos",
-    "El cliente te vomitó encima del asco, cancelaste el servicio y gastaste en tintorería",
-    "Te resbalaste, rompiste la mesa de cristal del motel y te la cobraron",
-    "No te bañaste, olías a patas, te cancelaron y pagaste indemnización",
-    "Te cayó redada policiaca por escándalo y soltaste plata de soborno para salir",
-    "Te topaste a un cliente tóxico que te robó el celular y la billetera",
-    "Se te acalambró la pierna a medio acto, fuiste a urgencias y gastaste todo",
-    "Arruinaste tu mejor lencería con vino barato y tocó comprar otra",
-    "Te quedaste dormido en plena acción, te corrieron a patadas y no te pagaron",
-    "Ofreciste masaje tailandés pero le dislocaste el hombro, pagaste el quiropráctico"
+    "Le mordiste donde no debías a {user} sin querer, te demandó y pagaste sus gastos médicos.",
+    "Olías súper mal, {user} te vomitó encima del asco, canceló el servicio y gastaste en tintorería.",
+    "Te resbalaste de la emoción, rompiste la mesa de cristal de {user} y te tocó pagarla nuevecita.",
+    "No te bañaste, {user} te canceló y encima le tuviste que dar una indemnización por el susto nasal.",
+    "Te cayó la policía por ruidosos, {user} se escondió y tú soltaste plata para que te soltaran.",
+    "Le confesaste tu amor a {user} en medio acto, se re asustó, huyó y no te pagó el motel.",
+    "Se te acalambró la pierna a la mitad, {user} se enojó, te fuiste a urgencias y perdiste lana.",
+    "Arruinaste tu mejor lencería con aceite barato, a {user} ni le gustó y perdiste tu inversión."
   ]
 };
 
 const frasesSlutPorTrabajo = {
   albañil: {
     success: [
-      "Llegaste marcado de cemento y eso prendió a tu cliente con fetiches",
-      "Le diste como maestro de obra: a puros martillazos y albures",
-      "Sudado y con pala en mano le cumpliste su fantasía de 'obrero rudo'",
-      "Armaste un rapidín en los andamios a 15 metros, pura adrenalina",
-      "Usaste el nivelador para asegurarte que le estabas dando derecho",
-      "Te quitaste el chaleco reflejante bailando lento y cobraste caro",
-      "Lo empotraste contra el muro de tabique que acababas de levantar",
-      "Rellenaste sus grietas con tu mezcla especial y te dio propina"
+      "Llegaste marcado de cemento y {user} se prendió por tus músculos de obrero/a.",
+      "Le diste como buen maestro de obra a {user}: a puros martillazos y gritando albures finos.",
+      "Sudado y con la pala, le cumpliste a {user} su fantasía de 'clase obrera rebelde'.",
+      "Armaste un rapidín con {user} arriba de un andamio a 15 metros, cobraste riesgo laboral.",
+      "Usaste el nivelador para asegurarte que a {user} le estabas dando derechito y te premió.",
+      "Te quitaste el chaleco reflejante al ritmo de reggaeton y {user} perdió la cabeza por ti.",
+      "Empotraste a {user} tan fuerte contra el muro de tabique que tumbaste la barda, pero valió la pena.",
+      "Rellenaste las 'grietas' de {user} con tu mezcla especial y te pagó con transferencia inmediata."
     ],
     fail: [
-      "Tenías cal en las manos, le raspaste las partes nobles y pagaste cremas curativas",
-      "El chaleco reflejante cortó el mood, te corrieron y tuviste que pagar el Uber de regreso",
-      "Te cayó mezcla fresca en un lugar sensible, lloraste y fuiste al dermatólogo",
-      "Por andar de caliente tiraste una columna recién colada y el patrón te descontó la paga",
-      "Llevaste un martillo a la cama por error, rompiste el piso y te cobraron la reparación"
+      "Tenías cal en las manos, le raspaste todas las partes nobles a {user} y le pagaste crema curativa.",
+      "El chaleco reflejante que llevabas cortó todo el mood de {user}, te corrió a patadas.",
+      "Te cayó mezcla fresca en un lugar hiper sensible, {user} se burló y te fuiste llorando al médico.",
+      "Llevaste un martillo a la cama por error, asustaste a {user} y terminaste rompiendo un espejo."
     ]
   },
   basurero: {
     success: [
-      "Te disfrazaste de mapache y le cumpliste su fantasía salvaje",
-      "Tu actitud de barrio pesado encantó y cerraste trato atrás del camión",
-      "Le hiciste el 'reciclaje profundo' y le sacaste los ahorros",
-      "Limpiaste sus tuberías mejor que las calles de la colonia",
-      "Lo compactaste contra la pared del cuarto y te pagó triple",
-      "Usaste guantes gruesos de látex y despertaste un fetiche raro",
-      "Separaste su ropa como si fuera PET y terminaron sin nada",
-      "Cobraste tarifa alta por recoger su 'basurita' emocional y física"
+      "Te disfrazaste de mapache callejero y le cumpliste a {user} su fantasía más bizarra y salvaje.",
+      "Tu actitud pesada de barrio le fascinó a {user} y cerraron el trato en la parte de atrás del camión.",
+      "Le hiciste el 'reciclaje profundo' a {user}, tanto que te dejó hasta los ahorros del banco.",
+      "Le dejaste las tuberías de {user} más limpias que las calles de la colonia tras tu turno.",
+      "Compactaste a {user} contra la pared del cuarto con tanta fuerza que te pagó tarifa triple.",
+      "Hiciste de su cuerpo tu propio basurero y a {user} extrañamente le pareció fascinante."
     ],
     fail: [
-      "Olías a lixiviado de 3 días, perdiste al cliente y gastaste fortunas en perfume",
-      "Una bolsa de basura rota te arruinó la lencería cara de trabajo",
-      "Llevaste infecciones raras por tu trabajo, terminaste pagando antibióticos caros",
-      "Le dio alergia el polvo del camión que traías encima, pagaste la consulta médica",
-      "Dejaste marcas de lodo tóxico en sus sábanas blancas y pagaste la tintorería fina"
+      "Olías a lixiviado de 3 días, {user} no aguantó las náuseas, te corrió y gastaste en perfumería.",
+      "Una bolsa de basura rota que llevabas encima arruinó la cama de {user}, pagaste lavandería.",
+      "Por tu trabajo llevaste pulgas al encuentro, {user} se infectó y tú pagaste el exterminador."
     ]
   },
   chef: {
     success: [
-      "Usaste crema batida de formas creativas y cobraste premium",
-      "Le serviste la cena sobre tu cuerpo y se comió todo el menú",
-      "Usaste el rodillo de amasar para darle unos golpecitos que le encantaron",
-      "Tus habilidades con la lengua probando caldos sirvieron para otras cosas",
-      "Le hiciste un glaseado especial y te dio calificación Michelin",
-      "Cocinaron juntos sin ropa y la temperatura de la cocina subió al máximo",
-      "Le diste a probar de tu 'salsa secreta' y se volvió adicto",
-      "Usaste hielos y chocolate caliente para volverlo loco"
+      "Untaste crema batida en el cuerpo de {user} y te lo comiste como el postre más caro del menú.",
+      "Le serviste una cena afrodisíaca sobre tu cuerpo a {user}, quien devoró todo y dejó propina.",
+      "Usaste el rodillo de amasar para darle unos golpecitos a {user} que le encantaron muchísimo.",
+      "Demostraste tus habilidades probando caldos directamente con {user} y se rindió a tus pies.",
+      "Le hiciste un 'glaseado' especial a {user} y te dio calificación Michelin en la cama.",
+      "Lo hicieron juntos sin ropa cerca de la estufa, {user} estaba hirviendo de pasión."
     ],
     fail: [
-      "Te equivocaste de frasco y usaste chile habanero en vez de lubricante, pagaste el hospital",
-      "Se te quemó la cena romántica previa, se activaron los aspersores y pagaste los daños",
-      "Olías tanto a cebolla que vomitó encima de tu ropa de marca, pérdida total",
-      "Metiste comida en lugares indebidos, causaste una infección y costeaste los antibióticos",
-      "Cortaste mal el pepino de exhibición y terminaste en la sala de emergencias"
+      "Te equivocaste de frasco y usaste salsa habanera en las partes de {user}, se fue gritando al doctor.",
+      "Se te quemó la cena romántica previa con {user}, activaste los aspersores y pagaste los daños del hotel.",
+      "Olías tanto a ajo picado que {user} vomitó al besarte y te demandó por daños emocionales.",
+      "Mientras cortabas verduras de exhibición con {user}, te rebanaste un dedo por querer lucirte."
     ]
   },
   programador: {
     success: [
-      "Le montaste un show en VR y te pagaron en Bitcoin",
-      "Hiciste un juego de rol de 'Hackeando tu corazón' y le derretiste el firewall",
-      "Tecleaste comandos mientras le dabas placer y le cumpliste su fantasía nerd",
-      "Vendiste el agua de tu teclado por cientos de dólares",
-      "Ejecutaste el script 'placer.exe' en bucle infinito y facturaste",
-      "Vestiste de colegiala anime y los donadores de Twitch enloquecieron",
-      "Insertaste tu código en su backend sin errores y te dio 5 estrellas",
-      "Bypasseaste sus defensas y entraste hasta el mainframe"
+      "Le montaste un show en VR espectacular a {user} y te pagó la sesión en puros Bitcoins.",
+      "Hiciste el juego de rol de 'Hackeando tu corazón', a {user} le derretiste el firewall al instante.",
+      "Tecleaste comandos rápido mientras le dabas placer, {user} cumplió su fantasía nerd contigo.",
+      "Vendiste el agua donde lavaste tu teclado mecánico y {user} pagó cientos de dólares por ella.",
+      "Ejecutaste el script 'placer_infinito.exe' con {user} y no dejaste que parara en toda la noche.",
+      "Vestiste de colegiala de anime, abriste stream privado para {user} y la donación fue gigante."
     ],
     fail: [
-      "Tu mamá entró al cuarto en pleno stream, te castigaron y tuviste que devolver donaciones",
-      "Te dio síndrome del túnel carpiano en plena chaqueta, pagaste fisioterapia",
-      "Te hackearon la billetera cripto a mitad del acto y perdiste saldo",
-      "Hiciste un corto circuito con tus juguetes USB y quemaste tu PC carísima",
-      "Olvidaste apagar la cámara al terminar, te expusieron y te extorsionaron por plata"
+      "Tu mamá entró a tu cuarto en pleno show con {user}, cerraste de golpe y devolviste el dinero.",
+      "Te dio síndrome del túnel carpiano acariciando a {user}, no terminaste y pagaste fisioterapia.",
+      "En medio del acto con {user} te hackearon la billetera cripto, por distraerte perdiste tus ahorros.",
+      "Hiciste un corto circuito con tus juguetes USB sincronizados y {user} te cobró la PC que le quemaste."
     ]
   },
   repartidor: {
     success: [
-      "Te pidieron 'paquete completo' en la app y cobraste los extras",
-      "Usaste la mochila térmica para calentar los ánimos",
-      "Hiciste 'delivery de salchicha' y te dieron 5 estrellas",
-      "Lo hicieron rapidín en las escaleras antes del siguiente pedido",
-      "Llegaste empapado por la lluvia y eso le prendió muchísimo al cliente",
-      "Le entregaste la pizza y de paso le diste su rebanada especial",
-      "Manejaste tu moto directo hasta su cuarto y armaron el desmadre",
-      "Aceleraste en la cama como aceleras en los semáforos, pura velocidad"
+      "{user} te pidió 'el paquete completo' por la app secreta y cobraste muchísimos extras jugosos.",
+      "Usaste tu mochila térmica para calentar los ánimos, {user} nunca había sudado tanto de placer.",
+      "Hiciste tu famoso 'delivery de salchicha' con {user} y te calificó con 5 súper estrellas.",
+      "Te aventaste un rapidín en las escaleras del depa con {user} antes de que llegara el conserje.",
+      "Llegaste empapado en sudor y lluvia, {user} se prendió impresionantemente y te jaló pa' adentro.",
+      "Aceleraste en la cama con {user} como cuando aceleras para cruzar el semáforo en amarillo."
     ],
     fail: [
-      "Te descubrió el conserje en plena acción y pagaste multa del edificio",
-      "Dejaste la moto afuera prendida, te la robaron mientras estabas adentro ocupado",
-      "El cliente te amarró, te robó el pedido, tu cartera y las propinas del día",
-      "Entraste apresurado, rompiste la puerta del cliente y te descontaron de tu nómina",
-      "Se te derramó la sopa caliente encima de tus partes íntimas y pagaste curación"
+      "El conserje los descubrió a {user} y a ti en plena acción en el pasillo, te pusieron multota.",
+      "Dejaste tu moto afuera prendida, entraste al cuarto con {user} y a los 5 minutos te la robaron.",
+      "{user} te amarró a la cama, pero resultó ser trampa: se robó la comida, tu cartera y tu moto.",
+      "Te derramaste una sopa ardiendo encima por quitarte la ropa rápido, {user} se rió y pagaste curación."
     ]
   },
   comerciante: {
     success: [
-      "Regateaste tu cuerpo y cerraste una noche redonda carísima",
-      "Con puro verbo subiste el precio de la hora y te pagaron todo",
-      "Ofreciste promo de 'Pague 1 lleve 2' con tu compa y rompieron récords",
-      "Vendiste tu ropa interior usada al triple de su valor original",
-      "Aplicaste tácticas de marketing en la cama y quedó fidelizado",
-      "Lo convenciste de suscribirse a tu plan mensual de cariño",
-      "Le cobraste hasta el impuesto por respirar tu mismo aire",
-      "Vendiste la experiencia como un producto de Apple: cara y exclusiva"
+      "Regateaste tu propio cuerpo con maestría, a {user} le sacaste una tarifa exorbitante y redonda.",
+      "Con puro verbo lavacerebros convenciste a {user} de pagarte hasta por respirar cerca tuyo.",
+      "Ofreciste una promo de 'Pague 1 lleve 2' incluyendo a tu compa, a {user} le encantó y facturaste.",
+      "Después del acto, le vendiste tu ropa interior usada a {user} al triple de lo que te costó.",
+      "Aplicaste técnicas de marketing emocional en la cama, ahora {user} es tu cliente VIP fidelizado.",
+      "Obligaste a {user} a firmar un contrato mensual de cariño y ya te aseguró ingresos fijos."
     ],
     fail: [
-      "El cliente canceló el pago con tarjeta por contracargo y te cobraron comisión",
-      "Invertiste en juguetes piratas, se rompieron adentro del cliente y pagaste cirugía médica",
-      "Le vendiste un servicio VIP falso, te denunciaron y pagaste arreglo legal",
-      "Un competidor bajó los precios, tú perdiste clientes y encima pagaste publicidad inútil",
-      "Ofreciste garantía de satisfacción, el cliente mintió diciendo que no le gustó y exigió reembolso"
+      "La terminal falló por falta de red, {user} aprovechó, fingió ir al baño y huyó sin pagarte nada.",
+      "Invertiste en juguetes eróticos piratas para impresionar a {user}, se rompieron y pagaste la urgencia médica.",
+      "Le vendiste una experiencia VIP a {user} pero fue pésima, te quemó en Facebook y perdiste ventas.",
+      "{user} te pagó con transferencia falsa, no checaste bien y entregaste el 'producto' gratis."
     ]
   }
 };
