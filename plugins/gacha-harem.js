@@ -14,11 +14,11 @@ function formatProtectionStatus(character) {
   const remaining = character.protection.expiresAt - Date.now();
   const days = Math.floor(remaining / (1000 * 60 * 60 * 24));
   const hours = Math.floor((remaining % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+  const minutes = Math.floor((remaining % (1000 * 60 * 60)) / (1000 * 60));
 
-  if (days > 0) {
-    return ` 🔒 ${days}d ${hours}h`;
-  }
-  return ` 🔒 ${hours}h`;
+  if (days > 0) return ` 🔒 ${days}d ${hours}h`;
+  if (hours > 0) return ` 🔒 ${hours}h ${minutes}m`;
+  return ` 🔒 ${Math.max(1, minutes)}m`;
 }
 
 let handler = async (m, { conn, args, participants }) => {

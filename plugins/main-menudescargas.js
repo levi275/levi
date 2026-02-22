@@ -1,3 +1,4 @@
+
 let handler = async (m, { conn }) => {
   const texto = `
 📥⊹ 𝐂𝐨𝐦𝐚𝐧𝐝𝐨𝐬 𝐝𝐞 𝐝𝐞𝐬𝐜𝐚𝐫𝐠𝐚𝐬 𝐩𝐚𝐫𝐚 𝐯𝐚𝐫𝐢𝐨𝐬 𝐚𝐫𝐜𝐡𝐢𝐯𝐨𝐬  📂⊹
@@ -48,6 +49,7 @@ let handler = async (m, { conn }) => {
 > ✦ Descargar enlaces disponibles de anime.
 ╰──── ੈ₊˚༅༴╰────︶.︶ ⸙ ͛ ͎ ͛ ︶.︶ ੈ₊˚༅
   `.trim();
+
 
   await conn.sendMessage(
     m.chat,

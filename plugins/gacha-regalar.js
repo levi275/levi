@@ -8,6 +8,7 @@ import {
   isSameUserId
 } from '../lib/gacha-group.js';
 import { resetProtectionOnTransfer } from '../lib/gacha-protection.js';
+import { findCharacterByName } from '../lib/gacha-characters.js';
 
 const charactersFilePath = './src/database/characters.json';
 
@@ -79,7 +80,7 @@ let handler = async (m, { conn, args, participants }) => {
 
   try {
     const characters = await loadCharacters();
-    const character = characters.find(c => c.name.toLowerCase() === characterName);
+    const character = findCharacterByName(characters, characterName);
 
     if (!character) {
       await conn.reply(m.chat, `No se encontró el personaje *${characterName}*.`, m);

@@ -90,7 +90,7 @@ let handler = async (m, { conn }) => {
 
 handler.help = ['infogacha', 'ginfo', 'gachainfo', 'estado', 'status', 'cooldowns', 'cd'];
 handler.tags = ['info'];
-handler.command = ['infogacha', 'ginfo', 'gachainfo'];
+handler.command = ['infogacha', 'ginfo', 'gachainfo', 'estado', 'status', 'cooldowns', 'cd'];
 handler.group = true;
 
 export default handler;
