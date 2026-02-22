@@ -51,8 +51,8 @@ export default handler;
 
 const eventosBuenos = [
   { texto: '✨ Encontraste una veta de minerales.', cambios: (b) => ({ exp: n(300, 700, b), coin: n(4000, 9000, b), emerald: n(4, 8, b), iron: n(35, 80, b), gold: n(20, 40, b), coal: n(35, 80, b), stone: n(250, 550, b) }) },
-  { texto: '💰 Hallaste un cofre enterrado.', cambios: (b) => ({ exp: n(450, 900, b), coin: n(6500, 12000, b), emerald: n(6, 10, b), iron: n(45, 100, b), gold: n(25, 50, b), coal: n(40, 90, b), stone: n(300, 600, b) }) },
-  { texto: '💎 Cueva antigua descubierta.', cambios: (b) => ({ exp: n(600, 1200, b), coin: n(9000, 16000, b), emerald: n(8, 14, b), iron: n(55, 110, b), gold: n(30, 60, b), coal: n(45, 100, b), stone: n(350, 700, b) }) },
+  { texto: '💰 Hallaste un cofre enterrado.', cambios: (b) => ({ exp: n(450, 900, b), coin: n(6500, 10000, b), emerald: n(6, 10, b), iron: n(45, 100, b), gold: n(25, 50, b), coal: n(40, 90, b), stone: n(300, 600, b) }) },
+  { texto: '💎 Cueva antigua descubierta.', cambios: (b) => ({ exp: n(600, 1200, b), coin: n(9000, 11000, b), emerald: n(8, 14, b), iron: n(55, 110, b), gold: n(30, 60, b), coal: n(45, 100, b), stone: n(350, 700, b) }) },
 ];
 
 const eventosMalos = [
