@@ -107,6 +107,12 @@ handler.register = true;
 
 export default handler;
 
+function toNum(number) {
+  if (number >= 1000 && number < 1000000) return (number / 1000).toFixed(1) + 'k';
+  if (number >= 1000000) return (number / 1000000).toFixed(1) + 'M';
+  return number.toString();
+}
+
 function segundosAHMS(segundos) {
   let minutos = Math.floor(segundos / 60);
   let segundosRestantes = segundos % 60;
