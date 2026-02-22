@@ -106,13 +106,16 @@ const frasesGenericas = {
     "Enseñaste a un niño a jugar Minecraft y sus papás te dieron"
   ],
   fail: [
-    "Llegaste crudo a chambear y te regresaron sin paga",
-    "Te dormiste en el camión, llegaste tarde y te descontaron el día",
-    "Rompiste una herramienta cara y te la cobraron a lo triple",
-    "Un cliente Karen te hizo berrinche y perdiste tu comisión",
-    "Te resbalaste trapeando, se rieron de ti y no te pagaron",
-    "Fuiste a comprar las cocas para todos y perdiste el cambio",
-    "Le respondiste mal al patrón y te castigó el sueldo"
+    "Rompiste la pantalla del celular que intentabas reparar y te lo cobraron a lo triple",
+    "Te dormiste en el camión, llegaste tarde y te descontaron medio día",
+    "Le respondiste mal al cliente Karen de turno y te bajaron el sueldo por penalización",
+    "Te resbalaste trapeando, rompiste una vitrina y la tuviste que pagar",
+    "Te fuiste de pinta, te descubrió tu jefe y te quitó el bono de puntualidad",
+    "Hiciste mal el corte de caja y tuviste que poner de tu bolsa para cuadrar",
+    "Fuiste por las cocas de los de la oficina, te asaltaron y pusiste tú el dinero",
+    "Daños a equipo de la empresa por andar jugando a las carreritas, adiós nómina",
+    "Tiraste pintura sobre la alfombra nueva del corporativo, cobro directo a ti",
+    "Perdiste las llaves del almacén, te cobraron el cerrajero y los candados nuevos"
   ]
 };
 
@@ -131,11 +134,11 @@ const frasesPorTrabajo = {
       "Tiraste un muro viejo a puro marrazo y cobraste demolición"
     ],
     fail: [
-      "Pusiste el muro chueco, lo tuvieron que tirar y te cobraron los ladrillos",
-      "Se te cayó la cuchara a la mezcla fresca y perdiste el día buscando",
-      "Te pisaste un clavo oxidado y gastaste la raya en la vacuna del tétanos",
-      "Te agarró la lluvia colando, se arruinó el cemento y te echaron la culpa",
-      "Llegaste tarde porque no pasaba la combi y te descontaron la mitad"
+      "Pusiste el muro chueco, lo tuvieron que tirar y te cobraron los ladrillos rotos",
+      "Dejaste mal fraguar el concreto y te obligaron a comprar más materiales de tu dinero",
+      "Rompiste la carretilla nueva por aventarla como loco, te descontaron en la raya",
+      "Perforaste un tubo principal de agua sin querer, el plomero te cobró a ti el arreglo",
+      "Mediste mal el terreno y colaste donde no era, multa tremenda del arquitecto"
     ]
   },
   basurero: {
@@ -152,11 +155,11 @@ const frasesPorTrabajo = {
       "Cumpliste doble turno porque faltó el chofer y cobraste doble"
     ],
     fail: [
-      "Se te rompió una bolsa de pañales sucios en la cara y te fuiste sin paga",
-      "Te mordió el perro de la esquina y gastaste en vendas",
-      "El camión se quedó sin frenos, chocaste un poste y te cobraron el deducible",
-      "Tiraste basura donde no era y te multó ecología",
-      "Se te cayó el celular en el compactador y perdiste lana"
+      "Chocaste el camión contra un carro estacionado, te cobraron el deducible entero",
+      "Se te cayó un sillón encima de un coche y rompiste el parabrisas, te descontaron",
+      "Te multó el municipio por tirar lixiviados en zona prohibida",
+      "Un perro te mordió fuerte, fuiste al doctor privado y te costó media quincena",
+      "Rompiste los guantes y el equipo de seguridad de la empresa, te los cobraron nuevos"
     ]
   },
   chef: {
@@ -173,11 +176,11 @@ const frasesPorTrabajo = {
       "Inventaste una salsa nueva que se vendió como pan caliente"
     ],
     fail: [
-      "Se te quemaron las milanesas, llenaste el local de humo y pagaste las pérdidas",
-      "Le echaste sal en lugar de azúcar al postre y te descontaron",
-      "Tiraste la olla del caldo matriz al piso por menso y lloraste",
-      "El inspector de salubridad encontró una cucaracha y te bajaron el sueldo",
-      "Te cortaste picando cebolla y no pudiste terminar el turno"
+      "Quemaste 10 kilos de cortes de carne fina, el dueño te los descontó a precio de carta",
+      "El inspector de sanidad encontró una irregularidad tuya y pagaste la multa para no perder trabajo",
+      "Derramaste el caldo base del día por correr en cocina, tuviste que poner para reponerlo",
+      "Mandaste un pedido con alérgenos a un cliente, te demandaron y gastaste en abogados",
+      "Rompiste tres platos de cerámica italiana, te salieron más caros que tu día de sueldo"
     ]
   },
   programador: {
@@ -194,11 +197,11 @@ const frasesPorTrabajo = {
       "Resolviste un error de CSS que llevaba meses rompiendo la web"
     ],
     fail: [
-      "Borraste la base de datos de producción y te descontaron por los daños",
-      "Tu código entró en un bucle infinito, tiraste AWS y pagaste la factura",
-      "El cliente pidió 500 cambios de color y no te pagó extra",
-      "Derramaste café en la Mac de la empresa y tuviste que pagarla",
-      "Olvidaste un punto y coma, estuviste 8 horas buscando y no cobraste hoy"
+      "Subiste un query malicioso sin querer, borraste la base de datos y te cobraron la restauración",
+      "Tu código sobrecargó los servidores de AWS, la factura llegó alta y la pagaste tú",
+      "Derramaste todo tu termo de café sobre la MacBook Pro de la oficina, descuento masivo",
+      "Instalaste un paquete npm infectado, comprometiste el proyecto y pagaste la auditoría de seguridad",
+      "Incumpliste tu contrato freelance y el cliente te cobró penalización por retrasos"
     ]
   },
   repartidor: {
@@ -215,11 +218,11 @@ const frasesPorTrabajo = {
       "Trabajaste el turno nocturno y sacaste el bono de desvelado"
     ],
     fail: [
-      "Se te volteó el caldo en la mochila, el cliente te reportó y no te pagaron",
-      "Ponchaste la llanta en un bache gigante y la reparación salió cara",
-      "Un perro callejero te correteó y soltaste el pedido del susto",
-      "Llegaste a una colonia peligrosa y te bajaron el cambio",
-      "La moto se quedó sin gasolina a medio camino y perdiste el día"
+      "Caíste en un bache gigante, doblaste el rin de la moto y pagaste mecánico urgente",
+      "El pedido de sushi caro se volteó y aplastó, el cliente lo rechazó y la app te lo descontó",
+      "Te pasaste un alto por la prisa, tránsito te detuvo y la multa te dejó seco",
+      "Te robaron el celular montado en el manubrio mientras buscabas la dirección",
+      "Dejaste mal puesta la patita de la moto, se cayó rompiendo las direccionales, gasto seguro"
     ]
   },
   comerciante: {
@@ -236,11 +239,11 @@ const frasesPorTrabajo = {
       "Un cliente mayorista te vació la tienda en una sola compra"
     ],
     fail: [
-      "Compraste mercancía pirata mala y nadie te compró, perdiste tu inversión",
-      "Un cliente te pagó con un billete falso de alta denominación y te cuadró la caja en rojo",
-      "Te cayó Profeco por no tener los precios a la vista y soltaste mordida",
-      "Se metió el agua a tu local por la lluvia y se te arruinó producto",
-      "Tu terminal de tarjetas falló todo el día y perdiste un montón de ventas"
+      "Te engañaron pagándote con billetes de denominación alta falsos, perdiste caja y producto",
+      "Te cayó un inspector de hacienda y, como te faltaba un papel, pagaste multa fuertísima",
+      "Dejaste la mercancía en el sol, se decoloró y arruinó toda, pura pérdida",
+      "Invertiste todos tus ahorros en los spinners justo cuando pasaron de moda, fracaso financiero",
+      "Tuviste que pagarle los daños a un cliente que resbaló en la entrada de tu local"
     ]
   }
 };
