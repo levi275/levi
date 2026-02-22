@@ -8,7 +8,7 @@ let handler = async (m, { conn, usedPrefix }) => {
 
   let job = getJobData(user);
   if (!job) {
-    return conn.reply(m.chat, `💼 No tienes chamba todavía rey.\nUsa *${usedPrefix}trabajo lista* para ver empleos y *${usedPrefix}trabajo elegir <trabajo>* para empezar a facturar.`, m);
+    return conn.reply(m.chat, `💼 No tienes chamba todavía rey.\nUsa *${usedPrefix}trabajo elegir <trabajo>* para empezar a facturar.`, m);
   }
 
   let tiempo = 3 * 60; // 3 minutos
@@ -20,16 +20,23 @@ let handler = async (m, { conn, usedPrefix }) => {
   let premiumBoost = user.premium ? 1.2 : 1;
   let successChance = (user.premium ? 0.88 : 0.82) + Math.min(0.08, (user.jobXp || 0) / 200000);
   let ok = Math.random() < successChance;
-  let useGeneric = Math.random() < 0.35; // 35% de que salga situación genérica
+  let useGeneric = Math.random() < 0.35; 
+
+  // --- LÓGICA DE BOLSA DE TRABAJO ---
+  let jobBonus = 1;
+  if (job.key === 'comerciante') jobBonus = 1.25; // Negociación pura, muy rentable
+  if (job.key === 'chef') jobBonus = 1.20; // Excelente en work
+  if (job.key === 'albañil') jobBonus = 1.10; // Buen rendimiento
+  if (job.key === 'repartidor') jobBonus = 1.05; // Balanceado
+  // ----------------------------------
 
   cooldowns[m.sender] = Date.now();
-
   let jobName = job.name.toUpperCase();
   let jobEmoji = job.emoji;
 
   if (ok) {
-    // Ganancias aumentadas (aprox 2000 a 5000)
-    let amount = Math.floor((Math.random() * 3000 + 2000) * job.workMultiplier * premiumBoost);
+    let baseAmount = Math.floor(Math.random() * 3000 + 2000);
+    let amount = Math.floor(baseAmount * job.workMultiplier * premiumBoost * jobBonus);
     let xpEarned = Math.floor(amount * 0.15);
     user.coin = (user.coin || 0) + amount;
     user.jobXp = (user.jobXp || 0) + xpEarned;
@@ -41,9 +48,11 @@ let handler = async (m, { conn, usedPrefix }) => {
     return conn.reply(m.chat, texto, m);
   }
 
-  // Pérdidas reducidas (aprox 200 a 600)
-  let rawLoss = Math.floor((Math.random() * 400 + 200) * (user.premium ? 0.9 : 1));
+  // Pérdidas (Comerciante y Basurero pierden menos por su estabilidad/aguante)
+  let lossResist = (job.key === 'comerciante' || job.key === 'basurero') ? 0.7 : 1;
+  let rawLoss = Math.floor((Math.random() * 400 + 200) * (user.premium ? 0.9 : 1) * lossResist);
   let loss = Math.min((user.coin || 0) + (user.bank || 0), rawLoss);
+  
   let rest = loss;
   let fromCoin = Math.min(user.coin || 0, rest);
   user.coin = Math.max(0, (user.coin || 0) - fromCoin);
@@ -83,167 +92,130 @@ function pickRandom(list) {
 
 const frasesGenericas = {
   success: [
-    "Le arreglaste el WiFi a una doña y te pagó",
-    "Hiciste delivery en tu bici y te ganaste algo extra",
-    "Vendiste empanadas en la esquina y conseguiste varo",
-    "Ayudaste a un ciego a cruzar la calle y te dio recompensa",
-    "Te disfrazaste de bot y entretuviste a la mara, te soltaron",
-    "Chambeaste como DJ en una fiesta barata y te pagaron",
-    "Le limpiaste el celular a un señor con el dedo y te dio propina",
-    "Trabajaste de cuidador de gatos y te dieron lana",
-    "Ayudaste a hackear una tarea y el alumno te soltó",
-    "Vendiste stickers en el grupo y ganaste por comisiones",
-    "Hiciste freelance programando scripts simples y te pagaron",
-    "Le hiciste la intro en CapCut a un youtuber y te dio dinero",
-    "Fuiste al mercado a ayudar con las bolsas y te llovió feria",
-    "Actuaste como NPC en una app de IA y cobraste la hora",
-    "Te disfrazaste de Pikachu en la plaza y te tiraron monedas",
-    "Fuiste plomero por un día y cobraste el arreglo",
-    "Hiciste pasteles con tu abuela y te tocó parte de la venta",
-    "Le arreglaste el WhatsApp a una señora y te soltó",
-    "Hiciste memes virales y cobraste por la fama en Twitter",
-    "Reparaste consolas retro y sacaste buena ganancia",
-    "Enseñaste a un niño a jugar Minecraft y sus papás te dieron"
+    "Le arreglaste el WiFi a una doña y te invitó a comer y te pagó",
+    "Paseaste a un perro con rabia, sobreviviste y cobraste caro",
+    "Te disfrazaste de tinaco Rotoplas en la plaza y la gente te dio monedas",
+    "Vendiste fotos de tus patas en internet y un raro te depositó",
+    "Enseñaste a tu abuela a usar WhatsApp sin mandar piolines y te dio domingo",
+    "Participaste en un experimento médico dudoso, se te cayó un mechón de pelo pero facturaste",
+    "Fuiste extra en una novela de Televisa, hiciste de árbol y cobraste el día",
+    "Le hiciste un amarre a tu vecino por encargo y la brujería dejó ganancias",
+    "Fuiste a aplaudir a un mitin político por un frutsi, una torta y un billete",
+    "Lloraste en un funeral de un desconocido por encargo y te pagaron extra por el drama",
+    "Te alquilaste como novio/a falso/a para una cena familiar y te forraste",
+    "Desparasitaste a un gato callejero nivel jefe final y la veterinaria te premió",
+    "Encontraste un billete flotando en una alcantarilla y lo pescaste con un chicle",
+    "Cuidaste a los chamacos del diablo de tu tía y te pagó la terapia y el sueldo",
+    "Le diste reset al módem de la empresa y te llamaron 'el hacker', te subieron el sueldo"
   ],
   fail: [
-    "Rompiste la pantalla del celular que intentabas reparar y te lo cobraron a lo triple",
-    "Te dormiste en el camión, llegaste tarde y te descontaron medio día",
-    "Le respondiste mal al cliente Karen de turno y te bajaron el sueldo por penalización",
-    "Te resbalaste trapeando, rompiste una vitrina y la tuviste que pagar",
-    "Te fuiste de pinta, te descubrió tu jefe y te quitó el bono de puntualidad",
-    "Hiciste mal el corte de caja y tuviste que poner de tu bolsa para cuadrar",
-    "Fuiste por las cocas de los de la oficina, te asaltaron y pusiste tú el dinero",
-    "Daños a equipo de la empresa por andar jugando a las carreritas, adiós nómina",
-    "Tiraste pintura sobre la alfombra nueva del corporativo, cobro directo a ti",
-    "Perdiste las llaves del almacén, te cobraron el cerrajero y los candados nuevos"
+    "Fuiste a comprar tortillas, te distrajiste viendo un perro y perdiste el billete",
+    "Te quedaste dormido en el camión, amaneciste en otra ciudad y gastaste todo en el regreso",
+    "Compraste unos audífonos en el semáforo y resulta que eran de jabón, pura pérdida",
+    "Te caíste en un bache gigante, se te rompió el pantalón y te descontaron por impresentable",
+    "El cajero automático se tragó tu tarjeta, fuiste a pelear al banco y perdiste el día de chamba",
+    "Le mandaste un sticker inapropiado al grupo del trabajo, te suspendieron sin goce de sueldo",
+    "Quisiste hacer un tutorial de YouTube en la vida real, explotó el microondas y lo pagaste",
+    "Apostaste tu quincena en una pelea de gallos imaginarios y te estafaron"
   ]
 };
 
 const frasesPorTrabajo = {
   albañil: {
     success: [
-      "Levantaste una pared a puro ojo y te quedó derechita, el Inge te premió",
-      "Colaste el techo tú solo bajo el sol y te dieron bono extra",
-      "Pegaste tabiques a la velocidad de la luz y acabaste el jale temprano",
-      "Preparaste la mezcla perfecta, ni muy aguada ni muy seca, y te pagaron bien",
-      "Cargaste 4 bultos de cemento juntos, impresionaste al patrón y te soltó feria",
-      "Armaste el andamio sin que se tambalee y cobraste seguro",
-      "Hiciste la instalación eléctrica de volada y sacaste propina",
-      "Encontraste varilla vieja, la vendiste al fierro viejo y sumaste ganancia",
-      "El dueño te invitó las caguamas y encima te pagó tu jornada completa",
-      "Tiraste un muro viejo a puro marrazo y cobraste demolición"
+      "Levantaste un muro en tiempo récord usando cumbias de fondo para dar ritmo",
+      "Hiciste una loza entera comiendo pura Coca con bolillo, superhumano, ganaste bono",
+      "Descubriste un tesoro pirata escarbando para los cimientos, te lo quedaste",
+      "Pegaste tabique todo el día sin plomada y te quedó perfecto, el Inge lloró de orgullo",
+      "Te rifaste cargando de a 3 bultos de cemento en la espalda y te dieron aguinaldo adelantado",
+      "Hiciste la mezcla tan perfecta que el patrón te nombró maestro albañil supremo",
+      "Dormiste la siesta en unos costales de yeso y aun así fuiste el empleado del mes"
     ],
     fail: [
-      "Pusiste el muro chueco, lo tuvieron que tirar y te cobraron los ladrillos rotos",
-      "Dejaste mal fraguar el concreto y te obligaron a comprar más materiales de tu dinero",
-      "Rompiste la carretilla nueva por aventarla como loco, te descontaron en la raya",
-      "Perforaste un tubo principal de agua sin querer, el plomero te cobró a ti el arreglo",
-      "Mediste mal el terreno y colaste donde no era, multa tremenda del arquitecto"
+      "Pusiste la puerta de la casa al revés y te obligaron a pagarla de tu raya",
+      "Se te cayó el celular a la revoltura de cemento fresca y quedó fosilizado",
+      "Te picó una araña radioactiva en la arena, no te dio poderes, solo te sacó dinero pal hospital",
+      "Acomodaste mal los andamios, se cayeron en dominó y pagaste los tabiques rotos"
     ]
   },
   basurero: {
     success: [
-      "Encontraste una tele medio funcional, la vendiste y sacaste buen extra",
-      "Separaste el PET y las latas como campeón y el kilo estaba caro hoy",
-      "Manejaste el camión como Toretto por el barrio y terminaste temprano",
-      "Limpiaste el desastre después del tianguis y los vecinos armaron coperacha",
-      "Te dieron propina en una residencial por llevarte sus escombros",
-      "Rescataste una silla gamer de la basura, la limpiaste y la vendiste",
-      "Hiciste tu ruta sin chocar ningún retrovisor y te dieron bono",
-      "Recolectaste toda la chatarra de un taller y te pagaron pesado",
-      "Le ganaste a los perros callejeros por una bolsa valiosa",
-      "Cumpliste doble turno porque faltó el chofer y cobraste doble"
+      "Encontraste un Nintendo 64 funcional entre los cartones y lo vendiste a un coleccionista",
+      "Te colaste a la ruta de los barrios ricos y te llevaste propinas de puro empresario",
+      "Dominaste el arte de lanzar bolsas al camión en movimiento a 20 km/h, premio a la eficiencia",
+      "Salvaste a un gatito de la compactadora y la doña de la cuadra te premió con dinero",
+      "Manejaste el camión por un callejón donde apenas cabía un alfiler sin rayarlo, te ascendieron",
+      "Separaste tanto cobre de la chatarra que hoy pareces magnate en el fierro viejo"
     ],
     fail: [
-      "Chocaste el camión contra un carro estacionado, te cobraron el deducible entero",
-      "Se te cayó un sillón encima de un coche y rompiste el parabrisas, te descontaron",
-      "Te multó el municipio por tirar lixiviados en zona prohibida",
-      "Un perro te mordió fuerte, fuiste al doctor privado y te costó media quincena",
-      "Rompiste los guantes y el equipo de seguridad de la empresa, te los cobraron nuevos"
+      "Aplastaste tu propio lonche en la máquina compactadora, te quedaste con hambre y sin dinero",
+      "Rompiste una bolsa negra llena de pintura vencida, manchaste todo y pagaste la lavandería",
+      "Te persiguió el perro más loco de la cuadra, saltaste una barda y se te rompió la cartera",
+      "Tiraste la basura de forma ecológica pero la multa por hacerlo fuera de horario te la comiste tú"
     ]
   },
   chef: {
     success: [
-      "Te aventaste un menú gourmet con sobras y los clientes dejaron propinota",
-      "Hiciste un emplatado tan mamador que te pagaron extra por el arte",
-      "Sacaste 50 pedidos en hora pico sin quemar nada y te dieron bono",
-      "Tu sazón hizo llorar de alegría al gerente y te subió la tarifa",
-      "Hiciste un pastel de tres pisos que no se derrumbó y cobraste caro",
-      "El TikToker de comida probó tus tacos y te dejó buena propina",
-      "Salvaste la sopa que estaba salada poniéndole papas, cobraste igual",
-      "Cocinaste para un evento VIP y te forraste de dinero",
-      "Despellejaste el pescado a la velocidad de la luz",
-      "Inventaste una salsa nueva que se vendió como pan caliente"
+      "Se te cayó un pedazo de jamón, le hiciste presentación francesa y cobraste el triple",
+      "Cocinaste con los ojos cerrados para impresionar a un crítico y te dejaron propinota",
+      "Volteaste la tortilla en el aire haciendo un triple salto mortal, la cocina te aplaudió",
+      "Inventaste el taco de sushi empanizado y te hiciste rico vendiendo la receta",
+      "Salvaste un evento de 100 personas cocinando solo con papas y queso, cobraste horas extra",
+      "Tu sazón hizo que un cliente recordara su infancia a lo Ratatouille, dejó un cheque en blanco",
+      "Afilaste los cuchillos tan bien que cortaste la tensión en la cocina, bono de paz mundial"
     ],
     fail: [
-      "Quemaste 10 kilos de cortes de carne fina, el dueño te los descontó a precio de carta",
-      "El inspector de sanidad encontró una irregularidad tuya y pagaste la multa para no perder trabajo",
-      "Derramaste el caldo base del día por correr en cocina, tuviste que poner para reponerlo",
-      "Mandaste un pedido con alérgenos a un cliente, te demandaron y gastaste en abogados",
-      "Rompiste tres platos de cerámica italiana, te salieron más caros que tu día de sueldo"
+      "Confundiste el azúcar con sal en el postre de bodas, te demandaron los novios",
+      "Hiciste flamear la sartén tan alto que activaste los rociadores, inundaste todo y pagaste la pérdida",
+      "El Gordon Ramsay región 4 entró a tu cocina, te gritó 'burro' y el susto te hizo tirar los platos",
+      "Cortaste mal un filete Wagyu de mil dólares y el gerente te lo cobró en cuotas"
     ]
   },
   programador: {
     success: [
-      "Arreglaste un bug en producción con una sola línea de código y cobraste bono",
-      "Copiaste y pegaste código de StackOverflow, funcionó perfecto y te pagaron",
-      "Terminaste el sprint 3 días antes y estuviste jugando, pero cobraste full",
-      "Optimizaste la base de datos y la empresa te dio una comisión de ahorro",
-      "Hiciste un script que hace tu trabajo solo y cobraste sin hacer nada",
-      "Sobreviviste a un deploy en viernes sin tirar el servidor",
-      "Hackeaste la red del vecino para no pagar internet y ahorraste",
-      "Vendiste una app sencilla que hiciste en una tarde por buen precio",
-      "El cliente aceptó el diseño a la primera sin pedir cambios absurdos",
-      "Resolviste un error de CSS que llevaba meses rompiendo la web"
+      "Reiniciaste el servidor y milagrosamente se arregló todo el proyecto, cobraste bono",
+      "Pusiste un 'if (error) { no_error }' y el sistema funcionó, fuiste ascendido a Senior",
+      "Vendiste un script de 3 líneas a una empresa grande y te forraste en cripto",
+      "Hackeaste el microondas de la oficina para calentar tu pizza más rápido, tus colegas te pagaron por el hack",
+      "Resolviste un bug que llevaba 5 años activo borrando un comentario, te dieron acciones",
+      "Copiaste un código indio de YouTube de 2012 y salvó la producción del viernes"
     ],
     fail: [
-      "Subiste un query malicioso sin querer, borraste la base de datos y te cobraron la restauración",
-      "Tu código sobrecargó los servidores de AWS, la factura llegó alta y la pagaste tú",
-      "Derramaste todo tu termo de café sobre la MacBook Pro de la oficina, descuento masivo",
-      "Instalaste un paquete npm infectado, comprometiste el proyecto y pagaste la auditoría de seguridad",
-      "Incumpliste tu contrato freelance y el cliente te cobró penalización por retrasos"
+      "Le diste 'Drop Table' a la base de datos principal sin querer, te quitaron todo tu finiquito",
+      "Se derramó tu bebida energética G-Fuel sobre el rack de servidores, arruinaste medio millón de pesos",
+      "Hiciste deploy en viernes a las 5pm, tiraste Amazon Web Services y pagaste multas",
+      "Te hackearon a ti por usar '1234' como contraseña, te vaciaron tu cuenta de banco"
     ]
   },
   repartidor: {
     success: [
-      "Entregaste la pizza antes de los 30 minutos esquiando en el tráfico, propina segura",
-      "Esquivaste 5 baches y 3 perros, la comida llegó intacta y te premiaron",
-      "Te tocó entregar en zona de ricos y te dieron propina en dólares",
-      "Agarraste tarifa dinámica por la lluvia y ganaste el triple",
-      "Optimizaste tu ruta y entregaste 10 paquetes en una hora",
-      "El cliente no salió a recibir y la app te regaló la comida más tu pago",
-      "Manejaste con una mano mientras te cubrías del sol y llegaste a tiempo",
-      "Entregaste un pedido frágil cruzando un cerro y cobraste extra",
-      "Ayudaste a otro repartidor ponchado y te disparó la cena",
-      "Trabajaste el turno nocturno y sacaste el bono de desvelado"
+      "Hiciste 'caballito' con la moto para no tirar las bebidas, el cliente te dio 5 estrellas y 500 varos",
+      "Entregaste el pedido en 5 minutos porque cortaste camino por el monte, propina de velocidad",
+      "Subiste 15 pisos por las escaleras sin derramar el ramen, cobraste el bono fitness",
+      "Un cliente famoso abrió la puerta, te tomaste una foto, la vendiste y ganaste",
+      "Sorteaste tres marchas, dos baches y un choque, llegaste intacto y el cliente te dio en dólares"
     ],
     fail: [
-      "Caíste en un bache gigante, doblaste el rin de la moto y pagaste mecánico urgente",
-      "El pedido de sushi caro se volteó y aplastó, el cliente lo rechazó y la app te lo descontó",
-      "Te pasaste un alto por la prisa, tránsito te detuvo y la multa te dejó seco",
-      "Te robaron el celular montado en el manubrio mientras buscabas la dirección",
-      "Dejaste mal puesta la patita de la moto, se cayó rompiendo las direccionales, gasto seguro"
+      "Te robaron la llanta de la moto mientras tocabas el timbre, te tocó pagar grua y llanta",
+      "Se te enredó el pedido en la cadena de la moto, entregaste puré de pizza y te cobraron el pedido",
+      "Un perro bulldog te correteó 4 cuadras, tiraste el sushi caro y tuviste que pagarlo",
+      "Te perdiste usando Google Maps, llegaste a otro estado y gastaste la ganancia en gasolina"
     ]
   },
   comerciante: {
     success: [
-      "Le vendiste hielo a un esquimal, tu nivel de persuasión te llenó de dinero",
-      "Hiciste promo de 'lleva 2, paga 3' y la gente cayó, ganancia pura",
-      "Vendiste todo el lote rezagado de fundas de celular y forraste la caja",
-      "Negociaste mayoreo como un tiburón y sacaste un margen enorme",
-      "Abusaste de la tendencia en TikTok y vendiste cosas chinas al triple",
-      "Tu local se llenó de turistas y les cobraste tarifa 'gringa'",
-      "Aplicaste la de 'ya es lo menos' y no cediste en el precio",
-      "Cambiaste los aparadores y las ventas subieron mágicamente",
-      "Vendiste mercancía que pensabas que ya era pérdida total",
-      "Un cliente mayorista te vació la tienda en una sola compra"
+      "Le vendiste una funda de celular a un wey que ni siquiera tenía celular, nivel dios",
+      "Convenciste a la señora que solo venía a 'ver' de comprarse media tienda, forraste la caja",
+      "Remataste luces de navidad rotas en pleno junio y la gente te las arrebató",
+      "Tus tácticas de regateo dejaron llorando al proveedor, maximizaste la ganancia",
+      "Le cambiaste la etiqueta a los productos rezagados por 'Edición Limitada' y te hiciste rico",
+      "Te pusiste a gritar en el mercado 'pásele güerita' y atraías a los gringos con dólares"
     ],
     fail: [
-      "Te engañaron pagándote con billetes de denominación alta falsos, perdiste caja y producto",
-      "Te cayó un inspector de hacienda y, como te faltaba un papel, pagaste multa fuertísima",
-      "Dejaste la mercancía en el sol, se decoloró y arruinó toda, pura pérdida",
-      "Invertiste todos tus ahorros en los spinners justo cuando pasaron de moda, fracaso financiero",
-      "Tuviste que pagarle los daños a un cliente que resbaló en la entrada de tu local"
+      "Hiciste el clásico error de dar cambio de 500 por un billete de 50, perdiste toda la ganancia",
+      "Invertiste en un contenedor de mascarillas en pleno 2024, nadie compró y quebraste poquito",
+      "Te estafaron pagándote con billetes de lotería falsos, te cuadró la caja en números rojos",
+      "Se metió un pájaro al local, rompió tres jarrones finos intentando salir, puro gasto"
     ]
   }
 };
