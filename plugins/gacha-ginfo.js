@@ -1,12 +1,14 @@
 import { promises as fs } from 'fs';
 
-import { cooldowns as rwCooldowns } from './gacha-rollwaifu.js';
-import { cooldowns as claimCooldowns } from './gacha-claim.js';
-import { cooldowns as voteCooldowns } from './gacha-vote.js';
-import { cooldowns as robCooldowns } from './gacha-robwaifu.js';
 import { isSameUserId } from '../lib/gacha-group.js';
 
 const charactersFilePath = './src/database/characters.json';
+
+const getCooldownMap = key => {
+  if (!global.gachaCooldowns || typeof global.gachaCooldowns !== 'object') return {};
+  const map = global.gachaCooldowns[key];
+  return map && typeof map === 'object' ? map : {};
+};
 
 function formatTime(ms) {
   if (!ms || ms <= 0) return 'Ahora.';
@@ -42,10 +44,10 @@ let handler = async (m, { conn }) => {
 
   try {
     const baseKey = `${groupId}:${userId}`;
-    const rwStatus = getCooldownStatus(rwCooldowns, baseKey, now);
-    const claimStatus = getCooldownStatus(claimCooldowns, baseKey, now);
-    const voteStatus = getCooldownStatus(voteCooldowns, baseKey, now);
-    const robStatus = getCooldownStatus(robCooldowns, baseKey, now);
+    const rwStatus = getCooldownStatus(getCooldownMap('rollwaifu'), baseKey, now);
+    const claimStatus = getCooldownStatus(getCooldownMap('claim'), baseKey, now);
+    const voteStatus = getCooldownStatus(getCooldownMap('vote'), baseKey, now);
+    const robStatus = getCooldownStatus(getCooldownMap('robwaifu'), baseKey, now);
 
     let allCharacters = [];
     try {

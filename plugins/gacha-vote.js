@@ -3,6 +3,9 @@ import { loadGroupVotes, saveGroupVotes, makeGroupCharacterKey } from '../lib/gr
 
 const charactersFilePath = './src/database/characters.json';
 export let cooldowns = {}; // clave: `${groupId}:${userId}` => expiration timestamp
+
+global.gachaCooldowns = global.gachaCooldowns || {};
+global.gachaCooldowns.vote = cooldowns;
 export const voteCooldownTime = 1 * 60 * 60 * 1000; // 1 hora
 
 let characterVotes = {}; // clave: `${groupId}:${characterId}` => expiration timestamp

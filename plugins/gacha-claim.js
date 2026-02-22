@@ -13,6 +13,9 @@ import {
 
 export const cooldowns = {}; // clave: `${groupId}:${userId}`
 
+global.gachaCooldowns = global.gachaCooldowns || {};
+global.gachaCooldowns.claim = cooldowns;
+
 async function loadClaimMessages() {
   try {
     const data = await fs.readFile('./src/database/userClaimConfig.json', 'utf-8');
