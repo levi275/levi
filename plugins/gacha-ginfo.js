@@ -2,7 +2,8 @@ import { promises as fs } from 'fs';
 
 import { cooldowns as rwCooldowns } from './gacha-rollwaifu.js';
 import { cooldowns as claimCooldowns } from './gacha-claim.js';
-import { cooldowns as voteCooldowns, voteCooldownTime } from './gacha-vote.js';
+import { cooldowns as voteCooldowns } from './gacha-vote.js';
+import { cooldowns as robCooldowns } from './gacha-robwaifu.js';
 
 const charactersFilePath = './src/database/characters.json';
 
@@ -12,6 +13,12 @@ function formatTime(ms) {
   const minutes = Math.floor(totalSeconds / 60);
   const seconds = totalSeconds % 60;
   return `${minutes} minutos ${seconds} segundos`;
+}
+
+function getCooldownStatus(cooldowns, key, now) {
+  const expiration = Number(cooldowns?.[key] || 0);
+  const remaining = expiration - now;
+  return formatTime(remaining);
 }
 
 let handler = async (m, { conn }) => {
@@ -27,30 +34,11 @@ let handler = async (m, { conn }) => {
   }
 
   try {
-    // Roll cooldown
-    const rwKey = `${groupId}:${userId}`;
-    const rwExpiration = rwCooldowns?.[rwKey] || 0;
-    const rwRemaining = rwExpiration - now;
-    const rwStatus = formatTime(rwRemaining);
-
-    // Claim cooldown
-    const claimKey = `${groupId}:${userId}`;
-    const claimExpiration = claimCooldowns?.[claimKey] || 0;
-    const claimRemaining = claimExpiration - now;
-    const claimStatus = formatTime(claimRemaining);
-
-    // Vote cooldown (we stored vote cooldowns in gacha-vote's export)
-    let voteStatus = 'Ahora.';
-    if (voteCooldowns && typeof voteCooldowns.get !== 'function') {
-      // voteCooldowns is an object keyed by `${groupId}:${userId}`
-      const voteKey = `${groupId}:${userId}`;
-      const lastVoteTime = voteCooldowns?.[voteKey];
-      if (lastVoteTime) {
-        const voteExpiration = lastVoteTime + (voteCooldownTime || 0);
-        const voteRemaining = voteExpiration - now;
-        voteStatus = formatTime(voteRemaining);
-      }
-    }
+    const baseKey = `${groupId}:${userId}`;
+    const rwStatus = getCooldownStatus(rwCooldowns, baseKey, now);
+    const claimStatus = getCooldownStatus(claimCooldowns, baseKey, now);
+    const voteStatus = getCooldownStatus(voteCooldowns, baseKey, now);
+    const robStatus = getCooldownStatus(robCooldowns, baseKey, now);
 
     let allCharacters = [];
     try {
@@ -61,7 +49,6 @@ let handler = async (m, { conn }) => {
       return conn.reply(m.chat, 'Hubo un error al cargar la base de datos de personajes.', m);
     }
 
-    // contamos claims en este grupo leyendo harem.json
     let harem = [];
     try {
       harem = JSON.parse(await fs.readFile('./src/database/harem.json', 'utf-8'));
@@ -80,12 +67,12 @@ let handler = async (m, { conn }) => {
     let response = `*❀ Usuario \`<${userName}>\`*\n\n`;
     response += `ⴵ RollWaifu » *${rwStatus}*\n`;
     response += `ⴵ Claim » *${claimStatus}*\n`;
-    response += `ⴵ Vote » *${voteStatus}*\n\n`;
+    response += `ⴵ Vote » *${voteStatus}*\n`;
+    response += `ⴵ RobWaifu » *${robStatus}*\n\n`;
     response += `♡ Personajes reclamados en este grupo » *${claimedCount} / ${totalCharacters}*\n`;
     response += `✰ Valor total (est.) » *${totalValue.toLocaleString('es-ES')}*`;
 
     await conn.reply(m.chat, response, m);
-
   } catch (e) {
     console.error('Error en handler ginfo:', e);
     await conn.reply(m.chat, '✘ Ocurrió un error al verificar tu estado.', m);

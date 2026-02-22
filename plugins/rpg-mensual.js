@@ -9,10 +9,10 @@ let handler = async (m) => {
     return m.reply(`${emoji3} ✿ Ya reclamaste tu *recompensa mensual* ✿\n⏳ Vuelve en *${msToTime(timeRemaining)}*`);
   }
 
-  const premiumFactor = user.premium ? 1.5 : 1;
-  const coinReward = Math.floor(pickRandom([650000, 700000, 750000, 820000]) * premiumFactor);
-  const expReward = Math.floor(pickRandom([70000, 80000, 90000, 100000]) * premiumFactor);
-  const diamondReward = Math.floor(pickRandom([70, 80, 90, 100]) * premiumFactor);
+  const premiumFactor = user.premium ? 1.3 : 1;
+  const coinReward = Math.floor(pickRandom([300000, 340000, 380000, 420000]) * premiumFactor);
+  const expReward = Math.floor(pickRandom([24000, 28000, 32000, 36000]) * premiumFactor);
+  const diamondReward = Math.floor(pickRandom([28, 34, 40, 46]) * premiumFactor);
 
   user.coin = (user.coin || 0) + coinReward;
   user.exp = (user.exp || 0) + expReward;

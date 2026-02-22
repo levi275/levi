@@ -9,9 +9,9 @@ const handler = async (m) => {
     return m.reply(`🎁 Ya reclamaste tu semanal.\nVuelve en *${msToTime((user.weekly + cooldown) - now)}*`);
   }
 
-  const coinReward = user.premium ? 220000 : 140000;
-  const expReward = user.premium ? 24000 : 15000;
-  const diamondReward = user.premium ? 30 : 18;
+  const coinReward = user.premium ? 120000 : 75000;
+  const expReward = user.premium ? 12000 : 7000;
+  const diamondReward = user.premium ? 14 : 8;
 
   user.coin = (user.coin || 0) + coinReward;
   user.exp = (user.exp || 0) + expReward;

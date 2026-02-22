@@ -13,11 +13,11 @@ const handler = async (m, { conn }) => {
   }
 
   const img = 'https://files.catbox.moe/qfx5pn.jpg';
-  const premiumFactor = user.premium ? 1.6 : 1;
-  const coin = Math.floor((Math.random() * 45000 + 25000) * premiumFactor);
-  const tokens = Math.floor((Math.random() * 30 + 20) * premiumFactor);
-  const diamonds = Math.floor((Math.random() * 20 + 12) * premiumFactor);
-  const exp = Math.floor((Math.random() * 20000 + 12000) * premiumFactor);
+  const premiumFactor = user.premium ? 1.35 : 1;
+  const coin = Math.floor((Math.random() * 22000 + 12000) * premiumFactor);
+  const tokens = Math.floor((Math.random() * 16 + 10) * premiumFactor);
+  const diamonds = Math.floor((Math.random() * 10 + 6) * premiumFactor);
+  const exp = Math.floor((Math.random() * 9000 + 5000) * premiumFactor);
 
   user.coin = (user.coin || 0) + coin;
   user.diamond = (user.diamond || 0) + diamonds;

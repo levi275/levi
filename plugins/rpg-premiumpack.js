@@ -10,9 +10,9 @@ const handler = async (m, { conn, isPrems }) => {
     return conn.reply(m.chat, `🎁 Ya reclamaste tu Premium Pack de hoy.\n⏳ Vuelve en *${wait}*.`, m);
   }
 
-  const coinReward = rand(90000, 170000);
-  const expReward = rand(9000, 16000);
-  const diamondReward = rand(12, 25);
+  const coinReward = rand(38000, 76000);
+  const expReward = rand(2800, 6200);
+  const diamondReward = rand(5, 12);
 
   user.coin = (user.coin || 0) + coinReward;
   user.exp = (user.exp || 0) + expReward;

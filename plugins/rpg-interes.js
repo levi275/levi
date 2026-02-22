@@ -13,9 +13,9 @@ const handler = async (m, { conn }) => {
     return conn.reply(m.chat, `🏦 Ya cobraste interés hoy.\n⏳ Vuelve en *${restante}*.`, m);
   }
 
-  const rate = user.premium ? 0.065 : 0.04;
-  const cap = user.premium ? 220000 : 110000;
-  const interest = Math.min(cap, Math.max(1200, Math.floor(bank * rate)));
+  const rate = user.premium ? 0.0285 : 0.028;
+  const cap = user.premium ? 55000 : 110000;
+  const interest = Math.min(cap, Math.max(600, Math.floor(bank * rate)));
 
   user.coin = (user.coin || 0) + interest;
   user.lastinterest = now;
