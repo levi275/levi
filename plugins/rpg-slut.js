@@ -55,7 +55,7 @@ let handler = async (m, { conn, usedPrefix }) => {
   let phraseList = useGeneric ? frasesSlutGenericas.fail : (frasesSlutPorTrabajo[job.key]?.fail || frasesSlutGenericas.fail);
   let phrase = pickRandom(phraseList);
 
-  let textoLoss = `❪❨̶  ֶָ֢ ✻̸ ${phrase} ahuyentaste a @${targetId.split('@')[0]}\n\nㅤㅤ    ֶָ֢ ✻̸ ➪ 𝐏𝐞𝐫𝐝𝐢𝐬𝐭𝐞: *${toNum(loss)}* ( *${loss}* ) ${m.moneda}\n\nㅤㅤ ⬫   ͜ ۬ ︵࣪᷼⏜݊᷼✿⃘𐇽۫ꥈ࣪࣪࣪࣪࣪࣪࣪࣪࣪۬۬۬࣪࣪࣪۬۬۬𝇈ٜ࣪࣪࣪࣪࣪۬۬࣪࣪࣪۬۬𑁍ٜ𐇽࣪࣪࣪࣪࣪۬۬࣪࣪࣪۬ 𝇈⃘۫ꥈ࣪࣪࣪࣪࣪࣪࣪࣪࣪۬۬۬࣪࣪࣪۬۬۬✿݊᷼⏜࣪᷼︵۬ ͜  ⬫`;
+  let textoLoss = `❪❨̶  ֶָ֢ ✻̸ ${phrase}, espantaste a @${targetId.split('@')[0]}\n\nㅤㅤ    ֶָ֢ ✻̸ ➪ 𝐏𝐞𝐫𝐝𝐢𝐬𝐭𝐞: *${toNum(loss)}* ( *${loss}* ) ${m.moneda}\n\nㅤㅤ ⬫   ͜ ۬ ︵࣪᷼⏜݊᷼✿⃘𐇽۫ꥈ࣪࣪࣪࣪࣪࣪࣪࣪࣪۬۬۬࣪࣪࣪۬۬۬𝇈ٜ࣪࣪࣪࣪࣪۬۬࣪࣪࣪۬۬𑁍ٜ𐇽࣪࣪࣪࣪࣪۬۬࣪࣪࣪۬ 𝇈⃘۫ꥈ࣪࣪࣪࣪࣪࣪࣪࣪࣪۬۬۬࣪࣪࣪۬۬۬✿݊᷼⏜࣪᷼︵۬ ͜  ⬫`;
   return conn.sendMessage(m.chat, { text: textoLoss, contextInfo: { mentionedJid: [targetId] } }, { quoted: m });
 };
 
@@ -100,17 +100,23 @@ const frasesSlutGenericas = {
     "Te disfrazaste de monja rebelde y vaciaste su cartera",
     "Hiciste la mortal hacia atrás y caíste justo donde debías",
     "Cobraste tarifa Premium por dejarte ahorcar poquito",
-    "Te metiste al jacuzzi juntos y el agua se puso a hervir de la pasión"
+    "Te metiste al jacuzzi juntos y el agua se puso a hervir de la pasión",
+    "Jugaste al doctor y le curaste todos los males a punta de placer",
+    "Tus gemidos despertaron a los vecinos pero te valió, cobraste doble",
+    "Le llenaste el cuerpo de aceite y se resbalaron hasta el éxito",
+    "Le cantaste al oído con voz ronca y cayó redondito/a a tus pies"
   ],
   fail: [
-    "Le mordiste donde no debías sin querer y te demandaron",
-    "El cliente te vomitó encima del asco, qué asquerosidad",
-    "Te resbalaste, caíste encima de la mesa y te tocó pagar",
-    "No te bañaste, olías a patas y te cancelaron el servicio",
-    "Le hablaste de tu ex en pleno acto y se le bajó todo",
-    "Te cayó redada policiaca y soltaste plata para salir",
-    "Te topaste a un cliente tóxico que no pagó y robó tu cel",
-    "Se te acalambró la pierna a medio acto y fuiste a urgencias"
+    "Le mordiste donde no debías sin querer, te demandaron y pagaste gastos médicos",
+    "El cliente te vomitó encima del asco, cancelaste el servicio y gastaste en tintorería",
+    "Te resbalaste, rompiste la mesa de cristal del motel y te la cobraron",
+    "No te bañaste, olías a patas, te cancelaron y pagaste indemnización",
+    "Te cayó redada policiaca por escándalo y soltaste plata de soborno para salir",
+    "Te topaste a un cliente tóxico que te robó el celular y la billetera",
+    "Se te acalambró la pierna a medio acto, fuiste a urgencias y gastaste todo",
+    "Arruinaste tu mejor lencería con vino barato y tocó comprar otra",
+    "Te quedaste dormido en plena acción, te corrieron a patadas y no te pagaron",
+    "Ofreciste masaje tailandés pero le dislocaste el hombro, pagaste el quiropráctico"
   ]
 };
 
@@ -127,10 +133,11 @@ const frasesSlutPorTrabajo = {
       "Rellenaste sus grietas con tu mezcla especial y te dio propina"
     ],
     fail: [
-      "Tenías cal en las manos y le raspaste las partes nobles",
-      "El chaleco reflejante cortó el mood y te corrieron",
-      "Te cayó mezcla fresca en un lugar sensible y lloraste",
-      "Tus manos estaban tan rasposas que le dejaste marcas y te corrió"
+      "Tenías cal en las manos, le raspaste las partes nobles y pagaste cremas curativas",
+      "El chaleco reflejante cortó el mood, te corrieron y tuviste que pagar el Uber de regreso",
+      "Te cayó mezcla fresca en un lugar sensible, lloraste y fuiste al dermatólogo",
+      "Por andar de caliente tiraste una columna recién colada y el patrón te descontó la paga",
+      "Llevaste un martillo a la cama por error, rompiste el piso y te cobraron la reparación"
     ]
   },
   basurero: {
@@ -145,10 +152,11 @@ const frasesSlutPorTrabajo = {
       "Cobraste tarifa alta por recoger su 'basurita' emocional y física"
     ],
     fail: [
-      "Olías a lixiviado de 3 días y perdiste al cliente al instante",
-      "Una bolsa de basura rota te arruinó la lencería cara",
-      "Encontró una cáscara de plátano pegada a tu zapato y se asqueó",
-      "Le dio alergia el polvo del camión que traías encima"
+      "Olías a lixiviado de 3 días, perdiste al cliente y gastaste fortunas en perfume",
+      "Una bolsa de basura rota te arruinó la lencería cara de trabajo",
+      "Llevaste infecciones raras por tu trabajo, terminaste pagando antibióticos caros",
+      "Le dio alergia el polvo del camión que traías encima, pagaste la consulta médica",
+      "Dejaste marcas de lodo tóxico en sus sábanas blancas y pagaste la tintorería fina"
     ]
   },
   chef: {
@@ -163,10 +171,11 @@ const frasesSlutPorTrabajo = {
       "Usaste hielos y chocolate caliente para volverlo loco"
     ],
     fail: [
-      "Le pusiste salsa habanera donde no iba y le ardió el alma",
-      "Se te quemó la cena romántica previa y el humo arruinó todo",
-      "Olías a cebolla y ajo intensamente, no aguantó el beso",
-      "Agarraste el chile serrano antes de tocarlo y terminaron en el hospital"
+      "Te equivocaste de frasco y usaste chile habanero en vez de lubricante, pagaste el hospital",
+      "Se te quemó la cena romántica previa, se activaron los aspersores y pagaste los daños",
+      "Olías tanto a cebolla que vomitó encima de tu ropa de marca, pérdida total",
+      "Metiste comida en lugares indebidos, causaste una infección y costeaste los antibióticos",
+      "Cortaste mal el pepino de exhibición y terminaste en la sala de emergencias"
     ]
   },
   programador: {
@@ -181,10 +190,11 @@ const frasesSlutPorTrabajo = {
       "Bypasseaste sus defensas y entraste hasta el mainframe"
     ],
     fail: [
-      "Se te cayó el internet a medio cam-show y perdiste los tips",
-      "Tu mamá entró al cuarto en pleno stream y tuviste que huir",
-      "Te dio síndrome del túnel carpiano en plena chaqueta y no acabaste",
-      "Te hackearon a ti en medio del acto y te vaciaron la cuenta"
+      "Tu mamá entró al cuarto en pleno stream, te castigaron y tuviste que devolver donaciones",
+      "Te dio síndrome del túnel carpiano en plena chaqueta, pagaste fisioterapia",
+      "Te hackearon la billetera cripto a mitad del acto y perdiste saldo",
+      "Hiciste un corto circuito con tus juguetes USB y quemaste tu PC carísima",
+      "Olvidaste apagar la cámara al terminar, te expusieron y te extorsionaron por plata"
     ]
   },
   repartidor: {
@@ -199,10 +209,11 @@ const frasesSlutPorTrabajo = {
       "Aceleraste en la cama como aceleras en los semáforos, pura velocidad"
     ],
     fail: [
-      "Te descubrió el conserje en plena acción y te multaron",
-      "La moto se cayó con todo y pedidos por estar adentro perdiendo el tiempo",
-      "Llegaste frío, tarde y sudando feo, te reportaron",
-      "El cliente te robó la moto mientras te quitabas la ropa"
+      "Te descubrió el conserje en plena acción y pagaste multa del edificio",
+      "Dejaste la moto afuera prendida, te la robaron mientras estabas adentro ocupado",
+      "El cliente te amarró, te robó el pedido, tu cartera y las propinas del día",
+      "Entraste apresurado, rompiste la puerta del cliente y te descontaron de tu nómina",
+      "Se te derramó la sopa caliente encima de tus partes íntimas y pagaste curación"
     ]
   },
   comerciante: {
@@ -217,10 +228,11 @@ const frasesSlutPorTrabajo = {
       "Vendiste la experiencia como un producto de Apple: cara y exclusiva"
     ],
     fail: [
-      "Tu terminal falló justo antes de cobrar y el cliente huyó sin pagar",
-      "Invertiste en lencería pirata, se rompió al primer tirón y pasaste pena",
-      "Le vendiste un servicio sobrevalorado y te quemó en redes sociales",
-      "No aceptabas transferencias, no traía efectivo y perdiste el rato"
+      "El cliente canceló el pago con tarjeta por contracargo y te cobraron comisión",
+      "Invertiste en juguetes piratas, se rompieron adentro del cliente y pagaste cirugía médica",
+      "Le vendiste un servicio VIP falso, te denunciaron y pagaste arreglo legal",
+      "Un competidor bajó los precios, tú perdiste clientes y encima pagaste publicidad inútil",
+      "Ofreciste garantía de satisfacción, el cliente mintió diciendo que no le gustó y exigió reembolso"
     ]
   }
 };
