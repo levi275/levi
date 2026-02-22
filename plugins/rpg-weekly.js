@@ -9,20 +9,22 @@ const handler = async (m) => {
     return m.reply(`🎁 Ya reclamaste tu semanal.\nVuelve en *${msToTime((user.weekly + cooldown) - now)}*`);
   }
 
-  const coinReward = user.premium ? 30000 : 20000;
-  const expReward = user.premium ? 2500 : 1800;
-  const diamondReward = user.premium ? 8 : 5;
+  const coinReward = user.premium ? 120000 : 75000;
+  const expReward = user.premium ? 12000 : 7000;
+  const diamondReward = user.premium ? 14 : 8;
 
   user.coin = (user.coin || 0) + coinReward;
   user.exp = (user.exp || 0) + expReward;
   user.diamond = (user.diamond || 0) + diamondReward;
+  user.diamonds = (user.diamonds || 0) + diamondReward;
   user.weekly = now;
 
   m.reply(
     `🎁 *Recompensa semanal*\n\n` +
       `💸 ${m.moneda}: *+${coinReward.toLocaleString()}*\n` +
-      `✨ Exp: *+${expReward}*\n` +
-      `💎 Diamantes: *+${diamondReward}*`,
+      `✨ Exp: *+${expReward.toLocaleString()}*\n` +
+      `💎 Diamantes: *+${diamondReward}*\n\n` +
+      `👑 Premium recibe más monedas, EXP y diamantes.`,
   );
 };
 

@@ -14,16 +14,17 @@ const handler = async (m, { conn }) => {
   else user.dailyStreak = Math.min(30, (user.dailyStreak || 0) + 1);
 
   const streak = user.dailyStreak;
-  const base = 2500;
-  const streakBonus = streak * 350;
-  const premiumBonus = user.premium ? 1200 : 0;
+  const base = 5200;
+  const streakBonus = streak * 520;
+  const premiumBonus = user.premium ? 1800 : 0;
 
   const coinReward = base + streakBonus + premiumBonus;
-  const diamondReward = 1 + Math.floor(streak / 7) + (user.premium ? 1 : 0);
-  const expReward = 200 + streak * 25;
+  const diamondReward = 2 + Math.floor(streak / 8) + (user.premium ? 1 : 0);
+  const expReward = 450 + streak * 70 + (user.premium ? 200 : 0);
 
   user.coin = (user.coin || 0) + coinReward;
   user.diamond = (user.diamond || 0) + diamondReward;
+  user.diamonds = (user.diamonds || 0) + diamondReward;
   user.exp = (user.exp || 0) + expReward;
   user.lastclaim = now;
 
@@ -33,7 +34,7 @@ const handler = async (m, { conn }) => {
       `💰 ${m.moneda}: *+${coinReward.toLocaleString()}*\n` +
       `💎 Diamantes: *+${diamondReward}*\n` +
       `✨ Exp: *+${expReward}*\n\n` +
-      `Siguiente día (racha ${Math.min(30, streak + 1)}): *+${(base + (Math.min(30, streak + 1) * 350) + premiumBonus).toLocaleString()} ${m.moneda}*`,
+      `Siguiente día (racha ${Math.min(30, streak + 1)}): *+${(base + (Math.min(30, streak + 1) * 520) + premiumBonus).toLocaleString()} ${m.moneda}*`,
     m,
   );
 };

@@ -6,6 +6,8 @@ let handler = async (m, { conn }) => {
 
 ൃ⵿꤬ᩚ̸̷͠ᩘ🍒̷̸ᩚ⃨⢾ ֺ ֢ ᮫  ─ *#w • #work • #trabajar*
 > ✦ Trabaja para ganar ${m.moneda}.
+ൃ⵿꤬ᩚ̸̷͠ᩘ🧰̷̸ᩚ⃨⢾ ֺ ֢ ᮫  ─ *#trabajo • #job • #empleo*
+> ✦ Elige o gestiona tu empleo (afecta work/crime/slut).
 ൃ⵿꤬ᩚ̸̷͠ᩘ🎀̷̸ᩚ⃨⢾ ֺ ֢ ᮫  ─ *#slut • #protituirse*
 > ✦ Trabaja como prostituta y gana ${m.moneda}.
 ൃ⵿꤬ᩚ̸̷͠ᩘ🍨̷̸ᩚ⃨⢾ ֺ ֢ ᮫  ─ *#cf • #suerte*
@@ -41,7 +43,9 @@ let handler = async (m, { conn }) => {
 ൃ⵿꤬ᩚ̸̷͠ᩘ🪙̷̸ᩚ⃨⢾ ֺ ֢ ᮫  ─ *#interes • #bankinterest*
 > ✦ Cobra intereses diarios por ahorrar en el banco.
 ൃ⵿꤬ᩚ̸̷͠ᩘ👑̷̸ᩚ⃨⢾ ֺ ֢ ᮫  ─ *#premiumbonus • #bonopremium*
-> ✦ Bonus exclusivo para usuarios premium cada 12h.
+> ✦ Bonus exclusivo para usuarios premium cada 8h.
+ൃ⵿꤬ᩚ̸̷͠ᩘ💼̷̸ᩚ⃨⢾ ֺ ֢ ᮫  ─ *#premiumpack • #packpremium*
+> ✦ Pack diario premium con monedas, diamantes y EXP.
 ൃ⵿꤬ᩚ̸̷͠ᩘ🥡̷̸ᩚ⃨⢾ ֺ ֢ ᮫  ─ *#monthly • #mensual*
 > ✦ Reclama tu recompensa mensual.
 ൃ⵿꤬ᩚ̸̷͠ᩘ🍒̷̸ᩚ⃨⢾ ֺ ֢ ᮫  ─ *#steal • #robar • #rob*
