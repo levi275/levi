@@ -1,3 +1,4 @@
+
 let handler = async (m, { conn }) => {
   const texto = `
 🔞✨⊹ 𝐂𝐨𝐦𝐚𝐧𝐝𝐨𝐬 𝐍𝐒𝐅𝐖 (𝐂𝐨𝐧𝐭𝐞𝐧𝐢𝐝𝐨 𝐩𝐚𝐫𝐚 𝐚𝐝𝐮𝐥𝐭𝐨𝐬) 🍑🔥⊹
@@ -46,6 +47,7 @@ let handler = async (m, { conn }) => {
 > ✦ Hacer tijeras.
 ╰────︶.︶ ⸙ ͛ ͎ ͛  ︶.︶ ੈ₊˚༅
   `.trim();
+
 
     await conn.sendMessage(
     m.chat,

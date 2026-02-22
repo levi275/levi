@@ -1,3 +1,4 @@
+
 let handler = async (m, { conn }) => {
   const texto = `
 👥✨⊹ 𝐂𝐨𝐦𝐚𝐧𝐝𝐨𝐬 𝐝𝐞 𝐠𝐫𝐮𝐩𝐨𝐬 𝐩𝐚𝐫𝐚 𝐮𝐧𝐚 𝐦𝐞𝐣𝐨𝐫 𝐠𝐞𝐬𝐭𝐢𝐨́𝐧 𝐝𝐞 𝐞𝐥𝐥𝐨𝐬 🔧📢⊹
@@ -68,6 +69,7 @@ let handler = async (m, { conn }) => {
 > ✦ Elimina a usuarios por el prefijo de país.
 ╰────︶.︶ ⸙ ͛ ͎ ͛  ︶.︶ ੈ₊˚༅
   `.trim();
+
 
     await conn.sendMessage(
     m.chat,

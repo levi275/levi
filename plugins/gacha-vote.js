@@ -1,8 +1,12 @@
 import { promises as fs } from 'fs';
 import { loadGroupVotes, saveGroupVotes, makeGroupCharacterKey } from '../lib/groupVotes.js';
+import { findCharacterByName } from '../lib/gacha-characters.js';
 
 const charactersFilePath = './src/database/characters.json';
 export let cooldowns = {}; // clave: `${groupId}:${userId}` => expiration timestamp
+
+global.gachaCooldowns = global.gachaCooldowns || {};
+global.gachaCooldowns.vote = cooldowns;
 export const voteCooldownTime = 1 * 60 * 60 * 1000; // 1 hora
 
 let characterVotes = {}; // clave: `${groupId}:${characterId}` => expiration timestamp
@@ -47,7 +51,7 @@ let handler = async (m, { conn, args }) => {
       return;
     }
 
-    const character = characters.find(c => c.name.toLowerCase() === characterName.toLowerCase());
+    const character = findCharacterByName(characters, characterName);
     if (!character) {
       await conn.reply(m.chat, 'Personaje no encontrado. Asegúrate del nombre correcto.', m);
       return;

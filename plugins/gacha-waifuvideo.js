@@ -3,6 +3,7 @@ import path from 'path'
 import axios from 'axios'
 import { spawn } from 'child_process'
 import { tmpdir } from 'os'
+import { findCharacterByName } from '../lib/gacha-characters.js'
 
 const charactersFilePath = './src/database/characters.json'
 const haremFilePath = './src/database/harem.json'
@@ -82,7 +83,7 @@ let handler = async (m, { conn, args }) => {
 
     try {
         const characters = await loadCharacters()
-        const character = characters.find(c => c.name.toLowerCase() === characterName)
+        const character = findCharacterByName(characters, characterName)
 
         if (!character) {
             await conn.reply(m.chat, `《✧》No se ha encontrado el personaje *${characterName}*. Asegúrate de que el nombre esté correcto.`, m)

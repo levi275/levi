@@ -1,3 +1,4 @@
+
 let handler = async (m, { conn }) => {
   const texto = `
 🎮✨⊹ 𝐂𝐨𝐦𝐚𝐧𝐝𝐨𝐬 𝐝𝐞 𝐣𝐮𝐞𝐠𝐨𝐬 𝐩𝐚𝐫𝐚 𝐣𝐮𝐠𝐚𝐫 𝐜𝐨𝐧 𝐭𝐮𝐬 𝐚𝐦𝐢𝐠𝐨𝐬 🕹️🎲⊹
@@ -70,6 +71,7 @@ let handler = async (m, { conn }) => {
 > ✦ Crea una sala de juego.  
 ╰────︶.︶ ⸙ ͛ ͎ ͛  ︶.︶ ੈ₊˚༅,
   `.trim();
+
 
    await conn.sendMessage(
     m.chat,

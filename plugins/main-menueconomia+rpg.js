@@ -1,3 +1,4 @@
+
 let handler = async (m, { conn }) => {
 
 
@@ -70,6 +71,7 @@ let handler = async (m, { conn }) => {
 > ✦ Reclama tu regalo navideño (Solo en Navidad).
 ╰────︶.︶ ⸙ ͛ ͎ ͛  ︶.︶ ੈ₊˚༅,
   `.trim();
+
 
   await conn.sendMessage(
     m.chat,

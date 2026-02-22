@@ -28,8 +28,8 @@ let handler = async (m, { conn, usedPrefix }) => {
   let jobEmoji = job.emoji;
 
   if (ok) {
-    // Ganancias reducidas (aprox 800 a 2500)
-    let amount = Math.floor((Math.random() * 1700 + 800) * job.workMultiplier * premiumBoost);
+    // Ganancias aumentadas (aprox 2000 a 5000)
+    let amount = Math.floor((Math.random() * 3000 + 2000) * job.workMultiplier * premiumBoost);
     let xpEarned = Math.floor(amount * 0.15);
     user.coin = (user.coin || 0) + amount;
     user.jobXp = (user.jobXp || 0) + xpEarned;

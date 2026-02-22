@@ -3,6 +3,9 @@ import { loadCharacters, findCharacterById } from '../lib/gacha-characters.js'
 import { isProtectionActive, getUserFunds, spendUserFunds, resetProtectionOnTransfer } from '../lib/gacha-protection.js'
 
 export let cooldowns = {}
+
+global.gachaCooldowns = global.gachaCooldowns || {}
+global.gachaCooldowns.robwaifu = cooldowns
 const CLAIM_GRACE_MS = 2 * 60 * 1000
 const FAIL_COOLDOWN_MS = 45 * 60 * 1000
 const SUCCESS_COOLDOWN_MS = 90 * 60 * 1000

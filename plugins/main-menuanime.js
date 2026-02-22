@@ -1,3 +1,4 @@
+
 let handler = async (m, { conn }) => {
   const texto = `
 🎌✨⊹ 𝐂𝐨𝐦𝐚𝐧𝐝𝐨𝐬 𝐝𝐞 𝐫𝐞𝐚𝐜𝐜𝐢𝐨𝐧𝐞𝐬 𝐝𝐞 𝐚𝐧𝐢𝐦𝐞 💢🎭⊹
@@ -72,6 +73,7 @@ let handler = async (m, { conn }) => {
 > ✦ Pensar en algo
 ╰────︶.︶ ⸙ ͛ ͎ ͛  ︶.︶ ੈ₊˚༅
   `.trim();
+
 
     await conn.sendMessage(
     m.chat,

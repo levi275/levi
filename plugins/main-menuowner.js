@@ -8,6 +8,8 @@ let owner = `
 »  ⊹˚• \`OWNERS\` •˚⊹
 
 ❀ ᥴ᥆mᥲᥒძ᥆s ძᥱ m᥆ძᥱrᥲᥴіóᥒ ᥡ ᥴ᥆ᥒ𝗍r᥆ᥣ ᥲ᥎ᥲᥒzᥲძ᥆ ⍴ᥲrᥲ ᥆ᥕᥒᥱrs.
+ᰔᩚ *#dev • #owners*
+> ✦ Abrir este menú de comandos de owner/mod.
 ᰔᩚ *#addowner • #delowner*
 > ✦ Agrega o elimina un número de la lista de owners.
 ᰔᩚ *#codigo*
@@ -97,6 +99,7 @@ let owner = `
 ᰔᩚ *#update*
 > ✦ Actualiza el Bot a la versión más reciente de GitHub.
 `.trim();
+
 
 await conn.sendMessage(m.chat, {
 text: owner,

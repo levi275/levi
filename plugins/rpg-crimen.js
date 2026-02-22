@@ -49,8 +49,8 @@ let handler = async (m, { conn, usedPrefix }) => {
   }
 
   if (roll < jailChance + successChance) {
-    // Ganancias reducidas (aprox 1500 a 4500)
-    let amount = Math.floor((Math.random() * 3000 + 1500) * job.crimeRewardMultiplier * (user.premium ? 1.18 : 1));
+    // Ganancias aumentadas (aprox 3000 a 7500)
+    let amount = Math.floor((Math.random() * 4500 + 3000) * job.crimeRewardMultiplier * (user.premium ? 1.18 : 1));
     user.coin = (user.coin || 0) + amount;
     cooldowns[senderId] = now;
 

@@ -1,3 +1,4 @@
+
 let handler = async (m, { conn }) => {
   const texto = `
 
@@ -49,6 +50,7 @@ let handler = async (m, { conn }) => {
 > ✦ Eliminar un personaje reclamado.
 ੈ₊˚༅༴╰────︶.︶ ⸙ ͛ ͎ ͛  ︶.︶ ੈੈ₊˚
   `.trim();
+
 
     await conn.sendMessage(
     m.chat,

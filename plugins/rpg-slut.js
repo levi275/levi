@@ -32,8 +32,8 @@ let handler = async (m, { conn, usedPrefix }) => {
   let jobEmoji = job.emoji;
 
   if (didWin) {
-    // Ganancias reducidas (aprox 1000 a 3500)
-    let amount = Math.floor((Math.random() * 2500 + 1000) * job.slutMultiplier * (user.premium ? 1.2 : 1));
+    // Ganancias aumentadas (aprox 2200 a 5700)
+    let amount = Math.floor((Math.random() * 3500 + 2200) * job.slutMultiplier * (user.premium ? 1.2 : 1));
     user.coin = (user.coin || 0) + amount;
 
     let phraseList = useGeneric ? frasesSlutGenericas.success : (frasesSlutPorTrabajo[job.key]?.success || frasesSlutGenericas.success);
