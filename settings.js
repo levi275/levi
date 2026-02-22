@@ -47,7 +47,7 @@ global.namebot = '꒰ 🥥 ꒱ؘ 𝙍𝙪𝙗𝙮-𝙃𝙤𝙨𝙝𝙞𝙣𝙤-�
 global.Rubysessions = 'RubySessions'
 global.jadi = 'RubyJadiBots' 
 global.RubyJadibts = true
-global.subbotlimitt = 25
+global.subbotlimitt = 22
 global.baileysSocketConfig = {
   connectTimeoutMs: 45000,
   keepAliveIntervalMs: 20000,
