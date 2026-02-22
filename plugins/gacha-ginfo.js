@@ -1,11 +1,14 @@
 import { promises as fs } from 'fs';
 
-import { cooldowns as rwCooldowns } from './gacha-rollwaifu.js';
-import { cooldowns as claimCooldowns } from './gacha-claim.js';
-import { cooldowns as voteCooldowns } from './gacha-vote.js';
-import { cooldowns as robCooldowns } from './gacha-robwaifu.js';
+import { isSameUserId } from '../lib/gacha-group.js';
 
 const charactersFilePath = './src/database/characters.json';
+
+const getCooldownMap = key => {
+  if (!global.gachaCooldowns || typeof global.gachaCooldowns !== 'object') return {};
+  const map = global.gachaCooldowns[key];
+  return map && typeof map === 'object' ? map : {};
+};
 
 function formatTime(ms) {
   if (!ms || ms <= 0) return 'Ahora.';
@@ -21,8 +24,14 @@ function getCooldownStatus(cooldowns, key, now) {
   return formatTime(remaining);
 }
 
+function normalizeUserId(userId) {
+  if (!userId) return userId;
+  if (userId.endsWith('@lid')) return `${userId.split('@')[0]}@s.whatsapp.net`;
+  return userId;
+}
+
 let handler = async (m, { conn }) => {
-  const userId = m.sender;
+  const userId = normalizeUserId(m.sender);
   const now = Date.now();
   const groupId = m.chat;
   let userName;
@@ -35,10 +44,10 @@ let handler = async (m, { conn }) => {
 
   try {
     const baseKey = `${groupId}:${userId}`;
-    const rwStatus = getCooldownStatus(rwCooldowns, baseKey, now);
-    const claimStatus = getCooldownStatus(claimCooldowns, baseKey, now);
-    const voteStatus = getCooldownStatus(voteCooldowns, baseKey, now);
-    const robStatus = getCooldownStatus(robCooldowns, baseKey, now);
+    const rwStatus = getCooldownStatus(getCooldownMap('rollwaifu'), baseKey, now);
+    const claimStatus = getCooldownStatus(getCooldownMap('claim'), baseKey, now);
+    const voteStatus = getCooldownStatus(getCooldownMap('vote'), baseKey, now);
+    const robStatus = getCooldownStatus(getCooldownMap('robwaifu'), baseKey, now);
 
     let allCharacters = [];
     try {
@@ -55,7 +64,7 @@ let handler = async (m, { conn }) => {
     } catch {
       harem = [];
     }
-    const userCharacters = harem.filter(c => c.groupId === groupId && c.userId === userId);
+    const userCharacters = harem.filter(c => c.groupId === groupId && isSameUserId(c.userId, userId));
     const claimedCount = userCharacters.length;
     const totalCharacters = allCharacters.length;
 
@@ -79,9 +88,9 @@ let handler = async (m, { conn }) => {
   }
 };
 
-handler.help = ['estado', 'status', 'cooldowns', 'cd'];
+handler.help = ['infogacha', 'ginfo', 'gachainfo', 'estado', 'status', 'cooldowns', 'cd'];
 handler.tags = ['info'];
-handler.command = ['infogacha', 'ginfo', 'gachainfo'];
+handler.command = ['infogacha', 'ginfo', 'gachainfo', 'estado', 'status', 'cooldowns', 'cd'];
 handler.group = true;
 
 export default handler;

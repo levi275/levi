@@ -3,6 +3,9 @@ import { loadCharacters, normalizeCharacterId } from '../lib/gacha-characters.js
 
 export const cooldowns = {}
 
+global.gachaCooldowns = global.gachaCooldowns || {}
+global.gachaCooldowns.rollwaifu = cooldowns
+
 global.activeRolls = global.activeRolls || {}
 
 function formatUrl(url) {
