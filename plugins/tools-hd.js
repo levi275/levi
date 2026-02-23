@@ -197,6 +197,7 @@ async function upscaleViaIloveimg(fileBuffer, fileName, scale) {
       lastError = error
     }
   }
+}
 
   throw new Error(`No fue posible procesar en iLoveIMG: ${lastError?.message || 'error desconocido'}`)
 }
