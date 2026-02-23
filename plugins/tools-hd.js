@@ -1,7 +1,7 @@
-import fetch from "node-fetch";
-import crypto from "crypto";
-import { FormData, Blob } from "formdata-node";
+import axios from "axios";
+import FormData from "form-data";
 import { fileTypeFromBuffer } from "file-type";
+import crypto from "crypto";
 
 const handler = async (m, { conn }) => {
   let q = m.quoted ? m.quoted : m;
@@ -15,34 +15,20 @@ const handler = async (m, { conn }) => {
   await m.react("⏳"); // Espera inicial
 
   try {
-    // Descarga de la imagen
+    // 1. Descarga de la imagen original
     let media = await q.download();
-
     if (!media) throw new Error("No se pudo descargar la imagen.");
 
-    // Subida a Catbox
-    let link = await catbox(media);
+    await conn.reply(m.chat, `✨ *Procesando tu imagen en HD...* (Esto puede tomar unos segundos)`, m);
 
-    if (!link || !link.startsWith("http")) {
-      throw new Error("Error al subir la imagen a Catbox.");
-    }
+    // 2. Procesamiento directo con iLoveIMG (Scraper integrado)
+    const randomName = `image_${crypto.randomBytes(3).toString("hex")}.jpg`;
+    const upscaledBuffer = await scrapeUpscaleFromFile(media, randomName, 2);
 
-    // Procesando con API upscale
-    let upscaleApi = `https://api.siputzx.my.id/api/iloveimg/upscale?image=${encodeURIComponent(link)}&scale=2`;
-    let res = await fetch(upscaleApi);
-    let data = await res.json();
-
-    if (!data.status || !data.result) {
-      throw new Error(data.message || "La API de upscale no devolvió un resultado válido.");
-    }
-
-    // Aviso de procesamiento exitoso
-    await conn.reply(m.chat, `✨ *Procesando tu imagen en HD...*`, m);
-
-    // Envío de imagen mejorada
+    // 3. Envío de imagen mejorada directamente como Buffer
     await conn.sendMessage(m.chat, {
-      image: { url: data.result },
-      caption: `✅ *Imagen mejorada con éxito* \n\n🔗 *Enlace HD:* ${data.result}`
+      image: upscaledBuffer,
+      caption: `✅ *Imagen mejorada con éxito*`
     }, { quoted: m });
 
     await m.react("✅"); // Reacción de éxito
@@ -62,23 +48,113 @@ handler.limit = true;
 
 export default handler;
 
-// ─── Funciones auxiliares ───
-async function catbox(content) {
-  const { ext, mime } = (await fileTypeFromBuffer(content)) || {};
-  const blob = new Blob([content.toArrayBuffer()], { type: mime });
-  const formData = new FormData();
-  const randomBytes = crypto.randomBytes(5).toString("hex");
-  formData.append("reqtype", "fileupload");
-  formData.append("fileToUpload", blob, randomBytes + "." + ext);
+// ─── Funciones internas (Scraper de iLoveIMG) ───
 
-  const response = await fetch("https://catbox.moe/user/api.php", {
-    method: "POST",
-    body: formData,
-    headers: {
-      "User-Agent":
-        "Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/44.0.2403.157 Safari/537.36",
-    },
-  });
+class UpscaleImageAPI {
+  constructor() {
+    this.api = null;
+    this.server = null;
+    this.taskId = null;
+    this.token = null;
+  }
 
-  return await response.text();
+  async getTaskId() {
+    try {
+      const { data: html } = await axios.get("https://www.iloveimg.com/upscale-image", {
+        headers: {
+          "User-Agent": "Mozilla/5.0 (Linux; Android 10; K) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/132.0.0.0 Mobile Safari/537.36",
+        },
+      });
+
+      const tokenMatches = html.match(/(ey[a-zA-Z0-9?%-_/]+)/g);
+      if (!tokenMatches || tokenMatches.length < 2) throw new Error("Token no encontrado en la web.");
+      this.token = tokenMatches[1];
+
+      const configMatch = html.match(/var ilovepdfConfig = ({.*?});/s);
+      if (!configMatch) throw new Error("Configuración del servidor no encontrada.");
+      
+      const configJson = JSON.parse(configMatch[1]);
+      const servers = configJson.servers;
+      if (!Array.isArray(servers) || servers.length === 0) throw new Error("La lista de servidores está vacía.");
+
+      this.server = servers[Math.floor(Math.random() * servers.length)];
+      this.taskId = html.match(/ilovepdfConfig\.taskId\s*=\s*['"](\w+)['"]/)?.[1];
+
+      this.api = axios.create({
+        baseURL: `https://${this.server}.iloveimg.com`,
+        headers: {
+          "Authorization": `Bearer ${this.token}`,
+          "User-Agent": "Mozilla/5.0 (Linux; Android 10; K) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/132.0.0.0 Mobile Safari/537.36",
+        },
+      });
+
+      if (!this.taskId) throw new Error("¡No se pudo obtener el ID de la tarea!");
+      return { taskId: this.taskId, server: this.server, token: this.token };
+    } catch (error) {
+      throw new Error(`Fallo al iniciar tarea: ${error.message}`);
+    }
+  }
+
+  async uploadFromFile(fileBuffer, fileName) {
+    if (!this.taskId || !this.api) throw new Error("Primero debes ejecutar getTaskId().");
+
+    try {
+      const fileType = await fileTypeFromBuffer(fileBuffer);
+      if (!fileType || !fileType.mime.startsWith("image/")) {
+        throw new Error("El archivo no es una imagen soportada.");
+      }
+
+      const form = new FormData();
+      form.append("name", fileName);
+      form.append("chunk", "0");
+      form.append("chunks", "1");
+      form.append("task", this.taskId);
+      form.append("preview", "1");
+      form.append("pdfinfo", "0");
+      form.append("pdfforms", "0");
+      form.append("pdfresetforms", "0");
+      form.append("v", "web.0");
+      form.append("file", fileBuffer, { filename: fileName, contentType: fileType.mime });
+
+      const response = await this.api.post("/v1/upload", form, {
+        headers: form.getHeaders(),
+      });
+      return response.data;
+    } catch (error) {
+      throw new Error(`Fallo al subir archivo: ${error.message}`);
+    }
+  }
+
+  async upscaleImage(serverFilename, scale = 2) {
+    if (!this.taskId || !this.api) throw new Error("Primero debes ejecutar getTaskId().");
+
+    try {
+      const form = new FormData();
+      form.append("task", this.taskId);
+      form.append("server_filename", serverFilename);
+      form.append("scale", scale.toString());
+
+      const response = await this.api.post("/v1/upscale", form, {
+        headers: form.getHeaders(),
+        responseType: "arraybuffer", // Importante para recibir el buffer de la imagen
+      });
+
+      return response.data;
+    } catch (error) {
+      throw new Error(`Fallo al aplicar el Upscale: ${error.message}`);
+    }
+  }
+}
+
+async function scrapeUpscaleFromFile(fileBuffer, fileName, scale) {
+  const upscaler = new UpscaleImageAPI();
+  await upscaler.getTaskId();
+
+  const uploadResult = await upscaler.uploadFromFile(fileBuffer, fileName);
+  if (!uploadResult || !uploadResult.server_filename) {
+    throw new Error("No se pudo subir la imagen al servidor de iLoveIMG.");
+  }
+
+  const imageBuffer = await upscaler.upscaleImage(uploadResult.server_filename, scale);
+  return imageBuffer;
 }
