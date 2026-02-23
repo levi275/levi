@@ -1,24 +1,5 @@
-import { promises as fs } from 'fs';
 import { loadHarem, saveHarem } from '../lib/gacha-group.js';
-
-const charactersFilePath = './src/database/characters.json';
-
-async function loadCharacters() {
-  try {
-    const data = await fs.readFile(charactersFilePath, 'utf-8');
-    return JSON.parse(data);
-  } catch (error) {
-    throw new Error('No se pudo cargar el archivo characters.json.');
-  }
-}
-
-async function saveCharacters(characters) {
-  try {
-    await fs.writeFile(charactersFilePath, JSON.stringify(characters, null, 2), 'utf-8');
-  } catch (error) {
-    throw new Error('No se pudo guardar el archivo characters.json.');
-  }
-}
+import { loadCharacters, findCharacterByName } from '../lib/gacha-characters.js';
 
 let handler = async (m, { conn, text }) => {
   const userId = m.sender;
@@ -30,9 +11,9 @@ let handler = async (m, { conn, text }) => {
 
   try {
     const characters = await loadCharacters();
-    const keyword = text.trim().toLowerCase();
+    const keyword = text.trim();
 
-    const character = characters.find(c => c.name.toLowerCase().includes(keyword));
+    const character = findCharacterByName(characters, keyword);
     if (!character) return m.reply(`El personaje *${text}* no existe.`);
 
     const harem = await loadHarem();

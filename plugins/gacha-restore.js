@@ -4,29 +4,12 @@
 //  - #addwaifus <nombre> @usuario
 //  - Responder a un mensaje que contiene la lista mostrada y ejecutar #addwaifus (entregará todos los personajes listados)
 // No requiere permisos de administrador ni owner.
-import { promises as fs } from 'fs';
-import path from 'path';
 import {
   loadHarem,
   saveHarem,
   addOrUpdateClaim
 } from '../lib/gacha-group.js';
-
-const charactersFilePath = path.join(process.cwd(), 'src', 'database', 'characters.json');
-
-async function loadCharacters() {
-  try {
-    const raw = await fs.readFile(charactersFilePath, 'utf-8');
-    const parsed = JSON.parse(raw);
-    return Array.isArray(parsed) ? parsed : [];
-  } catch {
-    return [];
-  }
-}
-
-function normalize(s = '') {
-  return String(s).toLowerCase().normalize('NFD').replace(/[\u0300-\u036f]/g, '').replace(/[^a-z0-9\s]/g, ' ').trim().replace(/\s+/g, ' ');
-}
+import { loadCharacters, findCharacterByName, findCharacterById } from '../lib/gacha-characters.js';
 
 function extractNamesFromList(text) {
   const names = [];
@@ -108,16 +91,12 @@ let handler = async (m, { conn, args, participants }) => {
       return m.reply('✘ No encontré nombres de personajes. Usa: #addwaifus <nombre> o responde a un mensaje con la lista.');
     }
 
-    // mapear nombres a personajes (por nombre normalizado, id o búsqueda por inclusión)
+    // mapear nombres a personajes (ID exacto o búsqueda robusta por nombre)
     const found = [];
     const notFound = [];
     for (const nm of namesToGive) {
-      const norm = normalize(nm);
-      let ch = characters.find(c => normalize(c.name) === norm || String(c.id) === nm);
-      if (!ch) {
-        // búsqueda por inclusión; priorizar nombres que incluyan la query
-        ch = characters.find(c => normalize(c.name).includes(norm) || norm.includes(normalize(c.name)));
-      }
+      const trimmed = String(nm || '').trim();
+      const ch = findCharacterById(characters, trimmed) || findCharacterByName(characters, trimmed);
       if (ch) {
         found.push(ch);
       } else {
