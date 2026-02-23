@@ -1,16 +1,15 @@
 import Jimp from 'jimp'
 import { sticker } from '../lib/sticker.js'
 
-const CANVAS_SIZE = 512
-const MAX_TEXT_LENGTH = 220
-const PADDING_X = 26
-const PADDING_Y = 24
-const MIN_GAP = 14
+const FINAL_SIZE = 512
+const WORK_SIZE = 1024
+const MAX_TEXT_LENGTH = 260
+const BG_COLOR = '#F2F2F2'
 
 const FONT_CANDIDATES = [
+  Jimp.FONT_SANS_128_BLACK,
   Jimp.FONT_SANS_64_BLACK,
   Jimp.FONT_SANS_32_BLACK,
-  Jimp.FONT_SANS_16_BLACK,
 ]
 
 function normalizeText(text = '') {
@@ -25,58 +24,79 @@ function tokenize(text = '') {
   return text.split(' ').map((word) => word.trim()).filter(Boolean)
 }
 
-function lineWidth(font, words = [], minGap = MIN_GAP) {
-  if (!words.length) return 0
-  const wordsWidth = words.reduce((sum, word) => sum + Jimp.measureText(font, word), 0)
-  const gapsWidth = Math.max(0, words.length - 1) * minGap
-  return wordsWidth + gapsWidth
+function makeChunks(font, words = [], maxChunkWidth = 360) {
+  const chunks = []
+  let i = 0
+
+  while (i < words.length) {
+    const w1 = words[i]
+    const w2 = words[i + 1]
+
+    if (w2) {
+      const joined = `${w1} ${w2}`
+      if (Jimp.measureText(font, joined) <= maxChunkWidth) {
+        chunks.push(joined)
+        i += 2
+        continue
+      }
+    }
+
+    chunks.push(w1)
+    i += 1
+  }
+
+  return chunks
 }
 
-function wrapWords(font, words = [], maxWidth) {
-  const lines = []
-  let current = []
+function buildRows(chunks = []) {
+  const rows = []
+  let current = { left: '', right: '' }
 
-  for (const word of words) {
-    if (!current.length) {
-      current.push(word)
+  for (let i = 0; i < chunks.length; i++) {
+    const chunk = chunks[i]
+
+    // Cada cierto patrón, forzamos palabra/frase centrada para imitar ejemplos.
+    if (i > 0 && i % 7 === 4 && !current.left && !current.right) {
+      rows.push({ center: chunk })
       continue
     }
 
-    const tryLine = [...current, word]
-    if (lineWidth(font, tryLine) <= maxWidth) {
-      current = tryLine
-    } else {
-      lines.push(current)
-      current = [word]
+    if (!current.left) {
+      current.left = chunk
+      continue
+    }
+
+    if (!current.right) {
+      current.right = chunk
+      rows.push(current)
+      current = { left: '', right: '' }
     }
   }
 
-  if (current.length) lines.push(current)
-  return lines
+  if (current.left || current.right) rows.push(current)
+  return rows
 }
 
-async function buildLayout(words = []) {
-  const maxWidth = CANVAS_SIZE - PADDING_X * 2
-  const maxHeight = CANVAS_SIZE - PADDING_Y * 2
-
+async function chooseLayout(words = []) {
   for (const fontPath of FONT_CANDIDATES) {
     const font = await Jimp.loadFont(fontPath)
-    const lines = wrapWords(font, words, maxWidth)
-    const lineHeight = Jimp.measureTextHeight(font, 'Ay', maxWidth) + 8
-    const contentHeight = lines.length * lineHeight
+    const chunks = makeChunks(font, words, 390)
+    const rows = buildRows(chunks)
 
-    const fitsHeight = contentHeight <= maxHeight
-    const fitsWidth = lines.every((line) => lineWidth(font, line) <= maxWidth)
+    const lineHeight = Jimp.measureTextHeight(font, 'Ay', WORK_SIZE) + 26
+    const topPad = 70
+    const bottomPad = 60
+    const contentHeight = rows.length * lineHeight
 
-    if (fitsHeight && fitsWidth) {
-      return { font, lines, lineHeight }
+    if (contentHeight <= WORK_SIZE - topPad - bottomPad) {
+      return { font, rows, lineHeight, topPad }
     }
   }
 
-  const fallbackFont = await Jimp.loadFont(Jimp.FONT_SANS_16_BLACK)
-  const fallbackLines = wrapWords(fallbackFont, words, maxWidth)
-  const fallbackLineHeight = Jimp.measureTextHeight(fallbackFont, 'Ay', maxWidth) + 6
-  return { font: fallbackFont, lines: fallbackLines.slice(0, 14), lineHeight: fallbackLineHeight }
+  const fallbackFont = await Jimp.loadFont(Jimp.FONT_SANS_32_BLACK)
+  const fallbackRows = buildRows(makeChunks(fallbackFont, words, 370))
+  const fallbackLineHeight = Jimp.measureTextHeight(fallbackFont, 'Ay', WORK_SIZE) + 20
+  return { font: fallbackFont, rows: fallbackRows.slice(0, 18), lineHeight: fallbackLineHeight, topPad: 50 }
 }
 
 async function renderBratImage(text = '') {
@@ -86,32 +106,71 @@ async function renderBratImage(text = '') {
   const words = tokenize(cleanText)
   if (!words.length) throw new Error('No se encontraron palabras para renderizar.')
 
-  const image = new Jimp(CANVAS_SIZE, CANVAS_SIZE, '#FFFFFF')
-  const { font, lines, lineHeight } = await buildLayout(words)
+  const { font, rows, lineHeight, topPad } = await chooseLayout(words)
 
-  const contentHeight = lines.length * lineHeight
-  let y = Math.max(PADDING_Y, Math.floor((CANVAS_SIZE - contentHeight) / 2))
+  const image = new Jimp(WORK_SIZE, WORK_SIZE, BG_COLOR)
+  const shadow = new Jimp(WORK_SIZE, WORK_SIZE, 0x00000000)
+  const textLayer = new Jimp(WORK_SIZE, WORK_SIZE, 0x00000000)
 
-  const availableWidth = CANVAS_SIZE - PADDING_X * 2
+  const leftX = 70
+  const rightX = 590
+  const centerBoxX = 190
+  const centerBoxW = 640
 
-  for (const line of lines) {
-    const widths = line.map((word) => Jimp.measureText(font, word))
-    const totalWordsWidth = widths.reduce((a, b) => a + b, 0)
+  const contentHeight = rows.length * lineHeight
+  let y = Math.max(topPad, Math.floor((WORK_SIZE - contentHeight) / 2))
 
-    let gap = MIN_GAP
-    if (line.length > 1) {
-      const free = availableWidth - totalWordsWidth
-      gap = Math.max(MIN_GAP, Math.floor(free / (line.length - 1)))
-    }
+  for (const row of rows) {
+    if (row.center) {
+      shadow.print(
+        font,
+        centerBoxX + 6,
+        y + 6,
+        {
+          text: row.center,
+          alignmentX: Jimp.HORIZONTAL_ALIGN_CENTER,
+          alignmentY: Jimp.VERTICAL_ALIGN_TOP,
+        },
+        centerBoxW,
+        lineHeight,
+      )
 
-    let x = PADDING_X
-    for (let i = 0; i < line.length; i++) {
-      image.print(font, x, y, line[i])
-      x += widths[i] + gap
+      textLayer.print(
+        font,
+        centerBoxX,
+        y,
+        {
+          text: row.center,
+          alignmentX: Jimp.HORIZONTAL_ALIGN_CENTER,
+          alignmentY: Jimp.VERTICAL_ALIGN_TOP,
+        },
+        centerBoxW,
+        lineHeight,
+      )
+    } else {
+      if (row.left) {
+        shadow.print(font, leftX + 6, y + 6, row.left)
+        textLayer.print(font, leftX, y, row.left)
+      }
+
+      if (row.right) {
+        shadow.print(font, rightX + 6, y + 6, row.right)
+        textLayer.print(font, rightX, y, row.right)
+      }
     }
 
     y += lineHeight
   }
+
+  // Difuminado suave estilo ejemplo
+  shadow.blur(3).opacity(0.25)
+  textLayer.blur(1)
+
+  image.composite(shadow, 0, 0)
+  image.composite(textLayer, 0, 0)
+
+  // Reducción para suavizar bordes y acercar estética del template compartido.
+  image.resize(FINAL_SIZE, FINAL_SIZE, Jimp.RESIZE_BILINEAR)
 
   return image.getBufferAsync(Jimp.MIME_PNG)
 }
