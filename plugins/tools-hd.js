@@ -8,15 +8,15 @@ let handler = async (m, { conn, usedPrefix, command }) => {
     let mime = (quoted.msg || quoted).mimetype || ''
 
     if (!/image/.test(mime)) {
-      return m.reply(`ৎ໋˓ִ࣪🫖⃘᩠໋݊✿꯭ 𝐑𝐞𝐬𝐩𝐨𝐧𝐝𝐞 𝐨 𝐞𝐧𝐯𝐢́𝐚 𝐮𝐧𝐚 𝐢𝐦𝐚𝐠𝐞𝐧 𝐜𝐨𝐧 𝐞𝐥 𝐜𝐨𝐦𝐚𝐧𝐝𝐨: *${usedPrefix + command}* ✿⃘ ᩠໋݊🍩⃘֟፝͠ೀ`)
+      return m.reply(`ৎ໋˓ִ࣪🫖⃘᩠໋݊✿꯭ 𝐑𝐞𝐬𝐩𝐨𝐧𝐝𝐞 𝐨 𝐞𝐧𝐯𝐢́𝐚 𝐮𝐧𝐚 𝐢𝐦𝐚𝐠𝐞𝐧 𝐜𝐨𝐧 𝐞𝐥 𝐜𝐨𝐦𝐚𝐧𝐝𝐨: *${usedPrefix + command}* ♪(๑ᴖ◡ᴖ๑)♪`)
     }
 
-    m.reply('𖹭ᩙ᤻ⵗⵗ ᦋ꯱⏝ᩙ﹒᧔⏳᧓﹒ᩙ⏝꯱ᦋ ⵗⵗ𖹭ᩙ᤻\n\n̊͘ ໋˓͙ ꒰𑂴ᩧ✨ᩧ̷̸꒱ᮬ᩠ִ࣪ ๑⃘໋യ꯭፝֟͠യᩥ᩠꯴ ͢.ᩡᩡ 𝐏𝐫𝐨𝐜𝐞𝐬𝐚𝐧𝐝𝐨 𝐢𝐦𝐚𝐠𝐞𝐧, 𝐩𝐨𝐫 𝐟𝐚𝐯𝐨𝐫 𝐞𝐬𝐩𝐞𝐫𝐚 𝐮𝐧 𝐦𝐨𝐦𝐞𝐧𝐭𝐨...')
+    m.reply(' ͢.ᩡᩡ 𝐏𝐫𝐨𝐜𝐞𝐬𝐚𝐧𝐝𝐨 𝐢𝐦𝐚𝐠𝐞𝐧, 𝐩𝐨𝐫 𝐟𝐚𝐯𝐨𝐫 𝐞𝐬𝐩𝐞𝐫𝐚 𝐮𝐧 𝐦𝐨𝐦𝐞𝐧𝐭𝐨...')
 
     let media = await quoted.download()
     let result = await hdr(media, 4)
 
-    let decoCaption = `ׅ┉᩿ׄ═ׅ֟𔘓𑂴᳝ׅׄ━ׄ─໋̤𖡻ְְׅׅ࣪࣪֘ᰰ ┉꒰꯭ᩘִ໋ׅׄ࣪🎀໋̤ׄ֘꒱┉𖡻̤ᰰְ᳝─໋᩿̤࣪━𔘓᮫ְִׅ֟ׄ݊𑂴═ְ᩿ׄ࣪┉ׅ\n\n\`ৎ˓ִ໋࣪🍒⃚̸̷᩠໋֟፝✿ ¡𝐀𝐪𝐮𝐢́ 𝐭𝐢𝐞𝐧𝐞𝐬 𝐭𝐮 𝐫𝐞𝐬𝐮𝐥𝐭𝐚𝐝𝐨! ✨\`\n\nׅ┉᩿ׄ═ׅ֟𔘓𑂴᳝ׅׄ━ׄ─໋̤𖡻ְְׅׅ࣪࣪֘ᰰ ┉꒰꯭ᩘִ໋ׅׄ࣪🎀໋̤ׄ֘꒱┉𖡻̤ᰰְ᳝─໋᩿̤࣪━𔘓᮫ְִׅ֟ׄ݊𑂴═ְ᩿ׄ࣪┉ׅ`
+    let decoCaption = `\`ৎ˓ִ໋࣪🍒⃚̸̷᩠໋֟፝✿ ¡𝐀𝐪𝐮𝐢́ 𝐭𝐢𝐞𝐧𝐞𝐬 𝐭𝐮 𝐫𝐞𝐬𝐮𝐥𝐭𝐚𝐝𝐨! ✨`\`
 
     await conn.sendFile(m.chat, result, 'hdr.png', decoCaption, m)
 
