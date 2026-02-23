@@ -142,7 +142,6 @@ let handler = async (m, { conn, text }) => {
 handler.help = ['mediafire']
 handler.tags = ['descargas']
 handler.command = ['mf', 'mediafire']
-handler.coin = 10
 handler.register = true
 handler.group = true
 
