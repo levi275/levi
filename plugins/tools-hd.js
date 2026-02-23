@@ -62,7 +62,17 @@ class UpscaleImageAPI {
     try {
       const { data: html } = await axios.get("https://www.iloveimg.com/upscale-image", {
         headers: {
+          "Accept": "*/*",
+          "Accept-Language": "id-ID,id;q=0.9,en-US;q=0.8,en;q=0.7",
+          "Connection": "keep-alive",
           "User-Agent": "Mozilla/5.0 (Linux; Android 10; K) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/132.0.0.0 Mobile Safari/537.36",
+          "sec-ch-ua": '"Not A(Brand";v="8", "Chromium";v="132"',
+          "sec-ch-ua-mobile": "?1",
+          "sec-ch-ua-platform": '"Android"',
+          "Sec-Fetch-Dest": "document",
+          "Sec-Fetch-Mode": "navigate",
+          "Sec-Fetch-Site": "none",
+          "Sec-Fetch-User": "?1",
         },
       });
 
@@ -83,8 +93,19 @@ class UpscaleImageAPI {
       this.api = axios.create({
         baseURL: `https://${this.server}.iloveimg.com`,
         headers: {
+          "Accept": "*/*",
+          "Accept-Language": "id-ID,id;q=0.9,en-US;q=0.8,en;q=0.7",
           "Authorization": `Bearer ${this.token}`,
+          "Connection": "keep-alive",
+          "Origin": "https://www.iloveimg.com",
+          "Referer": "https://www.iloveimg.com/",
+          "Sec-Fetch-Dest": "empty",
+          "Sec-Fetch-Mode": "cors",
+          "Sec-Fetch-Site": "same-site",
           "User-Agent": "Mozilla/5.0 (Linux; Android 10; K) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/132.0.0.0 Mobile Safari/537.36",
+          "sec-ch-ua": '"Not A(Brand";v="8", "Chromium";v="132"',
+          "sec-ch-ua-mobile": "?1",
+          "sec-ch-ua-platform": '"Android"',
         },
       });
 
@@ -136,12 +157,19 @@ class UpscaleImageAPI {
 
       const response = await this.api.post("/v1/upscale", form, {
         headers: form.getHeaders(),
-        responseType: "arraybuffer", // Importante para recibir el buffer de la imagen
+        responseType: "arraybuffer", 
       });
 
       return response.data;
     } catch (error) {
-      throw new Error(`Fallo al aplicar el Upscale: ${error.message}`);
+      // Intentamos extraer el error real que envía el servidor en lugar del código 500 genérico
+      let detalleError = error.message;
+      if (error.response && error.response.data) {
+        try {
+          detalleError = Buffer.from(error.response.data).toString('utf-8');
+        } catch (e) { }
+      }
+      throw new Error(`Request falló. Detalle del servidor: ${detalleError}`);
     }
   }
 }
@@ -150,11 +178,4 @@ async function scrapeUpscaleFromFile(fileBuffer, fileName, scale) {
   const upscaler = new UpscaleImageAPI();
   await upscaler.getTaskId();
 
-  const uploadResult = await upscaler.uploadFromFile(fileBuffer, fileName);
-  if (!uploadResult || !uploadResult.server_filename) {
-    throw new Error("No se pudo subir la imagen al servidor de iLoveIMG.");
-  }
-
-  const imageBuffer = await upscaler.upscaleImage(uploadResult.server_filename, scale);
-  return imageBuffer;
-}
+  const uploadResult = await upscaler.uploadFromFile(fileBuffer, fileName
