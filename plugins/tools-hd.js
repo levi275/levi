@@ -1,89 +1,130 @@
-import Jimp from 'jimp'
+import axios from 'axios'
+import * as cheerio from 'cheerio'
+import FormData from 'form-data'
 
-const MAX_INPUT_PIXELS = 18_000_000 // evita reventar RAM con imágenes enormes
-
-const parseScaleFromText = (text) => {
-  const n = Number((text || '').trim())
-  if (n === 4) return 4
-  return 2
-}
-
-const validateImageDimensions = (img) => {
-  const pixels = img.bitmap.width * img.bitmap.height
-  if (pixels > MAX_INPUT_PIXELS) {
-    throw new Error('La imagen es demasiado grande para procesarla de forma segura.')
-  }
-}
-
-const enhanceImageLocally = async (buffer, scale = 2) => {
-  const image = await Jimp.read(buffer)
-  validateImageDimensions(image)
-
-  const nextWidth = Math.max(1, Math.floor(image.bitmap.width * scale))
-  const nextHeight = Math.max(1, Math.floor(image.bitmap.height * scale))
-
-  // Pipeline local (sin proveedores externos): upscale + limpieza + nitidez
-  const output = image
-    .clone()
-    .resize(nextWidth, nextHeight, Jimp.RESIZE_BICUBIC)
-    .normalize()
-    .contrast(0.1)
-    .quality(95)
-
-  // Sharpen suave para recuperar detalles tras interpolación
-  output.convolute([
-    [0, -1, 0],
-    [-1, 5, -1],
-    [0, -1, 0],
-  ])
-
-  return output.getBufferAsync(Jimp.MIME_JPEG)
-}
-
-const handler = async (m, { conn, text }) => {
-  const q = m.quoted ? m.quoted : m
-  const mime = (q.msg || q).mimetype || ''
-
-  if (!mime || !/image\/(png|jpe?g|webp)/i.test(mime)) {
-    return conn.reply(m.chat, '❌ Responde a una imagen válida (png, jpg o webp).', m)
-  }
-
-  await m.react('⏳')
-
+let handler = async (m, { conn, usedPrefix, command }) => {
   try {
-    const media = await q.download()
-    if (!media) throw new Error('No se pudo descargar la imagen.')
+    let quoted = m.quoted ? m.quoted : m
+    let mime = (quoted.msg || quoted).mimetype || ''
 
-    const scale = parseScaleFromText(text)
-    await conn.reply(m.chat, `✨ *Mejorando imagen en HD (${scale}x local)...*`, m)
+    if (!/image/.test(mime)) {
+      return m.reply(`Send/Reply to an image with caption ${usedPrefix + command}`)
+    }
 
-    const upscaledBuffer = await enhanceImageLocally(media, scale)
+    m.reply('⏳ Processing image, please wait...')
 
-    await conn.sendMessage(
-      m.chat,
-      {
-        image: upscaledBuffer,
-        caption: `✅ *Imagen mejorada con éxito (${scale}x)*\n🛠️ Proveedor: *procesamiento local*`,
-      },
-      { quoted: m },
-    )
+    let media = await quoted.download()
+    let result = await hdr(media, 4)
 
-    await m.react('✅')
-  } catch (error) {
-    console.error('[tools-hd] Error:', error)
-    await m.react('❌')
-    return conn.reply(
-      m.chat,
-      `❌ *Error al procesar la imagen:*\n\`\`\`${error?.message || 'Error desconocido'}\`\`\``,
-      m,
-    )
+    await conn.sendFile(m.chat, result, 'hdr.png', '✅ Here is the result', m)
+
+  } catch (err) {
+    console.log(err)
+    m.reply('❌ Failed to process image.')
   }
 }
 
-handler.help = ['hd', 'upscale']
-handler.tags = ['herramientas']
-handler.command = ['hd', 'upscale', 'mejorarimagen']
-handler.register = true
-handler.limit = true
+handler.help = ['upscale-image']
+handler.tags = ['editor']
+handler.command = /^(upscale-image)$/i
+handler.premium = false
 
 export default handler
+
+
+// =============================
+// Get CSRF + Token
+// =============================
+async function getToken() {
+  try {
+    const html = await axios.get('https://www.iloveimg.com/upscale-image')
+    const $ = cheerio.load(html.data)
+
+    const script = $('script')
+      .filter((i, el) => $(el).html()?.includes('ilovepdfConfig ='))
+      .html()
+
+    const jsonS = script.split('ilovepdfConfig = ')[1].split(';')[0]
+    const json = JSON.parse(jsonS)
+
+    const csrf = $('meta[name="csrf-token"]').attr('content')
+
+    return { token: json.token, csrf }
+  } catch (err) {
+    throw new Error('Token Error: ' + err.message)
+  }
+}
+
+
+// =============================
+// Upload Image
+// =============================
+async function uploadImage(server, headers, buffer, task) {
+  const form = new FormData()
+
+  form.append('name', 'image.jpg')
+  form.append('chunk', '0')
+  form.append('chunks', '1')
+  form.append('task', task)
+  form.append('preview', '1')
+  form.append('file', buffer, 'image.jpg')
+
+  const res = await axios.post(
+    `https://${server}.iloveimg.com/v1/upload`,
+    form,
+    {
+      headers: {
+        ...headers,
+        ...form.getHeaders(),
+      },
+    }
+  )
+
+  return res.data
+}
+
+
+// =============================
+// HDR Upscale Function
+// =============================
+async function hdr(buffer, scale = 4) {
+  const { token, csrf } = await getToken()
+
+  const servers = [
+    'api1g','api2g','api3g','api8g','api9g','api10g','api11g',
+    'api12g','api13g','api14g','api15g','api16g','api17g',
+    'api18g','api19g','api20g','api21g','api22g','api24g','api25g'
+  ]
+
+  const server = servers[Math.floor(Math.random() * servers.length)]
+
+  const task = 'r68zl88mq72xq94j2d5p66bn2z9lrbx20njsbw2qsAvgmzr11lvfhAx9kl87pp6yqgx7c8vg7sfbqnrr42qb16v0gj8jl5s0kq1kgp26mdyjjspd8c5A2wk8b4Adbm6vf5tpwbqlqdr8A9tfn7vbqvy28ylphlxdl379psxpd8r70nzs3sk1'
+
+  const headers = {
+    Authorization: 'Bearer ' + token,
+    Origin: 'https://www.iloveimg.com',
+    Cookie: '_csrf=' + csrf,
+    'User-Agent': 'Mozilla/5.0'
+  }
+
+  const upload = await uploadImage(server, headers, buffer, task)
+
+  const form = new FormData()
+  form.append('task', task)
+  form.append('server_filename', upload.server_filename)
+  form.append('scale', scale)
+
+  const res = await axios.post(
+    `https://${server}.iloveimg.com/v1/upscale`,
+    form,
+    {
+      headers: {
+        ...headers,
+        ...form.getHeaders(),
+      },
+      responseType: 'arraybuffer',
+    }
+  )
+
+  return res.data
+}
