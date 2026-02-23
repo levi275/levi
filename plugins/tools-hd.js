@@ -3,52 +3,82 @@ import FormData from "form-data";
 import { fileTypeFromBuffer } from "file-type";
 import crypto from "crypto";
 
-const handler = async (m, { conn }) => {
-  let q = m.quoted ? m.quoted : m;
-  let mime = (q.msg || q).mimetype || '';
+const ILOVEIMG_PAGE_URL = "https://www.iloveimg.com/upscale-image";
 
-  // Validación de archivo
-  if (!mime || !/image\/(png|jpe?g)/.test(mime)) {
-    return conn.reply(m.chat, `❌ Por favor, responde a una *imagen válida* (png o jpg).`, m);
+const sleep = (ms) => new Promise((resolve) => setTimeout(resolve, ms));
+
+const findFirstMatch = (content, patterns) => {
+  for (const pattern of patterns) {
+    const match = content.match(pattern);
+    if (match?.[1]) return match[1];
   }
 
-  await m.react("⏳"); // Espera inicial
+  return null;
+};
+
+const parseServers = (rawServers) => {
+  if (!rawServers) return [];
+
+  if (Array.isArray(rawServers)) return rawServers.filter(Boolean);
+
+  if (typeof rawServers === "string") {
+    return rawServers
+      .split(",")
+      .map((s) => s.trim().replaceAll('"', "").replaceAll("'", ""))
+      .filter(Boolean);
+  }
+
+  return [];
+};
+
+const handler = async (m, { conn }) => {
+  const q = m.quoted ? m.quoted : m;
+  const mime = (q.msg || q).mimetype || "";
+
+  if (!mime || !/image\/(png|jpe?g|webp)/i.test(mime)) {
+    return conn.reply(m.chat, "❌ Responde a una imagen válida (png, jpg o webp).", m);
+  }
+
+  await m.react("⏳");
 
   try {
-    // 1. Descarga de la imagen original
-    let media = await q.download();
+    const media = await q.download();
     if (!media) throw new Error("No se pudo descargar la imagen.");
 
-    await conn.reply(m.chat, `✨ *Procesando tu imagen en HD...* (Esto puede tomar unos segundos)`, m);
+    await conn.reply(m.chat, "✨ *Procesando tu imagen en HD...* (puede tardar unos segundos)", m);
 
-    // 2. Procesamiento directo con iLoveIMG (Scraper integrado)
     const randomName = `image_${crypto.randomBytes(3).toString("hex")}.jpg`;
     const upscaledBuffer = await scrapeUpscaleFromFile(media, randomName, 2);
 
-    // 3. Envío de imagen mejorada directamente como Buffer
-    await conn.sendMessage(m.chat, {
-      image: upscaledBuffer,
-      caption: `✅ *Imagen mejorada con éxito*`
-    }, { quoted: m });
+    await conn.sendMessage(
+      m.chat,
+      {
+        image: upscaledBuffer,
+        caption: "✅ *Imagen mejorada con éxito*",
+      },
+      { quoted: m },
+    );
 
-    await m.react("✅"); // Reacción de éxito
-
-  } catch (e) {
-    console.error(e);
+    await m.react("✅");
+  } catch (error) {
+    console.error("[tools-hd] Error:", error);
     await m.react("❌");
-    return conn.reply(m.chat, `❌ *Error al procesar la imagen:*\n\`\`\`${e.message}\`\`\``, m);
+    return conn.reply(
+      m.chat,
+      `❌ *Error al procesar la imagen:*\n\
+\`\`\`${error?.message || "Error desconocido"}\`\`\``,
+      m,
+    );
   }
 };
 
-handler.help = ['hd', 'upscale'];
-handler.tags = ['herramientas'];
-handler.command = ['hd', 'upscale', 'mejorarimagen']; 
+handler.help = ["hd", "upscale"];
+handler.tags = ["herramientas"];
+handler.command = ["hd", "upscale", "mejorarimagen"];
 handler.register = true;
 handler.limit = true;
 
 export default handler;
-
-// ─── Funciones internas (Scraper de iLoveIMG) ───
 
 class UpscaleImageAPI {
   constructor() {
@@ -60,56 +90,51 @@ class UpscaleImageAPI {
 
   async getTaskId() {
     try {
-      const { data: html } = await axios.get("https://www.iloveimg.com/upscale-image", {
+      const { data: html } = await axios.get(ILOVEIMG_PAGE_URL, {
         headers: {
-          "Accept": "*/*",
-          "Accept-Language": "id-ID,id;q=0.9,en-US;q=0.8,en;q=0.7",
-          "Connection": "keep-alive",
-          "User-Agent": "Mozilla/5.0 (Linux; Android 10; K) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/132.0.0.0 Mobile Safari/537.36",
-          "sec-ch-ua": '"Not A(Brand";v="8", "Chromium";v="132"',
-          "sec-ch-ua-mobile": "?1",
-          "sec-ch-ua-platform": '"Android"',
-          "Sec-Fetch-Dest": "document",
-          "Sec-Fetch-Mode": "navigate",
-          "Sec-Fetch-Site": "none",
-          "Sec-Fetch-User": "?1",
+          Accept: "text/html,application/xhtml+xml,application/xml;q=0.9,*/*;q=0.8",
+          "User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/132.0.0.0 Safari/537.36",
         },
+        timeout: 20000,
       });
 
-      const tokenMatches = html.match(/(ey[a-zA-Z0-9?%-_/]+)/g);
-      if (!tokenMatches || tokenMatches.length < 2) throw new Error("Token no encontrado en la web.");
-      this.token = tokenMatches[1];
+      this.token = findFirstMatch(html, [
+        /"token":"([^"]+)"/,
+        /token\s*[:=]\s*["']([^"']+)["']/,
+        /(ey[a-zA-Z0-9?%\-_/]+)/,
+      ]);
 
-      const configMatch = html.match(/var ilovepdfConfig = ({.*?});/s);
-      if (!configMatch) throw new Error("Configuración del servidor no encontrada.");
-      
-      const configJson = JSON.parse(configMatch[1]);
-      const servers = configJson.servers;
-      if (!Array.isArray(servers) || servers.length === 0) throw new Error("La lista de servidores está vacía.");
+      this.taskId = findFirstMatch(html, [
+        /"taskId":"([^"]+)"/,
+        /taskId\s*[:=]\s*["']([^"']+)["']/,
+        /ilovepdfConfig\.taskId\s*=\s*["']([^"']+)["']/, // fallback viejo
+      ]);
 
+      const serversRaw = findFirstMatch(html, [
+        /"servers":\[([^\]]+)\]/,
+        /servers\s*[:=]\s*\[([^\]]+)\]/,
+      ]);
+
+      const servers = parseServers(serversRaw);
+
+      if (!this.token) throw new Error("Token no encontrado.");
+      if (!this.taskId) throw new Error("Task ID no encontrado.");
+
+      if (!servers.length) throw new Error("Lista de servidores vacía.");
       this.server = servers[Math.floor(Math.random() * servers.length)];
-      this.taskId = html.match(/ilovepdfConfig\.taskId\s*=\s*['"](\w+)['"]/)?.[1];
 
       this.api = axios.create({
         baseURL: `https://${this.server}.iloveimg.com`,
         headers: {
-          "Accept": "*/*",
-          "Accept-Language": "id-ID,id;q=0.9,en-US;q=0.8,en;q=0.7",
-          "Authorization": `Bearer ${this.token}`,
-          "Connection": "keep-alive",
-          "Origin": "https://www.iloveimg.com",
-          "Referer": "https://www.iloveimg.com/",
-          "Sec-Fetch-Dest": "empty",
-          "Sec-Fetch-Mode": "cors",
-          "Sec-Fetch-Site": "same-site",
-          "User-Agent": "Mozilla/5.0 (Linux; Android 10; K) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/132.0.0.0 Mobile Safari/537.36",
-          "sec-ch-ua": '"Not A(Brand";v="8", "Chromium";v="132"',
-          "sec-ch-ua-mobile": "?1",
-          "sec-ch-ua-platform": '"Android"',
+          Accept: "application/json, text/plain, */*",
+          Authorization: `Bearer ${this.token}`,
+          Origin: "https://www.iloveimg.com",
+          Referer: "https://www.iloveimg.com/",
+          "User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/132.0.0.0 Safari/537.36",
         },
+        timeout: 30000,
       });
 
-      if (!this.taskId) throw new Error("¡No se pudo obtener el ID de la tarea!");
       return { taskId: this.taskId, server: this.server, token: this.token };
     } catch (error) {
       throw new Error(`Fallo al iniciar tarea: ${error.message}`);
@@ -138,8 +163,9 @@ class UpscaleImageAPI {
       form.append("file", fileBuffer, { filename: fileName, contentType: fileType.mime });
 
       const response = await this.api.post("/v1/upload", form, {
-        headers: form.getHeaders(),
+        headers: { ...form.getHeaders() },
       });
+
       return response.data;
     } catch (error) {
       throw new Error(`Fallo al subir archivo: ${error.message}`);
@@ -148,34 +174,81 @@ class UpscaleImageAPI {
 
   async upscaleImage(serverFilename, scale = 2) {
     if (!this.taskId || !this.api) throw new Error("Primero debes ejecutar getTaskId().");
+    if (![2, 4].includes(scale)) throw new Error("El parámetro scale debe ser 2 o 4.");
 
     try {
       const form = new FormData();
       form.append("task", this.taskId);
       form.append("server_filename", serverFilename);
-      form.append("scale", scale.toString());
+      form.append("scale", String(scale));
 
-      const response = await this.api.post("/v1/upscale", form, {
-        headers: form.getHeaders(),
-        responseType: "arraybuffer", 
+      await this.api.post("/v1/upscale", form, {
+        headers: { ...form.getHeaders() },
       });
-
-      return response.data;
     } catch (error) {
-      // Intentamos extraer el error real que envía el servidor en lugar del código 500 genérico
-      let detalleError = error.message;
-      if (error.response && error.response.data) {
-        try {
-          detalleError = Buffer.from(error.response.data).toString('utf-8');
-        } catch (e) { }
-      }
-      throw new Error(`Request falló. Detalle del servidor: ${detalleError}`);
+      const detalle =
+        error?.response?.data && Buffer.isBuffer(error.response.data)
+          ? error.response.data.toString("utf-8")
+          : error?.response?.data
+            ? JSON.stringify(error.response.data)
+            : error.message;
+
+      throw new Error(`Fallo al aplicar el Upscale: ${detalle}`);
     }
+  }
+
+  async downloadResultWithRetry({ attempts = 8, delayMs = 1500 } = {}) {
+    if (!this.taskId || !this.api) throw new Error("Primero debes ejecutar getTaskId().");
+
+    let lastError = null;
+
+    for (let i = 1; i <= attempts; i += 1) {
+      try {
+        const response = await this.api.get(`/v1/download/${this.taskId}`, {
+          responseType: "arraybuffer",
+        });
+
+        return Buffer.from(response.data);
+      } catch (error) {
+        lastError = error;
+
+        const status = error?.response?.status;
+        const retriableStatus = [404, 409, 425, 429, 500, 502, 503, 504];
+        const isRetriable = !status || retriableStatus.includes(status);
+
+        if (!isRetriable || i === attempts) break;
+
+        await sleep(delayMs * i);
+      }
+    }
+
+    const detalle =
+      lastError?.response?.data && Buffer.isBuffer(lastError.response.data)
+        ? lastError.response.data.toString("utf-8")
+        : lastError?.response?.data
+          ? JSON.stringify(lastError.response.data)
+          : lastError?.message || "Error desconocido";
+
+    throw new Error(`Fallo al descargar resultado: ${detalle}`);
   }
 }
 
-async function scrapeUpscaleFromFile(fileBuffer, fileName, scale) {
+async function scrapeUpscaleFromFile(fileBuffer, fileName, scale = 2) {
   const upscaler = new UpscaleImageAPI();
   await upscaler.getTaskId();
 
-  const uploadResult = await upscaler.uploadFromFile(fileBuffer, fileName
+  const uploadResult = await upscaler.uploadFromFile(fileBuffer, fileName);
+  if (!uploadResult?.server_filename) {
+    throw new Error("No se pudo subir la imagen a iLoveIMG.");
+  }
+
+  await upscaler.upscaleImage(uploadResult.server_filename, scale);
+  const imageBuffer = await upscaler.downloadResultWithRetry({ attempts: 8, delayMs: 1500 });
+
+  const outType = await fileTypeFromBuffer(imageBuffer);
+  if (!outType?.mime?.startsWith("image/")) {
+    throw new Error("iLoveIMG no devolvió una imagen válida.");
+  }
+
+  return imageBuffer;
+}
