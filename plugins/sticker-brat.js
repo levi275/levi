@@ -1,16 +1,20 @@
 import Jimp from 'jimp'
+import fetch from 'node-fetch'
 import { sticker } from '../lib/sticker.js'
 
 const FINAL_SIZE = 512
 const WORK_SIZE = 1024
-const MAX_TEXT_LENGTH = 260
+const MAX_TEXT_LENGTH = 280
 const BG_COLOR = '#F2F2F2'
+const TOKEN_GAP = 22
 
 const FONT_CANDIDATES = [
   Jimp.FONT_SANS_128_BLACK,
   Jimp.FONT_SANS_64_BLACK,
   Jimp.FONT_SANS_32_BLACK,
 ]
+
+const emojiCache = new Map()
 
 function normalizeText(text = '') {
   return text
@@ -20,56 +24,90 @@ function normalizeText(text = '') {
     .slice(0, MAX_TEXT_LENGTH)
 }
 
-function tokenize(text = '') {
-  return text.split(' ').map((word) => word.trim()).filter(Boolean)
+function splitWithEmoji(text = '') {
+  // Separa emojis para poder renderizarlos como imagen.
+  const expanded = text.replace(/(\p{Extended_Pictographic}(?:\uFE0F|\u200D\p{Extended_Pictographic})*)/gu, ' $1 ')
+  return expanded.split(' ').map((t) => t.trim()).filter(Boolean)
 }
 
-function makeChunks(font, words = [], maxChunkWidth = 360) {
-  const chunks = []
-  let i = 0
+function isEmojiToken(token = '') {
+  return /\p{Extended_Pictographic}/u.test(token)
+}
 
-  while (i < words.length) {
-    const w1 = words[i]
-    const w2 = words[i + 1]
+function emojiToCodePoints(emoji = '') {
+  return [...emoji]
+    .map((char) => char.codePointAt(0))
+    .filter((cp) => cp !== 0xfe0f) // variation selector
+    .map((cp) => cp.toString(16))
+    .join('-')
+}
 
-    if (w2) {
-      const joined = `${w1} ${w2}`
-      if (Jimp.measureText(font, joined) <= maxChunkWidth) {
-        chunks.push(joined)
-        i += 2
-        continue
+async function getEmojiImage(emoji = '') {
+  if (emojiCache.has(emoji)) return emojiCache.get(emoji)
+
+  const code = emojiToCodePoints(emoji)
+  if (!code) return null
+
+  // Twemoji (72x72 PNG)
+  const url = `https://cdnjs.cloudflare.com/ajax/libs/twemoji/14.0.2/72x72/${code}.png`
+
+  try {
+    const res = await fetch(url)
+    if (!res.ok) throw new Error(`emoji status ${res.status}`)
+    const buf = await res.buffer()
+    const img = await Jimp.read(buf)
+    emojiCache.set(emoji, img)
+    return img
+  } catch {
+    emojiCache.set(emoji, null)
+    return null
+  }
+}
+
+async function buildToken(font, raw = '') {
+  if (isEmojiToken(raw)) {
+    const emojiImg = await getEmojiImage(raw)
+    if (emojiImg) {
+      const size = Math.max(66, Math.min(140, Jimp.measureTextHeight(font, 'Ay', WORK_SIZE) + 6))
+      return {
+        type: 'emoji',
+        text: raw,
+        width: size,
+        height: size,
+        image: emojiImg.clone().resize(size, size, Jimp.RESIZE_BILINEAR),
       }
     }
-
-    chunks.push(w1)
-    i += 1
   }
 
-  return chunks
+  return {
+    type: 'text',
+    text: raw,
+    width: Jimp.measureText(font, raw),
+    height: Jimp.measureTextHeight(font, 'Ay', WORK_SIZE),
+  }
 }
 
-function buildRows(chunks = []) {
+function buildRows(tokens = []) {
   const rows = []
-  let current = { left: '', right: '' }
+  let current = { left: null, right: null }
 
-  for (let i = 0; i < chunks.length; i++) {
-    const chunk = chunks[i]
+  for (let i = 0; i < tokens.length; i++) {
+    const tok = tokens[i]
 
-    // Cada cierto patrón, forzamos palabra/frase centrada para imitar ejemplos.
-    if (i > 0 && i % 7 === 4 && !current.left && !current.right) {
-      rows.push({ center: chunk })
+    if (i > 0 && i % 8 === 5 && !current.left && !current.right) {
+      rows.push({ center: tok })
       continue
     }
 
     if (!current.left) {
-      current.left = chunk
+      current.left = tok
       continue
     }
 
     if (!current.right) {
-      current.right = chunk
+      current.right = tok
       rows.push(current)
-      current = { left: '', right: '' }
+      current = { left: null, right: null }
     }
   }
 
@@ -77,99 +115,116 @@ function buildRows(chunks = []) {
   return rows
 }
 
-async function chooseLayout(words = []) {
+async function chooseLayout(rawTokens = []) {
   for (const fontPath of FONT_CANDIDATES) {
     const font = await Jimp.loadFont(fontPath)
-    const chunks = makeChunks(font, words, 390)
-    const rows = buildRows(chunks)
+    const tokens = []
 
-    const lineHeight = Jimp.measureTextHeight(font, 'Ay', WORK_SIZE) + 26
-    const topPad = 70
-    const bottomPad = 60
+    for (const raw of rawTokens) {
+      // eslint-disable-next-line no-await-in-loop
+      tokens.push(await buildToken(font, raw))
+    }
+
+    const rows = buildRows(tokens)
+    const lineHeight = Math.max(92, Jimp.measureTextHeight(font, 'Ay', WORK_SIZE) + 28)
     const contentHeight = rows.length * lineHeight
 
-    if (contentHeight <= WORK_SIZE - topPad - bottomPad) {
-      return { font, rows, lineHeight, topPad }
+    if (contentHeight <= WORK_SIZE - 120) {
+      return { font, rows, lineHeight }
     }
   }
 
   const fallbackFont = await Jimp.loadFont(Jimp.FONT_SANS_32_BLACK)
-  const fallbackRows = buildRows(makeChunks(fallbackFont, words, 370))
-  const fallbackLineHeight = Jimp.measureTextHeight(fallbackFont, 'Ay', WORK_SIZE) + 20
-  return { font: fallbackFont, rows: fallbackRows.slice(0, 18), lineHeight: fallbackLineHeight, topPad: 50 }
+  const fallbackTokens = []
+  for (const raw of rawTokens) {
+    // eslint-disable-next-line no-await-in-loop
+    fallbackTokens.push(await buildToken(fallbackFont, raw))
+  }
+  return {
+    font: fallbackFont,
+    rows: buildRows(fallbackTokens).slice(0, 18),
+    lineHeight: Math.max(72, Jimp.measureTextHeight(fallbackFont, 'Ay', WORK_SIZE) + 18),
+  }
+}
+
+function drawToken(layer, font, token, x, y) {
+  if (!token) return
+
+  if (token.type === 'emoji' && token.image) {
+    layer.composite(token.image, x, y + 2)
+    return
+  }
+
+  layer.print(font, x, y, token.text)
 }
 
 async function renderBratImage(text = '') {
   const cleanText = normalizeText(text)
   if (!cleanText) throw new Error('Texto vacío para generar sticker.')
 
-  const words = tokenize(cleanText)
-  if (!words.length) throw new Error('No se encontraron palabras para renderizar.')
+  const rawTokens = splitWithEmoji(cleanText)
+  if (!rawTokens.length) throw new Error('No se encontraron tokens para renderizar.')
 
-  const { font, rows, lineHeight, topPad } = await chooseLayout(words)
+  const { font, rows, lineHeight } = await chooseLayout(rawTokens)
 
   const image = new Jimp(WORK_SIZE, WORK_SIZE, BG_COLOR)
   const shadow = new Jimp(WORK_SIZE, WORK_SIZE, 0x00000000)
   const textLayer = new Jimp(WORK_SIZE, WORK_SIZE, 0x00000000)
 
-  const leftX = 70
-  const rightX = 590
-  const centerBoxX = 190
-  const centerBoxW = 640
+  const leftX = 64
+  const rightX = 586
+  const centerX = 190
+  const centerW = 640
 
   const contentHeight = rows.length * lineHeight
-  let y = Math.max(topPad, Math.floor((WORK_SIZE - contentHeight) / 2))
+  let y = Math.max(56, Math.floor((WORK_SIZE - contentHeight) / 2))
 
   for (const row of rows) {
     if (row.center) {
-      shadow.print(
-        font,
-        centerBoxX + 6,
-        y + 6,
-        {
-          text: row.center,
-          alignmentX: Jimp.HORIZONTAL_ALIGN_CENTER,
-          alignmentY: Jimp.VERTICAL_ALIGN_TOP,
-        },
-        centerBoxW,
-        lineHeight,
-      )
-
-      textLayer.print(
-        font,
-        centerBoxX,
-        y,
-        {
-          text: row.center,
-          alignmentX: Jimp.HORIZONTAL_ALIGN_CENTER,
-          alignmentY: Jimp.VERTICAL_ALIGN_TOP,
-        },
-        centerBoxW,
-        lineHeight,
-      )
+      const token = row.center
+      if (token.type === 'emoji' && token.image) {
+        const cx = centerX + Math.floor((centerW - token.width) / 2)
+        drawToken(shadow, font, token, cx + 6, y + 6)
+        drawToken(textLayer, font, token, cx, y)
+      } else {
+        shadow.print(
+          font,
+          centerX + 6,
+          y + 6,
+          { text: token.text, alignmentX: Jimp.HORIZONTAL_ALIGN_CENTER, alignmentY: Jimp.VERTICAL_ALIGN_TOP },
+          centerW,
+          lineHeight,
+        )
+        textLayer.print(
+          font,
+          centerX,
+          y,
+          { text: token.text, alignmentX: Jimp.HORIZONTAL_ALIGN_CENTER, alignmentY: Jimp.VERTICAL_ALIGN_TOP },
+          centerW,
+          lineHeight,
+        )
+      }
     } else {
       if (row.left) {
-        shadow.print(font, leftX + 6, y + 6, row.left)
-        textLayer.print(font, leftX, y, row.left)
+        drawToken(shadow, font, row.left, leftX + 6, y + 6)
+        drawToken(textLayer, font, row.left, leftX, y)
       }
 
       if (row.right) {
-        shadow.print(font, rightX + 6, y + 6, row.right)
-        textLayer.print(font, rightX, y, row.right)
+        const rightTokenX = rightX + (row.right.type === 'text' ? TOKEN_GAP : 0)
+        drawToken(shadow, font, row.right, rightTokenX + 6, y + 6)
+        drawToken(textLayer, font, row.right, rightTokenX, y)
       }
     }
 
     y += lineHeight
   }
 
-  // Difuminado suave estilo ejemplo
-  shadow.blur(3).opacity(0.25)
+  shadow.blur(3).opacity(0.24)
   textLayer.blur(1)
 
   image.composite(shadow, 0, 0)
   image.composite(textLayer, 0, 0)
-
-  // Reducción para suavizar bordes y acercar estética del template compartido.
   image.resize(FINAL_SIZE, FINAL_SIZE, Jimp.RESIZE_BILINEAR)
 
   return image.getBufferAsync(Jimp.MIME_PNG)
