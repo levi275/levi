@@ -5,6 +5,30 @@ import crypto from "crypto";
 
 const ILOVEIMG_PAGE_URL = "https://www.iloveimg.com/upscale-image";
 
+const findFirstMatch = (content, patterns) => {
+  for (const pattern of patterns) {
+    const match = content.match(pattern);
+    if (match?.[1]) return match[1];
+  }
+
+  return null;
+};
+
+const parseServers = (rawServers) => {
+  if (!rawServers) return [];
+
+  if (Array.isArray(rawServers)) return rawServers.filter(Boolean);
+
+  if (typeof rawServers === "string") {
+    return rawServers
+      .split(",")
+      .map((s) => s.trim().replaceAll('"', "").replaceAll("'", ""))
+      .filter(Boolean);
+  }
+
+  return [];
+};
+
 const handler = async (m, { conn }) => {
   const q = m.quoted ? m.quoted : m;
   const mime = (q.msg || q).mimetype || "";
@@ -72,20 +96,27 @@ class UpscaleImageAPI {
         timeout: 20000,
       });
 
-      const tokenMatch = html.match(/"token":"([^"]+)"/);
-      if (!tokenMatch?.[1]) throw new Error("Token no encontrado.");
-      this.token = tokenMatch[1];
+      this.token = findFirstMatch(html, [
+        /"token":"([^"]+)"/,
+        /token\s*[:=]\s*["']([^"']+)["']/,
+        /(ey[a-zA-Z0-9?%\-_/]+)/,
+      ]);
 
-      const taskIdMatch = html.match(/"taskId":"([^"]+)"/);
-      if (!taskIdMatch?.[1]) throw new Error("Task ID no encontrado.");
-      this.taskId = taskIdMatch[1];
+      this.taskId = findFirstMatch(html, [
+        /"taskId":"([^"]+)"/,
+        /taskId\s*[:=]\s*["']([^"']+)["']/,
+        /ilovepdfConfig\.taskId\s*=\s*["']([^"']+)["']/, // fallback viejo
+      ]);
 
-      const serversMatch = html.match(/"servers":\[([^\]]+)\]/);
-      if (!serversMatch?.[1]) throw new Error("No se encontraron servidores.");
-      const servers = serversMatch[1]
-        .split(",")
-        .map((s) => s.trim().replaceAll('"', ""))
-        .filter(Boolean);
+      const serversRaw = findFirstMatch(html, [
+        /"servers":\[([^\]]+)\]/,
+        /servers\s*[:=]\s*\[([^\]]+)\]/,
+      ]);
+
+      const servers = parseServers(serversRaw);
+
+      if (!this.token) throw new Error("Token no encontrado.");
+      if (!this.taskId) throw new Error("Task ID no encontrado.");
 
       if (!servers.length) throw new Error("Lista de servidores vacía.");
       this.server = servers[Math.floor(Math.random() * servers.length)];
