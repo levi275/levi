@@ -1,4 +1,5 @@
 import db from '../lib/database.js'
+import { formatJobLine, ensureJobFields } from '../lib/rpg-jobs.js'
 
 let handler = async (m, { conn, usedPrefix, participants }) => {
   let who = m.mentionedJid[0]
@@ -25,7 +26,9 @@ let handler = async (m, { conn, usedPrefix, participants }) => {
   if (!user)
     return m.reply('❌ *El usuario no se encuentra en la base de datos.*')
 
+  ensureJobFields(user)
   let nombre = await conn.getName(primaryJid)
+  const jobLine = formatJobLine(user)
 
   const coin = Number(user.coin || user.coins || 0)
   const bank = Number(user.bank || 0)
@@ -37,6 +40,7 @@ let handler = async (m, { conn, usedPrefix, participants }) => {
 │ 💸 Dinero » *¥${coin.toLocaleString()} ${m.moneda}*
 │ 🏦 Banco » *¥${bank.toLocaleString()} ${m.moneda}*
 │ 🧾 Total » *¥${total.toLocaleString()} ${m.moneda}*
+│ 💼 Trabajo » *${jobLine}*
 ╰─────────────────────
 > 📌 Usa *${usedPrefix}deposit* para proteger tu dinero en el banco.
 `.trim()

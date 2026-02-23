@@ -1,5 +1,6 @@
 import { loadHarem, findClaim } from '../lib/gacha-group.js'
 import { loadCharacters, normalizeCharacterId } from '../lib/gacha-characters.js'
+import { getExclusiveOwner } from '../lib/gacha-restrictions.js'
 
 export const cooldowns = {}
 
@@ -65,14 +66,22 @@ let handler = async (m, { conn }) => {
 
         const harem = await loadHarem()
         const claimedInGroup = findClaim(harem, groupId, randomCharacter.id)
+        const exclusiveOwner = getExclusiveOwner(randomCharacter.id)
         
         let ownerName = 'Nadie'
         if (claimedInGroup) {
             ownerName = await conn.getName(claimedInGroup.userId)
+        } else if (exclusiveOwner) {
+            ownerName = await conn.getName(exclusiveOwner).catch(() => `@${exclusiveOwner.split('@')[0]}`)
         }
 
+        const statusText = claimedInGroup
+            ? '🚫 Ocupado'
+            : (exclusiveOwner ? '🔒 Exclusivo' : '✅ Libre')
+
         if (!claimedInGroup) {
-            global.activeRolls[`${groupId}:${randomCharacter.id}`] = { user: userId, time: Date.now() }
+            const rollOwner = exclusiveOwner || userId
+            global.activeRolls[`${groupId}:${randomCharacter.id}`] = { user: rollOwner, time: Date.now() }
         }
 
         const message = `
@@ -86,7 +95,7 @@ let handler = async (m, { conn }) => {
 ╰┈➤ 🪙 ${randomCharacter.value}
 
 ▓𓏴𓏴 ۪ ֹ 🄴꯭🅂꯭🅃꯭🄰꯭🄳꯭🄾 :
-╰┈➤ ✨ ꯭${claimedInGroup ? '🚫 Ocupado' : '✅ Libre'}
+╰┈➤ ✨ ꯭${statusText}
 
 ▓𓏴𓏴 ۪ ֹ 🄳꯭🅄꯭🄴꯭🄽꯭̃🄾 :
 ╰┈➤ 👤 ${ownerName}
