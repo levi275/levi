@@ -5,6 +5,8 @@ import crypto from "crypto";
 
 const ILOVEIMG_PAGE_URL = "https://www.iloveimg.com/upscale-image";
 
+const sleep = (ms) => new Promise((resolve) => setTimeout(resolve, ms));
+
 const findFirstMatch = (content, patterns) => {
   for (const pattern of patterns) {
     const match = content.match(pattern);
@@ -195,18 +197,39 @@ class UpscaleImageAPI {
     }
   }
 
-  async downloadResult() {
+  async downloadResultWithRetry({ attempts = 8, delayMs = 1500 } = {}) {
     if (!this.taskId || !this.api) throw new Error("Primero debes ejecutar getTaskId().");
 
-    try {
-      const response = await this.api.get(`/v1/download/${this.taskId}`, {
-        responseType: "arraybuffer",
-      });
+    let lastError = null;
 
-      return Buffer.from(response.data);
-    } catch (error) {
-      throw new Error(`Fallo al descargar resultado: ${error.message}`);
+    for (let i = 1; i <= attempts; i += 1) {
+      try {
+        const response = await this.api.get(`/v1/download/${this.taskId}`, {
+          responseType: "arraybuffer",
+        });
+
+        return Buffer.from(response.data);
+      } catch (error) {
+        lastError = error;
+
+        const status = error?.response?.status;
+        const retriableStatus = [404, 409, 425, 429, 500, 502, 503, 504];
+        const isRetriable = !status || retriableStatus.includes(status);
+
+        if (!isRetriable || i === attempts) break;
+
+        await sleep(delayMs * i);
+      }
     }
+
+    const detalle =
+      lastError?.response?.data && Buffer.isBuffer(lastError.response.data)
+        ? lastError.response.data.toString("utf-8")
+        : lastError?.response?.data
+          ? JSON.stringify(lastError.response.data)
+          : lastError?.message || "Error desconocido";
+
+    throw new Error(`Fallo al descargar resultado: ${detalle}`);
   }
 }
 
@@ -220,7 +243,7 @@ async function scrapeUpscaleFromFile(fileBuffer, fileName, scale = 2) {
   }
 
   await upscaler.upscaleImage(uploadResult.server_filename, scale);
-  const imageBuffer = await upscaler.downloadResult();
+  const imageBuffer = await upscaler.downloadResultWithRetry({ attempts: 8, delayMs: 1500 });
 
   const outType = await fileTypeFromBuffer(imageBuffer);
   if (!outType?.mime?.startsWith("image/")) {
