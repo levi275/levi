@@ -16,7 +16,7 @@ let handler = async (m, { conn, usedPrefix, command }) => {
     let media = await quoted.download()
     let result = await hdr(media, 4)
 
-    let decoCaption = `\`ৎ˓ִ໋࣪🍒⃚̸̷᩠໋֟፝✿ ¡𝐀𝐪𝐮𝐢́ 𝐭𝐢𝐞𝐧𝐞𝐬 𝐭𝐮 𝐫𝐞𝐬𝐮𝐥𝐭𝐚𝐝𝐨! ✨`\`
+    let decoCaption = `\`ৎ˓ִ໋࣪🍒⃚̸̷᩠໋֟፝✿ ¡𝐀𝐪𝐮𝐢́ 𝐭𝐢𝐞𝐧𝐞𝐬 𝐭𝐮 𝐫𝐞𝐬𝐮𝐥𝐭𝐚𝐝𝐨! ✨\``
 
     await conn.sendFile(m.chat, result, 'hdr.png', decoCaption, m)
 
