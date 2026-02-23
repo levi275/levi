@@ -8,33 +8,32 @@ let handler = async (m, { conn, usedPrefix, command }) => {
     let mime = (quoted.msg || quoted).mimetype || ''
 
     if (!/image/.test(mime)) {
-      return m.reply(`Send/Reply to an image with caption ${usedPrefix + command}`)
+      return m.reply(`ৎ໋˓ִ࣪🫖⃘᩠໋݊✿꯭ 𝐑𝐞𝐬𝐩𝐨𝐧𝐝𝐞 𝐨 𝐞𝐧𝐯𝐢́𝐚 𝐮𝐧𝐚 𝐢𝐦𝐚𝐠𝐞𝐧 𝐜𝐨𝐧 𝐞𝐥 𝐜𝐨𝐦𝐚𝐧𝐝𝐨: *${usedPrefix + command}* ✿⃘ ᩠໋݊🍩⃘֟፝͠ೀ`)
     }
 
-    m.reply('⏳ Processing image, please wait...')
+    m.reply('𖹭ᩙ᤻ⵗⵗ ᦋ꯱⏝ᩙ﹒᧔⏳᧓﹒ᩙ⏝꯱ᦋ ⵗⵗ𖹭ᩙ᤻\n\n̊͘ ໋˓͙ ꒰𑂴ᩧ✨ᩧ̷̸꒱ᮬ᩠ִ࣪ ๑⃘໋യ꯭፝֟͠യᩥ᩠꯴ ͢.ᩡᩡ 𝐏𝐫𝐨𝐜𝐞𝐬𝐚𝐧𝐝𝐨 𝐢𝐦𝐚𝐠𝐞𝐧, 𝐩𝐨𝐫 𝐟𝐚𝐯𝐨𝐫 𝐞𝐬𝐩𝐞𝐫𝐚 𝐮𝐧 𝐦𝐨𝐦𝐞𝐧𝐭𝐨...')
 
     let media = await quoted.download()
     let result = await hdr(media, 4)
 
-    await conn.sendFile(m.chat, result, 'hdr.png', '✅ Here is the result', m)
+    let decoCaption = `ׅ┉᩿ׄ═ׅ֟𔘓𑂴᳝ׅׄ━ׄ─໋̤𖡻ְְׅׅ࣪࣪֘ᰰ ┉꒰꯭ᩘִ໋ׅׄ࣪🎀໋̤ׄ֘꒱┉𖡻̤ᰰְ᳝─໋᩿̤࣪━𔘓᮫ְִׅ֟ׄ݊𑂴═ְ᩿ׄ࣪┉ׅ\n\n\`ৎ˓ִ໋࣪🍒⃚̸̷᩠໋֟፝✿ ¡𝐀𝐪𝐮𝐢́ 𝐭𝐢𝐞𝐧𝐞𝐬 𝐭𝐮 𝐫𝐞𝐬𝐮𝐥𝐭𝐚𝐝𝐨! ✨\`\n\nׅ┉᩿ׄ═ׅ֟𔘓𑂴᳝ׅׄ━ׄ─໋̤𖡻ְְׅׅ࣪࣪֘ᰰ ┉꒰꯭ᩘִ໋ׅׄ࣪🎀໋̤ׄ֘꒱┉𖡻̤ᰰְ᳝─໋᩿̤࣪━𔘓᮫ְִׅ֟ׄ݊𑂴═ְ᩿ׄ࣪┉ׅ`
+
+    await conn.sendFile(m.chat, result, 'hdr.png', decoCaption, m)
 
   } catch (err) {
     console.log(err)
-    m.reply('❌ Failed to process image.')
+    m.reply('⊘ ✘ 𝐎𝐜𝐮𝐫𝐫𝐢𝐨́ 𝐮𝐧 𝐞𝐫𝐫𝐨𝐫 𝐚𝐥 𝐩𝐫𝐨𝐜𝐞𝐬𝐚𝐫 𝐥𝐚 𝐢𝐦𝐚𝐠𝐞𝐧. 𝐈𝐧𝐭𝐞́𝐧𝐭𝐚𝐥𝐨 𝐝𝐞 𝐧𝐮𝐞𝐯𝐨 𝐦𝐚́𝐬 𝐭𝐚𝐫𝐝𝐞. 🦇')
   }
 }
 
-handler.help = ['upscale-image']
+handler.help = ["remini", "hd", "enhance"]
 handler.tags = ['editor']
-handler.command = /^(upscale-image)$/i
+handler.command = ["remini", "hd", "enhance"]
 handler.premium = false
 
 export default handler
 
 
-// =============================
-// Get CSRF + Token
-// =============================
 async function getToken() {
   try {
     const html = await axios.get('https://www.iloveimg.com/upscale-image')
@@ -56,9 +55,6 @@ async function getToken() {
 }
 
 
-// =============================
-// Upload Image
-// =============================
 async function uploadImage(server, headers, buffer, task) {
   const form = new FormData()
 
@@ -84,9 +80,6 @@ async function uploadImage(server, headers, buffer, task) {
 }
 
 
-// =============================
-// HDR Upscale Function
-// =============================
 async function hdr(buffer, scale = 4) {
   const { token, csrf } = await getToken()
 
