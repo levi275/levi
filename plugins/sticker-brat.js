@@ -2,68 +2,115 @@ import Jimp from 'jimp'
 import { sticker } from '../lib/sticker.js'
 
 const CANVAS_SIZE = 512
-const MAX_TEXT_LENGTH = 180
+const MAX_TEXT_LENGTH = 220
+const PADDING_X = 26
+const PADDING_Y = 24
+const MIN_GAP = 14
+
+const FONT_CANDIDATES = [
+  Jimp.FONT_SANS_64_BLACK,
+  Jimp.FONT_SANS_32_BLACK,
+  Jimp.FONT_SANS_16_BLACK,
+]
 
 function normalizeText(text = '') {
   return text
-    .trim()
+    .replace(/\n+/g, ' ')
     .replace(/\s+/g, ' ')
+    .trim()
     .slice(0, MAX_TEXT_LENGTH)
 }
 
-function splitWords(text = '', perLine = 18) {
-  const words = text.split(' ')
+function tokenize(text = '') {
+  return text.split(' ').map((word) => word.trim()).filter(Boolean)
+}
+
+function lineWidth(font, words = [], minGap = MIN_GAP) {
+  if (!words.length) return 0
+  const wordsWidth = words.reduce((sum, word) => sum + Jimp.measureText(font, word), 0)
+  const gapsWidth = Math.max(0, words.length - 1) * minGap
+  return wordsWidth + gapsWidth
+}
+
+function wrapWords(font, words = [], maxWidth) {
   const lines = []
-  let current = ''
+  let current = []
 
   for (const word of words) {
-    const candidate = current ? `${current} ${word}` : word
-    if (candidate.length <= perLine) {
-      current = candidate
+    if (!current.length) {
+      current.push(word)
       continue
     }
 
-    if (current) lines.push(current)
-
-    if (word.length > perLine) {
-      const chunks = word.match(new RegExp(`.{1,${perLine}}`, 'g')) || [word]
-      lines.push(...chunks.slice(0, -1))
-      current = chunks[chunks.length - 1]
+    const tryLine = [...current, word]
+    if (lineWidth(font, tryLine) <= maxWidth) {
+      current = tryLine
     } else {
-      current = word
+      lines.push(current)
+      current = [word]
     }
   }
 
-  if (current) lines.push(current)
-  return lines.slice(0, 8)
+  if (current.length) lines.push(current)
+  return lines
+}
+
+async function buildLayout(words = []) {
+  const maxWidth = CANVAS_SIZE - PADDING_X * 2
+  const maxHeight = CANVAS_SIZE - PADDING_Y * 2
+
+  for (const fontPath of FONT_CANDIDATES) {
+    const font = await Jimp.loadFont(fontPath)
+    const lines = wrapWords(font, words, maxWidth)
+    const lineHeight = Jimp.measureTextHeight(font, 'Ay', maxWidth) + 8
+    const contentHeight = lines.length * lineHeight
+
+    const fitsHeight = contentHeight <= maxHeight
+    const fitsWidth = lines.every((line) => lineWidth(font, line) <= maxWidth)
+
+    if (fitsHeight && fitsWidth) {
+      return { font, lines, lineHeight }
+    }
+  }
+
+  const fallbackFont = await Jimp.loadFont(Jimp.FONT_SANS_16_BLACK)
+  const fallbackLines = wrapWords(fallbackFont, words, maxWidth)
+  const fallbackLineHeight = Jimp.measureTextHeight(fallbackFont, 'Ay', maxWidth) + 6
+  return { font: fallbackFont, lines: fallbackLines.slice(0, 14), lineHeight: fallbackLineHeight }
 }
 
 async function renderBratImage(text = '') {
   const cleanText = normalizeText(text)
   if (!cleanText) throw new Error('Texto vacío para generar sticker.')
 
+  const words = tokenize(cleanText)
+  if (!words.length) throw new Error('No se encontraron palabras para renderizar.')
+
   const image = new Jimp(CANVAS_SIZE, CANVAS_SIZE, '#FFFFFF')
-  const font = await Jimp.loadFont(Jimp.FONT_SANS_64_BLACK)
+  const { font, lines, lineHeight } = await buildLayout(words)
 
-  const lines = splitWords(cleanText, 17)
-  const lineHeight = lines.length > 5 ? 56 : 66
-  const blockHeight = lines.length * lineHeight
-  const startY = Math.max(14, Math.floor((CANVAS_SIZE - blockHeight) / 2))
+  const contentHeight = lines.length * lineHeight
+  let y = Math.max(PADDING_Y, Math.floor((CANVAS_SIZE - contentHeight) / 2))
 
-  for (let i = 0; i < lines.length; i++) {
-    const y = startY + i * lineHeight
-    image.print(
-      font,
-      22,
-      y,
-      {
-        text: lines[i],
-        alignmentX: Jimp.HORIZONTAL_ALIGN_CENTER,
-        alignmentY: Jimp.VERTICAL_ALIGN_MIDDLE,
-      },
-      CANVAS_SIZE - 44,
-      lineHeight,
-    )
+  const availableWidth = CANVAS_SIZE - PADDING_X * 2
+
+  for (const line of lines) {
+    const widths = line.map((word) => Jimp.measureText(font, word))
+    const totalWordsWidth = widths.reduce((a, b) => a + b, 0)
+
+    let gap = MIN_GAP
+    if (line.length > 1) {
+      const free = availableWidth - totalWordsWidth
+      gap = Math.max(MIN_GAP, Math.floor(free / (line.length - 1)))
+    }
+
+    let x = PADDING_X
+    for (let i = 0; i < line.length; i++) {
+      image.print(font, x, y, line[i])
+      x += widths[i] + gap
+    }
+
+    y += lineHeight
   }
 
   return image.getBufferAsync(Jimp.MIME_PNG)
