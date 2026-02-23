@@ -10,6 +10,7 @@ import {
   findCharacterById,
   extractCharacterIdFromText
 } from '../lib/gacha-characters.js';
+import { canUserClaimCharacter } from '../lib/gacha-restrictions.js';
 
 export const cooldowns = {}; // clave: `${groupId}:${userId}`
 
@@ -85,10 +86,10 @@ let handler = async (m, { conn }) => {
       }
     }
 
-    // Restricciones especiales (por ejemplo dueño exclusivo)
-    const owner = '18294868853@s.whatsapp.net';
-    if (character.id === "35" && userId !== owner) {
-      return conn.reply(m.chat, '👑 Ese personaje solo puede ser reclamado por el dueño del bot.', m);
+    const exclusiveRule = canUserClaimCharacter(character.id, userId);
+    if (!exclusiveRule.allowed) {
+      const exclusiveName = await conn.getName(exclusiveRule.ownerJid).catch(() => `@${exclusiveRule.ownerJid.split('@')[0]}`);
+      return conn.reply(m.chat, `🔒 El personaje *${character.name}* (ID ${character.id}) es exclusivo y solo puede ser reclamado por *${exclusiveName}*.`, m);
     }
 
     // comprobar si ya está reclamado en este grupo por otra persona

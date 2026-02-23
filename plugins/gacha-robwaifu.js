@@ -1,6 +1,7 @@
 import { loadHarem, saveHarem, isSameUserId } from '../lib/gacha-group.js'
 import { loadCharacters, findCharacterById } from '../lib/gacha-characters.js'
 import { isProtectionActive, getUserFunds, spendUserFunds, resetProtectionOnTransfer } from '../lib/gacha-protection.js'
+import { canUserClaimCharacter } from '../lib/gacha-restrictions.js'
 
 export let cooldowns = {}
 
@@ -84,6 +85,8 @@ let handler = async (m, { conn, participants }) => {
     if (!victimChars.length) return conn.reply(m.chat, `👤 *${victimName}* no tiene personajes para robar.`, m)
 
     const eligibleChars = victimChars.filter(char => {
+      const restriction = canUserClaimCharacter(char.characterId, userId)
+      if (!restriction.allowed) return false
       if (isProtectionActive(char)) return false
       const lastClaimTime = Number(char.lastClaimTime || 0)
       if (lastClaimTime > 0 && (now - lastClaimTime) < CLAIM_GRACE_MS) return false

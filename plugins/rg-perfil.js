@@ -1,7 +1,27 @@
 import moment from 'moment-timezone'
 import PhoneNumber from 'awesome-phonenumber'
 import fetch from 'node-fetch'
+import fs from 'fs'
+import path from 'path'
 import { formatJobLine, ensureJobFields } from '../lib/rpg-jobs.js'
+
+const marriagesFile = path.resolve('src/database/casados.json')
+
+function loadMarriages() {
+  try {
+    if (!fs.existsSync(marriagesFile)) return {}
+    return JSON.parse(fs.readFileSync(marriagesFile, 'utf8')) || {}
+  } catch {
+    return {}
+  }
+}
+
+function resolvePartnerJid(userId, user) {
+  if (user?.marry) return user.marry
+  const marriages = loadMarriages()
+  if (marriages[userId]?.partner) return marriages[userId].partner
+  return null
+}
 
 let handler = async (m, { conn }) => {
   let userId
@@ -31,12 +51,12 @@ let handler = async (m, { conn }) => {
     let cumpleanos = user.birth || '𖠿 No especificado'
     let genero = user.genre || '𖠿 No especificado'
 
-    let parejaId = user.marry || null
+    let parejaId = resolvePartnerJid(userId, user)
     let parejaTag = '✘ Nadie'
     let mentions = [userId]
-    if (parejaId && global.db.data.users[parejaId]) {
+    if (parejaId) {
       parejaTag = `⚝ @${parejaId.split('@')[0]}`
-      mentions.push(parejaId)
+      if (/@s\.whatsapp\.net$/.test(parejaId)) mentions.push(parejaId)
     }
 
     let description = user.description || '˖ ࣪⊹ Ninguna descripción'
