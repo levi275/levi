@@ -256,12 +256,14 @@ match, conn: this, participants, groupMetadata, user: userGroup, bot: botGroup, 
 if (typeof plugin !== 'function') continue
 if (!(match && match[0])) continue
 if ((usedPrefix = (match[0] || '')[0])) {
+if (['>', '=>', '$'].includes(usedPrefix)) continue
 let noPrefix = m.text.replace(usedPrefix, '')
 let [command, ...args] = noPrefix.trim().split` `.filter(v => v)
 args = args || []
 let _args = noPrefix.trim().split` `.slice(1)
 let text = _args.join` `
 command = (command || '').toLowerCase()
+if (!/^[a-z0-9][\w-]*$/i.test(command)) continue
 let fail = plugin.fail || global.dfail
 let isAccept = plugin.command instanceof RegExp ? plugin.command.test(command) :
 Array.isArray(plugin.command) ? plugin.command.some(cmd => cmd instanceof RegExp ? cmd.test(command) : cmd === command) :
@@ -276,9 +278,16 @@ continue
 }
 m.plugin = name
 let chatData = global.db.data.chats[m.chat] || {};
-const isBotBannedInThisChat = chatData.bannedBots && chatData.bannedBots.includes(this.user.jid);
-const unbanCommandFiles = ['grupo-unbanchat.js'];
-if (isBotBannedInThisChat && !unbanCommandFiles.includes(name)) return;
+const isBotBannedInThisChat = Array.isArray(chatData.bannedBots) && chatData.bannedBots.includes(this.user.jid);
+if (isBotBannedInThisChat) {
+const mode = chatData.banchatMode || 'silent'
+const allowOnBanchat = ['grupo-unbanchat.js']
+if (mode === 'silent') {
+if (!isROwner && !isOwner && !allowOnBanchat.includes(name)) return
+} else if (mode === 'strict' && !allowOnBanchat.includes(name)) {
+return
+}
+}
 if (m.chat in global.db.data.chats || sender in global.db.data.users) {
 let chat = global.db.data.chats[m.chat]
 let user = global.db.data.users[sender]
@@ -358,7 +367,7 @@ if (m) {
 let utente = global.db.data.users[sender]
 if (utente && utente.muto == true) {
 let bang = m.key.id
-let cancellazzione = m.key.participant
+let cancellazzione = m.key.participant || m.sender || sender
 try {
 await this.sendMessage(m.chat, { delete: { remoteJid: m.chat, fromMe: false, id: bang, participant: cancellazzione } })
 } catch (e) { }

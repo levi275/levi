@@ -45,21 +45,35 @@ async function getUnknownCommandThumbnail() {
   return thumbnailPromise;
 }
 
-export async function before(m, { conn }) {
+export async function before(m, { conn, isAdmin, isOwner, isROwner }) {
   if (!m.text) return;
 
   const prefixMatch = global.prefix.exec(m.text);
   if (!prefixMatch) return;
 
   const usedPrefix = prefixMatch[0];
+
+  const chat = global.db.data.chats[m.chat];
+  const botJid = conn?.user?.jid;
+  const isBotBannedInThisChat = Boolean(chat?.bannedBots && botJid && chat.bannedBots.includes(botJid));
+
+  if (isBotBannedInThisChat) {
+    const mode = chat?.banchatMode || 'silent';
+    if (mode === 'strict') return;
+    if (mode === 'silent' && !isOwner && !isROwner) return;
+  }
+  if (chat?.modoadmin && m.isGroup && !isAdmin && !isOwner && !isROwner) return;
+  if (['>', '=>', '$'].includes(usedPrefix)) return;
+
   const command = m.text.slice(usedPrefix.length).trim().split(' ')[0]?.toLowerCase();
   if (!command || command === 'bot') return;
+
+  if (!/^[a-z0-9][\w-]*$/i.test(command)) return;
 
   buildCommandCache(global.plugins);
   const isKnownCommand = cachedCommands.has(command);
 
   if (isKnownCommand) {
-    const chat = global.db.data.chats[m.chat];
     const user = global.db.data.users[m.sender];
 
     if (chat?.isBanned) {
